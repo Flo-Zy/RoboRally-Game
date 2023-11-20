@@ -1,6 +1,6 @@
 package SEPee.server.model.field;
-import SEPee.server.Direction;
-import SEPee.server.Position;
+import SEPee.server.model.Direction;
+import SEPee.server.model.Position;
 import lombok.Getter;
 import lombok.Setter;
 
