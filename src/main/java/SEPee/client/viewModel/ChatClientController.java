@@ -148,7 +148,7 @@ public class ChatClientController {
                 this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
                 this.writer = new PrintWriter(socket.getOutputStream(), true);
 
-                writer.println(username + " hat sich angemeldet.");
+                writer.println(username + " ist dem Chat beigetreten.");
 
                 new Thread(() -> {
                     try {
@@ -188,7 +188,7 @@ public class ChatClientController {
 
     public void shutdown() {
         try {
-            writer.println(username + " hat sich abgemeldet.");
+            writer.println(username + " hat den Chat verlassen.");
             socket.close();
             System.exit(0);
         } catch (IOException e) {

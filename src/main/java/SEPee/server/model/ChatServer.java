@@ -12,11 +12,11 @@ public class ChatServer {
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Server started. Waiting for connections...");
+            System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("New connection: " + clientSocket);
+                System.out.println("Neue Verbindung: " + clientSocket);
 
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                 clients.add(clientHandler);
