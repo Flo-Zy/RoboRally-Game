@@ -103,6 +103,8 @@ public class ChatClientController {
 package SEPee.client.viewModel;
 
 import SEPee.client.model.ChatClient;
+import SEPee.client.model.ChatMessage;
+import com.google.gson.Gson;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -114,6 +116,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ChatClientController {
@@ -130,9 +134,11 @@ public class ChatClientController {
     private Socket socket;
     private PrintWriter writer;
     private String username;
+    private Gson gson;
 
     public void init(ChatClient chatClient, Stage stage) {
         this.chatClient = chatClient;
+        this.gson = new Gson();
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nutzername");
@@ -155,7 +161,7 @@ public class ChatClientController {
                         BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         String serverMessage;
                         while ((serverMessage = serverReader.readLine()) != null) {
-                            appendToChatArea(serverMessage);
+                            processReceivedMessage(serverMessage);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -177,9 +183,41 @@ public class ChatClientController {
     private void sendMessage() {
         String message = messageField.getText();
         if (!message.isEmpty()) {
-            writer.println(username + ": " + message);
+            ChatMessage chatMessage = new ChatMessage(username, message);
+            String serializedMessage = gson.toJson(chatMessage);
+            writer.println(serializedMessage);
             messageField.clear();
         }
+    }
+
+    public void processReceivedMessage(String receivedJson) {
+        List<ChatMessage> chatMessages = ChatClient.deserializeChatMessages(receivedJson);
+
+        // Verarbeite die empfangenen Chat-Nachrichten weiter, z.B. zeige sie in der Chat-Ansicht an
+        if (chatMessages != null) {
+            for (ChatMessage message : chatMessages) {
+                String displayMessage = message.getUsername() + ": " + message.getMessage();
+                appendToChatArea(displayMessage);
+            }
+        }
+    }
+
+
+    public String prepareMessagesToSend(List<ChatMessage> messages) {
+        return ChatClient.serializeChatMessages(messages);
+    }
+
+    public void sendMessage(List<ChatMessage> messagesToSend) {
+
+        messagesToSend.add(new ChatMessage("SenderName", "Nachrichteninhalt"));
+
+        String serializedMessages = prepareMessagesToSend(messagesToSend);
+
+        sendToServer(serializedMessages);
+    }
+
+    private void sendToServer(String serializedMessages) {
+        // Hier würde der Code zur Nachrichtenübertragung an den Server stehen
     }
 
     public void appendToChatArea(String message) {
@@ -196,4 +234,3 @@ public class ChatClientController {
         }
     }
 }
-
