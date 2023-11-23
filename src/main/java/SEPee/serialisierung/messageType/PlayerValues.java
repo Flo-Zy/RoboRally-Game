@@ -3,10 +3,11 @@ import lombok.Getter;
 
 @Getter
 public class PlayerValues {
+    private String messageType;
     private PlayerBody messageBody;
 
     public PlayerValues(String playerName, int figure) {
-        String messageType = "PlayerValues";
+        this.messageType = "PlayerValues";
         this.messageBody = new PlayerBody(playerName, figure);
     }
 
