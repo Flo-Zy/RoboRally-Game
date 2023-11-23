@@ -7,4 +7,8 @@ public class Deserialisierer {
     public static <T> T deserialize(String json, Class<T> clazz) {
         return gson.fromJson(json, clazz);
     }
+
+
+
+
 }

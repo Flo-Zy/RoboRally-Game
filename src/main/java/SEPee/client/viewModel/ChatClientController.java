@@ -208,4 +208,5 @@ public class ChatClientController {
             e.printStackTrace();
         }
     }
+
 }
