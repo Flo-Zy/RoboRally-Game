@@ -12,19 +12,15 @@ public class Main {
         String serializedPlayer = Serialisierer.serialize(player);
 
         // Output the serialized PlayerValues
-        System.out.print("Serialized PlayerValues:");
+        System.out.println("Serialized PlayerValues:");
         System.out.println(serializedPlayer);
-
-
 
         // Deserialize the serialized string back to PlayerValues
         PlayerValues deserializedPlayer = Deserialisierer.deserialize(serializedPlayer, PlayerValues.class);
 
         // Output the deserialized PlayerValues
         System.out.println("\nDeserialized PlayerValues:");
-        System.out.println("Player Name: " + deserializedPlayer.getPlayerName());
-        System.out.println("Score: " + deserializedPlayer.getScore());
-
-
+        System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getPlayerName());
+        System.out.println("Figure: " + deserializedPlayer.getMessageBody().getFigure());
     }
 }

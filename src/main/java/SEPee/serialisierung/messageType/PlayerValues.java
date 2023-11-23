@@ -1,33 +1,36 @@
 package SEPee.serialisierung.messageType;
 
+import lombok.Getter;
 
+@Getter
 public class PlayerValues {
-    private String playerName;
-    private int score;
+    private PlayerBody messageBody;
 
-    // Konstruktor
-    public PlayerValues(String playerName, int score) {
-        this.playerName = playerName;
-        this.score = score;
+    public PlayerValues(String playerName, int figure) {
+        String messageType = "PlayerValues";
+        this.messageBody = new PlayerBody(playerName, figure);
     }
 
-    // Getter und Setter für playerName
-    public String getPlayerName() {
-        return playerName;
-    }
+    public static class PlayerBody {
+        private String name;
+        @Getter
+        private int figure;
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
+        public PlayerBody(String name, int figure) {
+            this.name = name;
+            this.figure = figure;
+        }
 
-    // Getter und Setter für score
-    public int getScore() {
-        return score;
-    }
+        public String getPlayerName() {
+            return name;
+        }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+        public void setPlayerName(String name) {
+            this.name = name;
+        }
 
-    // Weitere Methoden oder Attribute, die zur PlayerValues-Klasse gehören könnten
+        public void setFigure(int figure) {
+            this.figure = figure;
+        }
+    }
 }
