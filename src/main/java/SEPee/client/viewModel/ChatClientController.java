@@ -16,8 +16,6 @@ public class ChatClientController {
     @FXML
     private Button sendButton;
 
-    // Implementieren Sie die Logik für den Controller hier
-    // Beachten Sie, dass Sie eine Verbindung zum Server herstellen und Nachrichten senden müssen
 }*/
 //ChatClient als JavaFX-Fenster
 /*package SEPee.client.viewModel;
@@ -100,6 +98,7 @@ public class ChatClientController {
         }
     }
 }*/
+//Funktionierende Version
 package SEPee.client.viewModel;
 
 import SEPee.client.model.ChatClient;
@@ -154,7 +153,7 @@ public class ChatClientController {
                     try {
                         BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         String serverMessage;
-                        while ((serverMessage = serverReader.readLine()) != null) {
+                        while (!socket.isClosed() && !socket.isInputShutdown() && (serverMessage = serverReader.readLine()) != null) {
                             appendToChatArea(serverMessage);
                         }
                     } catch (IOException e) {
@@ -166,7 +165,13 @@ public class ChatClientController {
             }
 
             sendButton.setOnAction(event -> sendMessage());
-            stage.setOnCloseRequest(event -> shutdown());
+
+            stage.setOnCloseRequest(event -> {
+                shutdown();
+            });
+
+            // Füge einen Shutdown-Hook hinzu
+            Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
         } else {
             // Nutzer hat die Eingabe abgebrochen
             Platform.exit();
@@ -188,12 +193,19 @@ public class ChatClientController {
 
     public void shutdown() {
         try {
-            writer.println(username + " hat den Chat verlassen.");
-            socket.close();
-            System.exit(0);
-        } catch (IOException e) {
+            if (socket != null && !socket.isClosed()) {
+                if (writer != null) {
+                    writer.println(username + " hat den Chat verlassen.");
+                    // Flushe den Writer und schließe ihn
+                    writer.flush();
+                    writer.close();
+                }
+                // Warte kurz, um sicherzustellen, dass alle Threads ordnungsgemäß beendet werden können
+                Thread.sleep(100);
+                socket.close();
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 }
-
