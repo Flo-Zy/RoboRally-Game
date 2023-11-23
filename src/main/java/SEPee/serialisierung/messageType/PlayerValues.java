@@ -1,5 +1,4 @@
 package SEPee.serialisierung.messageType;
-
 import lombok.Getter;
 
 @Getter
@@ -25,6 +24,9 @@ public class PlayerValues {
             return name;
         }
 
+        /*
+        //werden garnicht gebraucht weil man playerName/Figure ohne methode setten kann oder?
+
         public void setPlayerName(String name) {
             this.name = name;
         }
@@ -32,5 +34,7 @@ public class PlayerValues {
         public void setFigure(int figure) {
             this.figure = figure;
         }
+
+         */
     }
 }
