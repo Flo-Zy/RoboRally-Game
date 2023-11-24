@@ -3,6 +3,9 @@ package SEPee.serialisierung.messageType;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -51,12 +54,6 @@ public class Main {
         String serializedCardsYouGotNow = Serialisierer.serialize(cardsYouGotNow);
         System.out.println(serializedCardsYouGotNow);
 
-        /** STIMMT NOCH NICHT: test CurrentCards serialisation */
-        CurrentCards.CurrentCardsBody.ActiveCard[] activeCards = {new CurrentCards.CurrentCardsBody.ActiveCard(1,"MoveI"), new CurrentCards.CurrentCardsBody.ActiveCard(2,"Spam")};
-        CurrentCards currentCards = new CurrentCards(activeCards);
-        String serializedCurrentCards = Serialisierer.serialize(currentCards);
-        System.out.println(serializedCurrentCards);
-
         // test ReplaceCard serialisation
         ReplaceCard replaceCard = new ReplaceCard(3, "MoveI", 9001);
         String serializedReplaceCard = Serialisierer.serialize(replaceCard);
@@ -102,5 +99,12 @@ public class Main {
         String serializedGameFinished = Serialisierer.serialize(gameFinished);
         System.out.println(serializedGameFinished);
 
+        // test CurrentCards serialisation
+        List<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+        activeCards.add(new CurrentCards.ActiveCard(1,"MoveI"));
+        activeCards.add(new CurrentCards.ActiveCard(2,"Spam"));
+        CurrentCards currentCards = new CurrentCards(activeCards);
+        String serializedCurrentCards = Serialisierer.serialize(currentCards);
+        System.out.println(serializedCurrentCards);
     }
 }
