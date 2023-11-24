@@ -5,33 +5,54 @@ import SEPee.serialisierung.Serialisierer;
 
 public class Main {
     public static void main(String[] args) {
-        // Create an instance of PlayerValues
+
+        // test PlayerValues serialisation
         PlayerValues player = new PlayerValues("Alice", 100);
-
-        // Serialize the PlayerValues instance
         String serializedPlayer = Serialisierer.serialize(player);
-
-        // Output the serialized PlayerValues
-        System.out.println("Serialized PlayerValues:");
         System.out.println(serializedPlayer);
-
-        // Deserialize the serialized string back to PlayerValues
+        // test PlayerValues de-serialisation
         PlayerValues deserializedPlayer = Deserialisierer.deserialize(serializedPlayer, PlayerValues.class);
-
-        // Output the deserialized PlayerValues
-        System.out.println("\nDeserialized PlayerValues:");
+        System.out.println("Deserialized PlayerValues:");
         System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getPlayerName());
         System.out.println("Figure: " + deserializedPlayer.getMessageBody().getFigure());
 
+        // test SendChat serialisation
         SendChat sendChat = new SendChat("Hi", 4);
-
         String serializedSendChat = Serialisierer.serialize(sendChat);
         System.out.println(serializedSendChat);
 
+        // test YourCards serialisation
         String[] string = {"card 1", "card 2"};
         YourCards yourCards = new YourCards(string);
         String serializedYourCards = Serialisierer.serialize(yourCards);
         System.out.println(serializedYourCards);
+
+        // test CardSelected serialisation
+        CardSelected cardSelected = new CardSelected(42, 5,true);
+        String serializedCardSelected = Serialisierer.serialize(cardSelected);
+        System.out.println(serializedCardSelected);
+
+        // test SelectionFinished serialisation
+        SelectionFinished selectionFinished = new SelectionFinished(42);
+        String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
+        System.out.println(serializedSelectionFinished);
+
+        // test TimerStarted serialisation
+        TimerStarted timerStarted = new TimerStarted();
+        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+        System.out.println(serializedTimerStarted);
+
+        // test TimerEnded serialisation
+        int[] clientIDs = {1, 3, 6};
+        TimerEnded timerEnded = new TimerEnded(clientIDs);
+        String serializedTimerEnded = Serialisierer.serialize(timerEnded);
+        System.out.println(serializedTimerEnded);
+
+        // test CardsYouGotNow serialisation
+        String[] cards = {"card1", "..."};
+        CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(cards);
+        String serializedCardsYouGotNow = Serialisierer.serialize(cardsYouGotNow);
+        System.out.println(serializedCardsYouGotNow);
 
     }
 }

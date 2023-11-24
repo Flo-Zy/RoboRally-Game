@@ -9,7 +9,7 @@ public class YourCards {
         this.messageBody = new YourCardsBody(cardsInHand);
     }
 
-    public static class YourCardsBody{
+    public static class YourCardsBody {
         private String[] cardsInHand;
 
         public YourCardsBody(String[] cardsInHand){

@@ -11,7 +11,6 @@ public class SendChat {
 
     public static class SendChatBody{
         private String message;
-
         private int to;
 
         public SendChatBody(String message, int to){
