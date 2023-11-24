@@ -4,27 +4,27 @@ public class ReceivedChat {
     private String messageType;
     private ReceivedChatBody messageBody;
 
-    public ReceivedChat(String message, int from, boolean isPrivate){
+    public ReceivedChat(String message, int from, boolean isPrivate) {
         this.messageType = "ReceivedChat";
         this.messageBody = new ReceivedChatBody(message, from, isPrivate);
     }
 
-    public static class ReceivedChatBody{
+    public static class ReceivedChatBody {
         private String message;
         private int from;
         private boolean isPrivate;
 
-        public ReceivedChatBody(String message, int from, boolean isPrivate){
+        public ReceivedChatBody(String message, int from, boolean isPrivate) {
             this.message = message;
             this.from = from;
             this.isPrivate = isPrivate;
         }
 
-        public String getMessage(){
+        public String getMessage() {
             return message;
         }
 
-        public void setMessage(String message){
+        public void setMessage(String message) {
             this.message = message;
         }
 
@@ -40,9 +40,8 @@ public class ReceivedChat {
             return isPrivate;
         }
 
-        public void setPrivate(boolean aPrivate) {
-            isPrivate = aPrivate;
+        public void setPrivate(boolean isPrivate) {
+            this.isPrivate = isPrivate;
         }
-
     }
 }

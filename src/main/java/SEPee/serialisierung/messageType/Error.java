@@ -4,25 +4,24 @@ public class Error {
     private String messageType;
     private ErrorBody messageBody;
 
-    public Error(String error){
+    public Error(String error) {
         this.messageType = "Error";
         this.messageBody = new ErrorBody(error);
     }
 
-    public static class ErrorBody{
+    public static class ErrorBody {
         private String error;
 
-        public ErrorBody(String error){
+        public ErrorBody(String error) {
             this.error = error;
         }
 
-        public String getError(){
+        public String getError() {
             return error;
         }
 
-        public void setError(String error){
+        public void setError(String error) {
             this.error = error;
         }
-
     }
 }

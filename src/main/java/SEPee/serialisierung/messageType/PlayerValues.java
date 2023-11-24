@@ -1,41 +1,37 @@
 package SEPee.serialisierung.messageType;
-import lombok.Getter;
 
-@Getter
 public class PlayerValues {
     private String messageType;
-    private PlayerBody messageBody;
+    private PlayerValuesBody messageBody;
 
-    public PlayerValues(String playerName, int figure) {
+    public PlayerValues(String name, int figure) {
         this.messageType = "PlayerValues";
-        this.messageBody = new PlayerBody(playerName, figure);
+        this.messageBody = new PlayerValuesBody(name, figure);
     }
 
-    public static class PlayerBody {
+    public static class PlayerValuesBody {
         private String name;
-        @Getter
         private int figure;
 
-        public PlayerBody(String name, int figure) {
+        public PlayerValuesBody(String name, int figure) {
             this.name = name;
             this.figure = figure;
         }
 
-        public String getPlayerName() {
+        public String getName() {
             return name;
         }
 
-        /*
-        //werden garnicht gebraucht weil man playerName/Figure ohne methode setten kann oder?
-
-        public void setPlayerName(String name) {
+        public void setName(String name) {
             this.name = name;
+        }
+
+        public int getFigure() {
+            return figure;
         }
 
         public void setFigure(int figure) {
             this.figure = figure;
         }
-
-         */
     }
 }

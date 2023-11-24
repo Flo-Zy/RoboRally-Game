@@ -2,33 +2,26 @@ package SEPee.serialisierung.messageType;
 
 public class HelloClient {
     private String messageType;
-    private HelloClientMessageBody messageBody;
+    private HelloClientBody messageBody;
 
-    public String getMessageType() {
-        return messageType;
+    public HelloClient(String protocol) {
+        this.messageType = "HelloClient";
+        this.messageBody = new HelloClientBody(protocol);
     }
 
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
+    public static class HelloClientBody {
+        private String protocol;
 
-    public HelloClientMessageBody getMessageBody() {
-        return messageBody;
-    }
+        public HelloClientBody(String protocol) {
+            this.protocol = protocol;
+        }
 
-    public void setMessageBody(HelloClientMessageBody messageBody) {
-        this.messageBody = messageBody;
-    }
-}
+        public String getProtocol() {
+            return protocol;
+        }
 
-class HelloClientMessageBody {
-    private String protocol;
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
+        public void setProtocol(String protocol) {
+            this.protocol = protocol;
+        }
     }
 }

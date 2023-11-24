@@ -2,33 +2,26 @@ package SEPee.serialisierung.messageType;
 
 public class Welcome {
     private String messageType;
-    private WelcomeMessageBody messageBody;
+    private WelcomeBody messageBody;
 
-    public String getMessageType() {
-        return messageType;
+    public Welcome(int clientID) {
+        this.messageType = "Welcome";
+        this.messageBody = new WelcomeBody(clientID);
     }
 
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
+    public static class WelcomeBody {
+        private int clientID;
 
-    public WelcomeMessageBody getMessageBody() {
-        return messageBody;
-    }
+        public WelcomeBody(int clientID) {
+            this.clientID = clientID;
+        }
 
-    public void setMessageBody(WelcomeMessageBody messageBody) {
-        this.messageBody = messageBody;
-    }
-}
+        public int getClientID() {
+            return clientID;
+        }
 
-class WelcomeMessageBody {
-    private int clientID;
-
-    public int getClientID() {
-        return clientID;
-    }
-
-    public void setClientID(int clientID) {
-        this.clientID = clientID;
+        public void setClientID(int clientID) {
+            this.clientID = clientID;
+        }
     }
 }

@@ -2,22 +2,18 @@ package SEPee.serialisierung.messageType;
 
 public class Alive {
     private String messageType;
-    private Object messageBody; // leeres Objekt
+    private AliveBody messageBody;
 
-    public String getMessageType() {
-        return messageType;
+    public Alive() {
+        this.messageType = "Alive";
+        this.messageBody = new AliveBody();
     }
 
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
+    public static class AliveBody {
 
-    public Object getMessageBody() {
-        return messageBody;
-    }
 
-    public void setMessageBody(Object messageBody) {
-        this.messageBody = messageBody;
-    }
+        public AliveBody() {
 
+        }
+    }
 }
