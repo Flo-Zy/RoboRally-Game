@@ -54,7 +54,7 @@ public class Main {
         String serializedCardsYouGotNow = Serialisierer.serialize(cardsYouGotNow);
         System.out.println(serializedCardsYouGotNow);
 
-        /** test CurrentCards serialisation */
+        /** STIMMT NOCH NICHT: test CurrentCards serialisation */
         CurrentCards.CurrentCardsBody.ActiveCard[] activeCards = {new CurrentCards.CurrentCardsBody.ActiveCard(1,"MoveI"), new CurrentCards.CurrentCardsBody.ActiveCard(2,"Spam")};
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);
@@ -70,10 +70,35 @@ public class Main {
         String serializedMovement = Serialisierer.serialize(movement);
         System.out.println(serializedMovement);
 
-        // test Movement serialisation
+        // test PlayerTurning serialisation
         PlayerTurning playerTurning = new PlayerTurning(42, "counterclockwise");
         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
         System.out.println(serializedPlayerTurning);
+
+        // test Animation serialisation
+        Animation animation = new Animation("PlayerShooting");
+        String serializedAnimation = Serialisierer.serialize(animation);
+        System.out.println(serializedAnimation);
+
+        // test Reboot serialisation
+        Reboot reboot = new Reboot(42);
+        String serializedReboot = Serialisierer.serialize(reboot);
+        System.out.println(serializedReboot);
+
+        // test RebootDirection serialisation
+        RebootDirection rebootDirection = new RebootDirection("right");
+        String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+        System.out.println(serializedRebootDirection);
+
+        // test Energy serialisation
+        Energy energy = new Energy(42,1,"EnergySpace");
+        String serializedEnergy = Serialisierer.serialize(energy);
+        System.out.println(serializedEnergy);
+
+        // test CheckPointReached serialisation
+        CheckPointReached checkPointReached = new CheckPointReached(42, 3);
+        String serializedCheckPointReached = Serialisierer.serialize(checkPointReached);
+        System.out.println(serializedCheckPointReached);
 
     }
 }
