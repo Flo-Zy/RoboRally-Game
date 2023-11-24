@@ -22,5 +22,10 @@ public class Main {
         System.out.println("\nDeserialized PlayerValues:");
         System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getPlayerName());
         System.out.println("Figure: " + deserializedPlayer.getMessageBody().getFigure());
+
+        SendChat sendChat = new SendChat("Hi", 4);
+
+        String serializedSendChat = Serialisierer.serialize(sendChat);
+        System.out.println(serializedSendChat);
     }
 }
