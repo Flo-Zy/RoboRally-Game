@@ -27,5 +27,11 @@ public class Main {
 
         String serializedSendChat = Serialisierer.serialize(sendChat);
         System.out.println(serializedSendChat);
+
+        String[] string = {"card 1", "card 2"};
+        YourCards yourCards = new YourCards(string);
+        String serializedYourCards = Serialisierer.serialize(yourCards);
+        System.out.println(serializedYourCards);
+
     }
 }
