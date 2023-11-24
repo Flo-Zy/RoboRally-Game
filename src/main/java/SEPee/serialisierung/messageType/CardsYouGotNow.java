@@ -23,5 +23,6 @@ public class CardsYouGotNow {
         public void setCards(String[] cards) {
             this.cards = cards;
         }
+
     }
 }
