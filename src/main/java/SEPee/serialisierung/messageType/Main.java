@@ -12,9 +12,6 @@ public class Main {
         System.out.println(serializedPlayer);
         // test PlayerValues de-serialisation
         PlayerValues deserializedPlayer = Deserialisierer.deserialize(serializedPlayer, PlayerValues.class);
-        System.out.println("Deserialized PlayerValues:");
-        System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getPlayerName());
-        System.out.println("Figure: " + deserializedPlayer.getMessageBody().getFigure());
 
         // test SendChat serialisation
         SendChat sendChat = new SendChat("Hi", 4);
@@ -99,6 +96,11 @@ public class Main {
         CheckPointReached checkPointReached = new CheckPointReached(42, 3);
         String serializedCheckPointReached = Serialisierer.serialize(checkPointReached);
         System.out.println(serializedCheckPointReached);
+
+        // test CheckPointReached serialisation
+        GameFinished gameFinished = new GameFinished(42);
+        String serializedGameFinished = Serialisierer.serialize(gameFinished);
+        System.out.println(serializedGameFinished);
 
     }
 }
