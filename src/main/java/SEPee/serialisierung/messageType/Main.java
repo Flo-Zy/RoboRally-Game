@@ -54,5 +54,26 @@ public class Main {
         String serializedCardsYouGotNow = Serialisierer.serialize(cardsYouGotNow);
         System.out.println(serializedCardsYouGotNow);
 
+        /** test CurrentCards serialisation */
+        CurrentCards.CurrentCardsBody.ActiveCard[] activeCards = {new CurrentCards.CurrentCardsBody.ActiveCard(1,"MoveI"), new CurrentCards.CurrentCardsBody.ActiveCard(2,"Spam")};
+        CurrentCards currentCards = new CurrentCards(activeCards);
+        String serializedCurrentCards = Serialisierer.serialize(currentCards);
+        System.out.println(serializedCurrentCards);
+
+        // test ReplaceCard serialisation
+        ReplaceCard replaceCard = new ReplaceCard(3, "MoveI", 9001);
+        String serializedReplaceCard = Serialisierer.serialize(replaceCard);
+        System.out.println(serializedReplaceCard);
+
+        // test Movement serialisation
+        Movement movement = new Movement(42, 4, 2);
+        String serializedMovement = Serialisierer.serialize(movement);
+        System.out.println(serializedMovement);
+
+        // test Movement serialisation
+        PlayerTurning playerTurning = new PlayerTurning(42, "counterclockwise");
+        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+        System.out.println(serializedPlayerTurning);
+
     }
 }
