@@ -9,6 +9,22 @@ public class PlayerValues {
         this.messageBody = new PlayerValuesBody(name, figure);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public PlayerValuesBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(PlayerValuesBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class PlayerValuesBody {
         private String name;
         private int figure;
@@ -34,4 +50,5 @@ public class PlayerValues {
             this.figure = figure;
         }
     }
+
 }

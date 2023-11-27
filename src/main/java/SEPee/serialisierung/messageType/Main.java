@@ -15,6 +15,8 @@ public class Main {
         System.out.println(serializedPlayer);
         // test PlayerValues de-serialisation
         PlayerValues deserializedPlayer = Deserialisierer.deserialize(serializedPlayer, PlayerValues.class);
+        System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getName());
+        System.out.println("Figure: " + deserializedPlayer.getMessageBody().getFigure());
 
         // test SendChat serialisation
         SendChat sendChat = new SendChat("Hi", 4);
