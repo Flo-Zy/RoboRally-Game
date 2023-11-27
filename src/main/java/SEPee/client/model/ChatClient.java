@@ -97,20 +97,4 @@ public class ChatClient extends Application {
     public static int getServerPort() {
         return SERVER_PORT;
     }
-
-    // Serialisierung einer Liste von ChatMessage-Objekten zu JSON
-    public static String serializeChatMessages(List<ChatMessage> messages) {
-        return gson.toJson(messages);
-    }
-
-    // Deserialisierung von JSON zu einer Liste von ChatMessage-Objekten
-    public static List<ChatMessage> deserializeChatMessages(String json) {
-        Type listType = new TypeToken<List<ChatMessage>>() {}.getType();
-        try {
-            return gson.fromJson(json, listType);
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
