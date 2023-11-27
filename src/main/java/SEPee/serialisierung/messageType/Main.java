@@ -13,6 +13,7 @@ public class Main {
         PlayerValues player = new PlayerValues("Alice", 100);
         String serializedPlayer = Serialisierer.serialize(player);
         System.out.println(serializedPlayer);
+
         // test PlayerValues de-serialisation
         PlayerValues deserializedPlayer = Deserialisierer.deserialize(serializedPlayer, PlayerValues.class);
         System.out.println("Player Name: " + deserializedPlayer.getMessageBody().getName());
@@ -108,5 +109,50 @@ public class Main {
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);
         System.out.println(serializedCurrentCards);
+
+        /**
+        // test GameStarted serialisation
+        // cell1
+        List<String> orientations1 = new ArrayList<>();
+        orientations1.add("top");
+        orientations1.add("right");
+        orientations1.add("bottom");
+        GameStarted.Component component1 = new GameStarted.Component("ConveyorBelt", "1B", 2, orientations1);
+        List<String> orientations2 = new ArrayList<>();
+        orientations1.add("left");
+        List<Integer> registers2 = new ArrayList<>();
+        registers2.add(2);
+        registers2.add(4);
+        GameStarted.Component component2 = new GameStarted.Component("PushPanel", "1B", orientations2, registers2);
+
+        List<GameStarted.Component> components1 = new ArrayList<>();
+        components1.add(component1);
+        components1.add(component2);
+        GameStarted.Cell cell1 = new GameStarted.Cell(components1);
+
+        // cell2
+        List<String> orientations3 = new ArrayList<>();
+        orientations3.add("top");
+        orientations3.add("right");
+        GameStarted.Component component3 = new GameStarted.Component("Wall", "4A", orientations3);
+        List<String> orientations4 = new ArrayList<>();
+        orientations4.add("bottom");
+        GameStarted.Component component4 = new GameStarted.Component("Laser", "4A", orientations4, 2);
+
+        List<GameStarted.Component> components2 = new ArrayList<>();
+        components2.add(component3);
+        components2.add(component4);
+        GameStarted.Cell cell2 = new GameStarted.Cell(components2);
+
+        List<GameStarted.Cell> cells = new ArrayList<>();
+        cells.add(cell1);
+        cells.add(cell2);
+
+        GameStarted gameStarted = new GameStarted(List<List<cells>>);
+
+        CurrentCards currentCards = new CurrentCards(activeCards);
+        String serializedCurrentCards = Serialisierer.serialize(currentCards);
+        System.out.println(serializedCurrentCards);
+         **/
     }
 }
