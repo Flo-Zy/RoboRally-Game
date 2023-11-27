@@ -1,12 +1,12 @@
 package SEPee.serialisierung.messageType;
 
-public class PlayerValues {
+public class PlayerAdded {
     private String messageType;
-    private PlayerValuesBody messageBody;
+    private PlayerAddedBody messageBody;
 
-    public PlayerValues(String name, int figure) {
-        this.messageType = "PlayerValues";
-        this.messageBody = new PlayerValuesBody(name, figure);
+    public PlayerAdded(int clientID, String name, int figure) {
+        this.messageType = "PlayerAdded";
+        this.messageBody = new PlayerAddedBody(clientID, name, figure);
     }
 
     public String getMessageType() {
@@ -17,21 +17,31 @@ public class PlayerValues {
         this.messageType = messageType;
     }
 
-    public PlayerValuesBody getMessageBody() {
+    public PlayerAddedBody getMessageBody() {
         return messageBody;
     }
 
-    public void setMessageBody(PlayerValuesBody messageBody) {
+    public void setMessageBody(PlayerAddedBody messageBody) {
         this.messageBody = messageBody;
     }
 
-    public static class PlayerValuesBody {
+    public static class PlayerAddedBody {
+        private int clientID;
         private String name;
         private int figure;
 
-        public PlayerValuesBody(String name, int figure) {
+        public PlayerAddedBody(int clientID, String name, int figure) {
+            this.clientID = clientID;
             this.name = name;
             this.figure = figure;
+        }
+
+        public int getClientID() {
+            return clientID;
+        }
+
+        public void setClientID(int clientID) {
+            this.clientID = clientID;
         }
 
         public String getName() {
@@ -50,5 +60,4 @@ public class PlayerValues {
             this.figure = figure;
         }
     }
-
 }
