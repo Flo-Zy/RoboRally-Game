@@ -118,6 +118,7 @@ public class Main {
         orientations1.add("right");
         orientations1.add("bottom");
         GameStarted.Component component1 = new GameStarted.Component("ConveyorBelt", "1B", 2, orientations1);
+
         List<String> orientations2 = new ArrayList<>();
         orientations1.add("left");
         List<Integer> registers2 = new ArrayList<>();
@@ -128,6 +129,7 @@ public class Main {
         List<GameStarted.Component> components1 = new ArrayList<>();
         components1.add(component1);
         components1.add(component2);
+
         GameStarted.Cell cell1 = new GameStarted.Cell(components1);
 
         // cell2
@@ -148,7 +150,7 @@ public class Main {
         cells.add(cell1);
         cells.add(cell2);
 
-        GameStarted gameStarted = new GameStarted(List<List<cells>>);
+        GameStarted gameStarted = new GameStarted(cells);
 
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);

@@ -9,6 +9,22 @@ public class PlayerTurning {
         this.messageBody = new PlayerTurningBody(clientID, rotation);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public PlayerTurningBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(PlayerTurningBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class PlayerTurningBody {
         int clientID;
         String rotation;

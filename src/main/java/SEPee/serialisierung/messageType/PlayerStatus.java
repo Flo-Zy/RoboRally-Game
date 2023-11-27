@@ -9,6 +9,22 @@ public class PlayerStatus {
         this.messageBody = new PlayerStatusBody(clientID, ready);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public PlayerStatusBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(PlayerStatusBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class PlayerStatusBody {
         private int clientID;
         private boolean ready;

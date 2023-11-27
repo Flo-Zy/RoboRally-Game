@@ -9,6 +9,22 @@ public class CardSelected {
         this.messageBody = new CardSelectedBody(clientID, register, filled);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public CardSelectedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(CardSelectedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class CardSelectedBody {
         private int clientID;
         private int register;

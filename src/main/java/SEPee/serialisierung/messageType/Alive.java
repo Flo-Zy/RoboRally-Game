@@ -9,6 +9,22 @@ public class Alive {
         this.messageBody = new AliveBody();
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public AliveBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(AliveBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class AliveBody {
 
 

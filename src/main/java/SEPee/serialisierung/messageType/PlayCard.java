@@ -9,6 +9,22 @@ public class PlayCard {
         this.messageBody = new CardBody(card);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public CardBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(CardBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class CardBody{
         private String card;
 

@@ -9,6 +9,22 @@ public class PlayerAdded {
         this.messageBody = new PlayerAddedBody(clientID, name, figure);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public PlayerAddedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(PlayerAddedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class PlayerAddedBody {
         private int clientID;
         private String name;

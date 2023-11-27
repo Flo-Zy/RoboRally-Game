@@ -9,6 +9,22 @@ public class StartingPointTaken {
         this.messageBody = new StartingPointTakenBody(x, y, clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public StartingPointTakenBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(StartingPointTakenBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class StartingPointTakenBody{
         private int x;
         private int y;

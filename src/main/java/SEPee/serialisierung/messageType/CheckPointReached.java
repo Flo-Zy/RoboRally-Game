@@ -9,6 +9,22 @@ public class CheckPointReached {
         this.messageBody = new CheckPointReachedBody(clientID, number);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public CheckPointReachedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(CheckPointReachedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class CheckPointReachedBody {
         private int clientID;
         private int number;

@@ -9,6 +9,22 @@ public class YourCards {
         this.messageBody = new YourCardsBody(cardsInHand);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public YourCardsBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(YourCardsBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class YourCardsBody {
         private String[] cardsInHand;
 

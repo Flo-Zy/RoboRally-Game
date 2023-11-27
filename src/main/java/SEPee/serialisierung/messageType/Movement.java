@@ -9,6 +9,22 @@ public class Movement {
         this.messageBody = new MovementBody(clientID, x, y);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public MovementBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(MovementBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class MovementBody {
         private int clientID;
         private int x;

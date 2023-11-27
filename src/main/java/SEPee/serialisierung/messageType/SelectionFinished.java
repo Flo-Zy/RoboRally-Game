@@ -9,6 +9,22 @@ public class SelectionFinished {
         this.messageBody = new SelectionFinishedBody(clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public SelectionFinishedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(SelectionFinishedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class SelectionFinishedBody {
         private int clientID;
 

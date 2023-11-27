@@ -9,6 +9,22 @@ public class MapSelected {
         this.messageBody = new MapSelectedBody(map);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public MapSelectedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(MapSelectedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class MapSelectedBody {
         private String map;
 

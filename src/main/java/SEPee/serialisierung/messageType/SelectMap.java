@@ -11,6 +11,22 @@ public class SelectMap {
         this.messageBody = new SelectMapBody(availableMaps);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public SelectMapBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(SelectMapBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class SelectMapBody {
         private List<String> availableMaps;
 

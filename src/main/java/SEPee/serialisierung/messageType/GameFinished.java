@@ -9,6 +9,22 @@ public class GameFinished {
         this.messageBody = new GameFinishedBody(clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public GameFinishedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(GameFinishedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class GameFinishedBody {
         int clientID;
 

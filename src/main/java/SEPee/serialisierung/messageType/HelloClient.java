@@ -9,6 +9,22 @@ public class HelloClient {
         this.messageBody = new HelloClientBody(protocol);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public HelloClientBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(HelloClientBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class HelloClientBody {
         private String protocol;
 

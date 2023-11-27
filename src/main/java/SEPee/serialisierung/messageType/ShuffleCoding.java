@@ -9,6 +9,22 @@ public class ShuffleCoding {
         this.messageBody = new ShuffleCodingBody(clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public ShuffleCodingBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(ShuffleCodingBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class ShuffleCodingBody{
         private int clientID;
 

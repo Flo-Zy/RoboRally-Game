@@ -9,6 +9,22 @@ public class Energy {
         this.messageBody = new EnergyBody(clientID, count, source);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public EnergyBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(EnergyBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class EnergyBody {
         private int clientID;
         private int count;

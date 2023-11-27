@@ -9,6 +9,22 @@ public class Animation {
         this.messageBody = new AnimationBody(type);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public AnimationBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(AnimationBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class AnimationBody {
         private String type;
 

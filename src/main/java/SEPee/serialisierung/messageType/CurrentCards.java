@@ -10,6 +10,22 @@ public class CurrentCards {
         this.messageBody = new CurrentCardsBody(activeCards);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public CurrentCardsBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(CurrentCardsBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class CurrentCardsBody {
         List<ActiveCard> activeCards;
 

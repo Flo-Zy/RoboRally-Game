@@ -9,6 +9,22 @@ public class Welcome {
         this.messageBody = new WelcomeBody(clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public WelcomeBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(WelcomeBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class WelcomeBody {
         private int clientID;
 

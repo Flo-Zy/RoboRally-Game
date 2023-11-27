@@ -9,6 +9,22 @@ public class SetStatus {
         this.messageBody = new SetStatusBody(ready);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public SetStatusBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(SetStatusBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class SetStatusBody {
         private boolean ready;
 

@@ -9,6 +9,22 @@ public class Error {
         this.messageBody = new ErrorBody(error);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public ErrorBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(ErrorBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class ErrorBody {
         private String error;
 

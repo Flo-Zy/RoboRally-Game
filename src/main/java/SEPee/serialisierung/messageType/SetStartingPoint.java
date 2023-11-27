@@ -9,6 +9,22 @@ public class SetStartingPoint {
         this.messageBody = new SetStartingPointBody(x, y);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public SetStartingPointBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(SetStartingPointBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class SetStartingPointBody{
         private int x;
 

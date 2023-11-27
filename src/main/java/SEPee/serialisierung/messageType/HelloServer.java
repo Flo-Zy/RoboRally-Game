@@ -9,6 +9,22 @@ public class HelloServer {
         this.messageBody = new HelloServerBody(group, isAI, protocol);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public HelloServerBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(HelloServerBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class HelloServerBody {
         private String group;
         private boolean isAI;

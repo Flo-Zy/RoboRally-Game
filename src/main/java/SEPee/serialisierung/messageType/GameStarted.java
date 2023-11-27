@@ -11,6 +11,22 @@ public class GameStarted {
         this.messageBody = new GameStartedBody(gameMap);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public GameStartedBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(GameStartedBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class GameStartedBody {
         private List<List<List<Cell>>> gameMap;
 

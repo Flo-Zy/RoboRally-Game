@@ -9,6 +9,22 @@ public class ReplaceCard {
         this.messageBody = new ReplaceCardBody(register, newCard, clientID);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public ReplaceCardBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(ReplaceCardBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class ReplaceCardBody {
         private int register;
         private String newCard;

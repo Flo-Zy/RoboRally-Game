@@ -9,6 +9,22 @@ public class SendChat {
         this.messageBody = new SendChatBody(message, to);
     }
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public SendChatBody getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(SendChatBody messageBody) {
+        this.messageBody = messageBody;
+    }
+
     public static class SendChatBody {
         private String message;
         private int to;
