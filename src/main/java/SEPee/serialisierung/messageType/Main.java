@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
         // test PlayerValues serialisation
         PlayerValues player = new PlayerValues("Alice", 100);
         String serializedPlayer = Serialisierer.serialize(player);
