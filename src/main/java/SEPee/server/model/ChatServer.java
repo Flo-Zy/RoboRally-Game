@@ -10,8 +10,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
-
 public class ChatServer {
     private static final int PORT = 8888;
     private static List<ClientHandler> clients = new ArrayList<>();
@@ -24,14 +22,14 @@ public class ChatServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Neue potentielle Verbindung: " + clientSocket);
 
+                // Sende HelloClient an den Client
                 HelloClient helloClient = new HelloClient("Version 0.1");
                 String serializedHelloClient = Serialisierer.serialize(helloClient);
 
-                // Sende serialisierten HelloClient-String an den Client
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                 writer.println(serializedHelloClient);
 
-                // Warte auf die Antwort des Clients
+                // Empfange Antwort vom Client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String clientResponse = reader.readLine();
 
@@ -44,10 +42,6 @@ public class ChatServer {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
                 }
-
-                ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
-                clients.add(clientHandler);
-                new Thread(clientHandler).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
