@@ -103,6 +103,8 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.ChatClient;
 
+import SEPee.serialisierung.Deserialisierer;
+import SEPee.serialisierung.messageType.HelloClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -128,10 +130,33 @@ public class ChatClientController {
     private ChatClient chatClient;
     private Socket socket;
     private PrintWriter writer;
+    private BufferedReader reader;
     private String username;
 
     public void init(ChatClient chatClient, Stage stage) {
         this.chatClient = chatClient;
+
+        try {
+            this.socket = ;
+            this.writer = new PrintWriter(socket.getOutputStream(), true);
+            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            // Empfange serialisierten HelloClient-String vom Server
+            String serializedHelloClient = reader.readLine();
+
+            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+            String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
+
+            // Überprüfe Protokollversion
+            if ("Version 0.1".equals(versionProtocol)) {
+                writer.println("OK");
+            } else {
+                writer.println("NOTOK");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nutzername");

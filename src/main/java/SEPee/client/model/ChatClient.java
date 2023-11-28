@@ -65,6 +65,7 @@ public class ChatClient extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8888;
 
+
     public static void main(String[] args) {
         launch(args);
     }
