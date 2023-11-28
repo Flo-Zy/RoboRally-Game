@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+
 public class ChatServer {
     private static final int PORT = 8888;
     private static List<ClientHandler> clients = new ArrayList<>();
@@ -33,7 +35,6 @@ public class ChatServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String clientResponse = reader.readLine();
 
-                // Überprüfe die Antwort des Clients
                 if ("OK".equals(clientResponse)) {
                     ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                     clients.add(clientHandler);
