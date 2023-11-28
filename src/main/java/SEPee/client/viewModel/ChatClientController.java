@@ -163,12 +163,8 @@ public class ChatClientController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             sendButton.setOnAction(event -> sendMessage());
-
-            stage.setOnCloseRequest(event -> {
-                shutdown();
-            });
+            stage.setOnCloseRequest(event -> shutdown());
 
             // Füge einen Shutdown-Hook hinzu
             Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
