@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatServer {
-    private static final int PORT = 8888;
+    private static final int PORT = 8887;
     private static List<ClientHandler> clients = new ArrayList<>();
 
     public static void main(String[] args) {
