@@ -4,6 +4,9 @@ import SEPee.client.viewModel.ChatClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -24,8 +27,16 @@ public class ChatClient {
     @Override
     public void start(Stage primaryStage) {
         try {
-
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ChatClient.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            primaryStage.setTitle("Chat Client");
+            primaryStage.setScene(scene);
+
+            ChatClientController controller = loader.getController();
 
             // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -46,8 +57,12 @@ public class ChatClient {
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             if("Version 0.1".equals(versionProtocol)){
                 writer.println("OK");
-                ChatClientController chatClientController = new ChatClientController();
-                chatClientController.init(chatclient, stage);
+
+                controller.init(this, primaryStage);
+
+                primaryStage.setOnCloseRequest(event -> controller.shutdown());
+
+                primaryStage.show();
             }else{
                 writer.println("NOT OK");
                 socket.close();
