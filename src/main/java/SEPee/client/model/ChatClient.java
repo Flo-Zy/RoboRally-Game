@@ -1,5 +1,6 @@
 package SEPee.client.model;
 
+import SEPee.client.viewModel.ChatClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
@@ -35,9 +36,10 @@ public class ChatClient {
 
             // Sende Antwort an den Server
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            //writer.println("OK");
             if("Version 0.1".equals(versionProtocol)){
                 writer.println("OK");
+                ChatClientController chatClientController = new ChatClientController();
+                chatClientController.init(chatclient, stage);
             }else{
                 writer.println("NOT OK");
                 socket.close();
