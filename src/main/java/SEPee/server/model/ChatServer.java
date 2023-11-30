@@ -34,11 +34,13 @@ public class ChatServer {
                 // Empfange Antwort vom Client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String clientResponse = reader.readLine();
+                System.out.println(clientResponse);
 
                 if ("OK".equals(clientResponse)) {
                     ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                     clients.add(clientHandler);
                     new Thread(clientHandler).start();
+                    System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();

@@ -2,6 +2,7 @@ package SEPee.client.model;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
+import SEPee.serialisierung.messageType.HelloClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,8 +21,13 @@ public class ChatClient {
             // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String serializedHelloClient = reader.readLine();
+            System.out.println(serializedHelloClient);
 
-            HelloServer helloServer = Deserialisierer.deserialize(serializedHelloClient, HelloServer.class);
+            //HelloServer helloServer = Deserialisierer.deserialize(serializedHelloClient, HelloServer.class);
+            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+            //test ob man Protokoll Version holen kann
+            String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
+            System.out.println(versionProtocol);
 
             // Antworte dem Server mit Gruppeninformationen und Protokollversion
             // Hier musst du die entsprechenden Informationen einfügen
@@ -29,7 +35,13 @@ public class ChatClient {
 
             // Sende Antwort an den Server
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.println("OK");
+            //writer.println("OK");
+            if("Version 0.1".equals(versionProtocol)){
+                writer.println("OK");
+            }else{
+                writer.println("NOT OK");
+                socket.close();
+            }
 
             // Beginne mit der Verarbeitung von Server-Nachrichten
             new Thread(() -> {
