@@ -64,4 +64,12 @@ public class ChatClient {
             e.printStackTrace();
         }
     }
+
+    public static String getServerIp() {
+        return SERVER_IP;
+    }
+
+    public static int getServerPort() {
+        return SERVER_PORT;
+    }
 }
