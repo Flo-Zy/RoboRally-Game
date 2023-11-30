@@ -4,6 +4,7 @@ import SEPee.client.viewModel.ChatClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,12 +12,19 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static javafx.application.Application.launch;
+
 public class ChatClient {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
 
     public static void main(String[] args) {
+        launch(args);
+    }
+    @Override
+    public void start(Stage primaryStage) {
         try {
+
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
 
             // Empfange HelloClient vom Server
