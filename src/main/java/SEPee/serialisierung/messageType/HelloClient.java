@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class HelloClient {
-    private String messageType;
+public class HelloClient extends Message{
+    //private String messageType;
     private HelloClientBody messageBody;
 
     public HelloClient(String protocol) {
-        this.messageType = "HelloClient";
+        super ("HelloClient");
+        //this.messageType = "HelloClient";
         this.messageBody = new HelloClientBody(protocol);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -17,6 +19,8 @@ public class HelloClient {
         this.messageType = messageType;
     }
 
+     */
+
     public HelloClientBody getMessageBody() {
         return messageBody;
     }
@@ -24,6 +28,8 @@ public class HelloClient {
     public void setMessageBody(HelloClientBody messageBody) {
         this.messageBody = messageBody;
     }
+
+
 
     public static class HelloClientBody {
         private String protocol;
@@ -40,4 +46,6 @@ public class HelloClient {
             this.protocol = protocol;
         }
     }
+
+
 }

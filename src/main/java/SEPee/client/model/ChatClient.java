@@ -4,6 +4,7 @@ import SEPee.client.viewModel.ChatClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,7 +18,7 @@ import java.net.Socket;
 
 import static javafx.application.Application.launch;
 
-public class ChatClient {
+public class ChatClient extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
 
@@ -46,6 +47,7 @@ public class ChatClient {
             //HelloServer helloServer = Deserialisierer.deserialize(serializedHelloClient, HelloServer.class);
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
             //test ob man Protokoll Version holen kann
+
             String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
             System.out.println(versionProtocol);
 

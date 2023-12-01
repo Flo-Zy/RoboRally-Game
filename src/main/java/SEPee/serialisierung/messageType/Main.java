@@ -8,6 +8,21 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+        //test HelloClient als child Klasse von Message
+        HelloClient helloClient = new HelloClient("Version 1.0");
+        String serializedHelloClient = Serialisierer.serialize(helloClient);
+        System.out.println(serializedHelloClient);
+
+        Message test = new HelloClient("Version 1.0");
+        String serializedHelloClient1 = Serialisierer.serialize(test);
+        Message deserialisiertesObjekt = Deserialisierer.deserialize(serializedHelloClient1, Message.class);
+        System.out.println(deserialisiertesObjekt.getMessageType());
+        HelloClient deserialisierterHelloClient = Deserialisierer.deserialize(serializedHelloClient1, HelloClient.class);
+        System.out.println(deserialisierterHelloClient.getMessageBody().getProtocol());
+
+
+        /*
         // test PlayerValues serialisation
         PlayerValues player = new PlayerValues("Alice", 100);
         String serializedPlayer = Serialisierer.serialize(player);
@@ -108,6 +123,8 @@ public class Main {
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);
         System.out.println(serializedCurrentCards);
+
+         */
 
         /**
         // test GameStarted serialisation
