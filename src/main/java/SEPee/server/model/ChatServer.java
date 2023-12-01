@@ -1,7 +1,10 @@
 package SEPee.server.model;
 
+import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.HelloClient;
+import SEPee.serialisierung.messageType.HelloServer;
+import SEPee.serialisierung.messageType.Welcome;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.util.List;
 public class ChatServer {
     private static final int PORT = 8887;
     private static List<ClientHandler> clients = new ArrayList<>();
+    private static int idCounter = 1;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -33,14 +37,19 @@ public class ChatServer {
 
                 // Empfange Antwort vom Client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String clientResponse = reader.readLine();
-                System.out.println(clientResponse);
+                String serializedHelloServer = reader.readLine();
+                System.out.println(serializedHelloServer);
+                HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
 
-                if ("OK".equals(clientResponse)) {
+                if ("Version 0.1".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
                     ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                     clients.add(clientHandler);
                     new Thread(clientHandler).start();
                     System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
+                    //erstelle den Spieler auf Client Seite bevor du die ID zurückschickst
+                    Welcome welcome = new Welcome(assigningClientID());
+                    String serializedWelcome = Serialisierer.serialize(welcome);
+                    writer.println(serializedWelcome);
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
@@ -49,5 +58,11 @@ public class ChatServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static synchronized int assigningClientID(){
+        int assignedClientID = idCounter;
+        idCounter++;
+        return assignedClientID;
     }
 }

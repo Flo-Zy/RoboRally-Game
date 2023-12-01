@@ -2,8 +2,10 @@ package SEPee.client.model;
 
 import SEPee.client.viewModel.ChatClientController;
 import SEPee.serialisierung.Deserialisierer;
+import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
+import SEPee.serialisierung.messageType.Welcome;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,31 +44,37 @@ public class ChatClient extends Application {
             String serializedHelloClient = reader.readLine();
             System.out.println(serializedHelloClient);
 
-            //HelloServer helloServer = Deserialisierer.deserialize(serializedHelloClient, HelloServer.class);
+            //prüfen, dass ein HelloClient angekommen ist, wenn es angekommne ist -> HelloServer zurückschicken
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
-            //test ob man Protokoll Version holen kann
+            if(deserializedHelloClient.getMessageType().equals("HelloClient")){
+                // Sende Antwort an den Server
+                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
+                String serializedHelloServer = Serialisierer.serialize(helloServer);
+                //schicken
+                writer.println(serializedHelloServer);
 
-            String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
-            System.out.println(versionProtocol);
+                //welcome empfangen
+                String serializedWelcome = reader.readLine();
+                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
+                System.out.println(deserializedWelcome.getMessageBody().getClientID());
 
-            // Antworte dem Server mit Gruppeninformationen und Protokollversion
-            // Hier musst du die entsprechenden Informationen einfügen
-            // ...
-
-            // Sende Antwort an den Server
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            if("Version 0.1".equals(versionProtocol)){
-                writer.println("OK");
-
-                controller.init(this, primaryStage);
-
-                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-
-                primaryStage.show();
             }else{
-                writer.println("NOT OK");
+                //reparieren dass es ohne Fehlermeldung schließt
                 socket.close();
             }
+
+
+
+
+            //writer.println("OK");
+
+            //controller.init(this, primaryStage);
+
+            //primaryStage.setOnCloseRequest(event -> controller.shutdown());
+
+            //primaryStage.show();
+
 
             // Beginne mit der Verarbeitung von Server-Nachrichten
             new Thread(() -> {
