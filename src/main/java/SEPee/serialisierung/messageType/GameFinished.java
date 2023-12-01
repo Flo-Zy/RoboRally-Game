@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class GameFinished {
-    private String messageType;
+public class GameFinished extends Message{
+    //private String messageType;
     private GameFinishedBody messageBody;
 
     public GameFinished(int clientID) {
-        this.messageType = "GameFinished";
+        super("GameFinished");
+        //this.messageType = "GameFinished";
         this.messageBody = new GameFinishedBody(clientID);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class GameFinished {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public GameFinishedBody getMessageBody() {
         return messageBody;

@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class Error {
-    private String messageType;
+public class Error extends Message{
+    //private String messageType;
     private ErrorBody messageBody;
 
     public Error(String error) {
-        this.messageType = "Error";
+        super("Error");
+        //this.messageType = "Error";
         this.messageBody = new ErrorBody(error);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class Error {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public ErrorBody getMessageBody() {
         return messageBody;

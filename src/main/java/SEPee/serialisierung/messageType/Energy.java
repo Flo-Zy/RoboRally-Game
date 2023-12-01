@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class Energy {
-    private String messageType;
+public class Energy extends Message{
+    //private String messageType;
     private EnergyBody messageBody;
 
     public Energy(int clientID, int count, String source){
-        this.messageType = "Energy";
+        super("Energy");
+        //this.messageType = "Energy";
         this.messageBody = new EnergyBody(clientID, count, source);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class Energy {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public EnergyBody getMessageBody() {
         return messageBody;
