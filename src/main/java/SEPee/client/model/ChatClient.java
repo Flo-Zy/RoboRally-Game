@@ -58,7 +58,6 @@ public class ChatClient extends Application {
                 String serializedWelcome = reader.readLine();
                 Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
                 System.out.println(deserializedWelcome.getMessageBody().getClientID());
-
             }else{
                 //reparieren dass es ohne Fehlermeldung schließt
                 socket.close();

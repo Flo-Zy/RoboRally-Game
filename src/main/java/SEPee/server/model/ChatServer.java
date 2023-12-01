@@ -46,7 +46,7 @@ public class ChatServer {
                     clients.add(clientHandler);
                     new Thread(clientHandler).start();
                     System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
-                    //erstelle den Spieler auf Client Seite bevor du die ID zurückschickst
+                    //welcome erstellen und an den Client schicken
                     Welcome welcome = new Welcome(assigningClientID());
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
