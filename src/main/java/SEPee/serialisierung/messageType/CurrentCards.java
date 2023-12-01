@@ -1,15 +1,17 @@
 package SEPee.serialisierung.messageType;
 import java.util.List;
 
-public class CurrentCards {
-    private String messageType;
+public class CurrentCards extends Message{
+    //private String messageType;
     private CurrentCardsBody messageBody;
 
     public CurrentCards(List<ActiveCard> activeCards) {
-        this.messageType = "CurrentCards";
+        super("CurrentCards");
+        //this.messageType = "CurrentCards";
         this.messageBody = new CurrentCardsBody(activeCards);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -17,6 +19,8 @@ public class CurrentCards {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public CurrentCardsBody getMessageBody() {
         return messageBody;

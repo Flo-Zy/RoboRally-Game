@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class Movement {
-    private String messageType;
+public class Movement extends Message{
+    //private String messageType;
     private MovementBody messageBody;
 
     public Movement(int clientID, int x, int y){
-        this.messageType = "Movement";
+        super("Movement");
+        //this.messageType = "Movement";
         this.messageBody = new MovementBody(clientID, x, y);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class Movement {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public MovementBody getMessageBody() {
         return messageBody;

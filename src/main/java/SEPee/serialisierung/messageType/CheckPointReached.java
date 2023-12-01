@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class CheckPointReached {
-    private String messageType;
+public class CheckPointReached extends Message{
+    //private String messageType;
     private CheckPointReachedBody messageBody;
 
     public CheckPointReached(int clientID, int number){
-        this.messageType = "CheckPointReached";
+        super("CheckPointReached");
+        //this.messageType = "CheckPointReached";
         this.messageBody = new CheckPointReachedBody(clientID, number);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class CheckPointReached {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public CheckPointReachedBody getMessageBody() {
         return messageBody;

@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class MapSelected {
-    private String messageType;
+public class MapSelected extends Message{
+    //private String messageType;
     private MapSelectedBody messageBody;
 
     public MapSelected(String map) {
-        this.messageType = "MapSelected";
+        super("MapSelected");
+        //this.messageType = "MapSelected";
         this.messageBody = new MapSelectedBody(map);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class MapSelected {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public MapSelectedBody getMessageBody() {
         return messageBody;

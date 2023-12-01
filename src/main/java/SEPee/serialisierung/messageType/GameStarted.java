@@ -2,15 +2,17 @@ package SEPee.serialisierung.messageType;
 
 import java.util.List;
 
-public class GameStarted {
-    private String messageType;
+public class GameStarted extends Message{
+    //private String messageType;
     private GameStartedBody messageBody;
 
     public GameStarted(List<List<List<Cell>>> gameMap) {
-        this.messageType = "GameStarted";
+        super("GameStarted");
+        //this.messageType = "GameStarted";
         this.messageBody = new GameStartedBody(gameMap);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -18,6 +20,8 @@ public class GameStarted {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public GameStartedBody getMessageBody() {
         return messageBody;
