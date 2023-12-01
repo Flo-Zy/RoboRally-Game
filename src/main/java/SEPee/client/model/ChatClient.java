@@ -16,8 +16,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import static javafx.application.Application.launch;
-
 public class ChatClient extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;

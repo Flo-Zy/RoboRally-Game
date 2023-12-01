@@ -2,15 +2,17 @@ package SEPee.serialisierung.messageType;
 
 import java.util.List;
 
-public class SelectMap {
-    private String messageType;
+public class SelectMap extends Message{
+    // private String messageType;
     private SelectMapBody messageBody;
 
     public SelectMap(List<String> availableMaps) {
-        this.messageType = "SelectMap";
+        super("SelectMap");
+        // this.messageType = "SelectMap";
         this.messageBody = new SelectMapBody(availableMaps);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -19,6 +21,8 @@ public class SelectMap {
         this.messageType = messageType;
     }
 
+
+     */
     public SelectMapBody getMessageBody() {
         return messageBody;
     }

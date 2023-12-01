@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class Reboot {
-    private String messageType;
+public class Reboot extends Message {
+    // private String messageType;
     private RebootBody messageBody;
 
     public Reboot(int clientID){
-        this.messageType = "Reboot";
+        super ("Reboot");
+        //this.messageType = "Reboot";
         this.messageBody = new RebootBody(clientID);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,8 @@ public class Reboot {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+
+     */
 
     public RebootBody getMessageBody() {
         return messageBody;

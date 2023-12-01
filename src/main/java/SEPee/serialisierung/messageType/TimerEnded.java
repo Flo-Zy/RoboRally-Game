@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class TimerEnded {
-    private String messageType;
+public class TimerEnded extends Message{
+    // private String messageType;
     private TimerEndedBody messageBody;
 
     public TimerEnded(int[] clientIDs) {
-        this.messageType = "TimerEnded";
+        super("TimerEnded");
+        // this.messageType = "TimerEnded";
         this.messageBody = new TimerEndedBody(clientIDs);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,7 @@ public class TimerEnded {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+    */
 
     public TimerEndedBody getMessageBody() {
         return messageBody;

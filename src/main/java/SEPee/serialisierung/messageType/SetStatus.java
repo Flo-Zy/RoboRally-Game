@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class SetStatus {
-    private String messageType;
+public class SetStatus extends Message{
+    // private String messageType;
     private SetStatusBody messageBody;
 
     public SetStatus(boolean ready) {
-        this.messageType = "SetStatus";
+        super("SetStatus");
+        // this.messageType = "SetStatus";
         this.messageBody = new SetStatusBody(ready);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,7 @@ public class SetStatus {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+    */
 
     public SetStatusBody getMessageBody() {
         return messageBody;

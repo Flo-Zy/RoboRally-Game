@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class PlayerTurning {
-    private String messageType;
+public class PlayerTurning extends Message{
+    // private String messageType;
     private PlayerTurningBody messageBody;
 
     public PlayerTurning(int clientID, String rotation){
-        this.messageType = "PlayerTurning";
+        super("PlayerTurning");
+        // this.messageType = "PlayerTurning";
         this.messageBody = new PlayerTurningBody(clientID, rotation);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,7 @@ public class PlayerTurning {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+     */
 
     public PlayerTurningBody getMessageBody() {
         return messageBody;

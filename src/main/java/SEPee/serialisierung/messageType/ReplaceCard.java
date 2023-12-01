@@ -1,14 +1,16 @@
 package SEPee.serialisierung.messageType;
 
-public class ReplaceCard {
-    private String messageType;
+public class ReplaceCard extends Message{
+    // private String messageType;
     private ReplaceCardBody messageBody;
 
     public ReplaceCard(int register, String newCard, int clientID){
-        this.messageType = "ReplaceCard";
+        super("ReplaceCard");
+        // this.messageType = "ReplaceCard";
         this.messageBody = new ReplaceCardBody(register, newCard, clientID);
     }
 
+    /*
     public String getMessageType() {
         return messageType;
     }
@@ -16,6 +18,7 @@ public class ReplaceCard {
     public void setMessageType(String messageType) {
         this.messageType = messageType;
     }
+    */
 
     public ReplaceCardBody getMessageBody() {
         return messageBody;
