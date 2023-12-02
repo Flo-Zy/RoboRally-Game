@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class Game {
     private GameBoard gameboard;
-    private Player[] playerList;
+    private ArrayList<Player> playerList;
     private Phase currentPhase;
     private ArrayList<ProgCard> initialProgDeck;
     private DamageDecks damageDecks;

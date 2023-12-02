@@ -183,13 +183,6 @@ public class ClientController {
         return 0; // Default value if no selection or unexpected button is pressed
     }
 
-
-
-
-
-
-
-
     public String getName() {
         return name;
     }

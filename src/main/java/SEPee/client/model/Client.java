@@ -68,11 +68,13 @@ public class Client extends Application {
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
                             controller.init(this, primaryStage);
-                            primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                            primaryStage.show();
+                            //primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                            //primaryStage.show();
 
-
-
+                            //PlayerValues schicken
+                            PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                            String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                            writer.println(serializedPlayerValues);
                             break;
                         case "PlayerAdded":
                             System.out.println("PlayerAdded");

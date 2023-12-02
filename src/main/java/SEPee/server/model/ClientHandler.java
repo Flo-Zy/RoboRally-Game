@@ -33,9 +33,9 @@ public class ClientHandler implements Runnable {
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
         ) {
-            String serializedReceivedChat;
-            while ((serializedReceivedChat = reader.readLine()) != null) {
-                Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedChat, Message.class);
+            String serializedReceivedString;
+            while ((serializedReceivedString = reader.readLine()) != null) {
+                Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
                 String input = deserializedReceivedString.getMessageType();
                 //System.out.println("2");
                 switch (input) {
@@ -45,9 +45,15 @@ public class ClientHandler implements Runnable {
                         break;
                     case "PlayerValues":
                         System.out.println("Player Values erhalten");
-                        PlayerAdded playerAdded = new PlayerAdded(1, "Hasan",4);
+                        String serializedPlayerValues = serializedReceivedString;
+                        PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
+
+                        System.out.println(deserializedPlayerValues.getMessageBody().getName()+
+                                "\n"+deserializedPlayerValues.getMessageBody().getFigure());
+
+                        /*PlayerAdded playerAdded = new PlayerAdded(1, "Hasan",4);
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
-                        writer.println(serializedPlayerAdded);
+                        writer.println(serializedPlayerAdded);*/
                         break;
                     case "SetStatus":
                         System.out.println("Set Status");
