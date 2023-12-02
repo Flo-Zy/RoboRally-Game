@@ -1,6 +1,8 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
+import SEPee.serialisierung.Deserialisierer;
+import SEPee.serialisierung.messageType.HelloClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -31,46 +33,63 @@ public class ClientController {
     private String username;
 
     public void init(Client chatClient, Stage stage) {
+        boolean validUsername = false;
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Username");
-        dialog.setHeaderText("Please enter your username:");
-        dialog.setContentText("Username:");
+        while (!validUsername) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Username");
+            dialog.setHeaderText("Please enter your username:");
+            dialog.setContentText("Username:");
+            Optional<String> result = dialog.showAndWait();
 
-        Optional<String> result = dialog.showAndWait();
 
-        if (result.isPresent()) {
-            this.username = result.get();
-            stage.setTitle("Chat Client - " + username);
+            if (result.isPresent() && !result.get().trim().isEmpty()) {
+                this.username = result.get().trim();
+                stage.setTitle("Chat Client - " + username);
+                validUsername = true;
 
-            try {
-                this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
-                this.writer = new PrintWriter(socket.getOutputStream(), true);
-                this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                try {
+                    this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
+                    //writer.println( "PRINT CHAT CLIENT" + chatClient);
+                    this.writer = new PrintWriter(socket.getOutputStream(), true);
+                    this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                writer.println(username + " has joined the chat.");
+                    // Empfange serialisierten HelloClient-String vom Server
+                    String serializedHelloClient = reader.readLine();
+                    HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+                    String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
 
-                new Thread(() -> {
-                    try {
-                        String serverMessage;
-                        while ((serverMessage = reader.readLine()) != null) {
-                            appendToChatArea(serverMessage);
+                    writer.println(username + " has joined the chat.");
+
+                    new Thread(() -> {
+                        try {
+                            String serverMessage;
+                            while ((serverMessage = reader.readLine()) != null) {
+                                appendToChatArea(serverMessage);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            sendButton.setOnAction(event -> sendMessage());
-            visibilityButton.setText("Alle");
-            visibilityButton.setOnAction(event -> toggleVisibility());
-            stage.setOnCloseRequest(event -> shutdown());
+                    }).start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                sendButton.setOnAction(event -> sendMessage());
+                visibilityButton.setText("Alle");
+                visibilityButton.setOnAction(event -> toggleVisibility());
+                stage.setOnCloseRequest(event -> shutdown());
 
-            Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-        } else {
-            Platform.exit();
+                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+            } else {
+                //falls Username empty
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username cannot be empty. Please enter a valid username.");
+                alert.showAndWait();
+
+                Platform.exit();
+            }
         }
     }
 
