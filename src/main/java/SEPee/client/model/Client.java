@@ -62,9 +62,10 @@ public class Client extends Application {
 
                 boolean loop = true;
                 while (loop){
+                    System.out.println("PlayerAdded");
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
-                    String input = deserializedReceivedString.getMessageType();
+                    String input = (deserializedReceivedString.getMessageType());
                     switch(input){
                         case "PlayerAdded":
                             System.out.println("PlayerAdded");
@@ -84,7 +85,7 @@ public class Client extends Application {
                             loop = false;
                             break;
                         default:
-                            System.out.println("Wrong massage received!");
+                            System.out.println("Wrong message received!");
                             break;
 
                     }
