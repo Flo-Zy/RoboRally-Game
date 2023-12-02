@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ChatClientController">
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="645.0" prefWidth="1130.0" spacing="10" VBox.vgrow="ALWAYS">

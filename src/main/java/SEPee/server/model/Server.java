@@ -15,11 +15,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ChatServer {
+public class Server extends Thread{
     private static final int PORT = 8887;
-    private static List<ClientHandler> clients = new ArrayList<>();
+    private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
 
     public static void main(String[] args) {
@@ -56,36 +57,8 @@ public class ChatServer {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
                 }
-                System.out.println("1");
-                String serializedReceivedString = reader.readLine();
-                Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
-                String input = deserializedReceivedString.getMessageType();
-                System.out.println("2");
-                switch (input) {
-                    //HelloServer wird oben behandelt beim Verbindungsaufbau
-                    case "Alive":
-                        System.out.println("Alive");
-                        continue;
-                    case "PlayerValues":
-                        System.out.println("Player Values");
-                        continue;
-                    case "SetStatus":
-                        System.out.println("Set Status");
-                        continue;
-                    case "MapSelected":
-                        System.out.println("Map Selected");
-                        continue;
-                    case "SendChat":
-                        System.out.println("Send Chat");
-                        continue;
-                    case "PlayCard":
-                        System.out.println("Play Card");
-                        continue;
-                    default:
-                        //Error-JSON an Client
-                        System.out.println("Unknown command");
-                        break;
-                }
+                //System.out.println("1");
+
             }
         } catch (IOException e) {
             e.printStackTrace();

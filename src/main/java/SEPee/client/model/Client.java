@@ -1,6 +1,6 @@
 package SEPee.client.model;
 
-import SEPee.client.viewModel.ChatClientController;
+import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ChatClient extends Application {
+public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
 
@@ -31,14 +31,14 @@ public class ChatClient extends Application {
         try {
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ChatClient.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Client.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            primaryStage.setTitle("Chat Client");
+            primaryStage.setTitle("Client");
             primaryStage.setScene(scene);
 
-            ChatClientController controller = loader.getController();
+            ClientController controller = loader.getController();
 
             // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

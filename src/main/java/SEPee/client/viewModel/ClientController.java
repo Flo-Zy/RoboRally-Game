@@ -1,6 +1,6 @@
 package SEPee.client.viewModel;
 
-import SEPee.client.model.ChatClient;
+import SEPee.client.model.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Optional;
 
-public class ChatClientController {
+public class ClientController {
     @FXML
     private TextArea chatArea;
 
@@ -30,7 +30,7 @@ public class ChatClientController {
     private BufferedReader reader;
     private String username;
 
-    public void init(ChatClient chatClient, Stage stage) {
+    public void init(Client chatClient, Stage stage) {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Username");
