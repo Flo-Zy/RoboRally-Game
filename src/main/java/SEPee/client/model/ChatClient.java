@@ -5,6 +5,7 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.HelloServer;
 import SEPee.serialisierung.messageType.HelloClient;
+import SEPee.serialisierung.messageType.Message;
 import SEPee.serialisierung.messageType.Welcome;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -58,6 +59,36 @@ public class ChatClient extends Application {
                 String serializedWelcome = reader.readLine();
                 Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
                 System.out.println(deserializedWelcome.getMessageBody().getClientID());
+
+                boolean loop = true;
+                while (loop){
+                    String serializedReceivedString = reader.readLine();
+                    Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
+                    String input = deserializedReceivedString.getMessageType();
+                    switch(input){
+                        case "PlayerAdded":
+                            System.out.println("PlayerAdded");
+                            break;
+                        case "PlayerStatus":
+                            System.out.println("PlayerStatus");
+                            break;
+                        case "SelectMap":
+                            System.out.println("SelectMap");
+                            break;
+                        case "ReceivedChat":
+                            System.out.println("ReceivedChat");
+                            break;
+                        case "GameFinished":
+                            System.out.println("GameFinished");
+                            //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
+                            loop = false;
+                            break;
+                        default:
+                            System.out.println("Wrong massage received!");
+                            break;
+
+                    }
+                }
 
             }else{
                 //reparieren dass es ohne Fehlermeldung schließt

@@ -2,9 +2,11 @@ package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.HelloClient;
-import SEPee.serialisierung.messageType.HelloServer;
-import SEPee.serialisierung.messageType.Welcome;
+import SEPee.serialisierung.messageType.*;
+//import SEPee.serialisierung.messageType.HelloClient;
+//import SEPee.serialisierung.messageType.HelloServer;
+//import SEPee.serialisierung.messageType.Welcome;
+//import SEPee.serialisierung.messageType.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +55,36 @@ public class ChatServer {
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
+                }
+                System.out.println("1");
+                String serializedReceivedString = reader.readLine();
+                Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
+                String input = deserializedReceivedString.getMessageType();
+                System.out.println("2");
+                switch (input) {
+                    //HelloServer wird oben behandelt beim Verbindungsaufbau
+                    case "Alive":
+                        System.out.println("Alive");
+                        continue;
+                    case "PlayerValues":
+                        System.out.println("Player Values");
+                        continue;
+                    case "SetStatus":
+                        System.out.println("Set Status");
+                        continue;
+                    case "MapSelected":
+                        System.out.println("Map Selected");
+                        continue;
+                    case "SendChat":
+                        System.out.println("Send Chat");
+                        continue;
+                    case "PlayCard":
+                        System.out.println("Play Card");
+                        continue;
+                    default:
+                        //Error-JSON an Client
+                        System.out.println("Unknown command");
+                        break;
                 }
             }
         } catch (IOException e) {
