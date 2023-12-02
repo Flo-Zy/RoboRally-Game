@@ -64,7 +64,7 @@ public class Client extends Application {
                 while (loop){
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
-                    String input = (deserializedReceivedString.getMessageType());
+                    String input = deserializedReceivedString.getMessageType();
                     switch(input){
                         case "PlayerAdded":
                             System.out.println("PlayerAdded");
