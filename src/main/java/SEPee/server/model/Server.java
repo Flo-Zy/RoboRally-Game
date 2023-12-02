@@ -23,6 +23,8 @@ public class Server extends Thread{
     private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
 
+    private static int clientID;
+
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
@@ -50,7 +52,8 @@ public class Server extends Thread{
                     new Thread(clientHandler).start();
                     System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                     //welcome erstellen und an den Client schicken
-                    Welcome welcome = new Welcome(assigningClientID());
+                    clientID = assigningClientID();
+                    Welcome welcome = new Welcome(clientID);
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
                 } else {
@@ -69,5 +72,9 @@ public class Server extends Thread{
         int assignedClientID = idCounter;
         idCounter++;
         return assignedClientID;
+    }
+
+    public static int getClientID() {
+        return clientID;
     }
 }

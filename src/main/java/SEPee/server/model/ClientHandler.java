@@ -11,12 +11,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
+import SEPee.server.model.Game;
 
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private List<ClientHandler> clients;
     private PrintWriter writer;
+    private ArrayList<Player> playerList;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
@@ -47,9 +50,13 @@ public class ClientHandler implements Runnable {
                         System.out.println("Player Values erhalten");
                         String serializedPlayerValues = serializedReceivedString;
                         PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
+                        String playerName = deserializedPlayerValues.getMessageBody().getName();
+                        int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
+                        playerList.add(new Player(playerName, Server.getClientID(), playerFigure));
+                        System.out.println(Server.getClientID());
 
-                        System.out.println(deserializedPlayerValues.getMessageBody().getName()+
-                                "\n"+deserializedPlayerValues.getMessageBody().getFigure());
+                        /*System.out.println(deserializedPlayerValues.getMessageBody().getName()+
+                                "\n"+deserializedPlayerValues.getMessageBody().getFigure());*/
 
                         /*PlayerAdded playerAdded = new PlayerAdded(1, "Hasan",4);
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
