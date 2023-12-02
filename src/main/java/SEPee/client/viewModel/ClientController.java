@@ -13,7 +13,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Optional;
+
+
 
 public class ClientController {
     @FXML
@@ -148,7 +151,7 @@ public class ClientController {
         dialog.setTitle("Robot Selection");
         dialog.setHeaderText("Please select a robot:");
 
-        // Erstelle Buttons für jeden Roboter
+        // Create buttons for each robot
         ButtonType button1 = new ButtonType("Robot 1", ButtonBar.ButtonData.OK_DONE);
         ButtonType button2 = new ButtonType("Robot 2", ButtonBar.ButtonData.OK_DONE);
         ButtonType button3 = new ButtonType("Robot 3", ButtonBar.ButtonData.OK_DONE);
@@ -156,20 +159,36 @@ public class ClientController {
         ButtonType button5 = new ButtonType("Robot 5", ButtonBar.ButtonData.OK_DONE);
         ButtonType button6 = new ButtonType("Robot 6", ButtonBar.ButtonData.OK_DONE);
 
-        // Füge die Buttons zum Dialog hinzu
+        // Create a map to associate button types with integer values
+        HashMap<ButtonType, Integer> buttonMap = new HashMap<>();
+        buttonMap.put(button1, 1);
+        buttonMap.put(button2, 2);
+        buttonMap.put(button3, 3);
+        buttonMap.put(button4, 4);
+        buttonMap.put(button5, 5);
+        buttonMap.put(button6, 6);
+
+        // Add buttons to the dialog
         dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
 
-        // Zeige den Dialog und warte auf Benutzereingabe
+        // Show the dialog and wait for user input
         dialog.initOwner(stage);
         Optional<Integer> result = dialog.showAndWait();
 
-        // Verarbeite die Benutzereingabe und gib die ausgewählte Roboterfigur zurück
-        result.ifPresent(figure -> {
-            // Mache etwas mit der ausgewählten Figur, wenn nötig
-            setFigure(figure);
-        });
-        return 0;
+        // Process user input and return the selected robot (index starting from 1)
+        if (result.isPresent()) {
+            return buttonMap.getOrDefault(result.get(), 0);
+        }
+
+        return 0; // Default value if no selection or unexpected button is pressed
     }
+
+
+
+
+
+
+
 
     public String getName() {
         return name;
