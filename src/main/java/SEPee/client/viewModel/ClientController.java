@@ -1,16 +1,16 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
-import SEPee.serialisierung.Deserialisierer;
-import SEPee.serialisierung.messageType.HelloClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Optional;
@@ -30,7 +30,9 @@ public class ClientController {
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
-    private String username;
+    private String name;
+    private int figure;
+    private int id;
 
     public void init(Client chatClient, Stage stage) {
         boolean validUsername = false;
@@ -42,24 +44,28 @@ public class ClientController {
             dialog.setContentText("Username:");
             Optional<String> result = dialog.showAndWait();
 
-
             if (result.isPresent() && !result.get().trim().isEmpty()) {
-                this.username = result.get().trim();
-                stage.setTitle("Chat Client - " + username);
+                this.name = result.get().trim();
+                stage.setTitle("Client - " + name);
                 validUsername = true;
 
-                try {
-                    this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
+                figure = showRobotSelectionDialog(stage);
+                setFigure(figure);
+
+
+
+                /*try {
+                    //this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
                     //writer.println( "PRINT CHAT CLIENT" + chatClient);
-                    this.writer = new PrintWriter(socket.getOutputStream(), true);
-                    this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    //this.writer = new PrintWriter(socket.getOutputStream(), true);
+                    //this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                     // Empfange serialisierten HelloClient-String vom Server
                     String serializedHelloClient = reader.readLine();
                     HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
                     String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
 
-                    writer.println(username + " has joined the chat.");
+                    writer.println(name + " has joined the chat.");
 
                     new Thread(() -> {
                         try {
@@ -79,7 +85,7 @@ public class ClientController {
                 visibilityButton.setOnAction(event -> toggleVisibility());
                 stage.setOnCloseRequest(event -> shutdown());
 
-                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));*/
             } else {
                 //falls Username empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -98,7 +104,7 @@ public class ClientController {
     private void sendMessage() {
         String message = messageField.getText();
         if (!message.isEmpty()) {
-            writer.println(username + ": " + message);
+            writer.println(name + ": " + message);
             messageField.clear();
         }
     }
@@ -125,7 +131,7 @@ public class ClientController {
         try {
             if (socket != null && !socket.isClosed()) {
                 if (writer != null) {
-                    writer.println(username + " has left the chat.");
+                    writer.println(name + " has left the chat.");
                     writer.flush();
                     writer.close();
                 }
@@ -135,5 +141,57 @@ public class ClientController {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private int showRobotSelectionDialog(Stage stage) {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Robot Selection");
+        dialog.setHeaderText("Please select a robot:");
+
+        // Erstelle Buttons für jeden Roboter
+        ButtonType button1 = new ButtonType("Robot 1", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button2 = new ButtonType("Robot 2", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button3 = new ButtonType("Robot 3", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button4 = new ButtonType("Robot 4", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button5 = new ButtonType("Robot 5", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button6 = new ButtonType("Robot 6", ButtonBar.ButtonData.OK_DONE);
+
+        // Füge die Buttons zum Dialog hinzu
+        dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
+
+        // Zeige den Dialog und warte auf Benutzereingabe
+        dialog.initOwner(stage);
+        Optional<Integer> result = dialog.showAndWait();
+
+        // Verarbeite die Benutzereingabe und gib die ausgewählte Roboterfigur zurück
+        result.ifPresent(figure -> {
+            // Mache etwas mit der ausgewählten Figur, wenn nötig
+            setFigure(figure);
+        });
+        return 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getFigure() {
+        return figure;
+    }
+
+    public void setFigure(int figure) {
+        this.figure = figure;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

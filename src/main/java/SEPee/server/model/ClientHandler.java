@@ -1,7 +1,10 @@
 package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
+import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.Message;
+import SEPee.serialisierung.messageType.PlayerAdded;
+import SEPee.serialisierung.messageType.PlayerValues;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +21,6 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
         this.clients = clients;
-
         try {
             this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
@@ -40,22 +42,25 @@ public class ClientHandler implements Runnable {
                     //HelloServer wird oben behandelt beim Verbindungsaufbau
                     case "Alive":
                         System.out.println("Alive");
-                        continue;
+                        break;
                     case "PlayerValues":
-                        System.out.println("Player Values");
-                        continue;
+                        System.out.println("Player Values erhalten");
+                        PlayerAdded playerAdded = new PlayerAdded(1, "Hasan",4);
+                        String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
+                        writer.println(serializedPlayerAdded);
+                        break;
                     case "SetStatus":
                         System.out.println("Set Status");
-                        continue;
+                        break;
                     case "MapSelected":
                         System.out.println("Map Selected");
-                        continue;
+                        break;
                     case "SendChat":
                         System.out.println("Send Chat");
-                        continue;
+                        break;
                     case "PlayCard":
                         System.out.println("Play Card");
-                        continue;
+                        break;
                     default:
                         //Error-JSON an Client
                         System.out.println("Unknown command");

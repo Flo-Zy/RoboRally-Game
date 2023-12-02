@@ -3,10 +3,7 @@ package SEPee.client.model;
 import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.HelloServer;
-import SEPee.serialisierung.messageType.HelloClient;
-import SEPee.serialisierung.messageType.Message;
-import SEPee.serialisierung.messageType.Welcome;
+import SEPee.serialisierung.messageType.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,7 +27,6 @@ public class Client extends Application {
     public void start(Stage primaryStage) {
         try {
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Client.fxml"));
             Parent root = loader.load();
 
@@ -55,10 +51,10 @@ public class Client extends Application {
                 //schicken
                 writer.println(serializedHelloServer);
 
-                //welcome empfangen
+                /*//welcome empfangen
                 String serializedWelcome = reader.readLine();
                 Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
-                System.out.println(deserializedWelcome.getMessageBody().getClientID());
+                System.out.println(deserializedWelcome.getMessageBody().getClientID());*/
 
                 boolean loop = true;
                 while (loop){
@@ -66,6 +62,18 @@ public class Client extends Application {
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
                     String input = deserializedReceivedString.getMessageType();
                     switch(input){
+                        case "Welcome":
+                            String serializedWelcome = serializedReceivedString;
+                            Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
+                            int receivedId = deserializedWelcome.getMessageBody().getClientID();
+                            controller.setId(receivedId);
+                            controller.init(this, primaryStage);
+                            primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                            primaryStage.show();
+
+
+
+                            break;
                         case "PlayerAdded":
                             System.out.println("PlayerAdded");
                             break;
@@ -95,16 +103,9 @@ public class Client extends Application {
                 socket.close();
             }
 
-
-
-
-            //writer.println("OK");
-
-            //controller.init(this, primaryStage);
-
-            //primaryStage.setOnCloseRequest(event -> controller.shutdown());
-
-            //primaryStage.show();
+            /*controller.init(this, primaryStage);
+            primaryStage.setOnCloseRequest(event -> controller.shutdown());
+            primaryStage.show();
 
 
             // Beginne mit der Verarbeitung von Server-Nachrichten
@@ -122,7 +123,7 @@ public class Client extends Application {
             }).start();
 
             // Hier kannst du weitere Logik für die Client-Anwendung implementieren
-            // ...
+            // ...*/
 
         } catch (IOException e) {
             e.printStackTrace();
