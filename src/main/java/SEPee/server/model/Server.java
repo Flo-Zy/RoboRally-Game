@@ -60,9 +60,9 @@ public class Server extends Thread{
 
                     /*
                     //tester fur client switchcase
-                   /* PlayerAdded playerAdded = new PlayerAdded(clientID, "hanso", 5);
+                    PlayerAdded playerAdded = new PlayerAdded(clientID, "hanso", 5);
                     String serializedplayerAdded = Serialisierer.serialize(playerAdded);
-                    writer.println(serializedplayerAdded);*/
+                    writer.println(serializedplayerAdded);
 
                     //2 tester fur client switchcase
                     PlayerStatus playerStatus = new PlayerStatus(clientID, true);
