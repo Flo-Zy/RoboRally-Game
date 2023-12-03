@@ -2,9 +2,7 @@ package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Message;
-import SEPee.serialisierung.messageType.PlayerAdded;
-import SEPee.serialisierung.messageType.PlayerValues;
+import SEPee.serialisierung.messageType.*;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,9 +12,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import SEPee.server.model.Game;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
+    private int clientId;
     private List<ClientHandler> clients;
     private PrintWriter writer;
 
@@ -54,13 +58,17 @@ public class ClientHandler implements Runnable {
                         String playerName = deserializedPlayerValues.getMessageBody().getName();
                         int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
                         //speichert Spielerobjekt in playerList im Server
-                        Server.getPlayerList().add(new Player(playerName, Server.getClientID(), playerFigure));
+                        clientId = Server.getClientID();
+                        Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
+                        //playerAdded senden an alle Clients
+                        PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
+                        String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
+                        broadcast(serializedPlayerAdded);
 
-
-                        //serverchecker tests
-                        System.out.println(deserializedPlayerValues.getMessageBody().getName());
-                        System.out.println(deserializedPlayerValues.getMessageBody().getFigure());
-
+                        //send Playerlist to new Player
+                        GivePlayerList givePlayerList= new GivePlayerList(Server.getPlayerList());
+                        String serializedGivePlayerList = Serialisierer.serialize(givePlayerList);
+                        sendToOneClient(clientId, serializedGivePlayerList);
 
                         break;
                     case "SetStatus":
@@ -91,4 +99,18 @@ public class ClientHandler implements Runnable {
             client.writer.println(serializedObjectToSend);
         }
     }
+
+    public void sendToOneClient(int clientId, String serializedObject) {
+        for (ClientHandler client : clients) {
+            if (client.getClientId() == clientId) {
+                // Found the target client, send the message to its socket
+                client.writer.println(serializedObject);
+                return; // Exit the loop after sending the message
+            }
+        }
+        // If the loop completes and the target client is not found, you may handle it accordingly.
+        System.out.println("Client with ID " + clientId + " not found.");
+    }
+
+
 }

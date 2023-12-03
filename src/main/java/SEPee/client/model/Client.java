@@ -15,10 +15,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Array;
+import java.util.ArrayList;
 
 public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
+    private static ArrayList<Player> playerListClient = new ArrayList<>();
 
     private boolean receivedHelloClient = false;
 
@@ -39,6 +42,7 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
+            // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
@@ -103,21 +107,33 @@ public class Client extends Application {
                             // Handle PlayerAdded message
                             break;
                         case "PlayerAdded":
-                            System.out.println("switch case playeradded angekommen");
-                            // Handle PlayerAdded message
+                            PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
+                            if(playerAdded.getMessageBody().getClientID() != controller.getId()){
+                                String name = playerAdded.getMessageBody().getName();
+                                int id = playerAdded.getMessageBody().getClientID();
+                                int figure = playerAdded.getMessageBody().getFigure();
+                                //den empfangenen Spieler in der Client seitigen playerList speichern
+                                playerListClient.add(new Player(name, id, figure));
+                                System.out.println("Player added");
+                            }
+                            break;
+                        case "GivePlayerList":
+                            GivePlayerList givePlayerList = Deserialisierer.deserialize(serializedReceivedString, GivePlayerList.class);
+                            playerListClient = givePlayerList.getMessageBody().getPlayerList();
                             break;
                         case "PlayerStatus":
-                            System.out.println("switch case playerstatus angekommen");
-                            // Handle PlayerStatus message
+                            System.out.println("PlayerStatus");
                             break;
                         case "SelectMap":
-                            // Handle SelectMap message
+                            System.out.println("SelectMap");
                             break;
                         case "ReceivedChat":
-                            // Handle ReceivedChat message
+                            System.out.println("ReceivedChat");
                             break;
                         case "GameFinished":
-                            // Handle GameFinished message
+                            System.out.println("GameFinished");
+                            //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
+                            loop = false;
                             break;
                         default:
                             System.out.println("Unhandled message received: " + messageType);
