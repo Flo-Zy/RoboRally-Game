@@ -117,17 +117,31 @@ public class ClientController {
     private void sendMessage() {
         String message = messageField.getText();
         if (!message.isEmpty()) {
+            SendChat sendChatMessage = new SendChat(getId(), message, getSelectedRecipientId());
+            System.out.println("send message selected id " + getSelectedRecipientId());
 
-            //DIFFERENT RECIPIENTID ???
-            int recipientId = -1;
-
-            SendChat sendChatMessage = new SendChat(getId(),message, recipientId);
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
             Client.getWriter().println(serializedSendChat);
 
             messageField.clear();
         }
     }
+
+    private int giveRecipientIdToSendMessage(){
+        return getSelectedRecipientId();
+
+    }
+
+    // Method to get the selected recipient ID
+    private int getSelectedRecipientId() {
+        if (visibilityButton.getText().equals("Privat")) {
+            System.out.println("die selected " + selectedRecipientId);
+            return selectedRecipientId; // Return the ID of the selected player for private messages
+        } else {
+            return -1; // If it's a message to all, return -1
+        }
+    }
+
 
     @FXML
     private void sendReady(){
@@ -191,6 +205,8 @@ public class ClientController {
         }
     }
 
+    private int selectedRecipientId  = -1; // Initialize with a default value
+
     private void showPlayerListDialog() {
         // Erstellen Sie einen ChoiceDialog mit der Liste der Spieler
         ChoiceDialog<Player> dialog = new ChoiceDialog<>(null, playerListClient);
@@ -217,20 +233,9 @@ public class ClientController {
         Optional<Player> result = dialog.showAndWait();
 
         if (result.isPresent()) {
-            // Spieler ausgewählt, die Recipient-ID auf die ausgewählte Spieler-ID setzen
             Player selectedPlayer = result.get();
-            int selectRecipientId = selectedPlayer.getId();
+            selectedRecipientId = selectedPlayer.getId(); // Store the ID of the selected player
             visibilityButton.setText("Privat");
-
-            // Hier kannst du die Logik für private Nachrichten implementieren
-            // Verwende die recipientId, um die private Nachricht zu senden
-        } else {
-            // "Abbrechen" wurde ausgewählt, die Recipient-ID auf -1 setzen
-            int selectRecipientId = -1;
-            visibilityButton.setText("Alle");
-
-            // Hier kannst du die Logik für Nachrichten an alle implementieren
-            // Verwende die recipientId, um die Nachricht an alle zu senden
         }
     }
 
