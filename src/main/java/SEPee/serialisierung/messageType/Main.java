@@ -2,12 +2,26 @@ package SEPee.serialisierung.messageType;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
+import SEPee.server.model.gameBoard.DizzyHighway;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+        DizzyHighway dizzyHighway = new DizzyHighway();
+        GameStarted gameStarted = new GameStarted(dizzyHighway.getGameBoard());
+        String serializedGameStarted = Serialisierer.serialize(gameStarted);
+        System.out.println(serializedGameStarted);
+
+        /*
+        //deserialisieren klappt noch nicht für die map
+        GameStarted deserializedGameStarted = Deserialisierer.deserialize(serializedGameStarted, GameStarted.class);
+        System.out.println(deserializedGameStarted.getMessageBody().getGameMap());
+
+         */
+
 
         //test HelloClient als child Klasse von Message
         HelloClient helloClient = new HelloClient("Version 1.0");
@@ -24,6 +38,7 @@ public class Main {
 
 
         /*
+
         // test PlayerValues serialisation
         PlayerValues player = new PlayerValues("Alice", 100);
         String serializedPlayer = Serialisierer.serialize(player);

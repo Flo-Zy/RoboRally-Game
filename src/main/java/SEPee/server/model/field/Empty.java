@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StartPoint extends Field{
+public class Empty extends Field{
 
-    public StartPoint(Position position){
-        super("Startpoint", position);
+    public Empty(Position position){
+        super("Empty", position);
     }
 }

@@ -1,12 +1,14 @@
 package SEPee.serialisierung.messageType;
 
+import SEPee.server.model.field.Field;
+
 import java.util.List;
 
 public class GameStarted extends Message{
     //private String messageType;
     private GameStartedBody messageBody;
 
-    public GameStarted(List<List<List<Cell>>> gameMap) {
+    public GameStarted(List<List<List<Field>>> gameMap) {
         super("GameStarted");
         //this.messageType = "GameStarted";
         this.messageBody = new GameStartedBody(gameMap);
@@ -32,17 +34,17 @@ public class GameStarted extends Message{
     }
 
     public static class GameStartedBody {
-        private List<List<List<Cell>>> gameMap;
+        private List<List<List<Field>>> gameMap;
 
-        public GameStartedBody(List<List<List<Cell>>> gameMap) {
+        public GameStartedBody(List<List<List<Field>>> gameMap) {
             this.gameMap = gameMap;
         }
 
-        public List<List<List<Cell>>> getGameMap() {
+        public List<List<List<Field>>> getGameMap() {
             return gameMap;
         }
 
-        public void setGameMap(List<List<List<Cell>>> gameMap) {
+        public void setGameMap(List<List<List<Field>>> gameMap) {
             this.gameMap = gameMap;
         }
     }
