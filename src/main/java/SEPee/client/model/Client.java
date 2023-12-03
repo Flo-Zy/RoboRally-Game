@@ -99,11 +99,18 @@ public class Client extends Application {
                             break;
                         case "PlayerAdded":
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
-                            String name = playerAdded.getMessageBody().getName();
-                            int id = playerAdded.getMessageBody().getClientID();
-                            int figure = playerAdded.getMessageBody().getFigure();
-                            //den empfangenen Spieler in der Client seitigen playerList speichern
-                            playerListClient.add(new Player(name, id, figure));
+                            if(playerAdded.getMessageBody().getClientID() != controller.getId()){
+                                String name = playerAdded.getMessageBody().getName();
+                                int id = playerAdded.getMessageBody().getClientID();
+                                int figure = playerAdded.getMessageBody().getFigure();
+                                //den empfangenen Spieler in der Client seitigen playerList speichern
+                                playerListClient.add(new Player(name, id, figure));
+                                System.out.println("Player added");
+                            }
+                            break;
+                        case "GivePlayerList":
+                            GivePlayerList givePlayerList = Deserialisierer.deserialize(serializedReceivedString, GivePlayerList.class);
+                            playerListClient = givePlayerList.getMessageBody().getPlayerList();
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");

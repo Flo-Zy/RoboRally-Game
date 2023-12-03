@@ -2,10 +2,7 @@ package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Message;
-import SEPee.serialisierung.messageType.PlayerAdded;
-import SEPee.serialisierung.messageType.PlayerStatus;
-import SEPee.serialisierung.messageType.PlayerValues;
+import SEPee.serialisierung.messageType.*;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,12 +65,11 @@ public class ClientHandler implements Runnable {
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                         broadcast(serializedPlayerAdded);
 
-                        /*//test sendToOneClient
-                        PlayerStatus playerStatus = new PlayerStatus(clientId, true);
-                        String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
-                        sendToOneClient(1, serializedPlayerStatus);
+                        //send Playerlist to new Player
+                        GivePlayerList givePlayerList= new GivePlayerList(Server.getPlayerList());
+                        String serializedGivePlayerList = Serialisierer.serialize(givePlayerList);
+                        sendToOneClient(clientId, serializedGivePlayerList);
 
-                         */
                         break;
                     case "SetStatus":
                         System.out.println("Set Status");
