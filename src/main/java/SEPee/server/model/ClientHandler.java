@@ -109,11 +109,10 @@ public class ClientHandler implements Runnable {
                             receivedChatisPrivate = true;
                         }
 
-
                         ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
 
                         String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                        writer.println(serializedReceivedChat);
+                        broadcast(serializedReceivedChat);
 
                         break;
                     case "PlayCard":
