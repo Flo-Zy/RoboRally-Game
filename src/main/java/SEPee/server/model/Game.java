@@ -4,6 +4,8 @@ import SEPee.server.model.card.progCard.ProgCard;
 import SEPee.server.model.card.specialCard.SpecialCard;
 
 import java.util.ArrayList;
+
+import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class Game {
     private GameBoard gameboard;
-    private Player[] playerList;
+    private ArrayList<Player> playerList;
     private Phase currentPhase;
     private ArrayList<ProgCard> initialProgDeck;
     private DamageDecks damageDecks;
