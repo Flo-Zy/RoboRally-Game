@@ -23,6 +23,7 @@ public class Client extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -36,39 +37,27 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
-
-
-            // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String serializedHelloClient = reader.readLine();
-            System.out.println(serializedHelloClient);
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
+            startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
 
-            //prüfen, dass ein HelloClient angekommen ist, wenn es angekommne ist -> HelloServer zurückschicken
-            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+            primaryStage.show();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-            if(deserializedHelloClient.getMessageType().equals("HelloClient")){
-
-
-                // Sende Antwort an den Server
-                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
-                String serializedHelloServer = Serialisierer.serialize(helloServer);
-                //schicken
-                writer.println(serializedHelloServer);
-
-
-                boolean loop = true;
-                while (loop){
-
+    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
+        new Thread(() -> {
+            try {
+                while (true) {
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
-                    String input = deserializedReceivedString.getMessageType();
+                    String messageType = deserializedReceivedString.getMessageType();
 
-
-                    switch(input){
+                    switch (messageType) {
                         case "Welcome":
                             String serializedWelcome = serializedReceivedString;
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
@@ -98,37 +87,29 @@ public class Client extends Application {
                             writer.println(serializedPlayerValues);
                             break;
                         case "PlayerAdded":
-                            System.out.println("PlayerAdded");
+                            // Handle PlayerAdded message
                             break;
                         case "PlayerStatus":
-                            System.out.println("PlayerStatus");
+                            // Handle PlayerStatus message
                             break;
                         case "SelectMap":
-                            System.out.println("SelectMap");
+                            // Handle SelectMap message
                             break;
                         case "ReceivedChat":
-                            System.out.println("ReceivedChat");
+                            // Handle ReceivedChat message
                             break;
                         case "GameFinished":
-                            System.out.println("GameFinished");
-                            //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
-                            loop = false;
+                            // Handle GameFinished message
                             break;
                         default:
-                            System.out.println("Wrong message received!");
+                            System.out.println("Unhandled message received: " + messageType);
                             break;
-
                     }
                 }
-
-            }else{
-                //reparieren, dass es ohne Fehlermeldung schließt
-                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        }).start();
     }
 
     public static String getServerIp() {
