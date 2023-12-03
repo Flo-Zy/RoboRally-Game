@@ -4,6 +4,7 @@ import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.Player;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -133,7 +134,6 @@ public class Client extends Application {
                         case "GameFinished":
                             System.out.println("GameFinished");
                             //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
-                            loop = false;
                             break;
                         default:
                             System.out.println("Unhandled message received: " + messageType);
