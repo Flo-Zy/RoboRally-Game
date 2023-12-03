@@ -5,6 +5,7 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SendChat;
+import SEPee.server.model.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,6 +22,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Optional;
 
+import static SEPee.client.model.Client.playerListClient;
 
 
 public class ClientController {
@@ -74,7 +76,7 @@ public class ClientController {
 
                     //writer.println(name + " has joined the chat.");
 
-                    new Thread(() -> {
+                    //new Thread(() -> {
                         /*try {
                             String serverMessage;
                             while ((serverMessage = reader.readLine()) != null) {
@@ -83,7 +85,7 @@ public class ClientController {
                         } catch (IOException e) {
                             //e.printStackTrace();
                         //}*/
-                    }).start();
+                    //}).start();
                 //} catch (IOException e) {
                 //    e.printStackTrace();
                 //}
@@ -136,6 +138,47 @@ public class ClientController {
         Client.getWriter().println(serializedSetStatus);
     }
 
+    /*private void toggleVisibility() {
+        if (visibilityButton.getText().equals("Alle")) {
+            showPlayerListDialog();
+        } else {
+            // Logik für private Nachrichten
+            // Hier kannst du die Logik für private Nachrichten implementieren, wenn nötig
+        }
+    }
+
+    private void showPlayerListDialog() {
+        // Erstellen Sie einen Dialog, um die Spielerliste anzuzeigen
+        Dialog<String> playerListDialog = new Dialog<>();
+        playerListDialog.setTitle("Spielerliste");
+        playerListDialog.setHeaderText("Liste der Spieler im Spiel:");
+
+        // Fügen Sie die Spielerliste als Textinhalt hinzu
+        TextArea playerListText = new TextArea();
+        playerListText.setEditable(false);
+        playerListText.setWrapText(true);
+
+        // Fügen Sie die Spielerliste aus der Client-Klasse hinzu
+        playerListText.setText(getPlayerListAsString());
+
+        playerListDialog.getDialogPane().setContent(playerListText);
+
+        // Fügen Sie einen "Schließen" -Button zum Dialog hinzu
+        ButtonType closeButton = new ButtonType("Schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
+        playerListDialog.getDialogPane().getButtonTypes().add(closeButton);
+
+        // Zeigen Sie den Dialog an und warten Sie auf Benutzereingaben
+        playerListDialog.showAndWait();
+    }
+
+    private String getPlayerListAsString() {
+        StringBuilder playerListString = new StringBuilder();
+        for (Player player : Client.playerListClient) {
+            playerListString.append("Name: ").append(player.getName()).append("\n");
+        }
+        return playerListString.toString();
+    }*/
+
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
             showPlayerListDialog();
@@ -144,10 +187,32 @@ public class ClientController {
             // Hier kannst du die Logik für private Nachrichten implementieren, wenn nötig
         }
     }
+
     private void showPlayerListDialog() {
-        // Implementiere hier die Logik für die Spielerliste und den Dialog
-        // Zeige eine Liste der Benutzer und ermögliche die Auswahl eines Spielers
-        // Beispiel: Verwende eine ChoiceDialog
+        // Erstellen Sie einen ChoiceDialog mit der Liste der Spieler
+        ChoiceDialog<Player> dialog = new ChoiceDialog<>(null, playerListClient);
+        dialog.setTitle("Spieler auswählen");
+        dialog.setHeaderText("Bitte wählen Sie einen Spieler:");
+
+        // Benutzer auswählen oder "Abbrechen" wählen
+        Optional<Player> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            // Spieler ausgewählt, die Recipient-ID auf die ausgewählte Spieler-ID setzen
+            Player selectedPlayer = result.get();
+            int recipientId = selectedPlayer.getId();
+            visibilityButton.setText("Privat");
+
+            // Hier kannst du die Logik für private Nachrichten implementieren
+            // Verwende die recipientId, um die private Nachricht zu senden
+        } else {
+            // "Abbrechen" wurde ausgewählt, die Recipient-ID auf -1 setzen
+            int recipientId = -1;
+            visibilityButton.setText("Alle");
+
+            // Hier kannst du die Logik für Nachrichten an alle implementieren
+            // Verwende die recipientId, um die Nachricht an alle zu senden
+        }
     }
 
     public void appendToChatArea(String message) {

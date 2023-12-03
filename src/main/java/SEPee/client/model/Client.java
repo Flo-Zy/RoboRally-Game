@@ -24,7 +24,7 @@ import lombok.Getter;
 public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
-    private static ArrayList<Player> playerListClient = new ArrayList<>();
+    public static ArrayList<Player> playerListClient = new ArrayList<>();
 
     private boolean receivedHelloClient = false;
     private static PrintWriter writer;
