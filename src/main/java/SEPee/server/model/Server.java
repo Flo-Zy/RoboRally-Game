@@ -23,7 +23,7 @@ public class Server extends Thread{
     private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
 
-    private static int clientID;
+    static int clientID;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {

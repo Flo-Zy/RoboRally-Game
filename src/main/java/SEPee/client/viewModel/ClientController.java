@@ -1,6 +1,8 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
+import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.SendChat;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -102,15 +104,22 @@ public class ClientController {
         }
     }
 
-
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
         if (!message.isEmpty()) {
-            writer.println(name + ": " + message);
+
+            //DIFFERENT RECIPIENTID ???
+            int recipientId = -1;
+
+            SendChat sendChatMessage = new SendChat(message, recipientId);
+            String serializedSendChat = Serialisierer.serialize(sendChatMessage);
+            writer.println(serializedSendChat);
+
             messageField.clear();
         }
     }
+
 
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
@@ -206,4 +215,5 @@ public class ClientController {
     public void setId(int id) {
         this.id = id;
     }
+
 }

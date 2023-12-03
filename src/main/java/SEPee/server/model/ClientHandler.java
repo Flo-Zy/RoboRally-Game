@@ -2,10 +2,10 @@ package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Message;
-import SEPee.serialisierung.messageType.PlayerAdded;
-import SEPee.serialisierung.messageType.PlayerValues;
+import SEPee.serialisierung.messageType.*;
 import com.google.gson.Gson;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import SEPee.server.model.Game;
+
+import static SEPee.server.model.Server.clientID;
 
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
@@ -70,6 +72,29 @@ public class ClientHandler implements Runnable {
                         break;
                     case "SendChat":
                         System.out.println("Send Chat");
+
+                        SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
+
+                        String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
+
+                        int receivedSendChatFrom = Server.getClientID();
+                        int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
+
+                        boolean receivedChatisPrivate;
+
+                        if (receivedSendChatTo == -1){
+                            receivedChatisPrivate = false;
+
+                        } else {
+                            receivedChatisPrivate = true;
+                        }
+
+
+                        ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
+
+                        String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                        writer.println(serializedReceivedChat);
+
                         break;
                     case "PlayCard":
                         System.out.println("Play Card");

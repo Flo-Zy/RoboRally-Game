@@ -86,7 +86,12 @@ public class Client extends Application {
                             System.out.println("SelectMap");
                             break;
                         case "ReceivedChat":
-                            System.out.println("ReceivedChat");
+                            String serializedReceivedChat = serializedReceivedString;
+                            ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
+
+                            String receivedMessage = deserializedReceivedChat.getMessageBody().getMessage();
+                            controller.appendToChatArea(receivedMessage);
+
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");
