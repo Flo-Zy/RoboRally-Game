@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.SendChat;
 import SEPee.server.model.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
@@ -190,8 +191,7 @@ public class ClientController {
         if (visibilityButton.getText().equals("Alle")) {
             showPlayerListDialog();
         } else {
-            // Logik für private Nachrichten
-            // Hier kannst du die Logik für private Nachrichten implementieren, wenn nötig
+            showPlayerListDialog();
         }
     }
 
@@ -201,20 +201,36 @@ public class ClientController {
         dialog.setTitle("Spieler auswählen");
         dialog.setHeaderText("Bitte wählen Sie einen Spieler:");
 
+        // Create a "Send to All" button
+        ButtonType sendToAllButton = new ButtonType("An Alle senden", ButtonBar.ButtonData.LEFT);
+        dialog.getDialogPane().getButtonTypes().add(sendToAllButton);
+
+        // Get the "Send to All" button from the dialog
+        Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
+        ((Node) sendToAllNode).setOnMouseClicked(event -> {
+            // Handle the action when "Send to All" is clicked
+            // Set recipient ID to -1 for sending the message to all
+            visibilityButton.setText("Alle");
+            // Implement the logic for sending messages to all players
+            // Use the recipientId (-1) to send the message to all
+            dialog.close(); // Close the dialog after handling the action
+        });
+
+
         // Benutzer auswählen oder "Abbrechen" wählen
         Optional<Player> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             // Spieler ausgewählt, die Recipient-ID auf die ausgewählte Spieler-ID setzen
             Player selectedPlayer = result.get();
-            int recipientId = selectedPlayer.getId();
+            int selectRecipientId = selectedPlayer.getId();
             visibilityButton.setText("Privat");
 
             // Hier kannst du die Logik für private Nachrichten implementieren
             // Verwende die recipientId, um die private Nachricht zu senden
         } else {
             // "Abbrechen" wurde ausgewählt, die Recipient-ID auf -1 setzen
-            int recipientId = -1;
+            int selectRecipientId = -1;
             visibilityButton.setText("Alle");
 
             // Hier kannst du die Logik für Nachrichten an alle implementieren

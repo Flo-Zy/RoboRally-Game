@@ -107,7 +107,7 @@ public class ClientHandler implements Runnable {
 
                         String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
 
-                        int receivedSendChatFrom = receivedSendChat.getMessageBody().getClientID();
+                        int receivedSendChatFrom = receivedSendChat.getMessageBody().getClientID(); //darf nicht getclientid sein muss checken von wem die message kommt und nincht in der sendchat
                         int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
 
                         boolean receivedChatisPrivate;
