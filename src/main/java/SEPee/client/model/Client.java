@@ -4,6 +4,7 @@ import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.Player;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,10 +16,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Array;
+import java.util.ArrayList;
 
 public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
+    private static ArrayList<Player> playerListClient = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -71,9 +75,10 @@ public class Client extends Application {
                             primaryStage.setOnCloseRequest(event -> controller.shutdown());
                             primaryStage.show();
 
+                            /*
                             // Beginne mit der Verarbeitung von Server-Nachrichten
                             new Thread(() -> {
-                                /*try {
+                                try {
                                     BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                                     String serverMessage;
                                     while ((serverMessage = serverReader.readLine()) != null) {
@@ -82,8 +87,10 @@ public class Client extends Application {
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }*/
+                                }
                             }).start();
+
+                             */
 
                             //PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
@@ -91,7 +98,12 @@ public class Client extends Application {
                             writer.println(serializedPlayerValues);
                             break;
                         case "PlayerAdded":
-                            System.out.println("PlayerAdded");
+                            PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
+                            String name = playerAdded.getMessageBody().getName();
+                            int id = playerAdded.getMessageBody().getClientID();
+                            int figure = playerAdded.getMessageBody().getFigure();
+                            //den empfangenen Spieler in der Client seitigen playerList speichern
+                            playerListClient.add(new Player(name, id, figure));
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
