@@ -36,14 +36,22 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
+
+
             // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String serializedHelloClient = reader.readLine();
             System.out.println(serializedHelloClient);
 
+
             //prüfen, dass ein HelloClient angekommen ist, wenn es angekommne ist -> HelloServer zurückschicken
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+
+
+
             if(deserializedHelloClient.getMessageType().equals("HelloClient")){
+
+
                 // Sende Antwort an den Server
                 PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
                 HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
@@ -51,16 +59,15 @@ public class Client extends Application {
                 //schicken
                 writer.println(serializedHelloServer);
 
-                /*//welcome empfangen
-                String serializedWelcome = reader.readLine();
-                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
-                System.out.println(deserializedWelcome.getMessageBody().getClientID());*/
 
                 boolean loop = true;
                 while (loop){
+
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
                     String input = deserializedReceivedString.getMessageType();
+
+
                     switch(input){
                         case "Welcome":
                             String serializedWelcome = serializedReceivedString;
@@ -115,31 +122,9 @@ public class Client extends Application {
                 }
 
             }else{
-                //reparieren dass es ohne Fehlermeldung schließt
+                //reparieren, dass es ohne Fehlermeldung schließt
                 socket.close();
             }
-
-            /*controller.init(this, primaryStage);
-            primaryStage.setOnCloseRequest(event -> controller.shutdown());
-            primaryStage.show();
-
-
-            // Beginne mit der Verarbeitung von Server-Nachrichten
-            new Thread(() -> {
-                try {
-                    BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String serverMessage;
-                    while ((serverMessage = serverReader.readLine()) != null) {
-                        // Handle server messages
-                        System.out.println(serverMessage);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-
-            // Hier kannst du weitere Logik für die Client-Anwendung implementieren
-            // ...*/
 
         } catch (IOException e) {
             e.printStackTrace();
