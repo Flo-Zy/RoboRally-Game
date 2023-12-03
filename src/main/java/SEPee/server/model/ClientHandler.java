@@ -44,8 +44,6 @@ public class ClientHandler implements Runnable {
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
         ) {
-            //SetStatus wem man Map schickt, weil zuerst ready
-            int counter = 0;
             String serializedReceivedString;
             while ((serializedReceivedString = reader.readLine()) != null) {
                 Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
@@ -81,15 +79,13 @@ public class ClientHandler implements Runnable {
                         PlayerStatus playerStatus = new PlayerStatus(setStatus.getMessageBody().getClientID(), setStatus.getMessageBody().isReady());
                         String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
                         broadcast(serializedPlayerStatus);
-                        /*
+                        if(Server.counterSetStatus == 0) {
                             int first = setStatus.getMessageBody().getClientID();
                             SelectMap selectMap = new SelectMap();
                             String serializedSelectMap = Serialisierer.serialize(selectMap);
                             sendToOneClient(first, serializedSelectMap);
-                            System.out.println("zu langsam");
-
-                         */
-
+                            Server.counterSetStatus++;
+                        }
                         break;
                     case "MapSelected":
                         System.out.println("Map Selected");

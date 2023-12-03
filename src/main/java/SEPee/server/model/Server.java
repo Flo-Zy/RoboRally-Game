@@ -24,6 +24,7 @@ public class Server extends Thread{
     private static int idCounter = 1;
     private static int clientID;
     private static ArrayList<Player> playerList = new ArrayList<>();
+    public static int counterSetStatus = 0;
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {

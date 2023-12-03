@@ -10,6 +10,12 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
+        //test selectMap
+        SelectMap selectMap = new SelectMap();
+        String testmap = Serialisierer.serialize(selectMap);
+        System.out.println(testmap);
+
+        /*
         DizzyHighway dizzyHighway = new DizzyHighway();
         GameStarted gameStarted = new GameStarted(dizzyHighway.getGameBoard());
         String serializedGameStarted = Serialisierer.serialize(gameStarted);

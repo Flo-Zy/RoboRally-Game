@@ -117,7 +117,7 @@ public class ClientController {
 
             SendChat sendChatMessage = new SendChat(message, recipientId);
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
-            writer.println(serializedSendChat);
+            Client.getWriter().println(serializedSendChat);
 
             messageField.clear();
         }
@@ -130,6 +130,7 @@ public class ClientController {
         }else{
             ready = false;
         }
+        System.out.println(ready);
         SetStatus setStatus = new SetStatus(getId(),ready);
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
