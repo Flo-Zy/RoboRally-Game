@@ -37,10 +37,38 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
+
+
+            // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String serializedHelloClient = reader.readLine();
+
+            //HelloClient angekommen? -> HelloloServer zurückschicken
+            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+
+            if(deserializedHelloClient.getMessageType().equals("HelloClient")) {
+
+                // Sende Antwort an den Server
+                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
+                String serializedHelloServer = Serialisierer.serialize(helloServer);
+
+                //schicken an server
+                writer.println(serializedHelloServer);
+
+                //Welcome zuruck empfangen
+                String serializedWelcome = reader.readLine();
+                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
+                System.out.println(deserializedWelcome.getMessageBody().getClientID());
+
+            }
+
+
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
+
 
             primaryStage.show();
 
@@ -66,20 +94,6 @@ public class Client extends Application {
                             controller.init(this, primaryStage);
                             primaryStage.setOnCloseRequest(event -> controller.shutdown());
                             primaryStage.show();
-
-                            // Beginne mit der Verarbeitung von Server-Nachrichten
-                            new Thread(() -> {
-                                /*try {
-                                    BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                                    String serverMessage;
-                                    while ((serverMessage = serverReader.readLine()) != null) {
-                                        // Handle server messages
-                                        System.out.println(serverMessage);
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }*/
-                            }).start();
 
                             //PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
