@@ -64,7 +64,7 @@ public class ClientController {
                 figure = showRobotSelectionDialog(stage);
                 setFigure(figure);
 
-
+                /*
 
                 //try {
                     //this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
@@ -75,18 +75,21 @@ public class ClientController {
                     //writer.println(name + " has joined the chat.");
 
                     new Thread(() -> {
-                        /*try {
+                        try {
                             String serverMessage;
                             while ((serverMessage = reader.readLine()) != null) {
                                appendToChatArea(serverMessage);
                             }
                         } catch (IOException e) {
                             //e.printStackTrace();
-                        //}*/
+                        //}
                     }).start();
                 //} catch (IOException e) {
                 //    e.printStackTrace();
                 //}
+
+                 */
+
                 sendButton.setOnAction(event -> sendMessage());
                 visibilityButton.setText("Alle");
                 visibilityButton.setOnAction(event -> toggleVisibility());
