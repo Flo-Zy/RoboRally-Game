@@ -168,9 +168,13 @@ public class Client extends Application {
                                 }
                             }
                             System.out.println(fromName);
-                            String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
-                            controller.appendToChatArea(receivedMessage);
-
+                            if (fromName != null) {
+                                String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
+                                controller.appendToChatArea(receivedMessage);
+                            } else {
+                                String receivedMessage = (deserializedReceivedChat.getMessageBody().getMessage());
+                                controller.appendToChatArea(receivedMessage);
+                            }
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");

@@ -68,6 +68,17 @@ public class ClientHandler implements Runnable {
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                         broadcast(serializedPlayerAdded);
 
+
+                        ReceivedChat joinedPlayerMessage = new ReceivedChat( playerName+ " has joined the chat.", 999, false);
+
+                        String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
+
+                        broadcast(serializedjoinedPlayerMessage);
+
+
+
+
+
                         //send Playerlist to new Player
                         GivePlayerList givePlayerList= new GivePlayerList(Server.getPlayerList());
                         String serializedGivePlayerList = Serialisierer.serialize(givePlayerList);
