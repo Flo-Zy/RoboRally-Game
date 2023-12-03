@@ -11,6 +11,7 @@ import javafx.scene.control.Dialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
@@ -57,38 +58,33 @@ public class ClientController {
 
 
 
-                /*try {
+                //try {
                     //this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
                     //writer.println( "PRINT CHAT CLIENT" + chatClient);
                     //this.writer = new PrintWriter(socket.getOutputStream(), true);
                     //this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    // Empfange serialisierten HelloClient-String vom Server
-                    String serializedHelloClient = reader.readLine();
-                    HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
-                    String versionProtocol = deserializedHelloClient.getMessageBody().getProtocol();
-
-                    writer.println(name + " has joined the chat.");
+                    //writer.println(name + " has joined the chat.");
 
                     new Thread(() -> {
-                        try {
+                        /*try {
                             String serverMessage;
                             while ((serverMessage = reader.readLine()) != null) {
-                                appendToChatArea(serverMessage);
+                               appendToChatArea(serverMessage);
                             }
                         } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                            //e.printStackTrace();
+                        //}*/
                     }).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //} catch (IOException e) {
+                //    e.printStackTrace();
+                //}
                 sendButton.setOnAction(event -> sendMessage());
                 visibilityButton.setText("Alle");
                 visibilityButton.setOnAction(event -> toggleVisibility());
                 stage.setOnCloseRequest(event -> shutdown());
 
-                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));*/
+                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
             } else {
                 //falls Username empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
