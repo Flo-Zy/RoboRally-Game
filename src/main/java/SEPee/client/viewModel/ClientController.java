@@ -47,24 +47,26 @@ public class ClientController {
     private String name;
     private int figure;
     private int id;
+    private String selectedMap;
+
 
     public void init(Client chatClient, Stage stage) {
-        boolean validUsername = false;
+            boolean validUsername = false;
 
-        while (!validUsername) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Username");
-            dialog.setHeaderText("Please enter your username:");
-            dialog.setContentText("Username:");
-            Optional<String> result = dialog.showAndWait();
+            while (!validUsername) {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Username");
+                dialog.setHeaderText("Please enter your username:");
+                dialog.setContentText("Username:");
+                Optional<String> result = dialog.showAndWait();
 
-            if (result.isPresent() && !result.get().trim().isEmpty()) {
-                this.name = result.get().trim();
-                stage.setTitle("Client - " + name);
-                validUsername = true;
+                if (result.isPresent() && !result.get().trim().isEmpty()) {
+                    this.name = result.get().trim();
+                    stage.setTitle("Client - " + name);
+                    validUsername = true;
 
-                figure = showRobotSelectionDialog(stage);
-                setFigure(figure);
+                    figure = showRobotSelectionDialog(stage);
+                    setFigure(figure);
 
                 /*
 
@@ -92,23 +94,23 @@ public class ClientController {
 
                  */
 
-                sendButton.setOnAction(event -> sendMessage());
-                visibilityButton.setText("Alle");
-                visibilityButton.setOnAction(event -> toggleVisibility());
-                stage.setOnCloseRequest(event -> shutdown());
+                    sendButton.setOnAction(event -> sendMessage());
+                    visibilityButton.setText("Alle");
+                    visibilityButton.setOnAction(event -> toggleVisibility());
+                    stage.setOnCloseRequest(event -> shutdown());
 
-                Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-            } else {
-                //falls Username empty
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                alert.showAndWait();
+                    Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+                } else {
+                    //falls Username empty
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Username cannot be empty. Please enter a valid username.");
+                    alert.showAndWait();
 
-                Platform.exit();
+                    Platform.exit();
+                }
             }
-        }
     }
 
 
@@ -132,8 +134,10 @@ public class ClientController {
     private void sendReady(){
         if(!ready){
             ready = true;
+            readyButton.setText("NICHT BEREIT");
         }else{
             ready = false;
+            readyButton.setText("BEREIT");
         }
         System.out.println(ready);
         SetStatus setStatus = new SetStatus(getId(),ready);
@@ -219,7 +223,6 @@ public class ClientController {
     }
 
 
-
     public void appendToChatArea(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
     }
@@ -277,6 +280,49 @@ public class ClientController {
         return 0; // Default value if no selection or unexpected button is pressed
     }
 
+    public String showSelectMapDialog(Stage stage) {
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Map Selection");
+            dialog.setHeaderText("Please select a Map:");
+
+            // Create buttons for each robot
+            ButtonType button1 = new ButtonType("DizzyHighway", ButtonBar.ButtonData.OK_DONE);
+
+            // Create a map to associate button types with integer values
+            HashMap<ButtonType, String> buttonMap = new HashMap<>();
+            buttonMap.put(button1, "DizzyHighway");
+
+
+            // Add buttons to the dialog
+            dialog.getDialogPane().getButtonTypes().setAll(button1);
+
+            // Show the dialog and wait for user input
+            dialog.initOwner(stage);
+            Optional<String> result = dialog.showAndWait();
+
+            System.out.println("Result: " + result.orElse("None"));
+            System.out.println("Mapped Value: " + buttonMap.getOrDefault(result.orElse(""), "Leer"));
+
+
+
+        // Process user input and return the selected robot (index starting from 1)
+            if (result.isPresent()) {
+                return buttonMap.getOrDefault(result.get(), "Leer");
+            }
+
+            return "Leer"; // Default value if no selection or unexpected button is pressed
+
+    }
+
+    public void init2(Client chatClient, Stage stage) {
+        Platform.runLater(() -> {
+            selectedMap = showSelectMapDialog(stage);
+            setSelectedMap(selectedMap);
+        });
+    }
+
+
+
     public String getName() {
         return name;
     }
@@ -300,4 +346,13 @@ public class ClientController {
     public void setId(int id) {
         this.id = id;
     }
+
+    private void setSelectedMap(String selectedMap) {
+        this.selectedMap = selectedMap;
+    }
+
+    public String getSelectedMap(){
+        return selectedMap;
+    }
+
 }
