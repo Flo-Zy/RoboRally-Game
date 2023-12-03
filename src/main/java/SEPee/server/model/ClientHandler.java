@@ -114,15 +114,20 @@ public class ClientHandler implements Runnable {
 
                         if (receivedSendChatTo == -1){
                             receivedChatisPrivate = false;
+                            ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
+
+                            String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                            broadcast(serializedReceivedChat);
 
                         } else {
                             receivedChatisPrivate = true;
+                            ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
+
+                            String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                            sendToOneClient(receivedSendChatTo, serializedReceivedChat);
                         }
 
-                        ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
 
-                        String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                        broadcast(serializedReceivedChat);
 
                         break;
                     case "PlayCard":
