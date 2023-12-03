@@ -79,9 +79,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void broadcast(String message) {
+    private void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
-            client.writer.println(message);
+            client.writer.println(serializedObjectToSend);
         }
     }
 }
