@@ -68,8 +68,22 @@ public class Client extends Application {
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
                             controller.init(this, primaryStage);
-                            //primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                            //primaryStage.show();
+                            primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                            primaryStage.show();
+
+                            // Beginne mit der Verarbeitung von Server-Nachrichten
+                            new Thread(() -> {
+                                /*try {
+                                    BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                                    String serverMessage;
+                                    while ((serverMessage = serverReader.readLine()) != null) {
+                                        // Handle server messages
+                                        System.out.println(serverMessage);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }*/
+                            }).start();
 
                             //PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
