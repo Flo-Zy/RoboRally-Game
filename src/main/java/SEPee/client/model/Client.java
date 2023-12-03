@@ -20,6 +20,8 @@ public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
 
+    private boolean receivedHelloClient = false;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -37,73 +39,72 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
-
-
-            // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String serializedHelloClient = reader.readLine();
-
-            //HelloClient angekommen? -> HelloloServer zurückschicken
-            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
-
-            if(deserializedHelloClient.getMessageType().equals("HelloClient")) {
-
-                // Sende Antwort an den Server
-                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
-                String serializedHelloServer = Serialisierer.serialize(helloServer);
-
-                //schicken an server
-                writer.println(serializedHelloServer);
-
-                //Welcome zuruck empfangen
-                String serializedWelcome = reader.readLine();
-                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
-                System.out.println(deserializedWelcome.getMessageBody().getClientID());
-
-            }
-
-
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
 
+            // Receive HelloClient from the server
+            String serializedHelloClient = reader.readLine();
+            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+
+            if (deserializedHelloClient.getMessageType().equals("HelloClient")) {
+                // Send HelloServer back to the server
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
+                String serializedHelloServer = Serialisierer.serialize(helloServer);
+                writer.println(serializedHelloServer);
+
+                // Receive the last Welcome message containing client ID from the server
+                String serializedWelcome = reader.readLine();
+                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
+                int receivedId = deserializedWelcome.getMessageBody().getClientID();
+                controller.setId(receivedId);
+                controller.init(this, primaryStage);
+                primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                primaryStage.show();
+
+                // PlayerValues schicken
+                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                writer.println(serializedPlayerValues);
+
+                receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
+            } else {
+
+                socket.close();
+                //fehlermeldung
+            }
+
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
-
-
-            primaryStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
+
+
+
+    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller,
+                                              Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
+                while (!receivedHelloClient) {
+                    // Wait until HelloClient and Welcome are received
+                    Thread.sleep(100); // Add a short delay to avoid busy waiting
+                }
+
+                // Start processing subsequent messages after receiving HelloClient and Welcome
                 while (true) {
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
                     String messageType = deserializedReceivedString.getMessageType();
 
                     switch (messageType) {
-                        case "Welcome":
-                            String serializedWelcome = serializedReceivedString;
-                            Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
-                            int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                            controller.setId(receivedId);
-                            controller.init(this, primaryStage);
-                            primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                            primaryStage.show();
-
-                            //PlayerValues schicken
-                            PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
-                            String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                            writer.println(serializedPlayerValues);
-                            break;
                         case "PlayerAdded":
+                            System.out.println("switch case playeradded angekommen");
                             // Handle PlayerAdded message
                             break;
                         case "PlayerStatus":
+                            System.out.println("switch case playerstatus angekommen");
                             // Handle PlayerStatus message
                             break;
                         case "SelectMap":
@@ -120,7 +121,7 @@ public class Client extends Application {
                             break;
                     }
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();

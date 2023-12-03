@@ -55,6 +55,13 @@ public class ClientHandler implements Runnable {
                         int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
                         //speichert Spielerobjekt in playerList im Server
                         Server.getPlayerList().add(new Player(playerName, Server.getClientID(), playerFigure));
+
+
+                        //serverchecker tests
+                        System.out.println(deserializedPlayerValues.getMessageBody().getName());
+                        System.out.println(deserializedPlayerValues.getMessageBody().getFigure());
+
+
                         break;
                     case "SetStatus":
                         System.out.println("Set Status");
