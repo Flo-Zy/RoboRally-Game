@@ -25,6 +25,8 @@ public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
     public static ArrayList<Player> playerListClient = new ArrayList<>();
+    public static ArrayList<String> mapList = new ArrayList<>();
+
 
     private boolean receivedHelloClient = false;
     private static PrintWriter writer;
@@ -146,6 +148,12 @@ public class Client extends Application {
                             break;
                         case "SelectMap":
                             System.out.println("SelectMap");
+                            SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
+                            mapList = selectMap.getMessageBody().getAvailableMaps();
+                            controller.init2(this, primaryStage);
+                            String selectedMap = controller.getSelectedMap();
+                            System.out.println(selectedMap);
+
                             break;
 
                         case "ReceivedChat":
