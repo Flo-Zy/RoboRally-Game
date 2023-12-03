@@ -147,11 +147,20 @@ public class Client extends Application {
                         case "SelectMap":
                             System.out.println("SelectMap");
                             break;
+
                         case "ReceivedChat":
+
                             String serializedReceivedChat = serializedReceivedString;
                             ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
 
-                            String receivedMessage = deserializedReceivedChat.getMessageBody().getMessage();
+                            String fromName = null;
+                            for(int i = 0; i < playerListClient.size(); i++){
+                                if(deserializedReceivedChat.getMessageBody().getFrom() == playerListClient.get(i).getId()){
+                                    fromName = playerListClient.get(i).getName();
+                                }
+                            }
+                            System.out.println(fromName);
+                            String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
                             controller.appendToChatArea(receivedMessage);
 
                             break;

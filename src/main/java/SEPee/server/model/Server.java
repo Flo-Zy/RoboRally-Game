@@ -58,6 +58,7 @@ public class Server extends Thread{
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
 
+                    /*
                     //tester fur client switchcase
                    /* PlayerAdded playerAdded = new PlayerAdded(clientID, "hanso", 5);
                     String serializedplayerAdded = Serialisierer.serialize(playerAdded);
@@ -67,6 +68,8 @@ public class Server extends Thread{
                     PlayerStatus playerStatus = new PlayerStatus(clientID, true);
                     String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
                     writer.println(serializedPlayerStatus);
+
+                     */
 
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
