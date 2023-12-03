@@ -18,13 +18,20 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Array;
 import java.util.ArrayList;
+import lombok.Getter;
 
+@Getter
 public class Client extends Application {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8887;
     private static ArrayList<Player> playerListClient = new ArrayList<>();
 
     private boolean receivedHelloClient = false;
+    private static PrintWriter writer;
+
+    public static PrintWriter getWriter(){
+        return writer;
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -45,7 +52,7 @@ public class Client extends Application {
 
             // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            writer = new PrintWriter(socket.getOutputStream(), true);
 
             // Receive HelloClient from the server
             String serializedHelloClient = reader.readLine();

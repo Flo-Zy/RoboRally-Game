@@ -1,15 +1,17 @@
 package SEPee.serialisierung.messageType;
 
+import SEPee.server.model.gameBoard.DizzyHighway;
+
 import java.util.List;
 
 public class SelectMap extends Message{
     // private String messageType;
     private SelectMapBody messageBody;
 
-    public SelectMap(List<String> availableMaps) {
+    public SelectMap() {
         super("SelectMap");
         // this.messageType = "SelectMap";
-        this.messageBody = new SelectMapBody(availableMaps);
+        this.messageBody = new SelectMapBody();
     }
 
     /*
@@ -34,8 +36,8 @@ public class SelectMap extends Message{
     public static class SelectMapBody {
         private List<String> availableMaps;
 
-        public SelectMapBody(List<String> availableMaps) {
-            this.availableMaps = availableMaps;
+        public SelectMapBody() {
+            availableMaps.add("DizzyHighway");
         }
 
         public List<String> getAvailableMaps() {

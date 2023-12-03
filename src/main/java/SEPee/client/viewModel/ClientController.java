@@ -2,6 +2,8 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.SetStatus;
+import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SendChat;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,9 +35,13 @@ public class ClientController {
     @FXML
     private Button visibilityButton;
 
+    @FXML
+    private Button readyButton;
+
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
+    private boolean ready = false;
     private String name;
     private int figure;
     private int id;
@@ -100,6 +106,7 @@ public class ClientController {
         }
     }
 
+
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
@@ -116,6 +123,17 @@ public class ClientController {
         }
     }
 
+    @FXML
+    private void sendReady(){
+        if(!ready){
+            ready = true;
+        }else{
+            ready = false;
+        }
+        SetStatus setStatus = new SetStatus(getId(),ready);
+        String serializedSetStatus = Serialisierer.serialize(setStatus);
+        Client.getWriter().println(serializedSetStatus);
+    }
 
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
@@ -211,5 +229,4 @@ public class ClientController {
     public void setId(int id) {
         this.id = id;
     }
-
 }
