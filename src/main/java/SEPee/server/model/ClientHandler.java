@@ -19,11 +19,12 @@ public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private List<ClientHandler> clients;
     private PrintWriter writer;
-    private ArrayList<Player> playerList;
+
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
         this.clients = clients;
+
         try {
             this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
@@ -52,15 +53,8 @@ public class ClientHandler implements Runnable {
                         PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
                         String playerName = deserializedPlayerValues.getMessageBody().getName();
                         int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
-                        playerList.add(new Player(playerName, Server.getClientID(), playerFigure));
-                        System.out.println(Server.getClientID());
-
-                        /*System.out.println(deserializedPlayerValues.getMessageBody().getName()+
-                                "\n"+deserializedPlayerValues.getMessageBody().getFigure());*/
-
-                        /*PlayerAdded playerAdded = new PlayerAdded(1, "Hasan",4);
-                        String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
-                        writer.println(serializedPlayerAdded);*/
+                        //speichert Spielerobjekt in playerList im Server
+                        Server.getPlayerList().add(new Player(playerName, Server.getClientID(), playerFigure));
                         break;
                     case "SetStatus":
                         System.out.println("Set Status");

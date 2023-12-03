@@ -22,8 +22,8 @@ public class Server extends Thread{
     private static final int PORT = 8887;
     private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
-
     private static int clientID;
+    private static ArrayList<Player> playerList = new ArrayList<>();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -76,5 +76,9 @@ public class Server extends Thread{
 
     public static int getClientID() {
         return clientID;
+    }
+
+    public static ArrayList<Player> getPlayerList(){
+        return playerList;
     }
 }
