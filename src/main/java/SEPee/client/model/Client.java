@@ -47,16 +47,13 @@ public class Client extends Application {
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
             if (deserializedHelloClient.getMessageType().equals("HelloClient")) {
+
                 // Send HelloServer back to the server
                 HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
                 String serializedHelloServer = Serialisierer.serialize(helloServer);
                 writer.println(serializedHelloServer);
 
-                // Receive the last Welcome message containing client ID from the server
-                String serializedWelcome = reader.readLine();
-                Welcome deserializedWelcome = Deserialisierer.deserialize(serializedWelcome, Welcome.class);
-                int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                controller.setId(receivedId);
+                //Stage wird initialisiert
                 controller.init(this, primaryStage);
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 primaryStage.show();
@@ -99,6 +96,12 @@ public class Client extends Application {
                     String messageType = deserializedReceivedString.getMessageType();
 
                     switch (messageType) {
+                        case "Welcome":
+                            Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
+                            int receivedId = deserializedWelcome.getMessageBody().getClientID();
+                            controller.setId(receivedId);
+                            // Handle PlayerAdded message
+                            break;
                         case "PlayerAdded":
                             System.out.println("switch case playeradded angekommen");
                             // Handle PlayerAdded message
