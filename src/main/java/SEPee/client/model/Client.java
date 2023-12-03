@@ -70,11 +70,6 @@ public class Client extends Application {
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 primaryStage.show();
 
-                // PlayerValues schicken
-                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
-                String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                writer.println(serializedPlayerValues);
-
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
             } else {
 
@@ -112,6 +107,14 @@ public class Client extends Application {
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
+
+
+                            // PlayerValues schicken
+                            PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                            String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                            writer.println(serializedPlayerValues);
+
+
                             // Handle PlayerAdded message
                             break;
                         case "PlayerAdded":
