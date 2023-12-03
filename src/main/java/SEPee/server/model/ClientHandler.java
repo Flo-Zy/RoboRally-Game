@@ -20,7 +20,6 @@ import lombok.Setter;
 @Getter
 @Setter
 
-import static SEPee.server.model.Server.clientID;
 
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
