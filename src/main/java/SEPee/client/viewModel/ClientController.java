@@ -120,7 +120,7 @@ public class ClientController {
             //DIFFERENT RECIPIENTID ???
             int recipientId = -1;
 
-            SendChat sendChatMessage = new SendChat(message, recipientId);
+            SendChat sendChatMessage = new SendChat(getId(),message, recipientId);
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
             Client.getWriter().println(serializedSendChat);
 
@@ -217,6 +217,8 @@ public class ClientController {
             // Verwende die recipientId, um die Nachricht an alle zu senden
         }
     }
+
+
 
     public void appendToChatArea(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));

@@ -4,10 +4,10 @@ public class SendChat extends Message{
     // private String messageType;
     private SendChatBody messageBody;
 
-    public SendChat(String message, int to) {
+    public SendChat(int clientID, String message, int to) {
         super("SendChat");
         // this.messageType = "SendChat";
-        this.messageBody = new SendChatBody(message, to);
+        this.messageBody = new SendChatBody(clientID, message, to);
     }
 
     /*
@@ -29,10 +29,12 @@ public class SendChat extends Message{
     }
 
     public static class SendChatBody {
+        private int clientID;
         private String message;
         private int to;
 
-        public SendChatBody(String message, int to) {
+        public SendChatBody(int clientID, String message, int to) {
+            this.clientID = clientID;
             this.message = message;
             this.to = to;
         }
@@ -51,6 +53,9 @@ public class SendChat extends Message{
 
         public void setTo(int to) {
             this.to = to;
+        }
+        public int getClientID(){
+            return clientID;
         }
     }
 }
