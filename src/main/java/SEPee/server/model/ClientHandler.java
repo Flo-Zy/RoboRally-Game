@@ -76,9 +76,19 @@ public class ClientHandler implements Runnable {
                     case "SetStatus":
                         System.out.println("Set Status");
                         SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
+                        //playerList vom Server aktualisieren
+                        for(int i = 0; i < Server.getPlayerList().size(); i++){
+                            if(setStatus.getMessageBody().getClientID() == Server.getPlayerList().get(i).getId()){
+                                Server.getPlayerList().get(i).setReady(setStatus.getMessageBody().isReady());
+                            }
+                        }
+
+                        //PlayerStatus an alle Clients senden
                         PlayerStatus playerStatus = new PlayerStatus(setStatus.getMessageBody().getClientID(), setStatus.getMessageBody().isReady());
                         String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
                         broadcast(serializedPlayerStatus);
+
+                        //ersten der ready drückt selectMap senden
                         if(Server.counterSetStatus == 0) {
                             int first = setStatus.getMessageBody().getClientID();
                             SelectMap selectMap = new SelectMap();

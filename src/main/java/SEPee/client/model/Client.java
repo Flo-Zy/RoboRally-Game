@@ -125,7 +125,7 @@ public class Client extends Application {
                                 int figure = playerAdded.getMessageBody().getFigure();
                                 //den empfangenen Spieler in der Client seitigen playerList speichern
                                 playerListClient.add(new Player(name, id, figure));
-                                System.out.println("Player added");
+                                System.out.println("Player added hahaha");
                             }
                             break;
                         case "GivePlayerList":
@@ -134,6 +134,15 @@ public class Client extends Application {
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
+                            PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
+                            for(int i = 0; i < playerListClient.size(); i++){
+                                if(playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()){
+                                    playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
+                                }
+                            }
+                            for(int i = 0; i < playerListClient.size(); i++){
+                                System.out.println(playerListClient.get(i).getName()+","+ playerListClient.get(i).isReady());
+                            }
                             break;
                         case "SelectMap":
                             System.out.println("SelectMap");
