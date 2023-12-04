@@ -4,6 +4,10 @@ import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 public class Player {
@@ -15,12 +19,24 @@ public class Player {
     private Card[] hand;
     private PlayerMat playerMat;
     private int checkpointTokens;
+    private Map<Socket, Integer> socketIdMap;
+
 
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;
         this.figure=figure;
         this.ready = false;
+        this.socketIdMap = new HashMap<>(); // Initialize the HashMap
+
+    }
+
+    public void associateSocketWithId(Socket socket, int clientId) {
+        socketIdMap.put(socket, clientId);
+    }
+
+    public int getClientIdFromSocket(Socket socket) {
+        return socketIdMap.getOrDefault(socket, 666); // Returns 666 if socket ID not found
     }
 
     public void draw(){}
