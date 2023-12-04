@@ -63,15 +63,15 @@ public class Client extends Application {
 
             if (deserializedHelloClient.getMessageType().equals("HelloClient")) {
 
-                // Send HelloServer back to the server
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
-                String serializedHelloServer = Serialisierer.serialize(helloServer);
-                writer.println(serializedHelloServer);
-
                 //Stage wird initialisiert
                 controller.init(this, primaryStage);
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 primaryStage.show();
+
+                // Send HelloServer back to the server
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
+                String serializedHelloServer = Serialisierer.serialize(helloServer);
+                writer.println(serializedHelloServer);
 
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
             } else {
@@ -120,8 +120,6 @@ public class Client extends Application {
                             String serializedPlayerValues = Serialisierer.serialize(playerValues);
                             writer.println(serializedPlayerValues);
 
-
-                            // Handle PlayerAdded message
                             break;
                         case "PlayerAdded":
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
