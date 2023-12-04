@@ -26,6 +26,7 @@ public class ClientHandler implements Runnable {
     private int clientId;
     private List<ClientHandler> clients;
     private PrintWriter writer;
+    private Player player;
 
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
@@ -56,14 +57,24 @@ public class ClientHandler implements Runnable {
                         break;
                     case "PlayerValues":
                         System.out.println("Player Values erhalten");
+
                         String serializedPlayerValues = serializedReceivedString;
                         PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
                         String playerName = deserializedPlayerValues.getMessageBody().getName();
                         int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
+
                         //speichert Spielerobjekt in playerList im Server
                         clientId = Server.getClientID();
                         Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
                         PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
+
+
+                        this.player = new Player(playerName, clientId, playerFigure);
+
+                        //associate socket with ID in the Player object
+                        player.associateSocketWithId(clientSocket, clientId);
+
+
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
                         //playerAdded senden an alle alten Clients
@@ -75,9 +86,7 @@ public class ClientHandler implements Runnable {
 
 
                         ReceivedChat joinedPlayerMessage = new ReceivedChat( playerName+ " has joined the chat.", 999, false);
-
                         String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
-
                         broadcast(serializedjoinedPlayerMessage);
 
                         //send Playerlist to new Player
@@ -121,7 +130,7 @@ public class ClientHandler implements Runnable {
 
                         String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
 
-                        int receivedSendChatFrom = receivedSendChat.getMessageBody().getClientID(); //darf nicht getclientid sein muss checken von wem die message kommt und nincht in der sendchat
+                        int receivedSendChatFrom = clientId;
                         int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
 
                         boolean receivedChatisPrivate;
