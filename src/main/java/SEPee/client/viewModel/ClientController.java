@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class ClientController {
     private int figure;
     private int id;
     private String selectedMap;
-
+    private ArrayList<String> playerNames = new ArrayList<>();
 
     public void init(Client chatClient, Stage stage) {
             boolean validUsername = false;
@@ -114,7 +115,6 @@ public class ClientController {
             }
     }
 
-
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
@@ -137,7 +137,7 @@ public class ClientController {
     // Method to get the selected recipient ID
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
-            System.out.println("die selected " + selectedRecipientId);
+            System.out.println("ID selected " + selectedRecipientId);
             return selectedRecipientId; // Return the ID of the selected player for private messages
         } else {
             return -1; // If it's a message to all, return -1
@@ -201,6 +201,9 @@ public class ClientController {
         return playerListString.toString();
     }*/
 
+    private int selectedRecipientId  = -1; // Initialize with a default value
+
+
     @FXML
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
@@ -210,11 +213,13 @@ public class ClientController {
         }
     }
 
-    private int selectedRecipientId  = -1; // Initialize with a default value
-
     private void showPlayerListDialog() {
+
+        // Initialize the playerNames array with player names from playerListClient
+        initializePlayerNames();
+
         // Erstellen Sie einen ChoiceDialog mit der Liste der Spieler
-        ChoiceDialog<Player> dialog = new ChoiceDialog<>(null, playerListClient);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playerNames);
         dialog.setTitle("Spieler auswählen");
         dialog.setHeaderText("Bitte wählen Sie einen Spieler:");
 
@@ -233,15 +238,19 @@ public class ClientController {
 
 
         // Benutzer auswählen oder "Abbrechen" wählen
-        Optional<Player> result = dialog.showAndWait();
+        Optional<String> result = dialog.showAndWait();
 
         if (result.isPresent()) {
-            Player selectedPlayer = result.get();
-            selectedRecipientId = selectedPlayer.getId(); // Store the ID of the selected player
-            visibilityButton.setText("Privat");
+            String selectedPlayerName = result.get();
+            // Id über Namen finden
+            int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt weil clientIds mit 1 anfangen
+            if (index != -1) {
+                // Update selectedRecipientId based on the index
+                selectedRecipientId = index;
+                visibilityButton.setText("Privat");
+            }
         }
     }
-
 
     public void appendToChatArea(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
@@ -300,6 +309,14 @@ public class ClientController {
         return 0; // Default value if no selection or unexpected button is pressed
     }
 
+    private void initializePlayerNames() {
+        playerNames.clear(); // Clear the existing names
+        for (Player player : playerListClient) {
+            String playerName = player.getName(); // Assuming the Player class has a method getName() that returns the name
+            playerNames.add(playerName);
+        }
+    }
+
     public String showSelectMapDialog(Stage stage) {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Map Selection");
@@ -340,8 +357,6 @@ public class ClientController {
             setSelectedMap(selectedMap);
         });
     }
-
-
 
     public String getName() {
         return name;
