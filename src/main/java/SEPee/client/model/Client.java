@@ -259,6 +259,7 @@ public class Client extends Application {
                         default:
                             System.out.println("Unhandled message received: " + messageType);
                             break;
+
                     }
                 }
             } catch (IOException | InterruptedException e) {
