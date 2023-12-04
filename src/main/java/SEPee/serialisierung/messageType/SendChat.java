@@ -4,7 +4,7 @@ public class SendChat extends Message{
     // private String messageType;
     private SendChatBody messageBody;
 
-    public SendChat(int clientID, String message, int to) {
+    public SendChat(String message, int to) {
         super("SendChat");
         // this.messageType = "SendChat";
         this.messageBody = new SendChatBody(message, to);

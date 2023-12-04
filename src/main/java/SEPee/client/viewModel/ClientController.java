@@ -119,7 +119,7 @@ public class ClientController {
     private void sendMessage() {
         String message = messageField.getText();
         if (!message.isEmpty()) {
-            SendChat sendChatMessage = new SendChat(getId(), message, getSelectedRecipientId());
+            SendChat sendChatMessage = new SendChat(message, getSelectedRecipientId());
             System.out.println("send message selected id " + getSelectedRecipientId());
 
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
@@ -201,6 +201,7 @@ public class ClientController {
         return playerListString.toString();
     }*/
 
+    @FXML
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
             showPlayerListDialog();
@@ -221,15 +222,13 @@ public class ClientController {
         ButtonType sendToAllButton = new ButtonType("An Alle senden", ButtonBar.ButtonData.LEFT);
         dialog.getDialogPane().getButtonTypes().add(sendToAllButton);
 
-        // Get the "Send to All" button from the dialog
+        //"Send to All" button from the dialog
         Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
-        ((Node) sendToAllNode).setOnMouseClicked(event -> {
+        ((Button) sendToAllNode).setOnAction(event -> {
             // Handle the action when "Send to All" is clicked
-            // Set recipient ID to -1 for sending the message to all
             visibilityButton.setText("Alle");
-            // Implement the logic for sending messages to all players
-            // Use the recipientId (-1) to send the message to all
-            dialog.close(); // Close the dialog after handling the action
+            selectedRecipientId = -1;
+            dialog.close();
         });
 
 

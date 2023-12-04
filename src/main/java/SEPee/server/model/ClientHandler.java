@@ -150,8 +150,6 @@ public class ClientHandler implements Runnable {
                             sendToOneClient(receivedSendChatTo, serializedReceivedChat);
                         }
 
-
-
                         break;
                     case "PlayCard":
                         System.out.println("Play Card");
