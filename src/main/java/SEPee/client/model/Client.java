@@ -105,6 +105,9 @@ public class Client extends Application {
                     String messageType = deserializedReceivedString.getMessageType();
 
                     switch (messageType) {
+                        case "Alive":
+                            System.out.println("Alive");
+                            break;
                         case "Welcome":
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
@@ -153,9 +156,10 @@ public class Client extends Application {
                             controller.init2(this, primaryStage);
                             String selectedMap = controller.getSelectedMap();
                             System.out.println(selectedMap);
-
                             break;
-
+                        case "GameStarted":
+                            System.out.println("Game Started");
+                            break;
                         case "ReceivedChat":
 
                             String serializedReceivedChat = serializedReceivedString;
@@ -175,6 +179,78 @@ public class Client extends Application {
                                 String receivedMessage = (deserializedReceivedChat.getMessageBody().getMessage());
                                 controller.appendToChatArea(receivedMessage);
                             }
+                            break;
+                        case "Error":
+                            System.out.println("Error");
+                            break;
+                        case "ConnectionUpdate":
+                            System.out.println("Connection Update");
+                            break;
+                        case "CardPlayed":
+                            System.out.println("Card Played");
+                            break;
+                        case "CurrentPlayer":
+                            System.out.println("Current Player");
+                            break;
+                        case "ActivePhase":
+                            System.out.println("Active Phase");
+                            break;
+                        case "StartingPointTaken":
+                            System.out.println("Starting Point Taken");
+                            break;
+                        case "YourCards":
+                            System.out.println("Your Cards");
+                            break;
+                        case "NotYourCards":
+                            System.out.println("Not Your Cards");
+                            break;
+                        case "ShuffleCoding":
+                            System.out.println("Shuffle Coding");
+                            break;
+                        case "CardSelected":
+                            System.out.println("Card Selected");
+                            break;
+                        case "TimerStarted":
+                            System.out.println("Timer Started");
+                            break;
+                        case "TimerEnded":
+                            System.out.println("Timer Ended");
+                            break;
+                        case "CardsYouGotNow":
+                            System.out.println("Cards You Got Now");
+                            break;
+                        case "CurrentCards":
+                            System.out.println("Current Cards");
+                            break;
+                        case "ReplaceCard":
+                            System.out.println("Replace Card");
+                            break;
+                        case "Movement":
+                            System.out.println("Movement");
+                            break;
+                        case "PlayerTurning":
+                            System.out.println("Player Turning");
+                            break;
+                        case "DrawDamage":
+                            System.out.println("Draw Damage");
+                            break;
+                        case "PickDamage":
+                            System.out.println("Pick Damage");
+                            break;
+                        case "Animation":
+                            System.out.println("Animation");
+                            break;
+                        case "Reboot":
+                            System.out.println("Reboot");
+                            break;
+                        case "RebootDirection":
+                            System.out.println("Reboot Direction");
+                            break;
+                        case "Energy":
+                            System.out.println("Energy");
+                            break;
+                        case "CheckPointReached":
+                            System.out.println("Check Point Reached");
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");

@@ -144,6 +144,18 @@ public class ClientHandler implements Runnable {
                     case "PlayCard":
                         System.out.println("Play Card");
                         break;
+                    case "SetStartingPoint":
+                        System.out.println("Set Starting Point");
+                        break;
+                    case "SelectedCard":
+                        System.out.println("Selected Card");
+                        break;
+                    case "SelectionFinished":
+                        System.out.println("Selection Finished");
+                        break;
+                    case "SelectedDamage":
+                        System.out.println("Selected Damage");
+                        break;
                     default:
                         //Error-JSON an Client
                         System.out.println("Unknown command");
