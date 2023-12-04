@@ -63,10 +63,15 @@ public class ClientHandler implements Runnable {
                         //speichert Spielerobjekt in playerList im Server
                         clientId = Server.getClientID();
                         Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
-                        //playerAdded senden an alle Clients
                         PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
-                        broadcast(serializedPlayerAdded);
+
+                        //playerAdded senden an alle alten Clients
+                        for(int i = 0; i < Server.getPlayerList().size(); i++) {
+                            if(Server.getPlayerList().get(i).getId() != clientId){
+                                sendToOneClient(Server.getPlayerList().get(i).getId(), serializedPlayerAdded);
+                            }
+                        }
 
 
                         ReceivedChat joinedPlayerMessage = new ReceivedChat( playerName+ " has joined the chat.", 999, false);
@@ -75,14 +80,12 @@ public class ClientHandler implements Runnable {
 
                         broadcast(serializedjoinedPlayerMessage);
 
-
-
-
-
                         //send Playerlist to new Player
-                        GivePlayerList givePlayerList= new GivePlayerList(Server.getPlayerList());
-                        String serializedGivePlayerList = Serialisierer.serialize(givePlayerList);
-                        sendToOneClient(clientId, serializedGivePlayerList);
+                        for(int i = 0; i < Server.getPlayerList().size(); i++){
+                            PlayerAdded playerAddedToNewClient = new PlayerAdded(Server.getPlayerList().get(i).getId(), Server.getPlayerList().get(i).getName(), Server.getPlayerList().get(i).getFigure());
+                            String serializedplayerAddedToNewClient = Serialisierer.serialize(playerAddedToNewClient);
+                            sendToOneClient(clientId, serializedplayerAddedToNewClient);
+                        }
                         break;
                     case "SetStatus":
                         System.out.println("Set Status");

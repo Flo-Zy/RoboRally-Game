@@ -5,6 +5,7 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
+import SEPee.server.model.Server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -124,18 +125,12 @@ public class Client extends Application {
                             break;
                         case "PlayerAdded":
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
-                            if(playerAdded.getMessageBody().getClientID() != controller.getId()){
-                                String name = playerAdded.getMessageBody().getName();
-                                int id = playerAdded.getMessageBody().getClientID();
-                                int figure = playerAdded.getMessageBody().getFigure();
-                                //den empfangenen Spieler in der Client seitigen playerList speichern
-                                playerListClient.add(new Player(name, id, figure));
-                                System.out.println("Player added hahaha");
-                            }
-                            break;
-                        case "GivePlayerList":
-                            GivePlayerList givePlayerList = Deserialisierer.deserialize(serializedReceivedString, GivePlayerList.class);
-                            playerListClient = givePlayerList.getMessageBody().getPlayerList();
+                            String name = playerAdded.getMessageBody().getName();
+                            int id = playerAdded.getMessageBody().getClientID();
+                            int figure = playerAdded.getMessageBody().getFigure();
+                            //den empfangenen Spieler in der Client seitigen playerList speichern
+                            playerListClient.add(new Player(name, id, figure));
+                            System.out.println("Player added");
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
@@ -171,7 +166,7 @@ public class Client extends Application {
                                     fromName = playerListClient.get(i).getName();
                                 }
                             }
-                            System.out.println(fromName);
+                            //System.out.println(fromName);
                             if (fromName != null) {
                                 String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
                                 controller.appendToChatArea(receivedMessage);
