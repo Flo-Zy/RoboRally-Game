@@ -61,7 +61,7 @@ public class Client extends Application {
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
-            if (deserializedHelloClient.getMessageType().equals("HelloClient")) {
+            if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 0.1")) {
 
                 //Stage wird initialisiert
                 controller.init(this, primaryStage);
@@ -76,8 +76,12 @@ public class Client extends Application {
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
             } else {
 
+                System.out.println("79");
                 socket.close();
-                //fehlermeldung
+                controller.shutdown();
+
+                //Client Terminiert nicht
+
             }
 
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
