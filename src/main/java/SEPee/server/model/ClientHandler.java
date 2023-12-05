@@ -134,26 +134,28 @@ public class ClientHandler implements Runnable {
 
                             boolean receivedChatisPrivate;
 
-                            if (receivedSendChatTo == -1) {
+
+                            if (receivedSendChatTo == -1){
                                 receivedChatisPrivate = false;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
 
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
                                 broadcast(serializedReceivedChat);
 
                             } else {
                                 receivedChatisPrivate = true;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
 
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                                sendToOneClient(receivedSendChatTo, "[privat von " + receivedSendChatTo + "]" + serializedReceivedChat);
+                                sendToOneClient(receivedSendChatTo, serializedReceivedChat);
 
                                 // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
-                                if (!(receivedSendChatTo == receivedSendChatFrom)) {
-                                    sendToOneClient(receivedSendChatFrom, "[privat an " + receivedSendChatTo + "]" + serializedReceivedChat);
+                                if (!(receivedSendChatTo == receivedSendChatFrom)){
+                                    sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
 
                                 }
                             }
+
 
 
                             break;
