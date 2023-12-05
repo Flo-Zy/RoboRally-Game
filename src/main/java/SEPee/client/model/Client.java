@@ -77,8 +77,10 @@ public class Client extends Application {
             } else {
 
                 System.out.println("79");
+
                 socket.close();
                 controller.shutdown();
+                System.exit(0);
 
                 //Client Terminiert nicht
 
