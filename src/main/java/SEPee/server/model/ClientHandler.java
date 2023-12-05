@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import SEPee.server.model.Game;
@@ -42,142 +43,151 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
-        ) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
-            while ((serializedReceivedString = reader.readLine()) != null) {
-                Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
-                String input = deserializedReceivedString.getMessageType();
-                //System.out.println("2");
-                switch (input) {
-                    //HelloServer wird oben behandelt beim Verbindungsaufbau
-                    case "Alive":
-                        System.out.println("Alive");
-                        break;
-                    case "PlayerValues":
-                        System.out.println("Player Values erhalten");
+            try {
+                while ((serializedReceivedString = reader.readLine()) != null) {
+                    Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
+                    String input = deserializedReceivedString.getMessageType();
+                    switch (input) {
+                        //HelloServer wird oben behandelt beim Verbindungsaufbau
+                        case "Alive":
+                            System.out.println("Alive");
+                            break;
+                        case "PlayerValues":
+                            System.out.println("Player Values erhalten");
 
-                        String serializedPlayerValues = serializedReceivedString;
-                        PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
-                        String playerName = deserializedPlayerValues.getMessageBody().getName();
-                        int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
+                            String serializedPlayerValues = serializedReceivedString;
+                            PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
+                            String playerName = deserializedPlayerValues.getMessageBody().getName();
+                            int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
-                        //speichert Spielerobjekt in playerList im Server
-                        clientId = Server.getClientID();
-                        Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
-                        PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
-
-
-                        this.player = new Player(playerName, clientId, playerFigure);
-
-                        //associate socket with ID in the Player object
-                        player.associateSocketWithId(clientSocket, clientId);
+                            //speichert Spielerobjekt in playerList im Server
+                            clientId = Server.getClientID();
+                            Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
+                            PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
 
 
-                        String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
+                            this.player = new Player(playerName, clientId, playerFigure);
 
-                        //playerAdded senden an alle alten Clients
-                        for(int i = 0; i < Server.getPlayerList().size(); i++) {
-                            if(Server.getPlayerList().get(i).getId() != clientId){
-                                sendToOneClient(Server.getPlayerList().get(i).getId(), serializedPlayerAdded);
+                            //associate socket with ID in the Player object
+                            player.associateSocketWithId(clientSocket, clientId);
+
+
+                            String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
+
+                            //playerAdded senden an alle alten Clients
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                if (Server.getPlayerList().get(i).getId() != clientId) {
+                                    sendToOneClient(Server.getPlayerList().get(i).getId(), serializedPlayerAdded);
+                                }
                             }
-                        }
 
 
-                        ReceivedChat joinedPlayerMessage = new ReceivedChat( playerName+ " has joined the chat.", 999, false);
-                        String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
-                        broadcast(serializedjoinedPlayerMessage);
+                            ReceivedChat joinedPlayerMessage = new ReceivedChat(playerName + " has joined the chat.", 999, false);
+                            String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
+                            broadcast(serializedjoinedPlayerMessage);
 
-                        //send Playerlist to new Player
-                        for(int i = 0; i < Server.getPlayerList().size(); i++){
-                            PlayerAdded playerAddedToNewClient = new PlayerAdded(Server.getPlayerList().get(i).getId(), Server.getPlayerList().get(i).getName(), Server.getPlayerList().get(i).getFigure());
-                            String serializedplayerAddedToNewClient = Serialisierer.serialize(playerAddedToNewClient);
-                            sendToOneClient(clientId, serializedplayerAddedToNewClient);
-                        }
-                        break;
-                    case "SetStatus":
-                        System.out.println("Set Status");
-                        SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
-                        //playerList vom Server aktualisieren
-                        for(int i = 0; i < Server.getPlayerList().size(); i++){
-                            if(setStatus.getMessageBody().getClientID() == Server.getPlayerList().get(i).getId()){
-                                Server.getPlayerList().get(i).setReady(setStatus.getMessageBody().isReady());
+                            //send Playerlist to new Player
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                PlayerAdded playerAddedToNewClient = new PlayerAdded(Server.getPlayerList().get(i).getId(), Server.getPlayerList().get(i).getName(), Server.getPlayerList().get(i).getFigure());
+                                String serializedplayerAddedToNewClient = Serialisierer.serialize(playerAddedToNewClient);
+                                sendToOneClient(clientId, serializedplayerAddedToNewClient);
                             }
-                        }
-
-                        //PlayerStatus an alle Clients senden
-                        PlayerStatus playerStatus = new PlayerStatus(setStatus.getMessageBody().getClientID(), setStatus.getMessageBody().isReady());
-                        String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
-                        broadcast(serializedPlayerStatus);
-
-                        //ersten der ready drückt selectMap senden
-                        if(Server.counterSetStatus == 0) {
-                            int first = setStatus.getMessageBody().getClientID();
-                            SelectMap selectMap = new SelectMap();
-                            String serializedSelectMap = Serialisierer.serialize(selectMap);
-                            sendToOneClient(first, serializedSelectMap);
-                            Server.counterSetStatus++;
-                        }
-                        break;
-                    case "MapSelected":
-                        System.out.println("Map Selected");
-                        break;
-                    case "SendChat":
-                        System.out.println("Send Chat");
-
-                        SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
-
-                        String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
-
-                        int receivedSendChatFrom = clientId;
-                        int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
-
-                        boolean receivedChatisPrivate;
-
-                        if (receivedSendChatTo == -1){
-                            receivedChatisPrivate = false;
-                            ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
-
-                            String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                            broadcast(serializedReceivedChat);
-
-                        } else {
-                            receivedChatisPrivate = true;
-                            ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
-
-                            String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                            sendToOneClient(receivedSendChatTo, "[privat von " + receivedSendChatTo + "]" + serializedReceivedChat);
-
-                            // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
-                            if (!(receivedSendChatTo == receivedSendChatFrom)){
-                                sendToOneClient(receivedSendChatFrom, "[privat an " + receivedSendChatTo + "]" + serializedReceivedChat);
-
+                            break;
+                        case "SetStatus":
+                            System.out.println("Set Status");
+                            SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
+                            //playerList vom Server aktualisieren
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                if (setStatus.getMessageBody().getClientID() == Server.getPlayerList().get(i).getId()) {
+                                    Server.getPlayerList().get(i).setReady(setStatus.getMessageBody().isReady());
+                                }
                             }
-                        }
 
-                        break;
-                    case "PlayCard":
-                        System.out.println("Play Card");
-                        break;
-                    case "SetStartingPoint":
-                        System.out.println("Set Starting Point");
-                        break;
-                    case "SelectedCard":
-                        System.out.println("Selected Card");
-                        break;
-                    case "SelectionFinished":
-                        System.out.println("Selection Finished");
-                        break;
-                    case "SelectedDamage":
-                        System.out.println("Selected Damage");
-                        break;
-                    default:
-                        //Error-JSON an Client
-                        System.out.println("Unknown command");
-                        break;
+                            //PlayerStatus an alle Clients senden
+                            PlayerStatus playerStatus = new PlayerStatus(setStatus.getMessageBody().getClientID(), setStatus.getMessageBody().isReady());
+                            String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
+                            broadcast(serializedPlayerStatus);
+
+                            //ersten der ready drückt selectMap senden
+                            if (Server.counterSetStatus == 0) {
+                                int first = setStatus.getMessageBody().getClientID();
+                                SelectMap selectMap = new SelectMap();
+                                String serializedSelectMap = Serialisierer.serialize(selectMap);
+                                sendToOneClient(first, serializedSelectMap);
+                                Server.counterSetStatus++;
+                            }
+                            break;
+                        case "MapSelected":
+                            System.out.println("Map Selected");
+                            break;
+                        case "SendChat":
+                            System.out.println("Send Chat");
+
+                            SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
+
+                            String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
+
+                            int receivedSendChatFrom = clientId;
+                            int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
+
+                            boolean receivedChatisPrivate;
+
+                            if (receivedSendChatTo == -1) {
+                                receivedChatisPrivate = false;
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+
+                                String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                                broadcast(serializedReceivedChat);
+
+                            } else {
+                                receivedChatisPrivate = true;
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+
+                                String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                                sendToOneClient(receivedSendChatTo, "[privat von " + receivedSendChatTo + "]" + serializedReceivedChat);
+
+                                // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
+                                if (!(receivedSendChatTo == receivedSendChatFrom)) {
+                                    sendToOneClient(receivedSendChatFrom, "[privat an " + receivedSendChatTo + "]" + serializedReceivedChat);
+
+                                }
+                            }
+
+
+                            break;
+                        case "PlayCard":
+                            System.out.println("Play Card");
+                            break;
+                        case "SetStartingPoint":
+                            System.out.println("Set Starting Point");
+                            break;
+                        case "SelectedCard":
+                            System.out.println("Selected Card");
+                            break;
+                        case "SelectionFinished":
+                            System.out.println("Selection Finished");
+                            break;
+                        case "SelectedDamage":
+                            System.out.println("Selected Damage");
+                            break;
+                        default:
+                            //Error-JSON an Client
+                            System.out.println("Unknown command");
+                            break;
+                    }
                 }
+            } catch (SocketException e) {
+                // Handle clientseitiger close
+                System.out.println("Client disconnected: " + e.getMessage());
+
+                //falls das der fall ist, was dann?
+
+            } catch (IOException e) {
+                e.printStackTrace(); // Other IO exceptions can be handled separately if needed
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
