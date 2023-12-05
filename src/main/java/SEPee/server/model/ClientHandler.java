@@ -147,11 +147,11 @@ public class ClientHandler implements Runnable {
                             ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
 
                             String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                            sendToOneClient(receivedSendChatTo, serializedReceivedChat);
+                            sendToOneClient(receivedSendChatTo, "[privat von " + receivedSendChatTo + "]" + serializedReceivedChat);
 
                             // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
                             if (!(receivedSendChatTo == receivedSendChatFrom)){
-                                sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
+                                sendToOneClient(receivedSendChatFrom, "[privat an " + receivedSendChatTo + "]" + serializedReceivedChat);
 
                             }
                         }
