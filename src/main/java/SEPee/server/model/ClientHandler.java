@@ -148,6 +148,7 @@ public class ClientHandler implements Runnable {
 
                             String serializedReceivedChat = Serialisierer.serialize(receivedChat);
                             sendToOneClient(receivedSendChatTo, serializedReceivedChat);
+                            sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
                         }
 
                         break;
