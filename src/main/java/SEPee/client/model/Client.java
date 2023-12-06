@@ -1,7 +1,6 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
-import SEPee.client.viewModel.ClientsData;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -29,6 +28,8 @@ public class Client extends Application {
     private static final int SERVER_PORT = 8887;
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
+    @Getter
+    public static ArrayList<Integer> takenFigures = new ArrayList<>();
 
 
 
@@ -87,27 +88,18 @@ public class Client extends Application {
                     System.out.println(playerListClient.get(i).getName());
                     System.out.println(playerListClient.get(i).getFigure());
                 }
+                //save taken figures in takenFigures
                 for (Player player : playerListClient) {
-                    takenFigures.add(player.getFigure());
+                    Client.getTakenFigures().add(player.getFigure());
 
                     //tester
                     System.out.println("138 " + player.getFigure());
+
                 }
 
                 //Stage wird initialisiert
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 controller.init(this, primaryStage);
-
-
-                //save taken figures in takenFigures
-                for (Player player : playerListClient) {
-                    ClientsData.getTakenFigures().add(player.getFigure());
-
-                    //tester
-                    System.out.println("138 " + player.getFigure());
-
-                }
-
                 primaryStage.show();
 
 

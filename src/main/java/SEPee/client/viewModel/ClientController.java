@@ -68,15 +68,14 @@ public class ClientController {
 
     public void init(Client Client, Stage stage) {
 
-        System.out.println(ClientsData.takenFigures);
 
         // hardcode Tester fur button disable bis system out print
         // Create a new Player object
         Player newPlayer = new Player("hasan1", 5, 2);
         // Add the new player to the client-side playerList
         playerListClient.add(newPlayer);
-        ClientsData.takenFigures.add(newPlayer.getFigure());
-        System.out.println("78 " + newPlayer.getFigure() + ClientsData.takenFigures.size());
+        Client.takenFigures.add(newPlayer.getFigure());
+        System.out.println("78 " + newPlayer.getFigure() + Client.takenFigures.size());
 
         boolean validUsername = false;
 
@@ -92,9 +91,8 @@ public class ClientController {
                 stage.setTitle("Client - " + name);
                 validUsername = true;
 
-                figure = showRobotSelectionDialog(stage, ClientsData.getTakenFigures());
+                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
                 setFigure(figure);
-                ClientsData.takenFigures.add(figure);
 
                 sendButton.setOnAction(event -> sendMessage());
                 visibilityButton.setText("Alle");
@@ -258,7 +256,7 @@ public class ClientController {
         dialog.initOwner(stage);
 
         //disable previously selected buttons
-        for (Integer takenFigure : ClientsData.takenFigures) {
+        for (Integer takenFigure : takenFigures) {
             ButtonType buttonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == takenFigure)
                     .map(Map.Entry::getKey)
