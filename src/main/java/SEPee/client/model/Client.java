@@ -69,7 +69,7 @@ public class Client extends Application {
                 primaryStage.show();
 
                 // Send HelloServer back to the server
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 0.1");
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
                 String serializedHelloServer = Serialisierer.serialize(helloServer);
                 writer.println(serializedHelloServer);
 
