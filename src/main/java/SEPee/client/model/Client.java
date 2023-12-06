@@ -4,6 +4,7 @@ import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.serialisierung.messageType.Error;
 import SEPee.server.model.Player;
 import SEPee.server.model.Server;
 import javafx.application.Application;
@@ -174,7 +175,9 @@ public class Client extends Application {
                             }
                             break;
                         case "Error":
-                            System.out.println("Error");
+                            //empfängt den Error vom Server und printet eine Fehlermeldung auf die Konsole.
+                            Error deserializedError = Deserialisierer.deserialize(serializedReceivedString, Error.class);
+                            System.out.println(deserializedError.getMessageBody().getError());
                             break;
                         case "ConnectionUpdate":
                             System.out.println("Connection Update");
