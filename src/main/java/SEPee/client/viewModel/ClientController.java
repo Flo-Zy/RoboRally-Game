@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static SEPee.client.model.Client.playerListClient;
@@ -69,32 +70,6 @@ public class ClientController {
 
                     figure = showRobotSelectionDialog(stage);
                     setFigure(figure);
-
-                /*
-
-                //try {
-                    //this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
-                    //writer.println( "PRINT CHAT CLIENT" + chatClient);
-                    //this.writer = new PrintWriter(socket.getOutputStream(), true);
-                    //this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-                    //writer.println(name + " has joined the chat.");
-
-                    new Thread(() -> {
-                        try {
-                            String serverMessage;
-                            while ((serverMessage = reader.readLine()) != null) {
-                               appendToChatArea(serverMessage);
-                            }
-                        } catch (IOException e) {
-                            //e.printStackTrace();
-                        //}
-                    }).start();
-                //} catch (IOException e) {
-                //    e.printStackTrace();
-                //}
-
-                 */
 
                     sendButton.setOnAction(event -> sendMessage());
                     visibilityButton.setText("Alle");
@@ -159,48 +134,6 @@ public class ClientController {
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
     }
-
-    /*private void toggleVisibility() {
-        if (visibilityButton.getText().equals("Alle")) {
-            showPlayerListDialog();
-        } else {
-            // Logik für private Nachrichten
-            // Hier kannst du die Logik für private Nachrichten implementieren, wenn nötig
-        }
-    }
-
-    private void showPlayerListDialog() {
-        // Erstellen Sie einen Dialog, um die Spielerliste anzuzeigen
-        Dialog<String> playerListDialog = new Dialog<>();
-        playerListDialog.setTitle("Spielerliste");
-        playerListDialog.setHeaderText("Liste der Spieler im Spiel:");
-
-        // Fügen Sie die Spielerliste als Textinhalt hinzu
-        TextArea playerListText = new TextArea();
-        playerListText.setEditable(false);
-        playerListText.setWrapText(true);
-
-        // Fügen Sie die Spielerliste aus der Client-Klasse hinzu
-        playerListText.setText(getPlayerListAsString());
-
-        playerListDialog.getDialogPane().setContent(playerListText);
-
-        // Fügen Sie einen "Schließen" -Button zum Dialog hinzu
-        ButtonType closeButton = new ButtonType("Schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
-        playerListDialog.getDialogPane().getButtonTypes().add(closeButton);
-
-        // Zeigen Sie den Dialog an und warten Sie auf Benutzereingaben
-        playerListDialog.showAndWait();
-    }
-
-    private String getPlayerListAsString() {
-        StringBuilder playerListString = new StringBuilder();
-        for (Player player : Client.playerListClient) {
-            playerListString.append("Name: ").append(player.getName()).append("\n");
-        }
-        return playerListString.toString();
-    }*/
-
     private int selectedRecipientId  = -1; // Initialize with a default value
 
 
@@ -304,8 +237,29 @@ public class ClientController {
 
         // Process user input and return the selected robot (index starting from 1)
         if (result.isPresent()) {
+            int selectedRobotIndex = result.get();
+
+            // Get the selected button
+            ButtonType selectedButtonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == selectedRobotIndex)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedButtonType != null) {
+                Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
+                selectedButton.setDisable(true); // Disable the selected button
+            }
+
+            return selectedRobotIndex;
+        }
+
+        /*
+        // Process user input and return the selected robot (index starting from 1)
+        if (result.isPresent()) {
             return buttonMap.getOrDefault(result.get(), 0);
         }
+         */
 
         return 0; // Default value if no selection or unexpected button is pressed
     }

@@ -157,7 +157,6 @@ public class ClientHandler implements Runnable {
 
                                 }
                             }
-
                             break;
                         case "PlayCard":
                             System.out.println("Play Card");
