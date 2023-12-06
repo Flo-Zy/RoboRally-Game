@@ -40,6 +40,7 @@ public class Server extends Thread{
 
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                 writer.println(serializedHelloClient);
+
                 if(playerList.size() > 0) {
                     for (int i = 0; i < playerList.size(); i++) {
                         PlayerAdded givePlayerlist = new PlayerAdded(playerList.get(i).getId(), playerList.get(i).getName(), playerList.get(i).getFigure());

@@ -86,6 +86,13 @@ public class Client extends Application {
 
                 for(int i = 0; i < playerListClient.size(); i++){
                     System.out.println(playerListClient.get(i).getName());
+                    System.out.println(playerListClient.get(i).getFigure());
+                }
+                for (Player player : playerListClient) {
+                    takenFigures.add(player.getFigure());
+
+                    //tester
+                    System.out.println("138 " + player.getFigure());
                 }
 
                 //Stage wird initialisiert
