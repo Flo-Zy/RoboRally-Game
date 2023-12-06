@@ -99,9 +99,9 @@ public class ClientController {
                     sendButton.setOnAction(event -> sendMessage());
                     visibilityButton.setText("Alle");
                     visibilityButton.setOnAction(event -> toggleVisibility());
-                    stage.setOnCloseRequest(event -> shutdown());
+                    //stage.setOnCloseRequest(event -> shutdown());
 
-                    Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+                    //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
                 } else {
                     //falls Username empty
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -270,6 +270,7 @@ public class ClientController {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        System.exit(0);
     }
 
     private int showRobotSelectionDialog(Stage stage) {

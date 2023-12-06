@@ -47,7 +47,7 @@ public class Server extends Thread{
                 System.out.println(serializedHelloServer);
                 HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
 
-                if ("Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
+                if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
                     ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                     clients.add(clientHandler);
                     new Thread(clientHandler).start();
