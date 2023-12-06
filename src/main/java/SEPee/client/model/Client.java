@@ -1,6 +1,7 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.ClientsData;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -29,13 +30,11 @@ public class Client extends Application {
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
 
-    @Getter
-    public static ArrayList<Integer> takenFigures = new ArrayList<>();
+
 
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
-
 
     public static void main(String[] args) {
         launch(args);
@@ -98,6 +97,17 @@ public class Client extends Application {
                 //Stage wird initialisiert
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 controller.init(this, primaryStage);
+
+
+                //save taken figures in takenFigures
+                for (Player player : playerListClient) {
+                    ClientsData.getTakenFigures().add(player.getFigure());
+
+                    //tester
+                    System.out.println("138 " + player.getFigure());
+
+                }
+
                 primaryStage.show();
 
 
@@ -120,8 +130,7 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
-    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller,
-                                              Stage primaryStage, PrintWriter writer) {
+    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
                 while (!receivedHelloClient) {
@@ -147,7 +156,6 @@ public class Client extends Application {
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
 
-
                             // PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
                             String serializedPlayerValues = Serialisierer.serialize(playerValues);
@@ -165,14 +173,6 @@ public class Client extends Application {
 
                             // Add the new player to the client-side playerList
                             playerListClient.add(newPlayer);
-
-                            //save taken figures in takenFigures
-                            for (Player player : playerListClient) {
-                                takenFigures.add(player.getFigure());
-
-                                //tester
-                                System.out.println("138 " + player.getFigure());
-                            }
 
                             System.out.println("Player added");
                             break;
