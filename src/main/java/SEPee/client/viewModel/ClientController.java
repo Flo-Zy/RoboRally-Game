@@ -70,7 +70,7 @@ public class ClientController {
 
         // hardcode Tester fur button disable bis system out print
         // Create a new Player object
-        Player newPlayer = new Player("hasan", 5, 2);
+        Player newPlayer = new Player("hasan1", 5, 2);
         // Add the new player to the client-side playerList
         playerListClient.add(newPlayer);
         Client.takenFigures.add(newPlayer.getFigure());
