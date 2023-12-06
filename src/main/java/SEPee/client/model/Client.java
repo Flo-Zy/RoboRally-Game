@@ -182,78 +182,103 @@ public class Client extends Application {
                             break;
                         case "ConnectionUpdate":
                             System.out.println("Connection Update");
+                            ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
                             break;
                         case "CardPlayed":
                             System.out.println("Card Played");
+                            CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
                             break;
                         case "CurrentPlayer":
                             System.out.println("Current Player");
+                            CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
                             break;
                         case "ActivePhase":
                             System.out.println("Active Phase");
+                            ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
                             break;
                         case "StartingPointTaken":
                             System.out.println("Starting Point Taken");
+                            StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
                             break;
                         case "YourCards":
                             System.out.println("Your Cards");
+                            YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
                             break;
                         case "NotYourCards":
                             System.out.println("Not Your Cards");
+                            NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
                             break;
                         case "ShuffleCoding":
                             System.out.println("Shuffle Coding");
+                            ShuffleCoding shuffleCoding = Deserialisierer.deserialize(serializedReceivedString, ShuffleCoding.class);
                             break;
                         case "CardSelected":
                             System.out.println("Card Selected");
+                            CardSelected cardSelected = Deserialisierer.deserialize(serializedReceivedString, CardSelected.class);
                             break;
                         case "TimerStarted":
                             System.out.println("Timer Started");
+                            TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             break;
                         case "TimerEnded":
                             System.out.println("Timer Ended");
+                            TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
                             break;
                         case "CardsYouGotNow":
                             System.out.println("Cards You Got Now");
+                            CardsYouGotNow cardsYouGotNow = Deserialisierer.deserialize(serializedReceivedString, CardsYouGotNow.class);
                             break;
                         case "CurrentCards":
                             System.out.println("Current Cards");
+                            CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
                             break;
                         case "ReplaceCard":
                             System.out.println("Replace Card");
+                            ReplaceCard replaceCard = Deserialisierer.deserialize(serializedReceivedString, ReplaceCard.class);
                             break;
                         case "Movement":
                             System.out.println("Movement");
+                            Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
                             break;
                         case "PlayerTurning":
                             System.out.println("Player Turning");
+                            PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
                             break;
                         case "DrawDamage":
                             System.out.println("Draw Damage");
+                            DrawDamage drawDamage = Deserialisierer.deserialize(serializedReceivedString, DrawDamage.class);
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");
+                            PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
                             break;
                         case "Animation":
                             System.out.println("Animation");
+                            Animation animation = Deserialisierer.deserialize(serializedReceivedString, Animation.class);
                             break;
                         case "Reboot":
                             System.out.println("Reboot");
+                            Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");
+                            RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
                             break;
                         case "Energy":
                             System.out.println("Energy");
+                            Energy energy = Deserialisierer.deserialize(serializedReceivedString, Energy.class);
                             break;
                         case "CheckPointReached":
                             System.out.println("Check Point Reached");
+                            CheckPointReached checkPointReached = Deserialisierer.deserialize(serializedReceivedString, CheckPointReached.class);
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");
+                            GameFinished gameFinished = Deserialisierer.deserialize(serializedReceivedString, GameFinished.class);
                             //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
                             break;
                         default:
+                            //kann man entfernen?
                             System.out.println("Unhandled message received: " + messageType);
                             break;
 

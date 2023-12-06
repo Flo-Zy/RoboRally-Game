@@ -123,6 +123,9 @@ public class ClientHandler implements Runnable {
                             break;
                         case "MapSelected":
                             System.out.println("Map Selected");
+                            MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
+
+
                             break;
                         case "SendChat":
                             System.out.println("Send Chat");
@@ -161,18 +164,23 @@ public class ClientHandler implements Runnable {
                             break;
                         case "PlayCard":
                             System.out.println("Play Card");
+                            PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
                             break;
                         case "SetStartingPoint":
                             System.out.println("Set Starting Point");
+                            SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
                             break;
                         case "SelectedCard":
                             System.out.println("Selected Card");
+                            SelectedCard selectedCard = Deserialisierer.deserialize(serializedReceivedString, SelectedCard.class);
                             break;
                         case "SelectionFinished":
                             System.out.println("Selection Finished");
+                            SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
+                            SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
                             break;
                         default:
                             //Error-JSON an Client
