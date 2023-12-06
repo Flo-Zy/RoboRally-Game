@@ -29,13 +29,13 @@ public class Client extends Application {
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
 
+    @Getter
+    public static ArrayList<Integer> takenFigures = new ArrayList<>();
 
     private boolean receivedHelloClient = false;
+    @Getter
     private static PrintWriter writer;
 
-    public static PrintWriter getWriter(){
-        return writer;
-    }
 
     public static void main(String[] args) {
         launch(args);
@@ -88,12 +88,6 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
-
-    @Getter
-    private ArrayList<Integer> takenFigures = new ArrayList<>();
-
-
-
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller,
                                               Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {

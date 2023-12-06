@@ -52,22 +52,29 @@ public class ClientController {
     private int id;
     private String selectedMap;
     private ArrayList<String> playerNames = new ArrayList<>();
-    private ArrayList<Integer> takenFigures = new ArrayList<>();
 
+    /*
     public void updateTakenFigures(ArrayList<Integer> takenFigures) {
-        this.takenFigures = takenFigures;
+        Client.takenFigures = takenFigures;
         // Do something with the updated list in your controller logic
     }
 
-    public void init(Client chatClient, Stage stage) {
+    private getTakenFigures(){
+        Client.getTakenFigures();
+        return
+    }
+
+     */
+
+    public void init(Client Client, Stage stage) {
 
         // hardcode Tester fur button disable bis system out print
         // Create a new Player object
         Player newPlayer = new Player("hasan", 5, 2);
         // Add the new player to the client-side playerList
         playerListClient.add(newPlayer);
-        this.takenFigures.add(newPlayer.getFigure());
-        System.out.println("78 " + newPlayer.getFigure() + takenFigures.size());
+        Client.takenFigures.add(newPlayer.getFigure());
+        System.out.println("78 " + newPlayer.getFigure() + Client.takenFigures.size());
 
 
 
@@ -85,7 +92,7 @@ public class ClientController {
                 stage.setTitle("Client - " + name);
                 validUsername = true;
 
-                figure = showRobotSelectionDialog(stage, chatClient.getTakenFigures());
+                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
                 setFigure(figure);
 
                 sendButton.setOnAction(event -> sendMessage());
@@ -250,7 +257,7 @@ public class ClientController {
         dialog.initOwner(stage);
 
         //disable previously selected buttons
-        for (Integer takenFigure : this.takenFigures) {
+        for (Integer takenFigure : Client.takenFigures) {
             ButtonType buttonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == takenFigure)
                     .map(Map.Entry::getKey)
