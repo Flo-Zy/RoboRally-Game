@@ -46,6 +46,7 @@ public class ClientHandler implements Runnable {
     public void run() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
+            String playerName = null;
             try {
                 while ((serializedReceivedString = reader.readLine()) != null) {
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
@@ -60,7 +61,7 @@ public class ClientHandler implements Runnable {
 
                             String serializedPlayerValues = serializedReceivedString;
                             PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedPlayerValues, PlayerValues.class);
-                            String playerName = deserializedPlayerValues.getMessageBody().getName();
+                            playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
                             //speichert Spielerobjekt in playerList im Server
@@ -186,7 +187,11 @@ public class ClientHandler implements Runnable {
                 // Handle clientseitiger close
                 System.out.println("Client disconnected: " + e.getMessage());
                 //wer disconnect
-                // has left chat
+
+                ReceivedChat leftPlayerMessage = new ReceivedChat(playerName + " has left the chat.", 999, false);
+                String serializedLeftPlayerMessage = Serialisierer.serialize(leftPlayerMessage);
+                broadcast(serializedLeftPlayerMessage);
+
 
                 //falls das der fall ist, was dann?
 
