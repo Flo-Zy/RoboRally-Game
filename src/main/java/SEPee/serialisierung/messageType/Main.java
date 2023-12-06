@@ -10,6 +10,12 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
+
+        // test HelloClient
+        HelloClient helloClient = new HelloClient("Version 1.0");
+        String serializedHelloClient = Serialisierer.serialize(helloClient);
+        System.out.println(serializedHelloClient);
+        /*
         //test ConectionUpdate
         ConnectionUpdate connectionUpdate = new ConnectionUpdate(9001, false, "AIControl");
         String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
@@ -39,7 +45,7 @@ public class Main {
         String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
         System.out.println(serializedSelectedDamage);
 
-        /*
+
         //test selectMap
         SelectMap selectMap = new SelectMap();
         String testmap = Serialisierer.serialize(selectMap);

@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -156,29 +157,29 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
-
-
-                            break;
-                        case "PlayCard":
-                            System.out.println("Play Card");
-                            break;
-                        case "SetStartingPoint":
-                            System.out.println("Set Starting Point");
-                            break;
-                        case "SelectedCard":
-                            System.out.println("Selected Card");
-                            break;
-                        case "SelectionFinished":
-                            System.out.println("Selection Finished");
-                            break;
-                        case "SelectedDamage":
-                            System.out.println("Selected Damage");
-                            break;
-                        default:
-                            //Error-JSON an Client
-                            System.out.println("Unknown command");
-                            break;
-                    }
+                        break;
+                    case "PlayCard":
+                        System.out.println("Play Card");
+                        break;
+                    case "SetStartingPoint":
+                        System.out.println("Set Starting Point");
+                        break;
+                    case "SelectedCard":
+                        System.out.println("Selected Card");
+                        break;
+                    case "SelectionFinished":
+                        System.out.println("Selection Finished");
+                        break;
+                    case "SelectedDamage":
+                        System.out.println("Selected Damage");
+                        break;
+                    default:
+                        //Error-JSON an Client
+                        //System.out.println("Unknown command");
+                        Error error = new Error("Whoops. That did not work. Try to adjust something.");
+                        String serializedError = Serialisierer.serialize(error);
+                        writer.println(serializedError);
+                        break;
                 }
             } catch (SocketException e) {
                 // Handle clientseitiger close

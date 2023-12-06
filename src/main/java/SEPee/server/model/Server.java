@@ -35,7 +35,7 @@ public class Server extends Thread{
                 System.out.println("Neue potentielle Verbindung: " + clientSocket);
 
                 // Sende HelloClient an den Client
-                HelloClient helloClient = new HelloClient("Version 0.1");
+                HelloClient helloClient = new HelloClient("Version 1.0");
                 String serializedHelloClient = Serialisierer.serialize(helloClient);
 
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
