@@ -29,13 +29,13 @@ public class Client extends Application {
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
 
+    @Getter
+    public static ArrayList<Integer> takenFigures = new ArrayList<>();
 
     private boolean receivedHelloClient = false;
+    @Getter
     private static PrintWriter writer;
 
-    public static PrintWriter getWriter(){
-        return writer;
-    }
 
     public static void main(String[] args) {
         launch(args);
@@ -113,10 +113,6 @@ public class Client extends Application {
             e.printStackTrace();
         }
     }
-
-
-
-
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller,
                                               Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
@@ -137,6 +133,9 @@ public class Client extends Application {
                             System.out.println("Alive");
                             break;
                         case "Welcome":
+
+
+
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
@@ -153,8 +152,21 @@ public class Client extends Application {
                             String name = playerAdded.getMessageBody().getName();
                             int id = playerAdded.getMessageBody().getClientID();
                             int figure = playerAdded.getMessageBody().getFigure();
-                            //den empfangenen Spieler in der Client seitigen playerList speichern
-                            playerListClient.add(new Player(name, id, figure));
+
+                            // Create a new Player object
+                            Player newPlayer = new Player(name, id, figure);
+
+                            // Add the new player to the client-side playerList
+                            playerListClient.add(newPlayer);
+
+                            //save taken figures in takenFigures
+                            for (Player player : playerListClient) {
+                                takenFigures.add(player.getFigure());
+
+                                //tester
+                                System.out.println("138 " + player.getFigure());
+                            }
+
                             System.out.println("Player added");
                             break;
                         case "PlayerStatus":

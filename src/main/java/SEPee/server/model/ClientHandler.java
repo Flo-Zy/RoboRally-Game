@@ -85,7 +85,6 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
-
                             ReceivedChat joinedPlayerMessage = new ReceivedChat(playerName + " has joined the chat.", 999, false);
                             String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
                             broadcast(serializedjoinedPlayerMessage);
@@ -96,6 +95,7 @@ public class ClientHandler implements Runnable {
                                 String serializedplayerAddedToNewClient = Serialisierer.serialize(playerAddedToNewClient);
                                 sendToOneClient(clientId, serializedplayerAddedToNewClient);
                             }
+
                             break;
                         case "SetStatus":
                             System.out.println("Set Status");
@@ -160,7 +160,6 @@ public class ClientHandler implements Runnable {
 
                                 }
                             }
-
                             break;
                         case "PlayCard":
                             System.out.println("Play Card");

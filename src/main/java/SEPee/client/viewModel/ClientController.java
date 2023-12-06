@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static SEPee.client.model.Client.playerListClient;
@@ -52,67 +53,65 @@ public class ClientController {
     private String selectedMap;
     private ArrayList<String> playerNames = new ArrayList<>();
 
-    public void init(Client chatClient, Stage stage) {
-            boolean validUsername = false;
+    /*
+    public void updateTakenFigures(ArrayList<Integer> takenFigures) {
+        Client.takenFigures = takenFigures;
+        // Do something with the updated list in your controller logic
+    }
 
-            while (!validUsername) {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Username");
-                dialog.setHeaderText("Please enter your username:");
-                dialog.setContentText("Username:");
-                Optional<String> result = dialog.showAndWait();
+    private getTakenFigures(){
+        Client.getTakenFigures();
+        return
+    }
 
-                if (result.isPresent() && !result.get().trim().isEmpty()) {
-                    this.name = result.get().trim();
-                    stage.setTitle("Client - " + name);
-                    validUsername = true;
+     */
 
-                    figure = showRobotSelectionDialog(stage);
-                    setFigure(figure);
+    public void init(Client Client, Stage stage) {
 
-                /*
+        // hardcode Tester fur button disable bis system out print
+        // Create a new Player object
+        Player newPlayer = new Player("hasan1", 5, 2);
+        // Add the new player to the client-side playerList
+        playerListClient.add(newPlayer);
+        Client.takenFigures.add(newPlayer.getFigure());
+        System.out.println("78 " + newPlayer.getFigure() + Client.takenFigures.size());
 
-                //try {
-                    //this.socket = new Socket(chatClient.getServerIp(), chatClient.getServerPort());
-                    //writer.println( "PRINT CHAT CLIENT" + chatClient);
-                    //this.writer = new PrintWriter(socket.getOutputStream(), true);
-                    //this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    //writer.println(name + " has joined the chat.");
 
-                    new Thread(() -> {
-                        try {
-                            String serverMessage;
-                            while ((serverMessage = reader.readLine()) != null) {
-                               appendToChatArea(serverMessage);
-                            }
-                        } catch (IOException e) {
-                            //e.printStackTrace();
-                        //}
-                    }).start();
-                //} catch (IOException e) {
-                //    e.printStackTrace();
-                //}
+        boolean validUsername = false;
 
-                 */
+        while (!validUsername) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Username");
+            dialog.setHeaderText("Please enter your username:");
+            dialog.setContentText("Username:");
+            Optional<String> result = dialog.showAndWait();
 
-                    sendButton.setOnAction(event -> sendMessage());
-                    visibilityButton.setText("Alle");
-                    visibilityButton.setOnAction(event -> toggleVisibility());
-                    //stage.setOnCloseRequest(event -> shutdown());
+            if (result.isPresent() && !result.get().trim().isEmpty()) {
+                this.name = result.get().trim();
+                stage.setTitle("Client - " + name);
+                validUsername = true;
 
-                    //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-                } else {
-                    //falls Username empty
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                    alert.showAndWait();
+                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
+                setFigure(figure);
 
-                    Platform.exit();
-                }
+                sendButton.setOnAction(event -> sendMessage());
+                visibilityButton.setText("Alle");
+                visibilityButton.setOnAction(event -> toggleVisibility());
+                //stage.setOnCloseRequest(event -> shutdown());
+
+                //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+            } else {
+                //falls Username empty
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username cannot be empty. Please enter a valid username.");
+                alert.showAndWait();
+
+                Platform.exit();
             }
+        }
     }
 
     @FXML
@@ -144,7 +143,6 @@ public class ClientController {
         }
     }
 
-
     @FXML
     private void sendReady(){
         if(!ready){
@@ -159,50 +157,7 @@ public class ClientController {
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
     }
-
-    /*private void toggleVisibility() {
-        if (visibilityButton.getText().equals("Alle")) {
-            showPlayerListDialog();
-        } else {
-            // Logik für private Nachrichten
-            // Hier kannst du die Logik für private Nachrichten implementieren, wenn nötig
-        }
-    }
-
-    private void showPlayerListDialog() {
-        // Erstellen Sie einen Dialog, um die Spielerliste anzuzeigen
-        Dialog<String> playerListDialog = new Dialog<>();
-        playerListDialog.setTitle("Spielerliste");
-        playerListDialog.setHeaderText("Liste der Spieler im Spiel:");
-
-        // Fügen Sie die Spielerliste als Textinhalt hinzu
-        TextArea playerListText = new TextArea();
-        playerListText.setEditable(false);
-        playerListText.setWrapText(true);
-
-        // Fügen Sie die Spielerliste aus der Client-Klasse hinzu
-        playerListText.setText(getPlayerListAsString());
-
-        playerListDialog.getDialogPane().setContent(playerListText);
-
-        // Fügen Sie einen "Schließen" -Button zum Dialog hinzu
-        ButtonType closeButton = new ButtonType("Schließen", ButtonBar.ButtonData.CANCEL_CLOSE);
-        playerListDialog.getDialogPane().getButtonTypes().add(closeButton);
-
-        // Zeigen Sie den Dialog an und warten Sie auf Benutzereingaben
-        playerListDialog.showAndWait();
-    }
-
-    private String getPlayerListAsString() {
-        StringBuilder playerListString = new StringBuilder();
-        for (Player player : Client.playerListClient) {
-            playerListString.append("Name: ").append(player.getName()).append("\n");
-        }
-        return playerListString.toString();
-    }*/
-
     private int selectedRecipientId  = -1; // Initialize with a default value
-
 
     @FXML
     private void toggleVisibility() {
@@ -273,7 +228,7 @@ public class ClientController {
         System.exit(0);
     }
 
-    private int showRobotSelectionDialog(Stage stage) {
+    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
         dialog.setHeaderText("Please select a robot:");
@@ -298,15 +253,44 @@ public class ClientController {
         // Add buttons to the dialog
         dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
 
-        // Show the dialog and wait for user input
+        //show the dialog and wait for user input
         dialog.initOwner(stage);
+
+        //disable previously selected buttons
+        for (Integer takenFigure : Client.takenFigures) {
+            ButtonType buttonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == takenFigure)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (buttonType != null) {
+                Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
+                buttonNode.setDisable(true);
+            }
+        }
+
+        //show dialog, wait for input
         Optional<Integer> result = dialog.showAndWait();
 
         // Process user input and return the selected robot (index starting from 1)
         if (result.isPresent()) {
-            return buttonMap.getOrDefault(result.get(), 0);
-        }
+            int selectedRobotIndex = buttonMap.get(result.get());
 
+            // Get the selected button
+            ButtonType selectedButtonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == selectedRobotIndex)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedButtonType != null) {
+                Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
+                selectedButton.setDisable(true); // Disable the selected button
+            }
+
+            return selectedRobotIndex;
+        }
         return 0; // Default value if no selection or unexpected button is pressed
     }
 
