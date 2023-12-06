@@ -114,6 +114,9 @@ public class Client extends Application {
                             System.out.println("Alive");
                             break;
                         case "Welcome":
+
+
+
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
@@ -145,9 +148,6 @@ public class Client extends Application {
                                 System.out.println("138 " + player.getFigure());
                             }
 
-
-
-                            // Print the player added message
                             System.out.println("Player added");
                             break;
                         case "PlayerStatus":

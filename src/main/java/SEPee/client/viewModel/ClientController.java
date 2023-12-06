@@ -52,7 +52,7 @@ public class ClientController {
     private int id;
     private String selectedMap;
     private ArrayList<String> playerNames = new ArrayList<>();
-    private ArrayList<Integer> takenFigures;
+    private ArrayList<Integer> takenFigures = new ArrayList<>();
 
     public void updateTakenFigures(ArrayList<Integer> takenFigures) {
         this.takenFigures = takenFigures;
@@ -60,40 +60,51 @@ public class ClientController {
     }
 
     public void init(Client chatClient, Stage stage) {
-            boolean validUsername = false;
 
-            while (!validUsername) {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Username");
-                dialog.setHeaderText("Please enter your username:");
-                dialog.setContentText("Username:");
-                Optional<String> result = dialog.showAndWait();
+        // hardcode Tester fur button disable bis system out print
+        // Create a new Player object
+        Player newPlayer = new Player("hasan", 5, 2);
+        // Add the new player to the client-side playerList
+        playerListClient.add(newPlayer);
+        this.takenFigures.add(newPlayer.getFigure());
+        System.out.println("78 " + newPlayer.getFigure() + takenFigures.size());
 
-                if (result.isPresent() && !result.get().trim().isEmpty()) {
-                    this.name = result.get().trim();
-                    stage.setTitle("Client - " + name);
-                    validUsername = true;
 
-                    figure = showRobotSelectionDialog(stage, chatClient.getTakenFigures());
-                    setFigure(figure);
 
-                    sendButton.setOnAction(event -> sendMessage());
-                    visibilityButton.setText("Alle");
-                    visibilityButton.setOnAction(event -> toggleVisibility());
-                    //stage.setOnCloseRequest(event -> shutdown());
+        boolean validUsername = false;
 
-                    //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-                } else {
-                    //falls Username empty
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                    alert.showAndWait();
+        while (!validUsername) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Username");
+            dialog.setHeaderText("Please enter your username:");
+            dialog.setContentText("Username:");
+            Optional<String> result = dialog.showAndWait();
 
-                    Platform.exit();
-                }
+            if (result.isPresent() && !result.get().trim().isEmpty()) {
+                this.name = result.get().trim();
+                stage.setTitle("Client - " + name);
+                validUsername = true;
+
+                figure = showRobotSelectionDialog(stage, chatClient.getTakenFigures());
+                setFigure(figure);
+
+                sendButton.setOnAction(event -> sendMessage());
+                visibilityButton.setText("Alle");
+                visibilityButton.setOnAction(event -> toggleVisibility());
+                //stage.setOnCloseRequest(event -> shutdown());
+
+                //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+            } else {
+                //falls Username empty
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username cannot be empty. Please enter a valid username.");
+                alert.showAndWait();
+
+                Platform.exit();
             }
+        }
     }
 
     @FXML
@@ -239,7 +250,7 @@ public class ClientController {
         dialog.initOwner(stage);
 
         //disable previously selected buttons
-        for (Integer takenFigure : takenFigures) {
+        for (Integer takenFigure : this.takenFigures) {
             ButtonType buttonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == takenFigure)
                     .map(Map.Entry::getKey)
