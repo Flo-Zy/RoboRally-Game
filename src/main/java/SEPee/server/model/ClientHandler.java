@@ -136,54 +136,57 @@ public class ClientHandler implements Runnable {
                             boolean receivedChatisPrivate;
 
 
-                            if (receivedSendChatTo == -1){
+                            if (receivedSendChatTo == -1) {
                                 receivedChatisPrivate = false;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
 
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
                                 broadcast(serializedReceivedChat);
 
                             } else {
                                 receivedChatisPrivate = true;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage,receivedSendChatFrom, receivedChatisPrivate);
+                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
 
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
                                 sendToOneClient(receivedSendChatTo, serializedReceivedChat);
 
                                 // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
-                                if (!(receivedSendChatTo == receivedSendChatFrom)){
+                                if (!(receivedSendChatTo == receivedSendChatFrom)) {
                                     sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
 
                                 }
                             }
 
-                        break;
-                    case "PlayCard":
-                        System.out.println("Play Card");
-                        break;
-                    case "SetStartingPoint":
-                        System.out.println("Set Starting Point");
-                        break;
-                    case "SelectedCard":
-                        System.out.println("Selected Card");
-                        break;
-                    case "SelectionFinished":
-                        System.out.println("Selection Finished");
-                        break;
-                    case "SelectedDamage":
-                        System.out.println("Selected Damage");
-                        break;
-                    default:
-                        //Error-JSON an Client
-                        //System.out.println("Unknown command");
-                        Error error = new Error("Whoops. That did not work. Try to adjust something.");
-                        String serializedError = Serialisierer.serialize(error);
-                        writer.println(serializedError);
-                        break;
+                            break;
+                        case "PlayCard":
+                            System.out.println("Play Card");
+                            break;
+                        case "SetStartingPoint":
+                            System.out.println("Set Starting Point");
+                            break;
+                        case "SelectedCard":
+                            System.out.println("Selected Card");
+                            break;
+                        case "SelectionFinished":
+                            System.out.println("Selection Finished");
+                            break;
+                        case "SelectedDamage":
+                            System.out.println("Selected Damage");
+                            break;
+                        default:
+                            //Error-JSON an Client
+                            //System.out.println("Unknown command");
+                            Error error = new Error("Whoops. That did not work. Try to adjust something.");
+                            String serializedError = Serialisierer.serialize(error);
+                            writer.println(serializedError);
+                            break;
+                    }
                 }
             } catch (SocketException e) {
                 // Handle clientseitiger close
                 System.out.println("Client disconnected: " + e.getMessage());
+                //wer disconnect
+                // has left chat
 
                 //falls das der fall ist, was dann?
 
