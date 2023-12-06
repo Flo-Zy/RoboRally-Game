@@ -40,6 +40,20 @@ public class Server extends Thread{
 
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                 writer.println(serializedHelloClient);
+                if(playerList.size() > 0) {
+                    for (int i = 0; i < playerList.size(); i++) {
+                        PlayerAdded givePlayerlist = new PlayerAdded(playerList.get(i).getId(), playerList.get(i).getName(), playerList.get(i).getFigure());
+                        String serializedGivePlayerlist = Serialisierer.serialize(givePlayerlist);
+                        writer.println(serializedGivePlayerlist);
+                    }
+                    PlayerAdded givePlayerlist = new PlayerAdded(-999, "", -999);
+                    String serializedGivePlayerlist = Serialisierer.serialize(givePlayerlist);
+                    writer.println(serializedGivePlayerlist);
+                }else{
+                    PlayerAdded givePlayerlist = new PlayerAdded(-999, "", -999);
+                    String serializedGivePlayerlist = Serialisierer.serialize(givePlayerlist);
+                    writer.println(serializedGivePlayerlist);
+                }
 
                 // Empfange Antwort vom Client
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

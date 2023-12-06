@@ -63,11 +63,36 @@ public class Client extends Application {
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
             if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
+                System.out.println(1);
+                boolean x = true;
+                while(x){
+                    System.out.println(8);
+                    String serializedPlayerlist = reader.readLine();
+                    System.out.println(9);
+                    Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
+                    System.out.println(2);
+                    if(deserializedPlayerlist.getMessageType().equals("PlayerAdded")){
+                        PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
+                        if(addPlayer.getMessageBody().getClientID() < 0){
+                            x = false;
+                        }else {
+                            playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
+                            System.out.println(3);
+                        }
+                    }else{
+                        x = false;
+                    }
+                }
+
+                for(int i = 0; i < playerListClient.size(); i++){
+                    System.out.println(playerListClient.get(i).getName());
+                }
 
                 //Stage wird initialisiert
                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                 controller.init(this, primaryStage);
                 primaryStage.show();
+
 
                 // Send HelloServer back to the server
                 HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
