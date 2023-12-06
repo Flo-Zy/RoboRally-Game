@@ -89,6 +89,8 @@ public class Client extends Application {
         }
     }
 
+    @Getter
+    private ArrayList<Integer> takenFigures = new ArrayList<>();
 
 
 
@@ -128,8 +130,24 @@ public class Client extends Application {
                             String name = playerAdded.getMessageBody().getName();
                             int id = playerAdded.getMessageBody().getClientID();
                             int figure = playerAdded.getMessageBody().getFigure();
-                            //den empfangenen Spieler in der Client seitigen playerList speichern
-                            playerListClient.add(new Player(name, id, figure));
+
+                            // Create a new Player object
+                            Player newPlayer = new Player(name, id, figure);
+
+                            // Add the new player to the client-side playerList
+                            playerListClient.add(newPlayer);
+
+                            //save taken figures in takenFigures
+                            for (Player player : playerListClient) {
+                                takenFigures.add(player.getFigure());
+
+                                //tester
+                                System.out.println("138 " + player.getFigure());
+                            }
+
+
+
+                            // Print the player added message
                             System.out.println("Player added");
                             break;
                         case "PlayerStatus":

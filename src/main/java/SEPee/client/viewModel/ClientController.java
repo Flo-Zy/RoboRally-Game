@@ -52,6 +52,12 @@ public class ClientController {
     private int id;
     private String selectedMap;
     private ArrayList<String> playerNames = new ArrayList<>();
+    private ArrayList<Integer> takenFigures;
+
+    public void updateTakenFigures(ArrayList<Integer> takenFigures) {
+        this.takenFigures = takenFigures;
+        // Do something with the updated list in your controller logic
+    }
 
     public void init(Client chatClient, Stage stage) {
             boolean validUsername = false;
@@ -68,7 +74,7 @@ public class ClientController {
                     stage.setTitle("Client - " + name);
                     validUsername = true;
 
-                    figure = showRobotSelectionDialog(stage);
+                    figure = showRobotSelectionDialog(stage, chatClient.getTakenFigures());
                     setFigure(figure);
 
                     sendButton.setOnAction(event -> sendMessage());
@@ -119,7 +125,6 @@ public class ClientController {
         }
     }
 
-
     @FXML
     private void sendReady(){
         if(!ready){
@@ -135,7 +140,6 @@ public class ClientController {
         Client.getWriter().println(serializedSetStatus);
     }
     private int selectedRecipientId  = -1; // Initialize with a default value
-
 
     @FXML
     private void toggleVisibility() {
@@ -206,7 +210,7 @@ public class ClientController {
         System.exit(0);
     }
 
-    private int showRobotSelectionDialog(Stage stage) {
+    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
         dialog.setHeaderText("Please select a robot:");
@@ -231,13 +235,29 @@ public class ClientController {
         // Add buttons to the dialog
         dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
 
-        // Show the dialog and wait for user input
+        //show the dialog and wait for user input
         dialog.initOwner(stage);
+
+        //disable previously selected buttons
+        for (Integer takenFigure : takenFigures) {
+            ButtonType buttonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == takenFigure)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (buttonType != null) {
+                Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
+                buttonNode.setDisable(true);
+            }
+        }
+
+        //show dialog, wait for input
         Optional<Integer> result = dialog.showAndWait();
 
         // Process user input and return the selected robot (index starting from 1)
         if (result.isPresent()) {
-            int selectedRobotIndex = result.get();
+            int selectedRobotIndex = buttonMap.get(result.get());
 
             // Get the selected button
             ButtonType selectedButtonType = buttonMap.entrySet().stream()
@@ -253,14 +273,6 @@ public class ClientController {
 
             return selectedRobotIndex;
         }
-
-        /*
-        // Process user input and return the selected robot (index starting from 1)
-        if (result.isPresent()) {
-            return buttonMap.getOrDefault(result.get(), 0);
-        }
-         */
-
         return 0; // Default value if no selection or unexpected button is pressed
     }
 

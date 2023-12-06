@@ -54,6 +54,9 @@ public class Server extends Thread{
                     System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                     //welcome erstellen und an den Client schicken
                     clientID = assigningClientID();
+
+
+
                     Welcome welcome = new Welcome(clientID);
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
