@@ -1,14 +1,20 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Position;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Gear extends Field{
-    //
-    public Gear(Position position){
-        super("GearClockwise", position);
-        //orientations = "clockwise";
+    //private int speed;
+    @SerializedName("orientations")
+    private String[] orientations;
+    //private int[] registers;
+    //private int count;
+    public Gear(String isOnBoard, String[] orientations){
+        super("Gear", isOnBoard);
+        this.orientations = orientations;
     }
 }
