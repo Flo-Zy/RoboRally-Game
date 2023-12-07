@@ -1,29 +1,20 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Direction;
-import SEPee.server.model.Position;
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
 
 @Getter
 @Setter
 public class Laser extends Field{
-    private int counter;
-
-    public Laser(Position position, ArrayList<Direction> direction){
-        super("BoardLaser", position, direction);
-    }
-
-    public void set1Laser(){
-        counter = 1;
-    }
-
-    public void set2Laser(){
-        counter = 2;
-    }
-
-    public void set3Laser(){
-        counter = 3;
+    //private int speed;
+    @SerializedName("orientations")
+    private String[] orientations;
+    //private int[] registers;
+    @SerializedName("count")
+    private int count;
+    public Laser(String isOnBoard, String[] orientations, int count){
+        super("Laser", isOnBoard);
+        this.orientations = orientations;
+        this.count = count;
     }
 }
