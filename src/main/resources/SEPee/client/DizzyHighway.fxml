@@ -3,8 +3,8 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
-        <GridPane prefHeight="500.0" prefWidth="650.0">
+<VBox fx:id="rootVBox" prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.DizzyHighwayController">
+        <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -652,7 +652,6 @@
                 </ImageView>
 
 
-
                 <ImageView fx:id="field100" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -707,7 +706,7 @@
                     </image>
                 </ImageView>
 
-                <ImageView fx:id="field109" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="">
+                <ImageView fx:id="field109" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
@@ -835,8 +834,6 @@
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
-
-
 
             </children>
         </GridPane>

@@ -1,6 +1,7 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.DizzyHighwayController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -25,27 +26,26 @@ import lombok.Getter;
 
 @Getter
 public class Client extends Application {
+
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
     @Getter
     public static ArrayList<Integer> takenFigures = new ArrayList<>();
-
-
-
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
+    private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
 
     public static void main(String[] args) {
         launch(args);
     }
-    private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
 
     @Override
     public void start(Stage primaryStage) {
         try {
+
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Client.fxml"));
             Parent root = loader.load();
@@ -56,69 +56,69 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
-                // Empfange HelloClient vom Server
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new PrintWriter(socket.getOutputStream(), true);
+            // Empfange HelloClient vom Server
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream(), true);
 
-                // Receive HelloClient from the server
-                String serializedHelloClient = reader.readLine();
-                HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
-                if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
-                    boolean x = true;
-                    while (x) {
-                        String serializedPlayerlist = reader.readLine();
-                        Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
-                        if (deserializedPlayerlist.getMessageType().equals("PlayerAdded")) {
-                            PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
-                            if (addPlayer.getMessageBody().getClientID() < 0) {
-                                x = false;
-                            } else {
-                                playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
-                            }
-                        } else {
+            // Receive HelloClient from the server
+            String serializedHelloClient = reader.readLine();
+            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+            if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
+                boolean x = true;
+                while (x) {
+                    String serializedPlayerlist = reader.readLine();
+                    Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
+                    if (deserializedPlayerlist.getMessageType().equals("PlayerAdded")) {
+                        PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
+                        if (addPlayer.getMessageBody().getClientID() < 0) {
                             x = false;
+                        } else {
+                            playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
                         }
+                    } else {
+                        x = false;
                     }
-
-                    for (int i = 0; i < playerListClient.size(); i++) {
-                        System.out.println(playerListClient.get(i).getName());
-                        System.out.println(playerListClient.get(i).getFigure());
-                    }
-                    //save taken figures in takenFigures
-                    for (Player player : playerListClient) {
-                        Client.getTakenFigures().add(player.getFigure());
-                    }
-
-                    //Stage wird initialisiert
-                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                    controller.init(this, primaryStage);
-
-                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
-                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                    writer.println(serializedPlayerValues);
-
-                    primaryStage.show();
-
-
-                    // Send HelloServer back to the server
-                    HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
-                    String serializedHelloServer = Serialisierer.serialize(helloServer);
-                    writer.println(serializedHelloServer);
-
-                    receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
-
-                } else {
-
-                    //socket.close();
-                    controller.shutdown();
-                    //System.exit(0);
                 }
 
-                startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
+                for (int i = 0; i < playerListClient.size(); i++) {
+                    System.out.println(playerListClient.get(i).getName());
+                    System.out.println(playerListClient.get(i).getFigure());
+                }
+                //save taken figures in takenFigures
+                for (Player player : playerListClient) {
+                    Client.getTakenFigures().add(player.getFigure());
+                }
 
-            } catch(IOException e){
-                e.printStackTrace();
+                //Stage wird initialisiert
+                primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                controller.init(this, primaryStage);
+
+                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                writer.println(serializedPlayerValues);
+
+                primaryStage.show();
+
+
+                // Send HelloServer back to the server
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
+                String serializedHelloServer = Serialisierer.serialize(helloServer);
+                writer.println(serializedHelloServer);
+
+                receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
+
+            } else {
+
+                //socket.close();
+                controller.shutdown();
+                //System.exit(0);
             }
+
+            startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
