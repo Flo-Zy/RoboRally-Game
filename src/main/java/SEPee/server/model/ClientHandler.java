@@ -64,9 +64,11 @@ public class ClientHandler implements Runnable {
                             playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
-                            //speichert Spielerobjekt in playerList im Server
-                            clientId = Server.getClientID();
-                            Server.getPlayerList().add(new Player(playerName, clientId, playerFigure));
+                            for(int i = 0; i < Server.getPlayerList().size(); i++){
+                                if(playerFigure == Server.getPlayerList().get(i).getFigure()){
+                                    clientId = Server.getPlayerList().get(i).getId();
+                                }
+                            }
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
 
 
@@ -79,22 +81,11 @@ public class ClientHandler implements Runnable {
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
                             //playerAdded senden an alle alten Clients
-                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                if (Server.getPlayerList().get(i).getId() != clientId) {
-                                    sendToOneClient(Server.getPlayerList().get(i).getId(), serializedPlayerAdded);
-                                }
-                            }
+                            broadcast(serializedPlayerAdded);
 
                             ReceivedChat joinedPlayerMessage = new ReceivedChat(playerName + " has joined the chat.", 999, false);
                             String serializedjoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
                             broadcast(serializedjoinedPlayerMessage);
-
-                            //send Playerlist to new Player
-                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                PlayerAdded playerAddedToNewClient = new PlayerAdded(Server.getPlayerList().get(i).getId(), Server.getPlayerList().get(i).getName(), Server.getPlayerList().get(i).getFigure());
-                                String serializedplayerAddedToNewClient = Serialisierer.serialize(playerAddedToNewClient);
-                                sendToOneClient(clientId, serializedplayerAddedToNewClient);
-                            }
 
                             break;
                         case "SetStatus":

@@ -53,29 +53,7 @@ public class ClientController {
     private String selectedMap;
     private ArrayList<String> playerNames = new ArrayList<>();
 
-    /*
-    public void updateTakenFigures(ArrayList<Integer> takenFigures) {
-        Client.takenFigures = takenFigures;
-        // Do something with the updated list in your controller logic
-    }
-
-    private getTakenFigures(){
-        Client.getTakenFigures();
-        return
-    }
-
-     */
-
     public void init(Client Client, Stage stage) {
-
-
-        // hardcode Tester fur button disable bis system out print
-        // Create a new Player object
-        Player newPlayer = new Player("hasan1", 5, 2);
-        // Add the new player to the client-side playerList
-        playerListClient.add(newPlayer);
-        Client.takenFigures.add(newPlayer.getFigure());
-        System.out.println("78 " + newPlayer.getFigure() + Client.takenFigures.size());
 
         boolean validUsername = false;
 

@@ -40,6 +40,7 @@ public class Client extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
 
     @Override
     public void start(Stage primaryStage) {
@@ -54,74 +55,71 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
-            // Empfange HelloClient vom Server
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream(), true);
+                // Empfange HelloClient vom Server
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer = new PrintWriter(socket.getOutputStream(), true);
 
-            // Receive HelloClient from the server
-            String serializedHelloClient = reader.readLine();
-            HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
-
-            if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
-                System.out.println(1);
-                boolean x = true;
-                while(x){
-                    System.out.println(8);
-                    String serializedPlayerlist = reader.readLine();
-                    System.out.println(9);
-                    Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
-                    System.out.println(2);
-                    if(deserializedPlayerlist.getMessageType().equals("PlayerAdded")){
-                        PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
-                        if(addPlayer.getMessageBody().getClientID() < 0){
+                // Receive HelloClient from the server
+                String serializedHelloClient = reader.readLine();
+                HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+                if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
+                    boolean x = true;
+                    while (x) {
+                        String serializedPlayerlist = reader.readLine();
+                        Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
+                        if (deserializedPlayerlist.getMessageType().equals("PlayerAdded")) {
+                            PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
+                            if (addPlayer.getMessageBody().getClientID() < 0) {
+                                x = false;
+                            } else {
+                                playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
+                            }
+                        } else {
                             x = false;
-                        }else {
-                            playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
-                            System.out.println(3);
                         }
-                    }else{
-                        x = false;
                     }
+
+                    for (int i = 0; i < playerListClient.size(); i++) {
+                        System.out.println(playerListClient.get(i).getName());
+                        System.out.println(playerListClient.get(i).getFigure());
+                    }
+                    //save taken figures in takenFigures
+                    for (Player player : playerListClient) {
+                        Client.getTakenFigures().add(player.getFigure());
+                    }
+
+                    //Stage wird initialisiert
+                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                    controller.init(this, primaryStage);
+
+                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                    writer.println(serializedPlayerValues);
+
+                    primaryStage.show();
+
+
+                    // Send HelloServer back to the server
+                    HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
+                    String serializedHelloServer = Serialisierer.serialize(helloServer);
+                    writer.println(serializedHelloServer);
+
+                    receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
+
+                } else {
+
+                    //socket.close();
+                    controller.shutdown();
+                    //System.exit(0);
                 }
 
-                for(int i = 0; i < playerListClient.size(); i++){
-                    System.out.println(playerListClient.get(i).getName());
-                    System.out.println(playerListClient.get(i).getFigure());
-                }
-                //save taken figures in takenFigures
-                for (Player player : playerListClient) {
-                    Client.getTakenFigures().add(player.getFigure());
+                startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
 
-                    //tester
-                    System.out.println("138 " + player.getFigure());
-
-                }
-
-                //Stage wird initialisiert
-                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                controller.init(this, primaryStage);
-                primaryStage.show();
-
-
-                // Send HelloServer back to the server
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
-                String serializedHelloServer = Serialisierer.serialize(helloServer);
-                writer.println(serializedHelloServer);
-
-                receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
-            } else {
-
-                //socket.close();
-                controller.shutdown();
-                //System.exit(0);
+            } catch(IOException e){
+                e.printStackTrace();
             }
-
-            startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
@@ -146,7 +144,6 @@ public class Client extends Application {
 
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                            controller.setId(receivedId);
 
                             // PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
@@ -158,6 +155,8 @@ public class Client extends Application {
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
                             String name = playerAdded.getMessageBody().getName();
                             int id = playerAdded.getMessageBody().getClientID();
+                            //controller ID setzten
+                            controller.setId(id);
                             int figure = playerAdded.getMessageBody().getFigure();
 
                             // Create a new Player object
@@ -167,6 +166,9 @@ public class Client extends Application {
                             playerListClient.add(newPlayer);
 
                             System.out.println("Player added");
+                            for(int i = 0; i < playerListClient.size(); i++){
+                                System.out.println(playerListClient.get(i).getName()+ "," +playerListClient.get(i).getId());
+                            }
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
