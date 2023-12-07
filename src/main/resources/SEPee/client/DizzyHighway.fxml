@@ -55,6 +55,9 @@
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
+                    <!-- <Image>
+                        <Image url="@/boardElementsPNGs/StartingPoint.png" />
+                    </Image> -->
                 </ImageView>
 
                 <ImageView fx:id="field04" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
@@ -68,7 +71,18 @@
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
-         <ImageView fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6" />
+
+                <ImageView fx:id="field06" fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field06" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
 
             </children>
         </GridPane>
