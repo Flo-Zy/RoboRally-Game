@@ -33,31 +33,28 @@
                 <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ImageView fx:id="field00" fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="field00" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                       <Image url="@/boardElementsPNGs/emptyField.png" />
                   </image>
                 </ImageView>
 
-                <ImageView fx:id="field01" fitHeight="52.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                <ImageView fx:id="field01" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
 
-                <ImageView fx:id="field02" fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                <ImageView fx:id="field02" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
 
-                <ImageView fx:id="field03" fitHeight="52.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                <ImageView fx:id="field03" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
                     <image>
-                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                        <Image url="@/boardElementsPNGs/startingPoint.png" />
                     </image>
-                    <!-- <Image>
-                        <Image url="@/boardElementsPNGs/StartingPoint.png" />
-                    </Image> -->
                 </ImageView>
 
                 <ImageView fx:id="field04" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
@@ -72,13 +69,13 @@
                     </image>
                 </ImageView>
 
-                <ImageView fx:id="field06" fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                <ImageView fx:id="field06" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
 
-                <ImageView fx:id="field06" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="7">
+                <ImageView fx:id="field07" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="7">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
