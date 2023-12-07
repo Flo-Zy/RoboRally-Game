@@ -26,7 +26,7 @@ import lombok.Getter;
 @Getter
 public class Client extends Application {
     private static final String SERVER_IP = "localhost";
-    private static final int SERVER_PORT = 8887;
+    private static final int SERVER_PORT = 8886;
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
     @Getter
