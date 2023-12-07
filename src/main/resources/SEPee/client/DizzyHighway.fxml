@@ -53,7 +53,7 @@
 
                 <ImageView fx:id="field03" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
                     <image>
-                        <Image url="@/boardElementsPNGs/startingPoint.png" />
+                        <Image url="@/boardElementsPNGs/StartingPoint.png" />
                     </image>
                 </ImageView>
 
