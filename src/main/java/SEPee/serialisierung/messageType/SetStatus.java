@@ -4,10 +4,10 @@ public class SetStatus extends Message{
     // private String messageType;
     private SetStatusBody messageBody;
 
-    public SetStatus(int clientID, boolean ready) {
+    public SetStatus(boolean ready) {
         super("SetStatus");
         // this.messageType = "SetStatus";
-        this.messageBody = new SetStatusBody(clientID, ready);
+        this.messageBody = new SetStatusBody(ready);
     }
 
     /*
@@ -30,11 +30,9 @@ public class SetStatus extends Message{
 
     public static class SetStatusBody {
 
-        private int clientID;
         private boolean ready;
 
-        public SetStatusBody(int clientID, boolean ready) {
-            this.clientID = clientID;
+        public SetStatusBody(boolean ready) {
             this.ready = ready;
         }
 
@@ -44,14 +42,6 @@ public class SetStatus extends Message{
 
         public void setReady(boolean ready) {
             this.ready = ready;
-        }
-
-        public int getClientID() {
-            return clientID;
-        }
-
-        public void setClientID(int clientID) {
-            this.clientID = clientID;
         }
     }
 }

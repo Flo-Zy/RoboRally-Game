@@ -19,7 +19,7 @@ public class Player {
     private Card[] hand;
     private PlayerMat playerMat;
     private int checkpointTokens;
-    private Map<Socket, Integer> socketIdMap;
+    private static Map<Socket, Integer> socketIdMap;
 
 
     public Player(String name, int id, int figure){
@@ -35,7 +35,7 @@ public class Player {
         socketIdMap.put(socket, clientId);
     }
 
-    public int getClientIdFromSocket(Socket socket) {
+    public static int getClientIdFromSocket(Socket socket) {
         return socketIdMap.getOrDefault(socket, 666); // Returns 666 if socket ID not found
     }
 

@@ -93,19 +93,30 @@ public class ClientHandler implements Runnable {
                             SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
                             //playerList vom Server aktualisieren
                             for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                if (setStatus.getMessageBody().getClientID() == Server.getPlayerList().get(i).getId()) {
+                                if (player.getId() == Server.getPlayerList().get(i).getId()) {
                                     Server.getPlayerList().get(i).setReady(setStatus.getMessageBody().isReady());
                                 }
                             }
+                            // is ready? tester
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                System.out.println(Server.getPlayerList().get(i).getName() + ", " + Server.getPlayerList().get(i).getId());
+                            }
+
+                            // is ready? tester
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                System.out.println(Server.getPlayerList().get(i).getName() + ", " + Server.getPlayerList().get(i).isReady());
+                            }
+
 
                             //PlayerStatus an alle Clients senden
-                            PlayerStatus playerStatus = new PlayerStatus(setStatus.getMessageBody().getClientID(), setStatus.getMessageBody().isReady());
+                            PlayerStatus playerStatus = new PlayerStatus(player.getId(), setStatus.getMessageBody().isReady());
                             String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
                             broadcast(serializedPlayerStatus);
 
+
                             //ersten der ready drückt selectMap senden
                             if (Server.counterSetStatus == 0) {
-                                int first = setStatus.getMessageBody().getClientID();
+                                int first = player.getId();
                                 SelectMap selectMap = new SelectMap();
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
                                 sendToOneClient(first, serializedSelectMap);

@@ -131,7 +131,8 @@ public class ClientController {
             readyButton.setText("BEREIT");
         }
         System.out.println(ready);
-        SetStatus setStatus = new SetStatus(getId(),ready);
+        SetStatus setStatus = new SetStatus(ready);
+
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
     }
