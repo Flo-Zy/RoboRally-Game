@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import static SEPee.client.model.Client.mapList;
 import static SEPee.client.model.Client.playerListClient;
 
 
@@ -49,7 +50,7 @@ public class ClientController {
     private String name;
     private int figure;
     private int id;
-    private String selectedMap;
+
     private ArrayList<String> playerNames = new ArrayList<>();
 
     public void init(Client chatClient, Stage stage) {
@@ -318,45 +319,22 @@ public class ClientController {
         }
     }
 
-    public String showSelectMapDialog(Stage stage) {
-            Dialog<String> dialog = new Dialog<>();
-            dialog.setTitle("Map Selection");
-            dialog.setHeaderText("Please select a Map:");
 
-            // Create buttons for each robot
-            ButtonType button1 = new ButtonType("DizzyHighway", ButtonBar.ButtonData.OK_DONE);
+    public String showSelectMapDialog(){
 
-            // Create a map to associate button types with integer values
-            HashMap<ButtonType, String> buttonMap = new HashMap<>();
-            buttonMap.put(button1, "DizzyHighway");
+        //ChoiceDialog mit der Liste der Maps
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, mapList);
+        dialog.setTitle("Map auswählen");
+        dialog.setHeaderText("Bitte wählen Sie eine Map:");
 
+        //Map auswählen oder "Abbrechen" wählen
+        Optional<String> result = dialog.showAndWait();
 
-            // Add buttons to the dialog
-            dialog.getDialogPane().getButtonTypes().setAll(button1);
-
-            // Show the dialog and wait for user input
-            dialog.initOwner(stage);
-            Optional<String> result = dialog.showAndWait();
-
-            System.out.println("Result: " + result.orElse("None"));
-            System.out.println("Mapped Value: " + buttonMap.getOrDefault(result.orElse(""), "Leer"));
-
-
-
-        // Process user input and return the selected robot (index starting from 1)
-            if (result.isPresent()) {
-                return buttonMap.getOrDefault(result.get(), "Leer");
-            }
-
-            return "Leer"; // Default value if no selection or unexpected button is pressed
-
-    }
-
-    public void init2(Client chatClient, Stage stage) {
-        Platform.runLater(() -> {
-            selectedMap = showSelectMapDialog(stage);
-            setSelectedMap(selectedMap);
-        });
+        String selectedMap = null;
+        if (result.isPresent()) {
+            selectedMap = result.get();
+        }
+        return selectedMap;
     }
 
     public String getName() {
@@ -381,14 +359,6 @@ public class ClientController {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    private void setSelectedMap(String selectedMap) {
-        this.selectedMap = selectedMap;
-    }
-
-    public String getSelectedMap(){
-        return selectedMap;
     }
 
 }

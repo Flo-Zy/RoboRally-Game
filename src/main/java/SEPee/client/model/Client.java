@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.Error;
 import SEPee.server.model.Player;
 import SEPee.server.model.Server;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -148,9 +149,13 @@ public class Client extends Application {
                             System.out.println("SelectMap");
                             SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
                             mapList = selectMap.getMessageBody().getAvailableMaps();
-                            controller.init2(this, primaryStage);
-                            String selectedMap = controller.getSelectedMap();
-                            System.out.println(selectedMap);
+                            Platform.runLater(() -> {
+                                String selectedMap1 = controller.showSelectMapDialog();
+                                System.out.println(selectedMap1);
+                                MapSelected mapSelected = new MapSelected(selectedMap1);
+                                String serializedMapSelected = Serialisierer.serialize(mapSelected);
+                                writer.println(serializedMapSelected);
+                            });
                             break;
                         case "GameStarted":
                             System.out.println("Game Started");
