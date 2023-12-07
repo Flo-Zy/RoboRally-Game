@@ -68,6 +68,7 @@
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
+         <ImageView fitHeight="53.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6" />
 
             </children>
         </GridPane>
