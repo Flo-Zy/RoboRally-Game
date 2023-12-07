@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public class BlueConveyorBelt extends Field{
+public class ConveyorBelt extends Field{
     private int speed;
-    public BlueConveyorBelt(Position position, ArrayList<Direction> direction){
+    public ConveyorBelt(Position position, ArrayList<Direction> direction){
         super("BlueConveyorBelt", position, direction);
         this.speed = 2;
     }
