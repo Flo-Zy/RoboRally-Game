@@ -1,7 +1,5 @@
 package SEPee.server.model.gameBoard;
 
-import SEPee.server.model.Position;
-import SEPee.server.model.field.Empty;
 import SEPee.server.model.field.Field;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,33 +11,16 @@ import java.util.ArrayList;
 @Setter
 public class GameBoard {
     private String boardId;
-    private String name;
-    private List<List<List<Field>>> gameBoard;
-    int x;
-    int y;
+    private String bordName;
+    private List<List<List<Field>>> gameBoard; // Spalte(Zeile(FelderTypen()))
 
-    GameBoard(String id, String name, int x, int y){
-        this.boardId = id;
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        gameBoard = new ArrayList<>(x);
-        for(int i = 0; i < x; i++){
-            List<List<Field>> column = new ArrayList<>(y);
-            for(int j = 0; j < y; j++){
-                column.add(new ArrayList<>());
-            }
-            gameBoard.add(column);
-        }
-        for(int i = 0; i < x; i++){
-            for(int j = 0; j < y; j++){
-                addField(i, j, new Empty(new Position(i,j)));
-            }
-        }
+    GameBoard(String boardId, String bordName, int sumColumns){
+        this.boardId = boardId;
+        this.bordName = bordName;
+        this.gameBoard = new ArrayList<>(sumColumns);
     }
 
-    public void addField(int x, int y, Field field){
-        gameBoard.get(x).get(y).add(field);
+    public void addRow(List<List<Field>> row) {
+        gameBoard.add(row);
     }
-
 }
