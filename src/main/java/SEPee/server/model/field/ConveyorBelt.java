@@ -1,6 +1,7 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Direction;
-import SEPee.server.model.Position;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +10,15 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class ConveyorBelt extends Field{
+    @SerializedName("speed")
     private int speed;
-    public ConveyorBelt(Position position, ArrayList<Direction> direction){
-        super("BlueConveyorBelt", position, direction);
-        this.speed = 2;
+    @SerializedName("orientations")
+    private String[] orientations;
+    //private int[] registers;
+    //private int count;
+    public ConveyorBelt(String isOnBoard, int speed, String[] orientations) {
+        super("ConveyorBelt", isOnBoard);
+        this.speed = speed;
+        this.orientations = orientations;
     }
 }

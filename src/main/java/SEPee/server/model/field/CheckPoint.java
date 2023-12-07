@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Checkpoint extends Field{
+public class CheckPoint extends Field{
     private int counter;
-    public Checkpoint(Position position){
+    public CheckPoint(Position position){
         super("Checkpoint", position);
     }
 }
