@@ -43,7 +43,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fitHeight="62.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true" />
+                         <ImageView fitHeight="62.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true" fx:id="field1">
+                             <image>
+                                 <Image url="@path/to/image1.png"/>
+                             </image>
+                         </ImageView>
+
                         <ImageView fitHeight="63.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
 
                      </children>
