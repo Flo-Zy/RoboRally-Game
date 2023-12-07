@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) {
 
 
-        // test HelloClient
+        /* test HelloClient
         HelloClient helloClient = new HelloClient("Version 1.0");
         String serializedHelloClient = Serialisierer.serialize(helloClient);
         System.out.println(serializedHelloClient);
-        /*
+
         //test ConectionUpdate
         ConnectionUpdate connectionUpdate = new ConnectionUpdate(9001, false, "AIControl");
         String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
@@ -51,6 +51,7 @@ public class Main {
         String testmap = Serialisierer.serialize(selectMap);
         System.out.println(testmap);
 
+        */
 
         DizzyHighway dizzyHighway = new DizzyHighway();
         GameStarted gameStarted = new GameStarted(dizzyHighway.getGameBoard());
@@ -58,12 +59,12 @@ public class Main {
         System.out.println(serializedGameStarted);
 
 
-        //deserialisieren klappt noch nicht für die map
+        //deserialisieren
         GameStarted deserializedGameStarted = Deserialisierer.deserialize(serializedGameStarted, GameStarted.class);
         System.out.println(deserializedGameStarted.getMessageBody().getGameMap());
 
 
-
+        /*
 
         //test HelloClient als child Klasse von Message
         HelloClient helloClient = new HelloClient("Version 1.0");
