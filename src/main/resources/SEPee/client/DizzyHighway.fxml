@@ -280,6 +280,379 @@
                 </ImageView>
 
 
+                <ImageView fx:id="field40" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field41" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field42" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field43" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field44" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field45" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field46" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field47" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field48" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field49" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
+
+                <ImageView fx:id="field50" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field51" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field52" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field53" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field54" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field55" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field56" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field57" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field58" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field59" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
+                <ImageView fx:id="field60" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field61" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field62" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field63" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field64" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field65" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field66" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field67" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field68" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field69" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
+                <ImageView fx:id="field70" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field71" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field72" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field73" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field74" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field75" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field76" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field77" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field78" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field79" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
+                <ImageView fx:id="field80" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field81" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field82" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field83" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field84" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field85" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field86" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field87" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field88" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field89" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
+                <ImageView fx:id="field90" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field91" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field92" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field93" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field94" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="4">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field95" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field96" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field97" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="7">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field98" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="8">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView fx:id="field99" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="9">
+                    <image>
+                        <Image url="@/boardElementsPNGs/emptyField.png" />
+                    </image>
+                </ImageView>
+
+
+
                 <ImageView fx:id="field100" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -403,10 +776,6 @@
                 </ImageView>
 
 
-
-
-
-
                 <ImageView fx:id="field120" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
                     <image>
                         <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -466,6 +835,7 @@
                         <Image url="@/boardElementsPNGs/emptyField.png" />
                     </image>
                 </ImageView>
+
 
 
             </children>
