@@ -1,14 +1,21 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Position;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class EnergySpace extends Field{
+    //private int speed;
+    //private String[] orientations;
+    //private int[] registers;
+    @SerializedName("count")
+    private int count;
 
-    private int counter;
-    public EnergySpace(Position position){
-        super("EnergySpace", position);
+    public EnergySpace(String isOnBoard, int count){
+        super("EnergySpace", isOnBoard);
+        this.count = count;
     }
 }

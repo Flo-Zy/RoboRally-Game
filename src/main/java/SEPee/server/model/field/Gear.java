@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GearClockwise extends Field{
+public class Gear extends Field{
     //
-    public GearClockwise(Position position){
+    public Gear(Position position){
         super("GearClockwise", position);
         //orientations = "clockwise";
     }

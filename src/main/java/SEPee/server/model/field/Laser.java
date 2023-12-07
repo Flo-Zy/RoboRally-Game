@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public class BoardLaser extends Field{
+public class Laser extends Field{
     private int counter;
 
-    public BoardLaser(Position position, ArrayList<Direction> direction){
+    public Laser(Position position, ArrayList<Direction> direction){
         super("BoardLaser", position, direction);
     }
 
