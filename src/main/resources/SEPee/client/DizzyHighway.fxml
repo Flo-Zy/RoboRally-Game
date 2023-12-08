@@ -1406,6 +1406,7 @@
               </GridPane>
          <VBox prefHeight="400.0" prefWidth="650.0">
             <children>
+                <!-- Hand of 10 Card Spaces -->
                <HBox prefHeight="100.0" prefWidth="650.0">
                   <children>
                      <StackPane>
@@ -1460,6 +1461,7 @@
                      </StackPane>
                   </children>
                </HBox>
+                <!-- Installed Upgrades -->
                <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="650.0">
                   <children>
                      <HBox prefHeight="100.0" prefWidth="195.0">
@@ -1474,6 +1476,7 @@
                      </HBox>
                   </children>
                </HBox>
+                <!-- Discard Pile, Energy Space, Checkpoint Space, Programming Pile -->
                <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
                   <children>
                      <HBox prefHeight="100.0" prefWidth="130.0">
@@ -1487,6 +1490,7 @@
                      </HBox>
                   </children>
                </HBox>
+                <!-- Register Felder -->
                <HBox layoutX="10.0" layoutY="210.0" prefHeight="100.0" prefWidth="650.0">
                   <children>
                      <HBox prefHeight="100.0" prefWidth="130.0">
