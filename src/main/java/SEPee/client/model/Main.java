@@ -20,7 +20,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
             Parent root = loader.load();
 
-            Scene scene = new Scene(root, 650, 700);
+            Scene scene = new Scene(root, 650, 800);
             primaryStage.setTitle("Dizzy Highway App");
             primaryStage.setScene(scene);
 
