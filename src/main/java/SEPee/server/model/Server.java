@@ -3,6 +3,9 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.field.Field;
+import lombok.Getter;
+import lombok.Setter;
 //import SEPee.serialisierung.messageType.HelloClient;
 //import SEPee.serialisierung.messageType.HelloServer;
 //import SEPee.serialisierung.messageType.Welcome;
@@ -17,15 +20,29 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+@Getter
+@Setter
 public class Server extends Thread{
     private static final int PORT = 8887;
     private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
+    @Getter
     private static int clientID;
+    @Getter
     private static ArrayList<Player> playerList = new ArrayList<>();
     public static int counterSetStatus = 0;
+    private static ArrayList<Integer> readyList = new ArrayList<>();
+    public static int readyListIndex = 0;
+    public static List<List<List<Field>>> gameMap;
+    public static int firstReady;
 
+    public static void addReady(int id){
+        readyList.add(id);
+    }
+
+    public static ArrayList<Integer> getReadyList(){
+        return readyList;
+    }
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
@@ -98,11 +115,4 @@ public class Server extends Thread{
         return assignedClientID;
     }
 
-    public static int getClientID() {
-        return clientID;
-    }
-
-    public static ArrayList<Player> getPlayerList(){
-        return playerList;
-    }
 }
