@@ -2,6 +2,7 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.MapSelected;
 import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SendChat;
@@ -132,9 +133,13 @@ public class ClientController {
         }
         System.out.println(ready);
         SetStatus setStatus = new SetStatus(ready);
-
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
+
+        //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
+        MapSelected mapSelected = new MapSelected("");
+        String serializedMapSelected = Serialisierer.serialize(mapSelected);
+        Client.getWriter().println(serializedMapSelected);
     }
     private int selectedRecipientId  = -1; // Initialize with a default value
 

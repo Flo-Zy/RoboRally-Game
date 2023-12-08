@@ -3,6 +3,8 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.field.*;
+import SEPee.server.model.gameBoard.*;
 import com.google.gson.Gson;
 
 import java.awt.*;
@@ -91,23 +93,13 @@ public class ClientHandler implements Runnable {
                         case "SetStatus":
                             System.out.println("Set Status");
                             SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
+                            Server.addReady(player.getId());
                             //playerList vom Server aktualisieren
                             for (int i = 0; i < Server.getPlayerList().size(); i++) {
                                 if (player.getId() == Server.getPlayerList().get(i).getId()) {
                                     Server.getPlayerList().get(i).setReady(setStatus.getMessageBody().isReady());
                                 }
                             }
-                            // is ready? tester
-                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                System.out.println(Server.getPlayerList().get(i).getName() + ", " + Server.getPlayerList().get(i).getId());
-                            }
-
-                            // is ready? tester
-                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                System.out.println(Server.getPlayerList().get(i).getName() + ", " + Server.getPlayerList().get(i).isReady());
-                            }
-
-
                             //PlayerStatus an alle Clients senden
                             PlayerStatus playerStatus = new PlayerStatus(player.getId(), setStatus.getMessageBody().isReady());
                             String serializedPlayerStatus = Serialisierer.serialize(playerStatus);
@@ -115,19 +107,53 @@ public class ClientHandler implements Runnable {
 
 
                             //ersten der ready drückt selectMap senden
-                            if (Server.counterSetStatus == 0) {
-                                int first = player.getId();
+                            if (Server.getReadyList().size() == 1) {
+                                Server.firstReady = Server.getReadyList().get(Server.readyListIndex);
+                                Server.readyListIndex++;
                                 SelectMap selectMap = new SelectMap();
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
-                                sendToOneClient(first, serializedSelectMap);
-                                Server.counterSetStatus++;
+                                sendToOneClient(Server.firstReady, serializedSelectMap);
+                            }
+                            if(!setStatus.getMessageBody().isReady()){
+                                if(player.getId() == Server.firstReady){
+                                    if(checkNumReady() == 0){
+                                        Server.getReadyList().clear();
+                                        Server.readyListIndex = 0;
+                                    }else {
+                                        int nextId = checkNextReady();
+                                        Server.firstReady = nextId;
+                                        Server.readyListIndex++;
+                                        SelectMap selectMap = new SelectMap();
+                                        String serializedSelectMap = Serialisierer.serialize(selectMap);
+                                        sendToOneClient(Server.firstReady, serializedSelectMap);
+                                    }
+
+                                }
                             }
                             break;
                         case "MapSelected":
                             System.out.println("Map Selected");
                             MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
+                            if(!mapSelected.getMessageBody().getMap().equals("")) {
+                                broadcast(serializedReceivedString);
+                                if (Server.firstReady == player.getId())
+                                    switch (mapSelected.getMessageBody().getMap()) {
+                                        case "DizzyHighway":
+                                            DizzyHighway dizzyHighway = new DizzyHighway();
+                                            Server.gameMap = dizzyHighway.getGameBoard();
+                                            break;
+                                    /*Später für weitere Maps
+                                    case " ":
 
+                                        break;
+                                     */
+                                    }
 
+                            }
+                            if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()){
+                                GameStarted gameStarted = new GameStarted(Server.gameMap);
+                                System.out.println("Das Spiel wird gestartet");
+                            }
                             break;
                         case "SendChat":
                             System.out.println("Send Chat");
@@ -229,6 +255,32 @@ public class ClientHandler implements Runnable {
         }
         // If the loop completes and the target client is not found, you may handle it accordingly.
         System.out.println("Client with ID " + clientId + " not found.");
+    }
+
+    public int checkNumReady(){
+        int numReady = 0;
+        for(int i = 0; i < Server.getPlayerList().size(); i++){
+            if(Server.getPlayerList().get(i).isReady()){
+                numReady++;
+            }
+        }
+        return numReady;
+    }
+
+    public int checkNextReady(){
+        int x = 0;
+        if(Server.readyListIndex < Server.getReadyList().size()) {
+            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                if (Server.getPlayerList().get(i).getId() == Server.getReadyList().get(Server.readyListIndex)
+                        && !Server.getPlayerList().get(i).isReady()) {
+                    Server.readyListIndex++;
+                    x = checkNextReady();
+                } else {
+                    x = Server.getReadyList().get(Server.readyListIndex);
+                }
+            }
+        }
+        return x;
     }
 
 
