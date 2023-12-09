@@ -42,9 +42,9 @@ public class Server extends Thread{
     @Getter
     @Setter
     private static int firstReady;
-    /*public static ArrayList<Integer> getReadyList(){
-        return readyList;
-    }*/
+    @Getter
+    @Setter
+    private static boolean gameStarted = false;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
