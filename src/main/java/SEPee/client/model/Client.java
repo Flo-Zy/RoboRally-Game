@@ -31,6 +31,7 @@ public class Client extends Application {
     private static final int SERVER_PORT = 8886;
     public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
     public static ArrayList<String> mapList = new ArrayList<>();
+    private String selectedMap1;
     @Getter
     public static ArrayList<Integer> takenFigures = new ArrayList<>();
     private boolean receivedHelloClient = false;
@@ -179,21 +180,21 @@ public class Client extends Application {
                                     playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
                                 }
                             }
-                            for(int i = 0; i < playerListClient.size(); i++){
-                                System.out.println(playerListClient.get(i).getName()+","+ playerListClient.get(i).isReady());
-                            }
                             break;
                         case "SelectMap":
-                            System.out.println("SelectMap");
+                            System.out.println("SelectMap" + controller.getName());
                             SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
                             mapList = selectMap.getMessageBody().getAvailableMaps();
                             Platform.runLater(() -> {
-                                String selectedMap1 = controller.showSelectMapDialog();
+                                selectedMap1 = controller.showSelectMapDialog();
                                 System.out.println(selectedMap1);
                                 MapSelected mapSelected = new MapSelected(selectedMap1);
                                 String serializedMapSelected = Serialisierer.serialize(mapSelected);
                                 writer.println(serializedMapSelected);
                             });
+                            break;
+                        case "MapSelected":
+                            System.out.println("Map wurde gewählt");
                             break;
                         case "GameStarted":
                             System.out.println("Game Started");
