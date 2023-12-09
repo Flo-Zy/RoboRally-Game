@@ -30,9 +30,10 @@ public class Server extends Thread{
     private static int clientID;
     @Getter
     private static ArrayList<Player> playerList = new ArrayList<>();
-    public static int counterSetStatus = 0;
     private static ArrayList<Integer> readyList = new ArrayList<>();
-    public static int readyListIndex = 0;
+    @Getter
+    @Setter
+    private static int readyListIndex = 0;
     public static List<List<List<Field>>> gameMap;
     public static int firstReady;
 
