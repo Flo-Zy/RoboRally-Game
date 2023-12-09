@@ -1,5 +1,6 @@
 package SEPee.client.model;
 
+import SEPee.client.viewModel.ClientController;
 import SEPee.client.viewModel.DizzyHighwayController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,14 +18,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         try {
             // Test DizzyHighway
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Dizzy+Chat.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root, 650, 800);
             primaryStage.setTitle("Dizzy Highway App");
             primaryStage.setScene(scene);
 
-            DizzyHighwayController dizzyHighwayController = loader.getController();
+            ClientController clientController = loader.getController();
             primaryStage.show();
         }catch (IOException e) {
             e.printStackTrace();

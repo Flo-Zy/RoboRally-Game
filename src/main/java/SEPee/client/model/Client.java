@@ -7,7 +7,6 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 import SEPee.server.model.Player;
-import SEPee.server.model.Server;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Array;
 import java.util.ArrayList;
 import lombok.Getter;
 
@@ -204,7 +202,7 @@ public class Client extends Application {
 
                             Platform.runLater(() -> {
                                 try {
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Dizzy+Chat.fxml"));
                                     Parent root = loader.load();
 
                                     Scene scene = new Scene(root);
