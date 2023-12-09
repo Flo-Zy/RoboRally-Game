@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 
 public class DizzyHighwayController {
     @FXML
@@ -32,8 +33,10 @@ public class DizzyHighwayController {
     private ImageView field08;
     @FXML
     private ImageView field09;
+    private Stage stage;
 
     public void init(Client Client, Stage stage) {
+        this.stage = stage;
 
     }
 }

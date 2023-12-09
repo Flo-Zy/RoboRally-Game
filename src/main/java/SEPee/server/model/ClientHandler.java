@@ -149,6 +149,9 @@ public class ClientHandler implements Runnable {
                             }
                             if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()){
                                 GameStarted gameStarted = new GameStarted(Server.gameMap);
+                                String serializedGameStarted = Serialisierer.serialize(gameStarted);
+                                broadcast(serializedGameStarted);
+
                                 System.out.println("Das Spiel wird gestartet");
                             }
                             break;
