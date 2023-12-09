@@ -23,7 +23,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Server extends Thread{
-    private static final int PORT = 8887;
+    private static final int PORT = 8886;
     private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private static int idCounter = 1;
     @Getter

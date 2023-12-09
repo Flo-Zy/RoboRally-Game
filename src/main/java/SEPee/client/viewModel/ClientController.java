@@ -11,6 +11,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -33,15 +36,12 @@ import static SEPee.client.model.Client.playerListClient;
 public class ClientController {
     @FXML
     private TextArea chatArea;
-
     @FXML
     private TextField messageField;
-
     @FXML
     private Button sendButton;
     @FXML
     private Button visibilityButton;
-
     @FXML
     private Button readyButton;
 
