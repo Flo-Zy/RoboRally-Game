@@ -114,8 +114,7 @@ public class ClientHandler implements Runnable {
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
                                 sendToOneClient(Server.firstReady, serializedSelectMap);
                             }
-                            if(!setStatus.getMessageBody().isReady()){
-                                if(player.getId() == Server.firstReady){
+                            if(!setStatus.getMessageBody().isReady() && player.getId() == Server.firstReady){
                                     if(checkNumReady() == 0){
                                         Server.getReadyList().clear();
                                         Server.readyListIndex = 0;
@@ -127,8 +126,6 @@ public class ClientHandler implements Runnable {
                                         String serializedSelectMap = Serialisierer.serialize(selectMap);
                                         sendToOneClient(Server.firstReady, serializedSelectMap);
                                     }
-
-                                }
                             }
                             break;
                         case "MapSelected":
