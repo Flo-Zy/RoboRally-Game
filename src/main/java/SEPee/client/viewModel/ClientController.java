@@ -35,10 +35,6 @@ import static SEPee.client.model.Client.playerListClient;
 
 public class ClientController {
     @FXML
-    private TextArea chatArea;
-    @FXML
-    private TextField messageField;
-    @FXML
     private Button sendButton;
     @FXML
     private Button visibilityButton;
@@ -53,7 +49,11 @@ public class ClientController {
     private int figure;
     private int id;
 
-    private ArrayList<String> playerNames = new ArrayList<>();
+    private ArrayList<String> playerNames = new ArrayList<>();   @FXML
+    private TextArea chatArea;
+    @FXML
+    private TextField messageField;
+
 
     public void init(Client Client, Stage stage) {
 
