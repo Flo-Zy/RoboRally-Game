@@ -108,24 +108,28 @@ public class ClientHandler implements Runnable {
 
                             //ersten der ready drückt selectMap senden
                             if (Server.getReadyList().size() == 1) {
-                                Server.firstReady = Server.getReadyList().get(Server.readyListIndex);
-                                Server.readyListIndex++;
+                                Server.gameMap = null;
+                                Server.firstReady = Server.getReadyList().get(Server.getReadyListIndex());
+                                Server.setReadyListIndex(Server.getReadyListIndex()+1);
                                 SelectMap selectMap = new SelectMap();
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
                                 sendToOneClient(Server.firstReady, serializedSelectMap);
                             }
                             if(!setStatus.getMessageBody().isReady() && player.getId() == Server.firstReady){
-                                    if(checkNumReady() == 0){
-                                        Server.getReadyList().clear();
-                                        Server.readyListIndex = 0;
-                                    }else {
-                                        int nextId = checkNextReady();
-                                        Server.firstReady = nextId;
-                                        Server.readyListIndex++;
-                                        SelectMap selectMap = new SelectMap();
-                                        String serializedSelectMap = Serialisierer.serialize(selectMap);
-                                        sendToOneClient(Server.firstReady, serializedSelectMap);
-                                    }
+
+                                if(checkNumReady() == 0){
+                                    Server.gameMap = null;
+                                    Server.getReadyList().clear();
+                                    Server.setReadyListIndex(0);
+                                }else {
+                                    Server.gameMap = null;
+                                    int nextId = checkNextReady();
+                                    Server.firstReady = nextId;
+                                    Server.setReadyListIndex(Server.getReadyListIndex()+1);
+                                    SelectMap selectMap = new SelectMap();
+                                    String serializedSelectMap = Serialisierer.serialize(selectMap);
+                                    sendToOneClient(Server.firstReady, serializedSelectMap);
+                                }
                             }
                             break;
                         case "MapSelected":
@@ -147,7 +151,8 @@ public class ClientHandler implements Runnable {
                                     }
 
                             }
-                            if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()){
+                            if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
+                                    && Server.gameMap != null){
                                 GameStarted gameStarted = new GameStarted(Server.gameMap);
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
@@ -269,14 +274,14 @@ public class ClientHandler implements Runnable {
 
     public int checkNextReady(){
         int x = 0;
-        if(Server.readyListIndex < Server.getReadyList().size()) {
+        if(Server.getReadyListIndex() < Server.getReadyList().size()) {
             for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                if (Server.getPlayerList().get(i).getId() == Server.getReadyList().get(Server.readyListIndex)
+                if (Server.getPlayerList().get(i).getId() == Server.getReadyList().get(Server.getReadyListIndex())
                         && !Server.getPlayerList().get(i).isReady()) {
-                    Server.readyListIndex++;
+                    Server.setReadyListIndex(Server.getReadyListIndex()+1);
                     x = checkNextReady();
                 } else {
-                    x = Server.getReadyList().get(Server.readyListIndex);
+                    x = Server.getReadyList().get(Server.getReadyListIndex());
                 }
             }
         }
