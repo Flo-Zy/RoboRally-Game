@@ -29,10 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static SEPee.client.model.Client.mapList;
-import static SEPee.client.model.Client.playerListClient;
-
-
 public class ClientController {
     @FXML
     private TextArea chatArea;
@@ -280,7 +276,7 @@ public class ClientController {
 
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
-        for (Player player : playerListClient) {
+        for (Player player : Client.getPlayerListClient()) {
             String playerName = player.getName(); // Assuming the Player class has a method getName() that returns the name
             playerNames.add(playerName);
         }
@@ -290,7 +286,7 @@ public class ClientController {
     public String showSelectMapDialog(){
 
         //ChoiceDialog mit der Liste der Maps
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, mapList);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
         dialog.setTitle("Map auswählen");
         dialog.setHeaderText("Bitte wählen Sie eine Map:");
 

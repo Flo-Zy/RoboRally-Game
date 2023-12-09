@@ -23,17 +23,23 @@ import java.net.Socket;
 import java.sql.Array;
 import java.util.ArrayList;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class Client extends Application {
 
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
-    public static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
-    public static ArrayList<String> mapList = new ArrayList<>();
+    @Getter
+    @Setter
+    private static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
+    @Getter
+    @Setter
+    private static ArrayList<String> mapList = new ArrayList<>();
     private String selectedMap1;
     @Getter
-    public static ArrayList<Integer> takenFigures = new ArrayList<>();
+    @Setter
+    private static ArrayList<Integer> takenFigures = new ArrayList<>();
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
