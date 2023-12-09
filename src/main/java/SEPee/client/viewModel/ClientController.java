@@ -9,6 +9,7 @@ import SEPee.serialisierung.messageType.SendChat;
 import SEPee.server.model.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -56,7 +57,7 @@ public class ClientController {
     private TextField messageField;
 
     @FXML
-    private Label mapLabel;
+    private VBox DizzyHighwayMap;
 
 
     public void init(Client Client, Stage stage) {
@@ -333,12 +334,16 @@ public class ClientController {
         this.id = id;
     }
 
-    public void updateMapLabel(String mapName) {
-        Platform.runLater(() -> {
-            // Assuming you have a Label named mapLabel in your FXML
-            mapLabel.setText("Selected Map: " + mapName);
-        });
-
-
+    public void loadDizzyHighwayFXML() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/path/to/DizzyHighway.fxml"));
+            // If DizzyHighway.fxml has a separate controller, set it here
+            loader.setController(new DizzyHighwayController());
+            Node dizzyHighway = loader.load();
+            DizzyHighwayMap.getChildren().setAll(dizzyHighway);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

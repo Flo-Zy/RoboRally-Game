@@ -10,7 +10,9 @@
     <HBox prefHeight="645.0" prefWidth="1130.0" spacing="10" VBox.vgrow="ALWAYS">
         <!-- Linke HBox -->
         <HBox prefHeight="645.0" prefWidth="830.0" HBox.hgrow="ALWAYS" />
-        <fx:include source="DizzyHighway.fxml"/>
+        <VBox fx:id="DizzyHighwayMap" >
+            <fx:include source="DizzyHighway.fxml"/>
+        </VBox>
 
         <!-- Rechte HBox (Chatarea VBox) -->
         <VBox prefHeight="645.0" prefWidth="287.0" spacing="10" HBox.hgrow="NEVER" VBox.vgrow="ALWAYS">

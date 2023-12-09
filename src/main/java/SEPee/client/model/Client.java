@@ -199,23 +199,7 @@ public class Client extends Application {
 
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
 
-
-                            Platform.runLater(() -> {
-                                try {
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Dizzy+Chat.fxml"));
-                                    Parent root = loader.load();
-
-                                    Scene scene = new Scene(root);
-                                    primaryStage.setTitle("Dizzy Highway");
-                                    primaryStage.setScene(scene);
-
-                                    ClientController clientController = loader.getController();
-                                    // Stage initialization
-                                    primaryStage.show();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            });
+                            controller.loadDizzyHighwayFXML();
                             break;
                         case "ReceivedChat":
 
