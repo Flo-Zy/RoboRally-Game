@@ -49,10 +49,14 @@ public class ClientController {
     private int figure;
     private int id;
 
-    private ArrayList<String> playerNames = new ArrayList<>();   @FXML
+    private ArrayList<String> playerNames = new ArrayList<>();
+    @FXML
     private TextArea chatArea;
     @FXML
     private TextField messageField;
+
+    @FXML
+    private Label mapLabel;
 
 
     public void init(Client Client, Stage stage) {
@@ -107,7 +111,7 @@ public class ClientController {
         }
     }
 
-    private int giveRecipientIdToSendMessage(){
+    private int giveRecipientIdToSendMessage() {
         return getSelectedRecipientId();
 
     }
@@ -123,11 +127,11 @@ public class ClientController {
     }
 
     @FXML
-    private void sendReady(){
-        if(!ready){
+    private void sendReady() {
+        if (!ready) {
             ready = true;
             readyButton.setText("NICHT BEREIT");
-        }else{
+        } else {
             ready = false;
             readyButton.setText("BEREIT");
         }
@@ -141,7 +145,8 @@ public class ClientController {
         String serializedMapSelected = Serialisierer.serialize(mapSelected);
         Client.getWriter().println(serializedMapSelected);
     }
-    private int selectedRecipientId  = -1; // Initialize with a default value
+
+    private int selectedRecipientId = -1; // Initialize with a default value
 
     @FXML
     private void toggleVisibility() {
@@ -287,7 +292,7 @@ public class ClientController {
     }
 
 
-    public String showSelectMapDialog(){
+    public String showSelectMapDialog() {
 
         //ChoiceDialog mit der Liste der Maps
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, mapList);
@@ -328,4 +333,12 @@ public class ClientController {
         this.id = id;
     }
 
+    public void updateMapLabel(String mapName) {
+        Platform.runLater(() -> {
+            // Assuming you have a Label named mapLabel in your FXML
+            mapLabel.setText("Selected Map: " + mapName);
+        });
+
+
+    }
 }

@@ -206,12 +206,12 @@ public class Client extends Application {
                                     Parent root = loader.load();
 
                                     Scene scene = new Scene(root);
-                                    primaryStage.setTitle("Client");
+                                    primaryStage.setTitle("Dizzy Highway");
                                     primaryStage.setScene(scene);
 
-                                    DizzyHighwayController dizzyController = loader.getController();
+                                    ClientController clientController = loader.getController();
                                     // Stage initialization
-                                    dizzyController.init(this, primaryStage);
+                                    primaryStage.show();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
