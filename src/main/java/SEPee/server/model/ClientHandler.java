@@ -151,8 +151,9 @@ public class ClientHandler implements Runnable {
                                     }
 
                             }
-                            if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
+                            if(!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
                                     && Server.getGameMap() != null){
+                                Server.setGameStarted(true);
                                 GameStarted gameStarted = new GameStarted(Server.getGameMap());
                                 System.out.println("Das Spiel wird gestartet");
                             }
