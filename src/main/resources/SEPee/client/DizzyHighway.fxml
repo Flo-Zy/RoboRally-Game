@@ -1414,52 +1414,92 @@
                         <children>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </StackPane>
                         </children>
@@ -1472,9 +1512,21 @@
                                     <Insets left="227.5" right="227.5" />
                                 </HBox.margin>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </HBox>
                         </children>
@@ -1487,8 +1539,16 @@
                                     <Insets left="65.0" />
                                 </HBox.margin>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
                                 </children>
                             </HBox>
                         </children>
@@ -1503,6 +1563,9 @@
                                         <HBox.margin>
                                             <Insets left="32.5" right="65.0" />
                                         </HBox.margin>
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <HBox.margin>
