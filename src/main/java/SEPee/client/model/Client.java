@@ -1,7 +1,6 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
-import SEPee.client.viewModel.DizzyHighwayController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -199,7 +198,7 @@ public class Client extends Application {
 
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
 
-                            controller.loadDizzyHighwayFXML();
+                            controller.loadDizzyHighwayFXML(this, primaryStage);
                             break;
                         case "ReceivedChat":
 

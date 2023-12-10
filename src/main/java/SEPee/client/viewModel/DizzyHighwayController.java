@@ -39,4 +39,7 @@ public class DizzyHighwayController {
         this.stage = stage;
 
     }
+    public void setRootVBox(VBox rootVBox) {
+        this.rootVBox = rootVBox;
+    }
 }

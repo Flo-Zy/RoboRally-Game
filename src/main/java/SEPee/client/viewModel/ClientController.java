@@ -4,7 +4,6 @@ import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
 import SEPee.serialisierung.messageType.SetStatus;
-import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SendChat;
 import SEPee.server.model.Player;
 import javafx.application.Platform;
@@ -12,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
@@ -22,7 +19,6 @@ import javafx.scene.control.Dialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -334,16 +330,28 @@ public class ClientController {
         this.id = id;
     }
 
-    public void loadDizzyHighwayFXML() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/path/to/DizzyHighway.fxml"));
-            // If DizzyHighway.fxml has a separate controller, set it here
-            loader.setController(new DizzyHighwayController());
-            Node dizzyHighway = loader.load();
-            DizzyHighwayMap.getChildren().setAll(dizzyHighway);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                Node dizzyHighway = loader.load();
 
+                // Get  controller
+                DizzyHighwayController dizzyHighwayController = loader.getController();
+
+                dizzyHighwayController.init(client, primaryStage);
+
+                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+
+                // set loaded FXML to VBox
+                DizzyHighwayMap.getChildren().setAll(dizzyHighway);
+
+                DizzyHighwayMap.setVisible(true);
+                DizzyHighwayMap.setManaged(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
 }
