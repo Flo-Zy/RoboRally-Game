@@ -43,7 +43,6 @@ public class Client extends Application {
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
-    private Game gameCLient;
 
     public static void main(String[] args) {
         launch(args);
@@ -203,7 +202,6 @@ public class Client extends Application {
                         case "GameStarted":
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
-                            gameCLient = new Game(playerListClient, gameStarted.getMessageBody().getGameMap());
                             controller.loadDizzyHighwayFXML(this, primaryStage);
                             break;
                         case "ReceivedChat":
@@ -242,27 +240,39 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
-                            System.out.println(currentPlayer.getMessageBody().getClientID()+"hieeeeer!"+ controller.getId());
-
-                            if(controller.getId() == currentPlayer.getMessageBody().getClientID()) {
-                                System.out.println("bin hier!");
-                                switch (gameCLient.getCurrentPhase()) {
-                                    case 0:
+                            switch (controller.getCurrentPhase()) {
+                                case 0:
+                                    if(controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+                                        System.out.println("Aufbauphase");
                                         Platform.runLater(() -> {
-                                            int point;
-                                            point = controller.setStartingPoint();
-                                            System.out.println("StartingPoint wurde gewählt"+ point);
+                                            controller.setStartingPoint();
+                                            System.out.println("StartingPoint wurde gewählt");
+                                            SetStartingPoint setStartingPoint = new SetStartingPoint(controller.getStartPointX(), controller.getStartPointY());
+                                            String serializedSetStartingPoint = Serialisierer.serialize(setStartingPoint);
+                                            writer.println(serializedSetStartingPoint);
                                         });
+                                    }
+                                    break;
+                                case 1:
+                                    System.out.println("Upgradephase");
+                                    break;
+                                case 2:
+                                    System.out.println("Programmierphase");
+                                    break;
+                                case 3:
+                                    System.out.println("Aktivierungsphase");
+                                    break;
                                 }
-                            }
                             break;
                         case "ActivePhase":
                             System.out.println("Active Phase");
                             ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
+                            controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
                             break;
                         case "StartingPointTaken":
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
+                            controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             break;
                         case "YourCards":
                             System.out.println("Your Cards");

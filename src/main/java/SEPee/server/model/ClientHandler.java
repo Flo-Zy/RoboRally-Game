@@ -164,6 +164,10 @@ public class ClientHandler implements Runnable {
                                 broadcast(serializedGameStarted);
                                 System.out.println("Das Spiel wird gestartet");
 
+                                ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                broadcast(serializedActivePhase);
+
                                 CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
                                 String serializedCurrentPlayer = Serialisierer.serialize(currentplayer);
                                 broadcast(serializedCurrentPlayer);
@@ -208,8 +212,26 @@ public class ClientHandler implements Runnable {
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
                             break;
                         case "SetStartingPoint":
+                            Server.setCountPlayerTruns(Server.getCountPlayerTruns()+1);
                             System.out.println("Set Starting Point");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
+
+                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), player.getId());
+                            String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
+                            broadcast(serializedStartingPointTaken);
+
+                            if(Server.getCountPlayerTruns() == Server.getGame().getPlayerList().size()){
+                                Server.getGame().nextCurrentPhase();
+                                Server.setCountPlayerTruns(0);
+
+                                ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                broadcast(serializedActivePhase);
+                            }
+
+                            CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
+                            String serializedCurrentPlayer = Serialisierer.serialize(currentplayer);
+                            broadcast(serializedCurrentPlayer);
                             break;
                         case "SelectedCard":
                             System.out.println("Selected Card");

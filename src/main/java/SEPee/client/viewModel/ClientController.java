@@ -60,6 +60,14 @@ public class ClientController {
 
     @FXML
     private VBox DizzyHighwayMap;
+    private ArrayList<Integer> takenStartPoints = new ArrayList<>();
+    @Getter
+    private int startPointX;
+    @Getter
+    private int startPointY;
+    @Getter
+    @Setter
+    private int currentPhase;
 
 
     public void init(Client Client, Stage stage) {
@@ -365,7 +373,7 @@ public class ClientController {
 
     }
 
-    public int setStartingPoint() {
+    public void setStartingPoint() {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Startingpoint Selection");
         dialog.setHeaderText("Please select a Startingpoint:");
@@ -394,9 +402,9 @@ public class ClientController {
         //dialog.initOwner(stage);
 
         //disable previously selected buttons
-        /*for (Integer takenFigure : takenFigures) {
+        for (Integer takenStartingPoint : takenStartPoints) {
             ButtonType buttonType = buttonMap.entrySet().stream()
-                    .filter(entry -> entry.getValue() == takenFigure)
+                    .filter(entry -> entry.getValue() == takenStartingPoint)
                     .map(Map.Entry::getKey)
                     .findFirst()
                     .orElse(null);
@@ -404,14 +412,13 @@ public class ClientController {
             if (buttonType != null) {
                 Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
                 buttonNode.setDisable(true);
-            }*/
+            }
+        }
         //show dialog, wait for input
         Optional<Integer> result = dialog.showAndWait();
-
         // Process user input and return the selected robot (index starting from 1)
         if (result.isPresent()) {
             int selectedStartingpoint = buttonMap.get(result.get());
-
             // Get the selected button
             ButtonType selectedButtonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == selectedStartingpoint)
@@ -423,9 +430,64 @@ public class ClientController {
                 Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
                 selectedButton.setDisable(true); // Disable the selected button
             }
-
-            return selectedStartingpoint;
-        }
-        return 0; // Default value if no selection or unexpected button is pressed
+            setStartingPointXY(selectedStartingpoint);
+            }
     }
+
+
+
+    public void addTakenStartingPoints(int x, int y){
+        int combinedValue = x*10 + y;
+        switch(combinedValue){
+            case 11:
+                takenStartPoints.add(1);
+                break;
+            case 3:
+                takenStartPoints.add(2);
+                break;
+            case 14:
+                takenStartPoints.add(3);
+                break;
+            case 15:
+                takenStartPoints.add(4);
+                break;
+            case 6:
+                takenStartPoints.add(5);
+                break;
+            case 18:
+                takenStartPoints.add(6);
+                break;
+        }
+    }
+
+    public void setStartingPointXY(int StartingPointNumber){
+        switch(StartingPointNumber){
+            case 1:
+                startPointX = 1;
+                startPointY = 1;
+                break;
+            case 2:
+                startPointX = 0;
+                startPointY = 3;
+                break;
+            case 3:
+                startPointX = 1;
+                startPointY = 4;
+                break;
+            case 4:
+                startPointX = 1;
+                startPointY = 5;
+                break;
+            case 5:
+                startPointX = 0;
+                startPointY = 6;
+                break;
+            case 6:
+                startPointX = 1;
+                startPointY = 8;
+                break;
+        }
+    }
+
+
 }

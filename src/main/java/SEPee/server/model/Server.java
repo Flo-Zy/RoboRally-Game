@@ -48,6 +48,9 @@ public class Server extends Thread{
     @Getter
     @Setter
     private static Game game;
+    @Getter
+    @Setter
+    private static int countPlayerTruns = 0;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
