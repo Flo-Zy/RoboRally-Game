@@ -152,7 +152,7 @@ public class Client extends Application {
 
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
-
+                            controller.setId(receivedId);
                             // PlayerValues schicken
                             PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
                             String serializedPlayerValues = Serialisierer.serialize(playerValues);
@@ -163,8 +163,6 @@ public class Client extends Application {
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
                             String name = playerAdded.getMessageBody().getName();
                             int id = playerAdded.getMessageBody().getClientID();
-                            //controller ID setzten
-                            controller.setId(id);
                             int figure = playerAdded.getMessageBody().getFigure();
 
                             // Create a new Player object
@@ -244,9 +242,18 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
-                            switch(gameCLient.getCurrentPhase()){
-                                case 0:
-                                    //controller.;
+                            System.out.println(currentPlayer.getMessageBody().getClientID()+"hieeeeer!"+ controller.getId());
+
+                            if(controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+                                System.out.println("bin hier!");
+                                switch (gameCLient.getCurrentPhase()) {
+                                    case 0:
+                                        Platform.runLater(() -> {
+                                            int point;
+                                            point = controller.setStartingPoint();
+                                            System.out.println("StartingPoint wurde gewählt"+ point);
+                                        });
+                                }
                             }
                             break;
                         case "ActivePhase":

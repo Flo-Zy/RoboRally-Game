@@ -14,7 +14,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.DizzyHighwayController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="900.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">

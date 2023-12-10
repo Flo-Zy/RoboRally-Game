@@ -1,6 +1,7 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
+import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
 import SEPee.serialisierung.messageType.SetStatus;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +45,12 @@ public class ClientController {
     private String name;
     private int figure;
     private int id;
+    @Getter
+    @Setter
+    private double x = 0;
+    @Getter
+    @Setter
+    private double y = 0;
 
     private ArrayList<String> playerNames = new ArrayList<>();
     @FXML
@@ -354,5 +363,69 @@ public class ClientController {
             }
         });
 
+    }
+
+    public int setStartingPoint() {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Startingpoint Selection");
+        dialog.setHeaderText("Please select a Startingpoint:");
+
+        // Create buttons for each robot
+        ButtonType button1 = new ButtonType("Start 1", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button2 = new ButtonType("Start 2", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button3 = new ButtonType("Start 3", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button4 = new ButtonType("Start 4", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button5 = new ButtonType("Start 5", ButtonBar.ButtonData.OK_DONE);
+        ButtonType button6 = new ButtonType("Start 6", ButtonBar.ButtonData.OK_DONE);
+
+        // Create a map to associate button types with integer values
+        HashMap<ButtonType, Integer> buttonMap = new HashMap<>();
+        buttonMap.put(button1, 1);
+        buttonMap.put(button2, 2);
+        buttonMap.put(button3, 3);
+        buttonMap.put(button4, 4);
+        buttonMap.put(button5, 5);
+        buttonMap.put(button6, 6);
+
+        // Add buttons to the dialog
+        dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
+
+        //show the dialog and wait for user input
+        //dialog.initOwner(stage);
+
+        //disable previously selected buttons
+        /*for (Integer takenFigure : takenFigures) {
+            ButtonType buttonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == takenFigure)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (buttonType != null) {
+                Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
+                buttonNode.setDisable(true);
+            }*/
+        //show dialog, wait for input
+        Optional<Integer> result = dialog.showAndWait();
+
+        // Process user input and return the selected robot (index starting from 1)
+        if (result.isPresent()) {
+            int selectedStartingpoint = buttonMap.get(result.get());
+
+            // Get the selected button
+            ButtonType selectedButtonType = buttonMap.entrySet().stream()
+                    .filter(entry -> entry.getValue() == selectedStartingpoint)
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedButtonType != null) {
+                Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
+                selectedButton.setDisable(true); // Disable the selected button
+            }
+
+            return selectedStartingpoint;
+        }
+        return 0; // Default value if no selection or unexpected button is pressed
     }
 }
