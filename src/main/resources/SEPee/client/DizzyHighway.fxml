@@ -11,10 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="900.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
@@ -1509,33 +1506,6 @@
                         <children>
                             <HBox prefHeight="100.0" prefWidth="195.0">
                                 <HBox.margin>
-                                    <Insets left="227.5" right="227.5" />
-                                </HBox.margin>
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                    </ImageView>
-                                </children>
-                            </HBox>
-                        </children>
-                    </HBox>
-                    <!-- Discard Pile, Energy Space, Checkpoint Space, Programming Pile -->
-                    <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
-                        <children>
-                            <HBox prefHeight="100.0" prefWidth="130.0">
-                                <HBox.margin>
                                     <Insets left="65.0" />
                                 </HBox.margin>
                                 <children>
@@ -1543,14 +1513,117 @@
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
                                     </ImageView>
                                     <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                                    </ImageView>
+                                </children>
+                            </HBox>
+                     <HBox prefHeight="100.0" prefWidth="195.0">
+                        <children>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                        </children>
+                        <HBox.margin>
+                           <Insets left="130.0" />
+                        </HBox.margin>
+                     </HBox>
+                        </children>
+                    </HBox>
+                    <!-- Discard Pile, Energy Space, Checkpoint Space, Programming Pile -->
+                    <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
+                        <children>
+                            <HBox prefHeight="100.0" prefWidth="60.0">
+                                <HBox.margin>
+                                    <Insets left="20.0" right="60.0" />
+                                </HBox.margin>
+                                <children>
+                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
                                 </children>
                             </HBox>
+                     <HBox layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
+                        <children>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                        </children>
+                        <HBox.margin>
+                           <Insets right="60.0" />
+                        </HBox.margin>
+                     </HBox>
+                     <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
+                        <children>
+                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
+                              </image>
+                           </ImageView>
+                        </children>
+                        <HBox.margin>
+                           <Insets left="40.0" />
+                        </HBox.margin>
+                     </HBox>
                         </children>
                     </HBox>
 
@@ -1571,21 +1644,33 @@
                                         <HBox.margin>
                                             <Insets right="65.0" />
                                         </HBox.margin>
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <HBox.margin>
                                             <Insets right="65.0" />
                                         </HBox.margin>
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="335.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <HBox.margin>
                                             <Insets right="65.0" />
                                         </HBox.margin>
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="465.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <HBox.margin>
                                             <Insets right="32.5" />
                                         </HBox.margin>
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
                                     </ImageView>
                                 </children>
                             </HBox>
@@ -1595,9 +1680,6 @@
             </VBox>
         </VBox>
     </children>
-
-
-
     <!-- cahtfenster von Client.fxml -->
 
 </AnchorPane>

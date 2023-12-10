@@ -4,10 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="645.0" prefWidth="213.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
-    <HBox prefHeight="645.0" prefWidth="1130.0" spacing="10" VBox.vgrow="ALWAYS">
+    <HBox spacing="10" prefHeight="900.0" prefWidth="920.0">
         <!-- Linke HBox -->
         <HBox prefHeight="645.0" prefWidth="830.0" HBox.hgrow="ALWAYS" />
         <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
