@@ -108,27 +108,27 @@ public class ClientHandler implements Runnable {
 
                             //ersten der ready drückt selectMap senden
                             if (Server.getReadyList().size() == 1) {
-                                Server.gameMap = null;
-                                Server.firstReady = Server.getReadyList().get(Server.getReadyListIndex());
+                                Server.setGameMap(null);
+                                Server.setFirstReady(Server.getReadyList().get(Server.getReadyListIndex()));
                                 Server.setReadyListIndex(Server.getReadyListIndex()+1);
                                 SelectMap selectMap = new SelectMap();
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
-                                sendToOneClient(Server.firstReady, serializedSelectMap);
+                                sendToOneClient(Server.getFirstReady(), serializedSelectMap);
                             }
-                            if(!setStatus.getMessageBody().isReady() && player.getId() == Server.firstReady){
+                            if(!setStatus.getMessageBody().isReady() && player.getId() == Server.getFirstReady()){
 
                                 if(checkNumReady() == 0){
-                                    Server.gameMap = null;
+                                    Server.setGameMap(null);
                                     Server.getReadyList().clear();
                                     Server.setReadyListIndex(0);
                                 }else {
-                                    Server.gameMap = null;
+                                    Server.setGameMap(null);
                                     int nextId = checkNextReady();
-                                    Server.firstReady = nextId;
+                                    Server.setFirstReady(nextId);
                                     Server.setReadyListIndex(Server.getReadyListIndex()+1);
                                     SelectMap selectMap = new SelectMap();
                                     String serializedSelectMap = Serialisierer.serialize(selectMap);
-                                    sendToOneClient(Server.firstReady, serializedSelectMap);
+                                    sendToOneClient(Server.getFirstReady(), serializedSelectMap);
                                 }
                             }
                             break;
@@ -137,11 +137,11 @@ public class ClientHandler implements Runnable {
                             MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
                             if(!mapSelected.getMessageBody().getMap().equals("")) {
                                 broadcast(serializedReceivedString);
-                                if (Server.firstReady == player.getId())
+                                if (Server.getFirstReady() == player.getId())
                                     switch (mapSelected.getMessageBody().getMap()) {
                                         case "DizzyHighway":
                                             DizzyHighway dizzyHighway = new DizzyHighway();
-                                            Server.gameMap = dizzyHighway.getGameBoard();
+                                            Server.setGameMap(dizzyHighway.getGameBoard());
                                             break;
                                     /*Später für weitere Maps
                                     case " ":
@@ -151,9 +151,10 @@ public class ClientHandler implements Runnable {
                                     }
 
                             }
-                            if(checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
-                                    && Server.gameMap != null){
-                                GameStarted gameStarted = new GameStarted(Server.gameMap);
+                            if(!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
+                                    && Server.getGameMap() != null){
+                                Server.setGameStarted(true);
+                                GameStarted gameStarted = new GameStarted(Server.getGameMap());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
 

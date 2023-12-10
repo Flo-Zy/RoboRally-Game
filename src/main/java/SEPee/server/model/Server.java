@@ -30,20 +30,21 @@ public class Server extends Thread{
     private static int clientID;
     @Getter
     private static ArrayList<Player> playerList = new ArrayList<>();
+    @Getter
+    @Setter
     private static ArrayList<Integer> readyList = new ArrayList<>();
     @Getter
     @Setter
     private static int readyListIndex = 0;
-    public static List<List<List<Field>>> gameMap;
-    public static int firstReady;
-
-    public static void addReady(int id){
-        readyList.add(id);
-    }
-
-    public static ArrayList<Integer> getReadyList(){
-        return readyList;
-    }
+    @Getter
+    @Setter
+    private static List<List<List<Field>>> gameMap;
+    @Getter
+    @Setter
+    private static int firstReady;
+    @Getter
+    @Setter
+    private static boolean gameStarted = false;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
@@ -114,6 +115,10 @@ public class Server extends Thread{
         int assignedClientID = idCounter;
         idCounter++;
         return assignedClientID;
+    }
+
+    public static void addReady(int id){
+        readyList.add(id);
     }
 
 }
