@@ -348,6 +348,10 @@ public class ClientController {
 
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
+
+                //Hidde Bereit nicht bereit  button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
