@@ -45,6 +45,9 @@ public class Server extends Thread{
     @Getter
     @Setter
     private static boolean gameStarted = false;
+    @Getter
+    @Setter
+    private static Game game;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");

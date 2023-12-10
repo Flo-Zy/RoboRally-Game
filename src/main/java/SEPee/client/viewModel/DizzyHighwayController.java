@@ -20,7 +20,9 @@ public class DizzyHighwayController {
     @FXML
     private ImageView field02;
     @FXML
-    private ImageView field03;
+    private ImageView field03a;
+    @FXML
+    private ImageView field03b;
     @FXML
     private ImageView field04;
     @FXML
@@ -37,9 +39,17 @@ public class DizzyHighwayController {
 
     public void init(Client Client, Stage stage) {
         this.stage = stage;
+        field03b.setOnMouseClicked(event -> handleStartFieldClick());
 
     }
+
     public void setRootVBox(VBox rootVBox) {
         this.rootVBox = rootVBox;
+    }
+    private void handleStartFieldClick() {
+        // Hier implementierst du die Logik, die bei einem Klick auf das Startfeld ausgeführt werden soll
+        // Zum Beispiel könntest du die Position des Clients ändern.
+        System.out.println("Startfeld wurde angeklickt!");
+
     }
 }

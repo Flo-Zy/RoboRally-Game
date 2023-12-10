@@ -5,6 +5,8 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
+//auslagern
+import SEPee.server.model.Game;
 import SEPee.server.model.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -41,6 +43,7 @@ public class Client extends Application {
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
+    private Game gameCLient;
 
     public static void main(String[] args) {
         launch(args);
@@ -201,9 +204,8 @@ public class Client extends Application {
                             break;
                         case "GameStarted":
                             System.out.println("Game Started");
-
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
-
+                            gameCLient = new Game(playerListClient, gameStarted.getMessageBody().getGameMap());
                             controller.loadDizzyHighwayFXML(this, primaryStage);
                             break;
                         case "ReceivedChat":
@@ -242,6 +244,10 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
+                            switch(gameCLient.getCurrentPhase()){
+                                case 0:
+                                    //controller.;
+                            }
                             break;
                         case "ActivePhase":
                             System.out.println("Active Phase");

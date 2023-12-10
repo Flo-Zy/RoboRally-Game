@@ -5,6 +5,7 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
 import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
+//Später auslagern
 import SEPee.server.model.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

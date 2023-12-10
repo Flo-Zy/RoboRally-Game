@@ -137,6 +137,7 @@ public class ClientHandler implements Runnable {
                             MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
                             if(!mapSelected.getMessageBody().getMap().equals("")) {
                                 broadcast(serializedReceivedString);
+                                //speicher die gewählte map (die gameMap)
                                 if (Server.getFirstReady() == player.getId())
                                     switch (mapSelected.getMessageBody().getMap()) {
                                         case "DizzyHighway":
@@ -151,14 +152,21 @@ public class ClientHandler implements Runnable {
                                     }
 
                             }
+                            //check alle ready und mind 2
                             if(!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
                                     && Server.getGameMap() != null){
                                 Server.setGameStarted(true);
+                                //erstelle das Spiel
+                                Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap()));
+                                //Sende an alle Clients Spiel wird gestarted
                                 GameStarted gameStarted = new GameStarted(Server.getGameMap());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
-
                                 System.out.println("Das Spiel wird gestartet");
+
+                                CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
+                                String serializedCurrentPlayer = Serialisierer.serialize(currentplayer);
+                                broadcast(serializedCurrentPlayer);
                             }
                             break;
                         case "SendChat":
