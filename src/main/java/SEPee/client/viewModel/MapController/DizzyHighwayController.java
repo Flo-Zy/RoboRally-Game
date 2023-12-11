@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DizzyHighwayController extends MapController{
+
     @Setter
     @FXML
     private VBox rootVBox;
@@ -57,7 +58,16 @@ public class DizzyHighwayController extends MapController{
 
     @FXML
     private ImageView Avatar1;
-
+    @FXML
+    private ImageView Avatar2;
+    @FXML
+    public ImageView Avatar3;
+    @FXML
+    public ImageView Avatar4;
+    @FXML
+    public ImageView Avatar5;
+    @FXML
+    public ImageView Avatar6;
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
@@ -65,29 +75,58 @@ public class DizzyHighwayController extends MapController{
     }
 
 
-    public void robotAppear(Player player, int x, int y) {
+    public void avatarAppear (Player player, int x, int y) {
         System.out.println("getFigure: " + player.getFigure());
 
-        switch (player.getFigure()){
-
+        switch (player.getFigure()) {
             case 1:
-
                 GridPane.setColumnIndex(Avatar1, x);
                 GridPane.setRowIndex(Avatar1, y);
-
-                System.out.println("x: " + x + " y: " + y);
-
-
-
                 Avatar1.setVisible(true);
                 Avatar1.setManaged(true);
-            break;
+                break;
+
+            case 2:
+                GridPane.setColumnIndex(Avatar2, x);
+                GridPane.setRowIndex(Avatar2, y);
+                Avatar2.setVisible(true);
+                Avatar2.setManaged(true);
+                break;
+
+            case 3:
+                GridPane.setColumnIndex(Avatar3, x);
+                GridPane.setRowIndex(Avatar3, y);
+                Avatar3.setVisible(true);
+                Avatar3.setManaged(true);
+                break;
+
+            case 4:
+                GridPane.setColumnIndex(Avatar4, x);
+                GridPane.setRowIndex(Avatar4, y);
+                Avatar4.setVisible(true);
+                Avatar4.setManaged(true);
+                break;
+
+            case 5:
+                GridPane.setColumnIndex(Avatar5, x);
+                GridPane.setRowIndex(Avatar5, y);
+                Avatar5.setVisible(true);
+                Avatar5.setManaged(true);
+                break;
+
+            case 6:
+                GridPane.setColumnIndex(Avatar6, x);
+                GridPane.setRowIndex(Avatar6, y);
+                Avatar6.setVisible(true);
+                Avatar6.setManaged(true);
+                break;
+
             default:
                 System.out.println("Robot not found.");
-            break;
+                break;
         }
-
     }
+
 
 
 

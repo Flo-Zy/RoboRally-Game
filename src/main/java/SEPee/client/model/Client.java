@@ -7,7 +7,6 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
-import SEPee.server.model.Game;
 import SEPee.server.model.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -294,7 +293,7 @@ public class Client extends Application {
 
                             for (int i = 0; i < playerListClient.size(); i++){
                                 if (playerListClient.get(i).getId() == startingPointTaken.getMessageBody().getClientID()){
-                                    controller.putRobotDown(playerListClient.get(i), startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                                    controller.putAvatarDown(playerListClient.get(i), startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                                 }
                             }
 

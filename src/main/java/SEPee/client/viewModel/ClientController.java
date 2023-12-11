@@ -487,8 +487,8 @@ public class ClientController {
         }
     }
 
-    public void putRobotDown(Player player, int x, int y){
-        mapController.robotAppear(player, x, y);
+    public void putAvatarDown(Player player, int x, int y){
+        mapController.avatarAppear(player, x, y);
 
     }
 
