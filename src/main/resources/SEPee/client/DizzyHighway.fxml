@@ -79,9 +79,15 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field04" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
+                    <ImageView fx:id="field04a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field04b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Custom/Antenne.png" />
                         </image>
                     </ImageView>
 
@@ -1396,9 +1402,15 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field123" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
+                    <ImageView fx:id="field123a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field123b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Custom/Checkpoint1.png" />
                         </image>
                     </ImageView>
 
