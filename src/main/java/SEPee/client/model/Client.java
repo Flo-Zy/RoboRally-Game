@@ -291,6 +291,19 @@ public class Client extends Application {
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
                             controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+
+                            for (int i = 0; i < playerListClient.size(); i++){
+                                if (playerListClient.get(i).getId() == startingPointTaken.getMessageBody().getClientID()){
+
+
+                                    controller.putRobotDown(playerListClient.get(i), startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+
+
+                                }
+                            }
+
+
+
                             break;
                         case "YourCards":
                             System.out.println("Your Cards");

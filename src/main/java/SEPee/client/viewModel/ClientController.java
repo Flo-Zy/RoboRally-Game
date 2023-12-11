@@ -38,7 +38,6 @@ public class ClientController {
     private Button visibilityButton;
     @FXML
     private Button readyButton;
-
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -487,6 +486,13 @@ public class ClientController {
                 break;
         }
     }
+
+    public void putRobotDown(Player player, int x, int y){
+        mapController.robotAppear(player, x, y);
+
+    }
+
+
 
 
 

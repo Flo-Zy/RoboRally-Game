@@ -2,6 +2,7 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.ClientController;
+import SEPee.server.model.Player;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -65,8 +66,23 @@ public class DizzyHighwayController extends MapController{
     public void setRootVBox(VBox rootVBox) {
         this.rootVBox = rootVBox;
 
-        this.Avatar1.setVisible(true);
-        this.Avatar1.setManaged(true);
+    }
+
+
+    public void robotAppear(Player player, int x, int y) {
+
+        switch (player.getFigure()){
+            case 1:
+
+
+                Avatar1.setVisible(true);
+                Avatar1.setManaged(true);
+            break;
+            default:
+                System.out.println("Robot not found.");
+            break;
+        }
+
 
 
     }
