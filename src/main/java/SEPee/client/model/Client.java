@@ -1,6 +1,7 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -148,7 +149,6 @@ public class Client extends Application {
                         case "Welcome":
 
 
-
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
@@ -171,15 +171,15 @@ public class Client extends Application {
                             playerListClient.add(newPlayer);
 
                             System.out.println("Player added");
-                            for(int i = 0; i < playerListClient.size(); i++){
-                                System.out.println(playerListClient.get(i).getName()+ "," +playerListClient.get(i).getId());
+                            for (int i = 0; i < playerListClient.size(); i++) {
+                                System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
                             }
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
                             PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
-                            for(int i = 0; i < playerListClient.size(); i++){
-                                if(playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()){
+                            for (int i = 0; i < playerListClient.size(); i++) {
+                                if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
                                     playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
                                 }
                             }
@@ -198,6 +198,24 @@ public class Client extends Application {
                             break;
                         case "MapSelected":
                             System.out.println("Map wurde gewählt");
+
+                            String serializedReceivedMap = serializedReceivedString;
+                            MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
+
+                            DizzyHighwayController mapController = null;
+                            switch (deserializedReceivedMap.getMessageBody().getMap()) {
+
+                                case "DizzyHighway":
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                                    mapController = loader.getController();
+
+                                    break;
+                                default:
+                                    System.out.println("Invalid Map");
+                                    break;
+                            }
+
+
                             break;
                         case "GameStarted":
                             System.out.println("Game Started");
@@ -210,8 +228,8 @@ public class Client extends Application {
                             ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
 
                             String fromName = null;
-                            for(int i = 0; i < playerListClient.size(); i++){
-                                if(deserializedReceivedChat.getMessageBody().getFrom() == playerListClient.get(i).getId()){
+                            for (int i = 0; i < playerListClient.size(); i++) {
+                                if (deserializedReceivedChat.getMessageBody().getFrom() == playerListClient.get(i).getId()) {
                                     fromName = playerListClient.get(i).getName();
                                 }
                             }
@@ -240,9 +258,9 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
-                            switch (controller.getCurrentPhase()) {
+                            switch (mapController.getCurrentPhase()) {
                                 case 0:
-                                    if(controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
                                         System.out.println("Aufbauphase");
                                         Platform.runLater(() -> {
                                             controller.setStartingPoint();
@@ -262,7 +280,7 @@ public class Client extends Application {
                                 case 3:
                                     System.out.println("Aktivierungsphase");
                                     break;
-                                }
+                            }
                             break;
                         case "ActivePhase":
                             System.out.println("Active Phase");
