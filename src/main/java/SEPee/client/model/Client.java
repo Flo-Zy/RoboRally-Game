@@ -291,15 +291,16 @@ public class Client extends Application {
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
                             controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
 
-                            for (int i = 0; i < playerListClient.size(); i++){
-                                if (playerListClient.get(i).getId() == startingPointTaken.getMessageBody().getClientID()){
-                                    controller.putAvatarDown(playerListClient.get(i), startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            int takenClientID = startingPointTaken.getMessageBody().getClientID();
+                            for (Player player : playerListClient) {
+                                if (player.getId() == takenClientID) {
+                                    controller.putAvatarDown(player, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                                    System.out.println("Starting Point taken for ID: " + player.getId() + ", figure: " + player.getFigure());
+                                    break;
                                 }
                             }
-
-
-
                             break;
+
                         case "YourCards":
                             System.out.println("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
