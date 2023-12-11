@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="900.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
@@ -73,6 +73,12 @@
                         </image>
                     </ImageView>
 
+                    <ImageView fx:id="field03c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf2.png" />
+                        </image>
+                    </ImageView>
+
                     <ImageView fx:id="field04" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -94,6 +100,12 @@
                     <ImageView fx:id="field06b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field06c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf5.png" />
                         </image>
                     </ImageView>
 
@@ -133,6 +145,12 @@
                         </image>
                     </ImageView>
 
+                    <ImageView fx:id="field11c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf1.png" />
+                        </image>
+                    </ImageView>
+
                     <ImageView fx:id="field12a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -169,6 +187,12 @@
                         </image>
                     </ImageView>
 
+                    <ImageView fx:id="field14c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf3.png" />
+                        </image>
+                    </ImageView>
+
                     <ImageView fx:id="field15a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -178,6 +202,12 @@
                     <ImageView fx:id="field15b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field15c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf4.png" />
                         </image>
                     </ImageView>
 
@@ -211,6 +241,12 @@
                     <ImageView fx:id="field18b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field18c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                        <image>
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf6.png" />
                         </image>
                     </ImageView>
 
