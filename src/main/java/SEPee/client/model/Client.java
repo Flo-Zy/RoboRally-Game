@@ -258,7 +258,7 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
-                            switch (mapController.getCurrentPhase()) {
+                            switch (controller.getCurrentPhase()) {
                                 case 0:
                                     if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
                                         System.out.println("Aufbauphase");
