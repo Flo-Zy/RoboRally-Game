@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -37,6 +38,8 @@ public class DizzyHighwayController extends MapController{
     @FXML
     private ImageView field03b;
     @FXML
+    private ImageView field03c;
+    @FXML
     private ImageView field04;
     @FXML
     private ImageView field05;
@@ -54,13 +57,20 @@ public class DizzyHighwayController extends MapController{
     @Getter
     public double y = -9;
 
-    public void init(Client Client, Stage stage) {
+
+    public void init(Client client, Stage stage) {
         this.stage = stage;
 
     }
 
     public void setRootVBox(VBox rootVBox) {
         this.rootVBox = rootVBox;
+
+        Image Avatar1 = new Image("boardElementsPNGs/Custom/Avatars/BlauAvatar.png");
+        ImageView imageView = new ImageView(Avatar1);
+        gridPane.add(imageView, 0, 0);
+
+
     }
 
 
