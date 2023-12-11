@@ -294,11 +294,7 @@ public class Client extends Application {
 
                             for (int i = 0; i < playerListClient.size(); i++){
                                 if (playerListClient.get(i).getId() == startingPointTaken.getMessageBody().getClientID()){
-
-
                                     controller.putRobotDown(playerListClient.get(i), startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
-
-
                                 }
                             }
 

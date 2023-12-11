@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DizzyHighwayController extends MapController{
+    @Setter
     @FXML
     private VBox rootVBox;
     @FXML
@@ -63,16 +64,19 @@ public class DizzyHighwayController extends MapController{
 
     }
 
-    public void setRootVBox(VBox rootVBox) {
-        this.rootVBox = rootVBox;
-
-    }
-
 
     public void robotAppear(Player player, int x, int y) {
+        System.out.println("getFigure: " + player.getFigure());
 
         switch (player.getFigure()){
+
             case 1:
+
+                GridPane.setColumnIndex(Avatar1, x);
+                GridPane.setRowIndex(Avatar1, y);
+
+                System.out.println("x: " + x + " y: " + y);
+
 
 
                 Avatar1.setVisible(true);
@@ -82,8 +86,6 @@ public class DizzyHighwayController extends MapController{
                 System.out.println("Robot not found.");
             break;
         }
-
-
 
     }
 
