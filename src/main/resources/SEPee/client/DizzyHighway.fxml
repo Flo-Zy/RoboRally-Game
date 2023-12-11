@@ -44,9 +44,19 @@
                 </rowConstraints>
                 <children>
 
+
+
+
+
                     <ImageView fx:id="field00" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="Avatar1" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                        <image>
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/BlauAvatar.png" />
                         </image>
                     </ImageView>
 

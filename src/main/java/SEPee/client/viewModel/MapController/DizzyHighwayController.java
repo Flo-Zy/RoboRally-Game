@@ -52,10 +52,9 @@ public class DizzyHighwayController extends MapController{
     @FXML
     private ImageView field09;
     private Stage stage;
-    @Getter
-    public double x = -9;
-    @Getter
-    public double y = -9;
+
+    @FXML
+    private ImageView Avatar1;
 
 
     public void init(Client client, Stage stage) {
@@ -66,9 +65,8 @@ public class DizzyHighwayController extends MapController{
     public void setRootVBox(VBox rootVBox) {
         this.rootVBox = rootVBox;
 
-        Image Avatar1 = new Image("boardElementsPNGs/Custom/Avatars/BlauAvatar.png");
-        ImageView imageView = new ImageView(Avatar1);
-        gridPane.add(imageView, 0, 0);
+        this.Avatar1.setVisible(true);
+        this.Avatar1.setManaged(true);
 
 
     }
