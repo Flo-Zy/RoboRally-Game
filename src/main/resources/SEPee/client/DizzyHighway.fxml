@@ -1407,11 +1407,11 @@
             <VBox prefHeight="400.0" prefWidth="650.0">
                 <children>
                     <!-- Hand of 10 Card Spaces -->
-                    <HBox prefHeight="100.0" prefWidth="650.0">
+                    <HBox fx:id="totalHand" prefHeight="100.0" prefWidth="650.0">
                         <children>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1420,7 +1420,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1429,7 +1429,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1438,7 +1438,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1447,7 +1447,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1456,7 +1456,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1465,7 +1465,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1474,7 +1474,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1483,7 +1483,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1492,7 +1492,7 @@
                             </StackPane>
                             <StackPane>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand9" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
@@ -1504,68 +1504,70 @@
                     <!-- Installed Upgrades -->
                     <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="650.0">
                         <children>
-                            <HBox prefHeight="100.0" prefWidth="195.0">
+                            <!-- Installed permanent Upgrades -->
+                            <HBox fx:id="totalPermanentUpdate" prefHeight="100.0" prefWidth="195.0">
                                 <HBox.margin>
                                     <Insets left="65.0" />
                                 </HBox.margin>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="permanentUpdate0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="permanentUpdate1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="permanentUpdate2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
                                     </ImageView>
                                 </children>
                             </HBox>
-                     <HBox prefHeight="100.0" prefWidth="195.0">
-                        <children>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                        </children>
-                        <HBox.margin>
-                           <Insets left="130.0" />
-                        </HBox.margin>
-                     </HBox>
+                            <!-- Installed temporary Upgrades -->
+                            <HBox fx:id="totalTemporaryUpdate" prefHeight="100.0" prefWidth="195.0">
+                                <children>
+                                    <ImageView fx:id="temporaryUpdate0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="temporaryUpdate1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="temporaryUpdate2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                        </image>
+                                    </ImageView>
+                                </children>
+                                <HBox.margin>
+                                    <Insets left="130.0" />
+                                </HBox.margin>
+                            </HBox>
                         </children>
                     </HBox>
-                    <!-- Discard Pile, Energy Space, Checkpoint Space, Programming Pile -->
+                    <!-- Discard Pile, Programming Pile -->
                     <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
                         <children>
                             <HBox prefHeight="100.0" prefWidth="60.0">
@@ -1573,106 +1575,56 @@
                                     <Insets left="20.0" right="60.0" />
                                 </HBox.margin>
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="discardPile" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                            <Image url="@/boardElementsPNGs/flippedCard.png" />
                                         </image>
                                     </ImageView>
                                 </children>
                             </HBox>
-                     <HBox layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                        <children>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                        </children>
-                        <HBox.margin>
-                           <Insets right="60.0" />
-                        </HBox.margin>
-                     </HBox>
-                     <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                        <children>
-                           <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                 <Image url="@/boardElementsPNGs/defaultCard.png" />
-                              </image>
-                           </ImageView>
-                        </children>
-                        <HBox.margin>
-                           <Insets left="40.0" />
-                        </HBox.margin>
-                     </HBox>
-                        </children>
-                    </HBox>
-
-                    <!-- Register Felder -->
-                    <HBox layoutX="10.0" layoutY="210.0" prefHeight="100.0" prefWidth="650.0">
-                        <children>
-                            <HBox prefHeight="100.0" prefWidth="130.0">
+                            <HBox fx:id="totalRegister" layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <HBox.margin>
-                                            <Insets left="32.5" right="65.0" />
-                                        </HBox.margin>
+                                    <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <HBox.margin>
-                                            <Insets right="65.0" />
-                                        </HBox.margin>
+                                    <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <HBox.margin>
-                                            <Insets right="65.0" />
-                                        </HBox.margin>
+                                    <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="335.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <HBox.margin>
-                                            <Insets right="65.0" />
-                                        </HBox.margin>
+                                    <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                    <ImageView fitHeight="100.0" fitWidth="65.0" layoutX="465.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <HBox.margin>
-                                            <Insets right="32.5" />
-                                        </HBox.margin>
+                                    <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
                                 </children>
+                                <HBox.margin>
+                                    <Insets right="60.0" />
+                                </HBox.margin>
+                            </HBox>
+                            <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
+                                <children>
+                                    <ImageView fx:id="programmingDeck" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/flippedCard.png" />
+                                        </image>
+                                    </ImageView>
+                                </children>
+                                <HBox.margin>
+                                    <Insets left="40.0" />
+                                </HBox.margin>
                             </HBox>
                         </children>
                     </HBox>
