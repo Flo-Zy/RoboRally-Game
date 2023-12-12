@@ -49,7 +49,7 @@ public class Game {
         }
     }
 
-    public void nextPlayer(){ //nextPlayer ist keine getter methode!
+    public void setNextPlayersTurn(){ //nextPlayer ist keine getter methode!
         if(currentPhase == 0) { // 0: Starting-Phase
             playerIndex++;
             currentPlayer = playerList.get(playerIndex);
@@ -57,6 +57,7 @@ public class Game {
         } else { // 1/2/3: Upgrade/Programming/Activation-Phase
             // select nextPlayer closest to antenna
             playerIndex = 0;
+            // update der priorityPlayerList
             checkPriorities();
             currentPlayer = priorityPlayerList.get(playerIndex);
             playerIndex++;
@@ -68,22 +69,36 @@ public class Game {
         int antennaY = 4;
         priorityPlayerList.clear();
 
-        // Create a TreeMap to automatically sort players based on their distance from the antenna
-        TreeMap<Integer, Player> sortedPlayers = new TreeMap<>();
+        // TreeMap, die automatisch alles Player anhand Distanz und Winkel von der Antenne aus sortiert
+        TreeMap<Double, Player> sortedPlayers = new TreeMap<>();
 
-        // Determine position of every player's robot and calculate distance
+        // Bestimme Position von jedem Player Roboter + Berechne Distanz und Winkel zu der Antenne
         for (Player player : playerList) {
             int distanceOfRobotFromAntenna = calculateDistance(player.getRobot().getX(), player.getRobot().getY(), antennaX, antennaY);
-            sortedPlayers.put(distanceOfRobotFromAntenna, player);
+            double angleFromAntenna = calculateAngle(player.getRobot().getX(), player.getRobot().getY(), antennaX, antennaY);
+
+            // Schlüsselwert von Player für TreeMap erstellen aus Distanz und Winkel zu der Antenne
+            double playerKey = distanceOfRobotFromAntenna + angleFromAntenna / 1000.0; // /1000 damit beim Sortieren der Winkel nicht zu viel Einfluss hat
+
+            sortedPlayers.put(playerKey, player);
         }
 
-        // Add players from TreeMap to priorityPlayerList (sorted by distance)
+        // Hinzufügen der Player von der TreeMap zur priorityPlayerList (sortiert nach Distanz und Winkel)
         priorityPlayerList.addAll(sortedPlayers.values());
     }
 
     private int calculateDistance(int x1, int y1, int x2, int y2) {
-        // Assuming Euclidean distance formula
+        // Berechnung Distanz
         return (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+    private double calculateAngle(int x, int y, int centerX, int centerY) {
+        // Berechnung Winkel in Radian
+        double angle = Math.atan2(y - centerY, x - centerX);
+        // Winkel -> Grad und normalisieren zu [0, 360]
+        double degrees = Math.toDegrees(angle);
+        degrees = (degrees + 360) % 360;
+        // Grad -> Radian
+        return Math.toRadians(degrees);
     }
 
     public void activateElements() {

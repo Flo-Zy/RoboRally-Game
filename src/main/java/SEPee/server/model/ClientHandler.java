@@ -12,9 +12,7 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -234,11 +232,12 @@ public class ClientHandler implements Runnable {
                                 Server.getGame().nextCurrentPhase();
                                 Server.setCountPlayerTurns(0);  // in neuer Phase ist keiner dran gewesen bisher
 
+                                // Aktive Spielphase setzen
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
                             } else {
-                                Server.getGame().nextPlayer();
+                                Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der tatsächlich (abhg. von Phase) dran ist
                             }
 
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());

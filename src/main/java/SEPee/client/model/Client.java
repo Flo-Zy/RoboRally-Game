@@ -251,6 +251,11 @@ public class Client extends Application {
                             System.out.println("Card Played");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
                             break;
+                        case "ActivePhase":
+                            System.out.println("Active Phase");
+                            ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
+                            controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
+                            break;
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
@@ -291,11 +296,6 @@ public class Client extends Application {
                                     System.out.println("Aktivierungsphase");
                                     break;
                             }
-                            break;
-                        case "ActivePhase":
-                            System.out.println("Active Phase");
-                            ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
-                            controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
                             break;
                         case "StartingPointTaken":
                             System.out.println("Starting Point Taken");
