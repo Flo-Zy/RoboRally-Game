@@ -4,5 +4,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UTurn {
+public class UTurn extends ProgCard {
 }
