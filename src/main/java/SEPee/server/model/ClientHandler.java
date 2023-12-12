@@ -78,10 +78,6 @@ public class ClientHandler implements Runnable {
 
                             this.player = new Player(playerName, clientId, playerFigure);
 
-
-
-
-
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
                             //playerAdded senden an alle alten Clients
@@ -231,13 +227,12 @@ public class ClientHandler implements Runnable {
 
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
-
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){ // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
                                 Server.getGame().nextCurrentPhase();
-                                Server.setCountPlayerTurns(0);
+                                Server.setCountPlayerTurns(0);  // in neuer Phase ist keiner dran gewesen bisher
 
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);

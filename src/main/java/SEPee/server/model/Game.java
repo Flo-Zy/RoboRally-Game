@@ -60,7 +60,6 @@ public class Game {
             checkPriorities();
             currentPlayer = priorityPlayerList.get(playerIndex);
             playerIndex++;
-            //return currentPlayer;
         }
     }
 

@@ -302,7 +302,7 @@ public class ClientController {
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
         for (Player player : Client.getPlayerListClient()) {
-            String playerName = player.getName(); // Assuming the Player class has a method getName() that returns the name
+            String playerName = player.getName();
             playerNames.add(playerName);
         }
     }
@@ -336,16 +336,14 @@ public class ClientController {
                 mapController = dizzyHighwayController;
 
                 dizzyHighwayController.init(client, primaryStage);
-
                 dizzyHighwayController.setRootVBox(DizzyHighwayMap);
 
                 // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
-
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
-                //Hidde Bereit nicht bereit  button
+                //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -475,7 +473,7 @@ public class ClientController {
     }
 
 
-    public void initDrawPile(clientId){
+    public void initDrawPile(int clientId){
         mapController.initializeDrawPile(clientId);
     }
 

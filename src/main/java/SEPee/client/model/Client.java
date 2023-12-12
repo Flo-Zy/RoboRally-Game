@@ -62,13 +62,13 @@ public class Client extends Application {
 
             ClientController controller = loader.getController();
 
-            // Empfange HelloClient vom Server
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            // Receive HelloClient from the server
+            // Empfange HelloClient vom Server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
+
             if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
                 boolean x = true;
                 while (x) {
@@ -146,8 +146,6 @@ public class Client extends Application {
                             System.out.println("Alive");
                             break;
                         case "Welcome":
-
-
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
@@ -207,7 +205,6 @@ public class Client extends Application {
                                 case "DizzyHighway":
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     mapController = loader.getController();
-
                                     break;
                                 default:
                                     System.out.println("Invalid Map");

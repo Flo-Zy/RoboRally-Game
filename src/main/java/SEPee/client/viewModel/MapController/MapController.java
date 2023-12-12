@@ -4,6 +4,6 @@ import SEPee.server.model.Player;
 
 public abstract class MapController {
     public void avatarAppear(Player player, int x, int y){}
-    public void initializeDrawPile(ClientId clientId) {
+    public void initializeDrawPile(int clientId) {
     }
 }
