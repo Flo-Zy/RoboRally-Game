@@ -218,15 +218,18 @@ public class ClientHandler implements Runnable {
                             System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
+                            /*
                             int messageFrom = Player.getClientIdFromSocket(this.clientSocket);
 
                             System.out.println("message from socket :" + this.clientSocket);
 
                             System.out.println("message from :" + messageFrom);
 
-                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), messageFrom);
+                             */
 
-                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + messageFrom);
+                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
+
+                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
