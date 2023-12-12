@@ -17,6 +17,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+import static SEPee.server.model.Player.*;
+
 @Getter
 @Setter
 
@@ -74,6 +76,7 @@ public class ClientHandler implements Runnable {
 
                             //associate socket with ID in the Player object
                             player.associateSocketWithId(clientSocket, clientId);
+
 
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -212,9 +215,11 @@ public class ClientHandler implements Runnable {
                             System.out.println("Set Starting Point");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), this.clientId);
+                            int messageFrom = Player.socketIdMap.get(clientSocket);
 
-                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + this.clientId);
+                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), messageFrom);
+
+                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + messageFrom);
 
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);

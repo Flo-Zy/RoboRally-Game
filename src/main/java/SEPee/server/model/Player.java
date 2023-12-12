@@ -19,7 +19,7 @@ public class Player {
     private Card[] hand;
     private PlayerMat playerMat;
     private int checkpointTokens;
-    private static Map<Socket, Integer> socketIdMap;
+    static Map<Socket, Integer> socketIdMap;
 
 
     public Player(String name, int id, int figure){
