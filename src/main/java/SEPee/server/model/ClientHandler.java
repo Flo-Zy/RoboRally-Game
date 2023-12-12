@@ -3,11 +3,8 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
-import SEPee.server.model.field.*;
 import SEPee.server.model.gameBoard.*;
-import com.google.gson.Gson;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,11 +12,14 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import SEPee.server.model.Game;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
+
+import static SEPee.server.model.Player.*;
 
 @Getter
 @Setter
@@ -31,6 +31,7 @@ public class ClientHandler implements Runnable {
     private List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
+
 
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
@@ -66,18 +67,19 @@ public class ClientHandler implements Runnable {
                             playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
+
                             for(int i = 0; i < Server.getPlayerList().size(); i++){
                                 if(playerFigure == Server.getPlayerList().get(i).getFigure()){
                                     clientId = Server.getPlayerList().get(i).getId();
                                 }
                             }
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
-
+                            associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure);
 
-                            //associate socket with ID in the Player object
-                            player.associateSocketWithId(clientSocket, clientId);
+
+
 
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -212,21 +214,36 @@ public class ClientHandler implements Runnable {
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
                             break;
                         case "SetStartingPoint":
-                            Server.setCountPlayerTruns(Server.getCountPlayerTruns()+1);
-                            System.out.println("Set Starting Point");
+                            Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
+                            System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), player.getId());
+                            /*
+                            int messageFrom = Player.getClientIdFromSocket(this.clientSocket);
+
+                            System.out.println("message from socket :" + this.clientSocket);
+
+                            System.out.println("message from :" + messageFrom);
+
+                             */
+
+                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
+
+                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+
+
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTruns() == Server.getGame().getPlayerList().size()){
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
                                 Server.getGame().nextCurrentPhase();
-                                Server.setCountPlayerTruns(0);
+                                Server.setCountPlayerTurns(0);
 
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
+                            } else {
+                                Server.getGame().nextPlayer();
                             }
 
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());

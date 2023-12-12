@@ -1,5 +1,4 @@
 package SEPee.server.model;
-
 import lombok.Getter;
 import lombok.Setter;
 

@@ -2,6 +2,7 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
+import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
 import SEPee.serialisierung.messageType.SetStatus;
@@ -37,20 +38,22 @@ public class ClientController {
     private Button visibilityButton;
     @FXML
     private Button readyButton;
-
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
     private boolean ready = false;
+    @Setter
+    @Getter
     private String name;
+    @Setter
+    @Getter
     private int figure;
+    @Setter
+    @Getter
     private int id;
-    @Getter
-    @Setter
-    private double x = 0;
-    @Getter
-    @Setter
-    private double y = 0;
+    public MapController mapController;
+    private ArrayList<Integer> takenStartPoints = new ArrayList<>();
+
 
     private ArrayList<String> playerNames = new ArrayList<>();
     @FXML
@@ -60,14 +63,16 @@ public class ClientController {
 
     @FXML
     private VBox DizzyHighwayMap;
-    private ArrayList<Integer> takenStartPoints = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private int currentPhase;
+
     @Getter
     private int startPointX;
     @Getter
     private int startPointY;
-    @Getter
-    @Setter
-    private int currentPhase;
+
 
 
     public void init(Client Client, Stage stage) {
@@ -302,7 +307,6 @@ public class ClientController {
         }
     }
 
-
     public String showSelectMapDialog() {
 
         //ChoiceDialog mit der Liste der Maps
@@ -320,30 +324,6 @@ public class ClientController {
         return selectedMap;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getFigure() {
-        return figure;
-    }
-
-    public void setFigure(int figure) {
-        this.figure = figure;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
@@ -352,6 +332,8 @@ public class ClientController {
 
                 // Get  controller
                 DizzyHighwayController dizzyHighwayController = loader.getController();
+
+                mapController = dizzyHighwayController;
 
                 dizzyHighwayController.init(client, primaryStage);
 
@@ -371,6 +353,30 @@ public class ClientController {
             }
         });
 
+    }
+
+    public void addTakenStartingPoints(int x, int y){
+        int combinedValue = x*10 + y;
+        switch(combinedValue){
+            case 11:
+                takenStartPoints.add(1);
+                break;
+            case 3:
+                takenStartPoints.add(2);
+                break;
+            case 14:
+                takenStartPoints.add(3);
+                break;
+            case 15:
+                takenStartPoints.add(4);
+                break;
+            case 6:
+                takenStartPoints.add(5);
+                break;
+            case 18:
+                takenStartPoints.add(6);
+                break;
+        }
     }
 
     public void setStartingPoint() {
@@ -431,32 +437,6 @@ public class ClientController {
                 selectedButton.setDisable(true); // Disable the selected button
             }
             setStartingPointXY(selectedStartingpoint);
-            }
-    }
-
-
-
-    public void addTakenStartingPoints(int x, int y){
-        int combinedValue = x*10 + y;
-        switch(combinedValue){
-            case 11:
-                takenStartPoints.add(1);
-                break;
-            case 3:
-                takenStartPoints.add(2);
-                break;
-            case 14:
-                takenStartPoints.add(3);
-                break;
-            case 15:
-                takenStartPoints.add(4);
-                break;
-            case 6:
-                takenStartPoints.add(5);
-                break;
-            case 18:
-                takenStartPoints.add(6);
-                break;
         }
     }
 
@@ -488,6 +468,14 @@ public class ClientController {
                 break;
         }
     }
+
+    public void putAvatarDown(Player player, int x, int y){
+        mapController.avatarAppear(player, x, y);
+
+    }
+
+
+
 
 
 }

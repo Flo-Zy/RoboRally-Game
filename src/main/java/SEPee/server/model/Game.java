@@ -46,18 +46,18 @@ public class Game {
         }
     }
 
-    public Player nextPlayer(){
+    public void nextPlayer(){ //nextPlayer ist keine getter methode!
         if(currentPhase == 0) { // 0: Starting-Phase
             playerIndex++;
             currentPlayer = playerList.get(playerIndex);
-            return currentPlayer;
+            //return currentPlayer;
         } else { // 1/2/3: Upgrade/Programming/Activation-Phase
             // select nextPlayer closest to antenna
             playerIndex = 0;
             checkPriorities();
             currentPlayer = priorityPlayerList.get(playerIndex);
             playerIndex++;
-            return currentPlayer;
+            //return currentPlayer;
         }
     }
 

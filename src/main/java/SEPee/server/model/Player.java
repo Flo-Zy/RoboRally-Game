@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
@@ -19,19 +20,16 @@ public class Player {
     private Card[] hand;
     private PlayerMat playerMat;
     private int checkpointTokens;
-    private static Map<Socket, Integer> socketIdMap;
-
+    private static Map<Socket, Integer> socketIdMap = new ConcurrentHashMap<>();
 
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;
         this.figure=figure;
         this.ready = false;
-        this.socketIdMap = new HashMap<>(); // Initialize the HashMap
-
     }
 
-    public void associateSocketWithId(Socket socket, int clientId) {
+    public static void associateSocketWithId(Socket socket, int clientId) {
         socketIdMap.put(socket, clientId);
     }
 

@@ -2,15 +2,30 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.ClientController;
+import SEPee.server.model.Player;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import lombok.Getter;
+import lombok.Setter;
 
-public class DizzyHighwayController{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+public class DizzyHighwayController extends MapController{
+
+    @Setter
     @FXML
     private VBox rootVBox;
     @FXML
@@ -26,6 +41,8 @@ public class DizzyHighwayController{
     @FXML
     private ImageView field03b;
     @FXML
+    private ImageView field03c;
+    @FXML
     private ImageView field04;
     @FXML
     private ImageView field05;
@@ -38,35 +55,80 @@ public class DizzyHighwayController{
     @FXML
     private ImageView field09;
     private Stage stage;
-    @Getter
-    public double x = -9;
-    @Getter
-    public double y = -9;
 
-    public void init(Client Client, Stage stage) {
+    @FXML
+    private ImageView Avatar1;
+    @FXML
+    private ImageView Avatar2;
+    @FXML
+    public ImageView Avatar3;
+    @FXML
+    public ImageView Avatar4;
+    @FXML
+    public ImageView Avatar5;
+    @FXML
+    public ImageView Avatar6;
+
+    public void init(Client client, Stage stage) {
         this.stage = stage;
 
     }
 
-    public void setRootVBox(VBox rootVBox) {
-        this.rootVBox = rootVBox;
-    }
-    public void handleStartFieldClick() {
-            field03b.setOnMouseClicked(event -> {
-                int colIndex;
-                if(GridPane.getColumnIndex(field03b) == null){
-                    x = 0;
-                }else{
-                    x = GridPane.getColumnIndex(field03b);
-                }
-                int rowIndex;
-                if(GridPane.getRowIndex(field03b) == null){
-                    y = 0;
-                }else{
-                    y = GridPane.getRowIndex(field03b);
-                }
 
-            });
+    public void avatarAppear (Player player, int x, int y) {
+        System.out.println("getFigure: " + player.getFigure());
+
+        switch (player.getFigure()) {
+            case 1:
+                GridPane.setColumnIndex(Avatar1, x);
+                GridPane.setRowIndex(Avatar1, y);
+                Avatar1.setVisible(true);
+                Avatar1.setManaged(true);
+                break;
+
+            case 2:
+                GridPane.setColumnIndex(Avatar2, x);
+                GridPane.setRowIndex(Avatar2, y);
+                Avatar2.setVisible(true);
+                Avatar2.setManaged(true);
+                break;
+
+            case 3:
+                GridPane.setColumnIndex(Avatar3, x);
+                GridPane.setRowIndex(Avatar3, y);
+                Avatar3.setVisible(true);
+                Avatar3.setManaged(true);
+                break;
+
+            case 4:
+                GridPane.setColumnIndex(Avatar4, x);
+                GridPane.setRowIndex(Avatar4, y);
+                Avatar4.setVisible(true);
+                Avatar4.setManaged(true);
+                break;
+
+            case 5:
+                GridPane.setColumnIndex(Avatar5, x);
+                GridPane.setRowIndex(Avatar5, y);
+                Avatar5.setVisible(true);
+                Avatar5.setManaged(true);
+                break;
+
+            case 6:
+                GridPane.setColumnIndex(Avatar6, x);
+                GridPane.setRowIndex(Avatar6, y);
+                Avatar6.setVisible(true);
+                Avatar6.setManaged(true);
+                break;
+
+            default:
+                System.out.println("Robot not found.");
+                break;
         }
     }
+
+
+
+
+}
 
