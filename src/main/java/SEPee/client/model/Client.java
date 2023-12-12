@@ -303,7 +303,7 @@ public class Client extends Application {
                             }
  */
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
-                            Player avatarPlayer = playerListClient.get(takenClientID - 1);
+                            Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
 
