@@ -2,6 +2,7 @@ package SEPee.server.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import SEPee.server.model.field.Field;
 import lombok.Getter;
@@ -61,26 +62,26 @@ public class Game {
     }
 
     public void checkPriorities() {
-        int minDistanceFromAntenna = 0;
+        int antennaX = 0;
         int antennaY = 4;
         priorityPlayerList.clear();
-        priorityPlayerList = new ArrayList<>(playerList.size());
-        // determine position of every player's robot
-        for (int i=0; i<playerList.size(); i++) {
-            int distanceOfRobotFromAntenna = playerList.get(i).getRobot().getX() + Math.abs((playerList.get(i).getRobot().getY() - antennaY));
 
-            if (distanceOfRobotFromAntenna > minDistanceFromAntenna) { // größere Entfernung zur Antenne
-                priorityPlayerList.add(playerList.get(i));
+        // Create a TreeMap to automatically sort players based on their distance from the antenna
+        TreeMap<Integer, Player> sortedPlayers = new TreeMap<>();
 
-            }
-            if (distanceOfRobotFromAntenna < minDistanceFromAntenna) { // kleinste Entfernung zur Antenne
-                minDistanceFromAntenna = distanceOfRobotFromAntenna;
-                priorityPlayerList.add(playerList.get(i));
-            } else if (distanceOfRobotFromAntenna == minDistanceFromAntenna) { // gleiche Entfernung zur Antenne
-
-            }
+        // Determine position of every player's robot and calculate distance
+        for (Player player : playerList) {
+            int distanceOfRobotFromAntenna = calculateDistance(player.getRobot().getX(), player.getRobot().getY(), antennaX, antennaY);
+            sortedPlayers.put(distanceOfRobotFromAntenna, player);
         }
-        return priorityPlayerList;
+
+        // Add players from TreeMap to priorityPlayerList (sorted by distance)
+        priorityPlayerList.addAll(sortedPlayers.values());
+    }
+
+    private int calculateDistance(int x1, int y1, int x2, int y2) {
+        // Assuming Euclidean distance formula
+        return (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     public void activateElements() {
