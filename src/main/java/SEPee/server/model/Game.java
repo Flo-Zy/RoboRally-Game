@@ -39,9 +39,12 @@ public class Game {
     }
 
     public void nextCurrentPhase(){
-        if(currentPhase == 3){
+        currentPhase++;
+
+        if(currentPhase == 3) {
             currentPhase = 1;
-        }else{
+
+        } else if (currentPhase == 1) { // überspringen der Upgrade Phase
             currentPhase++;
         }
     }

@@ -18,6 +18,5 @@ public class Robot {
     }
 
     public void fireLaser(Orientation target){
-
     }
 }

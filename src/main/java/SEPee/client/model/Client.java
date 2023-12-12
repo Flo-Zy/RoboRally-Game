@@ -277,6 +277,18 @@ public class Client extends Application {
                                     break;
                                 case 2:
                                     System.out.println("Programmierphase");
+                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+
+
+                                        //init drawpil
+                                        controller.initDrawPile(clientId);
+
+
+                                        // ziehen vom Drawpile
+
+                                        // string an server?
+                                    }
+
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");

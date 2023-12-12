@@ -2,8 +2,11 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.ClientController;
+import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.PlayerTurning;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
+import SEPee.server.model.card.Decks;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -24,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class DizzyHighwayController extends MapController{
+public class DizzyHighwayController extends MapController {
 
     @Setter
     @FXML
@@ -70,57 +73,98 @@ public class DizzyHighwayController extends MapController{
     @FXML
     public ImageView Avatar6;
 
+    private Map<Player, Robot> playerRobotMap; //store player and robot
+    private Map<Robot, ImageView> robotImageViewMap; // link robots and imageviews
+
     public void init(Client client, Stage stage) {
         this.stage = stage;
+        playerRobotMap = new HashMap<>();
+        robotImageViewMap = new HashMap<>();
+        playerDrawPile = new HashMap<>(); //init programmingPile
 
     }
 
 
-    public void avatarAppear (Player player, int x, int y) {
+    public void avatarAppear(Player player, int x, int y) {
         System.out.println("getFigure: " + player.getFigure());
 
         switch (player.getFigure()) {
             case 1:
-                Robot robot1 = new Robot(x, y);
-                playerRobotMap.put(player, robot1); //store in hashmap
-                updateAvatarPosition(robot1, Avatar1);
+                Robot robot1 = new Robot(x, y); // set coordinates von robot1
+                playerRobotMap.put(player, robot1); //link player n robot
 
+                ImageView avatar1ImageView = Avatar1; // store imageview
+                robotImageViewMap.put(robot1, avatar1ImageView); // link imageview w robot
 
+                updateAvatarPosition(robot1); //put on selectedStartPoint
+
+                avatar1ImageView.setVisible(true); //make visible
+                avatar1ImageView.setManaged(true);
+
+                //rotateAvatar(player.getId(), "clockwise"); //wird rotiert hingestellt weil PlayerTurning erst mit karten geschieht
 
                 break;
             case 2:
-                GridPane.setColumnIndex(Avatar2, x);
-                GridPane.setRowIndex(Avatar2, y);
-                Avatar2.setVisible(true);
-                Avatar2.setManaged(true);
+                Robot robot2 = new Robot(x, y);
+                playerRobotMap.put(player, robot2);
+
+                ImageView avatar2ImageView = Avatar2;
+                robotImageViewMap.put(robot2, avatar2ImageView);
+                updateAvatarPosition(robot2);
+
+                avatar2ImageView.setVisible(true);
+                avatar2ImageView.setManaged(true);
+
+                //moveRobotTester(robot2);
+
                 break;
 
             case 3:
-                GridPane.setColumnIndex(Avatar3, x);
-                GridPane.setRowIndex(Avatar3, y);
-                Avatar3.setVisible(true);
-                Avatar3.setManaged(true);
+                Robot robot3 = new Robot(x, y);
+                playerRobotMap.put(player, robot3);
+
+                ImageView avatar3ImageView = Avatar3;
+                robotImageViewMap.put(robot3, avatar3ImageView);
+                updateAvatarPosition(robot3);
+
+                avatar3ImageView.setVisible(true);
+                avatar3ImageView.setManaged(true);
                 break;
 
             case 4:
-                GridPane.setColumnIndex(Avatar4, x);
-                GridPane.setRowIndex(Avatar4, y);
-                Avatar4.setVisible(true);
-                Avatar4.setManaged(true);
+                Robot robot4 = new Robot(x, y);
+                playerRobotMap.put(player, robot4);
+
+                ImageView avatar4ImageView = Avatar4;
+                robotImageViewMap.put(robot4, avatar4ImageView);
+                updateAvatarPosition(robot4);
+
+                avatar4ImageView.setVisible(true);
+                avatar4ImageView.setManaged(true);
                 break;
 
             case 5:
-                GridPane.setColumnIndex(Avatar5, x);
-                GridPane.setRowIndex(Avatar5, y);
-                Avatar5.setVisible(true);
-                Avatar5.setManaged(true);
+                Robot robot5 = new Robot(x, y);
+                playerRobotMap.put(player, robot5);
+
+                ImageView avatar5ImageView = Avatar5;
+                robotImageViewMap.put(robot5, avatar5ImageView);
+                updateAvatarPosition(robot5);
+
+                avatar5ImageView.setVisible(true);
+                avatar5ImageView.setManaged(true);
                 break;
 
             case 6:
-                GridPane.setColumnIndex(Avatar6, x);
-                GridPane.setRowIndex(Avatar6, y);
-                Avatar6.setVisible(true);
-                Avatar6.setManaged(true);
+                Robot robot6 = new Robot(x, y);
+                playerRobotMap.put(player, robot6);
+
+                ImageView avatar6ImageView = Avatar6;
+                robotImageViewMap.put(robot6, avatar6ImageView);
+                updateAvatarPosition(robot6);
+
+                avatar6ImageView.setVisible(true);
+                avatar6ImageView.setManaged(true);
                 break;
 
             default:
@@ -129,8 +173,87 @@ public class DizzyHighwayController extends MapController{
         }
     }
 
+    private void updateAvatarPosition(Robot robot) {
+        ImageView imageView = robotImageViewMap.get(robot);
+        GridPane.setColumnIndex(imageView, robot.getX());
+        GridPane.setRowIndex(imageView, robot.getY());
 
+        // send messagetype move
+    }
+
+    private void rotateAvatar(int clientId, String rotateDirection) {
+        PlayerTurning playerTurning = new PlayerTurning(clientId, rotateDirection);
+        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+        Client.getWriter().println(serializedPlayerTurning);
+        // send messageType PlayerTurning
+    }
+
+    //tester fur spatere kartenimpplementierung:
+    public void moveRobotTester(Robot robot) {
+        if (robot != null) {
+            // Move 1 field
+            int currentX = robot.getX();
+            int currentY = robot.getY();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            // Move in the x-axis (for example)
+            robot.setX(currentX + 1);
+            updateAvatarPosition(robot); // Update the robot's position on the grid
+
+            // Wait for one second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Move 2 fields
+            robot.setX(currentX + 2); // Move 2 fields ahead from the previous position
+            updateAvatarPosition(robot); // Update the robot's position on the grid
+
+            // Wait for one second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //rotateAvatar(2, "clockwise");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            robot.setX(currentX + 3); // Move 2 fields ahead from the previous position
+            updateAvatarPosition(robot); // Update the robot's position on the grid
+
+            // Wait for one second
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Repeat this process for the y-axis or any other required movements
+        }
+    }
+
+    public void initalizeDrawPile(){
+        Decks playerDrawPile = new Decks();
+        player.put(player, playerDrawPile);
+    }
 
 
 }
+
+
+
 

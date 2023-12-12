@@ -475,7 +475,8 @@ public class ClientController {
     }
 
 
-
-
+    public void initDrawPile(clientId){
+        mapController.initializeDrawPile(clientId);
+    }
 
 }
