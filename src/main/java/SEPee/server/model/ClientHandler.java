@@ -3,11 +3,8 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
-import SEPee.server.model.field.*;
 import SEPee.server.model.gameBoard.*;
-import com.google.gson.Gson;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,9 +12,8 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.List;
-import SEPee.server.model.Game;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -212,17 +208,21 @@ public class ClientHandler implements Runnable {
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
                             break;
                         case "SetStartingPoint":
-                            Server.setCountPlayerTruns(Server.getCountPlayerTruns()+1);
+                            Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
                             System.out.println("Set Starting Point");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), player.getId());
+                            StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), this.clientId);
+
+                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + this.clientId);
+
+
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTruns() == Server.getGame().getPlayerList().size()){
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
                                 Server.getGame().nextCurrentPhase();
-                                Server.setCountPlayerTruns(0);
+                                Server.setCountPlayerTurns(0);
 
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);

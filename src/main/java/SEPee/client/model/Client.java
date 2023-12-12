@@ -290,7 +290,7 @@ public class Client extends Application {
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
                             controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
-
+/*
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             for (Player player : playerListClient) {
                                 if (player.getId() == takenClientID) {
@@ -299,6 +299,12 @@ public class Client extends Application {
                                     break;
                                 }
                             }
+ */
+                            int takenClientID = startingPointTaken.getMessageBody().getClientID();
+                            Player avatarPlayer = playerListClient.get(takenClientID - 1); // minus 1 weil playerListClient
+                            controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
+
                             break;
 
                         case "YourCards":
