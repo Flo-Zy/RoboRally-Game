@@ -3,6 +3,7 @@ package SEPee.client.viewModel.MapController;
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.ClientController;
 import SEPee.server.model.Player;
+import SEPee.server.model.Robot;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -80,12 +81,13 @@ public class DizzyHighwayController extends MapController{
 
         switch (player.getFigure()) {
             case 1:
-                GridPane.setColumnIndex(Avatar1, x);
-                GridPane.setRowIndex(Avatar1, y);
-                Avatar1.setVisible(true);
-                Avatar1.setManaged(true);
-                break;
+                Robot robot1 = new Robot(x, y);
+                playerRobotMap.put(player, robot1); //store in hashmap
+                updateAvatarPosition(robot1, Avatar1);
 
+
+
+                break;
             case 2:
                 GridPane.setColumnIndex(Avatar2, x);
                 GridPane.setRowIndex(Avatar2, y);
