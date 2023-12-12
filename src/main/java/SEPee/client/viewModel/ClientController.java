@@ -42,8 +42,14 @@ public class ClientController {
     private PrintWriter writer;
     private BufferedReader reader;
     private boolean ready = false;
+    @Setter
+    @Getter
     private String name;
+    @Setter
+    @Getter
     private int figure;
+    @Setter
+    @Getter
     private int id;
     public MapController mapController;
     private ArrayList<Integer> takenStartPoints = new ArrayList<>();
@@ -316,30 +322,6 @@ public class ClientController {
             selectedMap = result.get();
         }
         return selectedMap;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getFigure() {
-        return figure;
-    }
-
-    public void setFigure(int figure) {
-        this.figure = figure;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {

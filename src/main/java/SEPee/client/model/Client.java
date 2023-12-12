@@ -257,6 +257,8 @@ public class Client extends Application {
                         case "CurrentPlayer":
                             System.out.println("Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
+                            System.out.println("Client current Player checker: " + currentPlayer.getMessageBody().getClientID());
+
                             switch (controller.getCurrentPhase()) {
                                 case 0:
                                     if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
@@ -301,9 +303,10 @@ public class Client extends Application {
                             }
  */
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
-                            Player avatarPlayer = playerListClient.get(takenClientID); // minus 1 weil playerListClient
+                            Player avatarPlayer = playerListClient.get(takenClientID - 1);
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
+
 
                             break;
 

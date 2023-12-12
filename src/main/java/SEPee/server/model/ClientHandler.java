@@ -12,7 +12,9 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +31,7 @@ public class ClientHandler implements Runnable {
     private List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
+
 
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
@@ -64,18 +67,18 @@ public class ClientHandler implements Runnable {
                             playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
+
                             for(int i = 0; i < Server.getPlayerList().size(); i++){
                                 if(playerFigure == Server.getPlayerList().get(i).getFigure()){
                                     clientId = Server.getPlayerList().get(i).getId();
                                 }
                             }
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
-
+                            associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure);
 
-                            //associate socket with ID in the Player object
-                            player.associateSocketWithId(clientSocket, clientId);
+
 
 
 
@@ -212,10 +215,14 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SetStartingPoint":
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
-                            System.out.println("Set Starting Point");
+                            System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            int messageFrom = Player.socketIdMap.get(clientSocket);
+                            int messageFrom = Player.getClientIdFromSocket(this.clientSocket);
+
+                            System.out.println("message from socket :" + this.clientSocket);
+
+                            System.out.println("message from :" + messageFrom);
 
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), messageFrom);
 
@@ -232,6 +239,8 @@ public class ClientHandler implements Runnable {
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
+                            } else {
+                                Server.getGame().nextPlayer();
                             }
 
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());

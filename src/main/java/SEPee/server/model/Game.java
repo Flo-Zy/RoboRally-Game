@@ -52,7 +52,7 @@ public class Game {
             playerIndex++;
             currentPlayer = playerList.get(playerIndex);
         }else{
-
+            //logik fur nachste phasen
         }
 
     }

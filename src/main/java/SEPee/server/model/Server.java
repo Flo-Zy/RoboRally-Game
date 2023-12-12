@@ -20,6 +20,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 @Getter
 @Setter
 public class Server extends Thread{
@@ -94,9 +95,18 @@ public class Server extends Thread{
                     if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
                         ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                         clients.add(clientHandler);
+
+                        //associate socket with ID in the Player object
+                        Player.associateSocketWithId(clientSocket, clientID);
+
+                        System.out.println("101 server: " + Player.getClientIdFromSocket(clientSocket));
+
+
                         new Thread(clientHandler).start();
                         System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                         //welcome erstellen und an den Client schicken
+
+
 
                         System.out.println(clientID);
                         Welcome welcome = new Welcome(clientID);
