@@ -53,18 +53,32 @@ public class Game {
         } else { // 1/2/3: Upgrade/Programming/Activation-Phase
             // select nextPlayer closest to antenna
             playerIndex = 0;
-            checkPriorities(gameBoard);
+            checkPriorities();
             currentPlayer = priorityPlayerList.get(playerIndex);
             playerIndex++;
             return currentPlayer;
         }
     }
 
-    public ArrayList<Player> checkPriorities(List<List<List<Field>>> gameBoard) {
+    public void checkPriorities() {
+        int minDistanceFromAntenna = 0;
+        int antennaY = 4;
+        priorityPlayerList.clear();
         priorityPlayerList = new ArrayList<>(playerList.size());
-        // determ position of every player's robot
+        // determine position of every player's robot
         for (int i=0; i<playerList.size(); i++) {
-            playerList.get(i).getRobot().getX();
+            int distanceOfRobotFromAntenna = playerList.get(i).getRobot().getX() + Math.abs((playerList.get(i).getRobot().getY() - antennaY));
+
+            if (distanceOfRobotFromAntenna > minDistanceFromAntenna) { // größere Entfernung zur Antenne
+                priorityPlayerList.add(playerList.get(i));
+
+            }
+            if (distanceOfRobotFromAntenna < minDistanceFromAntenna) { // kleinste Entfernung zur Antenne
+                minDistanceFromAntenna = distanceOfRobotFromAntenna;
+                priorityPlayerList.add(playerList.get(i));
+            } else if (distanceOfRobotFromAntenna == minDistanceFromAntenna) { // gleiche Entfernung zur Antenne
+
+            }
         }
         return priorityPlayerList;
     }
