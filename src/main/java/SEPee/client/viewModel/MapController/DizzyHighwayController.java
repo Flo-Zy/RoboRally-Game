@@ -8,6 +8,7 @@ import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.Decks;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;

@@ -300,16 +300,17 @@ public class Client extends Application {
                                         String serializedRightTurn = Serialisierer.serialize(rightTurn);
                                         writer.println(serializedRightTurn);
 
-
-
-                                    PlayCard playCard3 = new PlayCard("MoveIII");
+                                        PlayCard playCard3 = new PlayCard("MoveIII");
                                         String serializedPlayCard3 = Serialisierer.serialize(playCard3);
                                         writer.println(serializedPlayCard3);
 
+                                        PlayCard leftTurn = new PlayCard("LeftTurn");
+                                        String serializedleftTurn = Serialisierer.serialize(leftTurn);
+                                        writer.println(serializedleftTurn);
 
-
-
-
+                                        PlayCard playCard4 = new PlayCard("MoveII");
+                                        String serializedPlayCard4 = Serialisierer.serialize(playCard4);
+                                        writer.println(serializedPlayCard4);
 
                                         // Schritt 2: Auswählen vom DrawPile
 

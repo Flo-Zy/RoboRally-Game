@@ -3,10 +3,7 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
-import SEPee.server.model.card.progCard.MoveI;
-import SEPee.server.model.card.progCard.MoveIII;
-import SEPee.server.model.card.progCard.MoveII;
-import SEPee.server.model.card.progCard.RightTurn;
+import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.*;
 
 import java.io.BufferedReader;
@@ -277,6 +274,7 @@ public class ClientHandler implements Runnable {
 
                                     Movement movement = new Movement(clientID, x, y);
                                     String serializedMovement = Serialisierer.serialize(movement);
+                                    Thread.sleep(750);
                                     broadcast(serializedMovement);
                                     break;
 
@@ -289,6 +287,7 @@ public class ClientHandler implements Runnable {
 
                                     Movement movement2 = new Movement(clientID2, x2, y2);
                                     String serializedMovement2 = Serialisierer.serialize(movement2);
+                                    Thread.sleep(750);
                                     broadcast(serializedMovement2);
                                     break;
 
@@ -302,6 +301,7 @@ public class ClientHandler implements Runnable {
 
                                     Movement movement3 = new Movement(clientID3, x3, y3);
                                     String serializedMovement3 = Serialisierer.serialize(movement3);
+                                    Thread.sleep(750);
                                     broadcast(serializedMovement3);
                                     break;
                                 case "PowerUp":
@@ -310,20 +310,19 @@ public class ClientHandler implements Runnable {
 
                                 case "RightTurn":
                                     RightTurn.makeEffect(this.robot);
-
-                                    int clientIDRightTurn = this.clientId;
-                                    String newOrientation = this.robot.getOrientation();
-
-
-                                    PlayerTurning playerTurning = new PlayerTurning(clientIDRightTurn, newOrientation);
-                                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                                    writer.println(serializedPlayerTurning);
-
-
+                                    int clientIDRightTurn = this.clientId;;
+                                    PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
+                                    String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
+                                    Thread.sleep(750);
+                                    broadcast(serializedPlayerTurningRight);
                                     break;
-
                                 case "LeftTurn":
-
+                                    LeftTurn.makeEffect(this.robot);
+                                    int clientIDLeftTurn = this.clientId;;
+                                    PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
+                                    String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
+                                    Thread.sleep(750);
+                                    broadcast(serializedPlayerTurningLeft);
                                     break;
 
                                 case "UTurn":
@@ -459,6 +458,8 @@ public class ClientHandler implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace(); // Other IO exceptions can be handled separately if needed
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
 
         } catch (IOException e) {
