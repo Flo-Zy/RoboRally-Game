@@ -69,7 +69,6 @@ public class DizzyHighwayController extends MapController {
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> playerDrawPileMap;
 
-
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
