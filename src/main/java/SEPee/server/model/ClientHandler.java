@@ -3,11 +3,10 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
-import SEPee.server.model.card.Card;
-import SEPee.server.model.card.progCard.Move1;
-import SEPee.server.model.card.progCard.ProgCard;
+import SEPee.server.model.card.progCard.MoveI;
+import SEPee.server.model.card.progCard.MoveIII;
+import SEPee.server.model.card.progCard.MoveII;
 import SEPee.server.model.gameBoard.*;
-import SEPee.server.model.Robot;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,11 +15,8 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -121,7 +117,7 @@ public class ClientHandler implements Runnable {
                             //                          }
 
 
-                            this.robot = new Robot(0,0,"right");
+                            this.robot = new Robot(0,0,"right"); //initialize robots server side
 
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -271,8 +267,8 @@ public class ClientHandler implements Runnable {
 
                                     break;
 
-                                case "Move1":
-                                    Move1.makeEffect(this.robot);
+                                case "MoveI":
+                                    MoveI.makeEffect(this.robot);
 
                                     int x = this.robot.getX();
                                     int y = this.robot.getY();
@@ -283,11 +279,21 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedMovement);
                                     break;
 
-                                case "Move2":
+                                case "MoveII":
+                                    MoveII.makeEffect(this.robot);
 
+                                    int x2 = this.robot.getX();
+                                    int y2 = this.robot.getY();
+                                    int clientID2 = this.clientId;
+
+                                    Movement movement2 = new Movement(clientID2, x2, y2);
+                                    String serializedMovement2 = Serialisierer.serialize(movement2);
+                                    broadcast(serializedMovement2);
                                     break;
 
-                                case "Move3":
+
+                                case "MoveIII":
+                                    MoveIII.makeEffect(this.robot);
 
                                     break;
                                 case "PowerUp":
@@ -324,6 +330,9 @@ public class ClientHandler implements Runnable {
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
 
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+
+                            this.robot.setY(setStartingPoint.getMessageBody().getY());
+                            this.robot.setX(setStartingPoint.getMessageBody().getX());
 /*
                             switch (player.getFigure()) {
                                 case 1:

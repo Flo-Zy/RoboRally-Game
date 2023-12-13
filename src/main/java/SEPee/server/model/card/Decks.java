@@ -42,13 +42,13 @@ public class Decks {
 
     private void initializeDeck(List<Card> deck) {
         for (int i = 0; i < 5; i++) {
-            deck.add(new Move1());
+            deck.add(new MoveI());
         }
         for (int i = 0; i < 3; i++) {
-            deck.add(new Move2());
+            deck.add(new MoveIII());
         }
         for (int i = 0; i < 1; i++) {
-            deck.add(new Move3());
+            deck.add(new MoveII());
         }
         for (int i = 0; i < 3; i++) {
             deck.add(new RightTurn());

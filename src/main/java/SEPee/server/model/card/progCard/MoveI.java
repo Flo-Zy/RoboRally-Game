@@ -1,16 +1,15 @@
 package SEPee.server.model.card.progCard;
-import SEPee.server.model.ClientHandler;
 import SEPee.server.model.Robot;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Move1 extends ProgCard {
+public class MoveI extends ProgCard {
 
 
 
-    public Move1() {
+    public MoveI() {
         super();
     }
 

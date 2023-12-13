@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Move2 extends ProgCard {
-    public Move2() {
+public class MoveII extends ProgCard {
+    public MoveII() {
         super();
     }
     @Override
     public String getImageUrl() {
-        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_02.png";
+        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_03.png";
     }
 }

@@ -290,8 +290,8 @@ public class Client extends Application {
                                             writer.println(serializedPlayCard);
                                             // Schritt 2: Auswählen vom DrawPile
 
-                                            // string an server?
-                                        }
+                                        // string an server?
+
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
