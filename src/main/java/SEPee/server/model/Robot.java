@@ -18,9 +18,10 @@ public class Robot {
 
      */
 
-    public Robot(int x, int y) {
+    public Robot(int x, int y, String orientation) {
         this.x = x;
         this.y = y;
+        this.orientation = orientation;
         // Other initializations if needed
         //orientation
     }

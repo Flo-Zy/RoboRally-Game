@@ -36,6 +36,8 @@ public class ClientHandler implements Runnable {
     private List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
+    private Robot robot;
+
 
 
 
@@ -88,7 +90,39 @@ public class ClientHandler implements Runnable {
 
                             //Robot robot = new Robot()
 
-                                    //this.player.getRobot().setOrientation("right");
+                            //this.player.getRobot().setOrientation("right");switch (player.getFigure()) {
+                            //                                case 1:
+                            //                                    Robot robot1 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    Robot.;
+                            //                                    break;
+                            //                                case 2:
+                            //                                    Robot robot2 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 3:
+                            //                                    Robot robot3 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 4:
+                            //                                    Robot robot4 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 5:
+                            //                                    Robot robot5 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 6:
+                            //                                    Robot robot6 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                default:
+                            //                                    System.out.println("Robot could not be initialized.");
+                            //                                    break;
+                            //                          }
+
+
+                            this.robot = new Robot(0,0,"right");
+
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
@@ -238,12 +272,11 @@ public class ClientHandler implements Runnable {
                                     break;
 
                                 case "Move1":
+                                    Move1.makeEffect(this.robot);
 
-                                    Move1.makeEffect(this.player.getRobot());
-
-                                    int x = this.player.getRobot().getX();
-                                    int y = this.player.getRobot().getY();
-                                    int clientID = this.player.getId();
+                                    int x = this.robot.getX();
+                                    int y = this.robot.getY();
+                                    int clientID = this.clientId;
 
                                     Movement movement = new Movement(clientID, x, y);
                                     String serializedMovement = Serialisierer.serialize(movement);

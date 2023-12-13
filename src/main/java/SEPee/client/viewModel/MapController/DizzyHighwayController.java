@@ -91,7 +91,7 @@ public class DizzyHighwayController extends MapController {
 
         switch (player.getFigure()) {
             case 1:
-                Robot robot1 = new Robot(x, y); // set coordinates for robot1
+                Robot robot1 = new Robot(x, y, "right"); // set coordinates for robot1
                 playerRobotMap.put(player, robot1); //link player and robot
 
                 ImageView avatar1ImageView = Avatar1; // store imageview
@@ -106,7 +106,7 @@ public class DizzyHighwayController extends MapController {
 
                 break;
             case 2:
-                Robot robot2 = new Robot(x, y);
+                Robot robot2 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot2);
 
                 ImageView avatar2ImageView = Avatar2;
@@ -121,7 +121,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 3:
-                Robot robot3 = new Robot(x, y);
+                Robot robot3 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot3);
 
                 ImageView avatar3ImageView = Avatar3;
@@ -133,7 +133,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 4:
-                Robot robot4 = new Robot(x, y);
+                Robot robot4 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot4);
 
                 ImageView avatar4ImageView = Avatar4;
@@ -145,7 +145,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 5:
-                Robot robot5 = new Robot(x, y);
+                Robot robot5 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot5);
 
                 ImageView avatar5ImageView = Avatar5;
@@ -157,7 +157,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 6:
-                Robot robot6 = new Robot(x, y);
+                Robot robot6 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot6);
 
                 ImageView avatar6ImageView = Avatar6;
