@@ -4,7 +4,10 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.Move1;
+import SEPee.server.model.card.progCard.ProgCard;
 import SEPee.server.model.gameBoard.*;
+import SEPee.server.model.Robot;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
 
