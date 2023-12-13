@@ -283,12 +283,27 @@ public class Client extends Application {
                                             // Schritt 1: init drawPile in totalHand
                                             controller.initDrawPile(player.getId());
                                             System.out.println("Player: " + player.getName() + " got 9 cards.");
+                                        }
 
-                                            //harcode tester für MoveI
-                                            PlayCard playCard = new PlayCard("Move1");
-                                            String serializedPlayCard = Serialisierer.serialize(playCard);
-                                            writer.println(serializedPlayCard);
-                                            // Schritt 2: Auswählen vom DrawPile
+                                        /*
+                                        //harcode tester für MoveI - III
+                                        PlayCard playCard = new PlayCard("MoveI");
+                                        String serializedPlayCard = Serialisierer.serialize(playCard);
+                                        writer.println(serializedPlayCard);
+
+                                        PlayCard playCard2 = new PlayCard("MoveII");
+                                        String serializedPlayCard2 = Serialisierer.serialize(playCard2);
+                                        writer.println(serializedPlayCard2);
+
+                                        PlayCard playCard3 = new PlayCard("MoveIII");
+                                        String serializedPlayCard3 = Serialisierer.serialize(playCard3);
+                                        writer.println(serializedPlayCard3);
+
+
+                                         */
+
+
+                                        // Schritt 2: Auswählen vom DrawPile
 
                                         // string an server?
 
