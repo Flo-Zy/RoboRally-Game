@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Again extends ProgCard {
     public Again() {
-        super();
+        super("Again", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_09.png");
     }
     @Override
     public String getImageUrl() {

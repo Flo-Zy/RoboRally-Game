@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class LeftTurn extends ProgCard {
     public LeftTurn() {
-        super();
+        super("LeftTurn", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_07.png");
     }
     @Override
     public String getImageUrl() {

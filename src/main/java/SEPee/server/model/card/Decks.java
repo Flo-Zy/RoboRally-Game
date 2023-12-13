@@ -57,7 +57,7 @@ public class Decks {
             deck.add(new LeftTurn());
         }
         for (int i = 0; i < 1; i++) {
-            deck.add(new Backup());
+            deck.add(new BackUp());
         }
         for (int i = 0; i < 1; i++) {
             deck.add(new PowerUp());

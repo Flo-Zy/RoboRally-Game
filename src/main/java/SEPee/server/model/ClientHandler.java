@@ -236,16 +236,17 @@ public class ClientHandler implements Runnable {
 
                                 // wenn currentPhase = 2 -> YourCards (schicke jedem Client zuerst sein progDeck)
                                 if (Server.getGame().getCurrentPhase() == 2) {
-                                    for (Player player : Server.getGame().getPriorityPlayerList()) {
+                                    for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>();
                                         for (Card card : player.getPlayerMat().getProgDeck()) {
                                             clientCards.add(card.getName());
                                         }
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
-                                        System.out.println(player.getId() + ", " + serializedYourCards);
+                                        System.out.println("Testttttttttt: " + player.getId() + ", " + serializedYourCards);
                                         // sende an diesen Client sein gemischtes ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
+                                        // broadcast(serializedYourCards);
                                     }
                                 }
 

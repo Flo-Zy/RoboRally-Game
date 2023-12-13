@@ -6,7 +6,9 @@ import java.util.TreeMap;
 
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.Movement;
+import SEPee.server.model.card.Card;
 import SEPee.server.model.card.Decks;
+import SEPee.server.model.card.upgradeCard.UpgradeCard;
 import SEPee.server.model.field.Field;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +18,7 @@ import lombok.Setter;
 public class Game {
     private List<List<List<Field>>> gameBoard;
     private ArrayList<Player> playerList;
-    private ArrayList<Player> priorityPlayerList;
+    // private ArrayList<Player> priorityPlayerList;
     private int playerIndex;
     private int currentPhase;
     private Player currentPlayer;
@@ -49,10 +51,6 @@ public class Game {
 
         } else if (currentPhase == 1) { // Überspringen der Upgrade Phase
             currentPhase++;
-        } else if (currentPhase == 2) { // Programming Phase: Mische für jeden player das priorityPlayerList.get(i).getPlayerMat().getProgDeck();
-            for (Player player : priorityPlayerList) {
-                player.getPlayerMat().setProgDeck(new Decks().getDeck());
-            }
         }
     }
 
@@ -65,8 +63,8 @@ public class Game {
             // select nextPlayer closest to antenna
             playerIndex = 0;
             // update der priorityPlayerList
-            checkPriorities();
-            currentPlayer = priorityPlayerList.get(playerIndex);
+            checkPriorities(); // update der playerList mit Prioritäten
+            currentPlayer = playerList.get(playerIndex);
             playerIndex++;
         }
     }
@@ -74,7 +72,6 @@ public class Game {
     public void checkPriorities() {
         int antennaX = 0;
         int antennaY = 4;
-        priorityPlayerList.clear();
 
         // TreeMap, die automatisch alles Player anhand Distanz und Winkel von der Antenne aus sortiert
         TreeMap<Double, Player> sortedPlayers = new TreeMap<>();
@@ -91,7 +88,8 @@ public class Game {
         }
 
         // Hinzufügen der Player von der TreeMap zur priorityPlayerList (sortiert nach Distanz und Winkel)
-        priorityPlayerList.addAll(sortedPlayers.values());
+        playerList.clear();
+        playerList.addAll(sortedPlayers.values());
     }
 
     private int calculateDistance(int x1, int y1, int x2, int y2) {

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class PowerUp extends ProgCard {
     public PowerUp() {
-        super();
+        super("PowerUp", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_06.png");
     }
     @Override
     public String getImageUrl() {

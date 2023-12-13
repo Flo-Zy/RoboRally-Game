@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Move2 extends ProgCard {
     public Move2() {
-        super();
+        super("Move2", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_02.png");
     }
     @Override
     public String getImageUrl() {

@@ -1,27 +1,19 @@
 package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.PlayerTurning;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.Decks;
+import SEPee.server.model.card.progCard.*;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
@@ -75,14 +67,14 @@ public class DizzyHighwayController extends MapController {
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<String>> playerDrawPile;
+    private Map<Integer, List<Card>> playerDrawPileMap;
 
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPile = new HashMap<>(); // init programmingPile
+        playerDrawPileMap = new HashMap<>(); // init programmingPile
     }
 
 
@@ -247,65 +239,79 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeDrawPile(int clientId, ArrayList<String> clientHand){
-        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (!playerDrawPile.containsKey(clientId)) {
-            // Wenn nicht, ordne dem
-            playerDrawPile.put(clientId, clientHand);
-        }
+    public void initializeDrawPile(int clientId, ArrayList<String> clientHand) {
+        // Erstelle aus der erhaltenen ArrayList<String> clientHand eine ArrayList<Card> drawPile
+        ArrayList<Card> drawPile = new ArrayList<>();
 
-        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPile)
-        List<Card> drawPile = playerDrawPile.get(clientId);
+        for (String cardName : clientHand) {
+            switch (cardName) {
+                case "Again":
+                    drawPile.add(new Again());
+                case "BackUp":
+                    drawPile.add(new BackUp());
+                case "LeftTurn":
+                    drawPile.add(new LeftTurn());
+                case "Move1":
+                    drawPile.add(new Move1());
+                case "Move2":
+                    drawPile.add(new Move2());
+                case "Move3":
+                    drawPile.add(new Move3());
+                case "PowerUp":
+                    drawPile.add(new PowerUp());
+                case "RightTurn":
+                    drawPile.add(new RightTurn());
+                case "UTurn":
+                    drawPile.add(new UTurn());
+            }
 
-        // Prüfe, ob der Kartenstapel nicht leer ist
-        if (!drawPile.isEmpty()) {
-            // Hole die HBox mit fx:id="totalHand"
-            HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
+            // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+            if (!playerDrawPileMap.containsKey(clientId)) {
+                // Wenn nicht, ordne dem player mit der clientId das drawPile zu
+                playerDrawPileMap.put(clientId, drawPile);
+            }
 
-            // Prüfe, ob die HBox gefunden wurde
-            if (totalHand != null) {
-                // Durchlaufe die ImageView-Elemente in der HBox
-                for (int i = 0; i < totalHand.getChildren().size(); i++) {
-                    // Hole das i-te ImageView-Element
-                    ImageView imageView = (ImageView) totalHand.getChildren().get(i);
+            // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+            List<Card> drawPileClient = playerDrawPileMap.get(clientId);
 
-                    // Prüfe, ob das ImageView-Element gefunden wurde
-                    if (imageView != null) {
-                        // Prüfe, ob es noch Karten im Kartenstapel gibt
-                        if (!drawPile.isEmpty()) {
-                            // Hole die oberste Karte vom Kartenstapel
-                            Card card = drawPile.remove(0);
+            // Prüfe, ob der Kartenstapel nicht leer ist
+            if (!drawPileClient.isEmpty()) {
+                // Hole die HBox mit fx:id="totalHand"
+                HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
 
-                            // Setze das Bild des ImageView-Elements mit dem Bild der Karte
-                            Image cardImage = new Image(card.getImageUrl());
-                            imageView.setImage(cardImage);
+                // Prüfe, ob die HBox gefunden wurde
+                if (totalHand != null) {
+                    // Durchlaufe die ImageView-Elemente in der HBox
+                    for (int i = 0; i < totalHand.getChildren().size(); i++) {
+                        // Hole das i-te ImageView-Element
+                        ImageView imageView = (ImageView) totalHand.getChildren().get(i);
 
-                            // Mache das ImageView-Element sichtbar
-                            imageView.setVisible(true);
-                            imageView.setManaged(true);
-                        } else {
-                            // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
-                            imageView.setImage(null);
-                            imageView.setVisible(false);
-                            imageView.setManaged(false);
+                        // Prüfe, ob das ImageView-Element gefunden wurde
+                        if (imageView != null) {
+                            // Prüfe, ob es noch Karten im Kartenstapel gibt
+                            if (!drawPileClient.isEmpty()) {
+                                // Hole die oberste Karte vom Kartenstapel
+                                Card card = drawPileClient.remove(0);
+
+                                // Setze das Bild des ImageView-Elements mit dem Bild der Karte
+                                Image cardImage = new Image(card.getImageUrl());
+                                imageView.setImage(cardImage);
+
+                                // Mache das ImageView-Element sichtbar
+                                imageView.setVisible(true);
+                                imageView.setManaged(true);
+                            } else {
+                                // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
+                                imageView.setImage(null);
+                                imageView.setVisible(false);
+                                imageView.setManaged(false);
+                            }
                         }
                     }
                 }
             }
         }
     }
-
-    public void movementPlayed(int clientId, int newX, int newY){
-
-        Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
-        Robot robot = playerRobotMap.get(player);
-
-        ImageView imageView = robotImageViewMap.get(robot);
-        GridPane.setColumnIndex(imageView, newX);
-        GridPane.setRowIndex(imageView, newY);
-    }
-
-
 }
 
 
