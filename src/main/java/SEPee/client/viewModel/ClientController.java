@@ -55,6 +55,7 @@ public class ClientController {
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     private ArrayList<Integer> takenStartPoints = new ArrayList<>();
     private ArrayList<String> playerNames = new ArrayList<>();
+    @Setter
     @Getter
     private ArrayList<String> clientHand = new ArrayList<>();
     @FXML
@@ -479,6 +480,10 @@ public class ClientController {
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);
 
+    }
+
+    public void playerTurn(int clientIdToTurn, String rotation){
+        mapController.playerTurn(clientIdToTurn, rotation);
     }
 
 

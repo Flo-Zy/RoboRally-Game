@@ -375,6 +375,11 @@ public class Client extends Application {
                         case "PlayerTurning":
                             System.out.println("Player Turning");
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
+
+                            int clientIdToTurn = playerTurning.getMessageBody().getClientID();
+                            String rotation = playerTurning.getMessageBody().getRotation();
+                            controller.playerTurn(clientIdToTurn, rotation);
+
                             break;
                         case "DrawDamage":
                             System.out.println("Draw Damage");

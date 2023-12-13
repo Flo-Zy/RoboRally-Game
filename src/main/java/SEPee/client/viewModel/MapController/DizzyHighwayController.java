@@ -182,12 +182,7 @@ public class DizzyHighwayController extends MapController {
         // send messagetype move
     }
 
-    private void rotateAvatar(int clientId, String rotateDirection) {
-        PlayerTurning playerTurning = new PlayerTurning(clientId, rotateDirection);
-        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-        Client.getWriter().println(serializedPlayerTurning);
-        // send messageType PlayerTurning
-    }
+
 
     //tester fur spätere kartenimplementierung:
     public void moveRobotTester(Robot robot) {
@@ -247,7 +242,9 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeDrawPile(int clientId, ArrayList<String> clientHand){
+    /*
+
+    public void initializeDrawPile(int clientId, ArrayList<String> clientHand) {
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (!playerDrawPile.containsKey(clientId)) {
             // Wenn nicht, ordne dem
@@ -295,7 +292,9 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void movementPlayed(int clientId, int newX, int newY){
+     */
+
+    public void movementPlayed(int clientId, int newX, int newY) {
 
         Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
         Robot robot = playerRobotMap.get(player);
@@ -305,9 +304,23 @@ public class DizzyHighwayController extends MapController {
         GridPane.setRowIndex(imageView, newY);
     }
 
-    public void robotTurned(){
+    public void playerTurn(int clientIdToTurn, String rotation) {
+        Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
 
+        ImageView imageView = robotImageViewMap.get(robot);
+
+        if (imageView != null) {
+            double currentRotation = imageView.getRotate();
+            double rotationAmount = 90.0;
+
+            if (rotation.equals("clockwise")) {
+                imageView.setRotate(currentRotation + rotationAmount);
+            } else if (rotation.equals("counterclockwise")) {
+                imageView.setRotate(currentRotation - rotationAmount);
+            }
+        }
     }
+
 
 
 }
