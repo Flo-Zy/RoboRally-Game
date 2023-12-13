@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Decks {
-    private List<Card> deck;
+    private ArrayList<Card> deck;
     /*
     private List<Card> deck2;
     private List<Card> deck3;
@@ -15,11 +15,11 @@ public class Decks {
     private List<Card> deck5;
     private List<Card> deck6;
      */
-    public List<Card> getDeck() {
+    public ArrayList<Card> getDeck() {
         return deck;
     }
 
-    public void setDeck(List<Card> deck) {
+    public void setDeck(ArrayList<Card> deck) {
         this.deck = deck;
     }
 

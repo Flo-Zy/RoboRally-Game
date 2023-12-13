@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import SEPee.server.model.card.Decks;
 import SEPee.server.model.field.Field;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,8 +45,12 @@ public class Game {
         if(currentPhase == 3) {
             currentPhase = 1;
 
-        } else if (currentPhase == 1) { // überspringen der Upgrade Phase
+        } else if (currentPhase == 1) { // Überspringen der Upgrade Phase
             currentPhase++;
+        } else if (currentPhase == 2) { // Programming Phase: Mische für jeden player das priorityPlayerList.get(i).getPlayerMat().getProgDeck();
+            for (Player player : priorityPlayerList) {
+                player.getPlayerMat().setProgDeck(new Decks().getDeck());
+            }
         }
     }
 

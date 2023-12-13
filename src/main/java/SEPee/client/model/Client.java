@@ -318,6 +318,15 @@ public class Client extends Application {
                         case "YourCards":
                             System.out.println("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
+
+                            // Füge in ChatArea: transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
+                            controller.appendToChatArea(yourCards.getMessageBody().transformCardsInHandIntoString());
+
+                            // update im ClientController die clientHand
+                            controller.setClientHand(yourCards.getMessageBody().getCardsInHand());
+
+                            // initialisiere 9 Karten in Hand des players
+                            controller.initDrawPile(controller.getId());
                             break;
 
                         case "NotYourCards":

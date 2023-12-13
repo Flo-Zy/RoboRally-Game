@@ -51,7 +51,7 @@ public class Main {
         String testmap = Serialisierer.serialize(selectMap);
         System.out.println(testmap);
 
-        */
+
 
         DizzyHighway dizzyHighway = new DizzyHighway();
         GameStarted gameStarted = new GameStarted(dizzyHighway.getGameBoard());
@@ -62,9 +62,6 @@ public class Main {
         //deserialisieren
         GameStarted deserializedGameStarted = Deserialisierer.deserialize(serializedGameStarted, GameStarted.class);
         System.out.println(deserializedGameStarted.getMessageBody().getGameMap());
-
-
-        /*
 
         //test HelloClient als child Klasse von Message
         HelloClient helloClient = new HelloClient("Version 1.0");
@@ -182,8 +179,23 @@ public class Main {
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);
         System.out.println(serializedCurrentCards);
+        */
 
-         */
+        ArrayList<String> clientCards = new ArrayList<>();
+        /*
+        Für tatsächlichen Code im ClientHandler:
+
+        for(Player player : Server.getGame().getPriorityList())
+            for(Card card : player.getPlayerMat().getProgDeck())
+                clientCards.add(card.getName());
+            }
+        }
+        */
+        clientCards.add("card1");
+        clientCards.add("...");
+        YourCards yourCards = new YourCards(clientCards);
+        String serializedYourCards = Serialisierer.serialize(yourCards);
+        System.out.println(serializedYourCards);
 
         /**
         // test GameStarted serialisation

@@ -3,6 +3,7 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.card.Card;
 import SEPee.server.model.gameBoard.*;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -229,15 +231,31 @@ public class ClientHandler implements Runnable {
                             broadcast(serializedStartingPointTaken);
 
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){ // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
-                                Server.getGame().nextCurrentPhase();
-                                Server.setCountPlayerTurns(0);  // in neuer Phase ist keiner dran gewesen bisher
+                                Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
+                                Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
+
+                                // wenn currentPhase = 2 -> YourCards (schicke jedem Client zuerst sein progDeck)
+                                if (Server.getGame().getCurrentPhase() == 2) {
+                                    for (Player player : Server.getGame().getPriorityPlayerList()) {
+                                        ArrayList<String> clientCards = new ArrayList<>();
+                                        for (Card card : player.getPlayerMat().getProgDeck()) {
+                                            clientCards.add(card.getName());
+                                        }
+                                        YourCards yourCards = new YourCards(clientCards);
+                                        String serializedYourCards = Serialisierer.serialize(yourCards);
+                                        System.out.println(player.getId() + ", " + serializedYourCards);
+                                        // sende an diesen Client sein gemischtes ProgDeck
+                                        sendToOneClient(player.getId(), serializedYourCards);
+                                    }
+                                }
 
                                 // Aktive Spielphase setzen
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
+
                             } else {
-                                Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der tatsächlich (abhg. von Phase) dran ist
+                                Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der (abhg. von Phase) dran ist
                             }
 
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());

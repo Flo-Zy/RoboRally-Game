@@ -76,7 +76,7 @@ public class DizzyHighwayController extends MapController {
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<Card>> playerDrawPile;
+    private Map<Integer, List<String>> playerDrawPile;
 
 
     public void init(Client client, Stage stage) {
@@ -248,7 +248,7 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeDrawPile(int clientId){
+    public void initializeDrawPile(int clientId, ArrayList<String> clientHand){
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (!playerDrawPile.containsKey(clientId)) {
             // Wenn nicht, erstelle einen neuen Kartenstapel für den Spieler

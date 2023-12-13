@@ -9,6 +9,7 @@ import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
 //Später auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.card.Card;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +55,8 @@ public class ClientController {
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     private ArrayList<Integer> takenStartPoints = new ArrayList<>();
     private ArrayList<String> playerNames = new ArrayList<>();
+    @Getter
+    private ArrayList<String> clientHand = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML
@@ -469,7 +472,7 @@ public class ClientController {
 
 
     public void initDrawPile(int clientId){
-        mapController.initializeDrawPile(clientId);
+        mapController.initializeDrawPile(clientId, clientHand);
     }
 
 }
