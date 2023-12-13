@@ -472,4 +472,13 @@ public class ClientController {
         mapController.initializeDrawPile(clientId);
     }
 
+
+    public void movementPlayed(int clientIdToMove, int newX, int newY) {
+        mapController.movementPlayed(clientIdToMove, newX, newY);
+
+    }
+
+
+
+
 }

@@ -356,6 +356,12 @@ public class Client extends Application {
                         case "Movement":
                             System.out.println("Movement");
                             Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
+
+                            int clientIdToMove = movement.getMessageBody().getClientID();
+                            int newX = movement.getMessageBody().getX();
+                            int newY = movement.getMessageBody().getY();
+                            controller.movementPlayed(clientIdToMove,newX, newY);
+
                             break;
                         case "PlayerTurning":
                             System.out.println("Player Turning");
