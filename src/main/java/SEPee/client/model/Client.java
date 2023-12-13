@@ -325,7 +325,6 @@ public class Client extends Application {
 
                             // update im ClientController die clientHand
                             controller.setClientHand(yourCards.getMessageBody().getCardsInHand());
-                            // Test korrekt: System.out.println(controller.getClientHand());
 
                             // initialisiere die 9 Karten von YourCards in Hand des players
                             controller.initDrawPile(controller.getId(), controller.getClientHand());

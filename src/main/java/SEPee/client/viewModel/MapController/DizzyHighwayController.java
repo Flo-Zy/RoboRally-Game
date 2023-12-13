@@ -247,22 +247,31 @@ public class DizzyHighwayController extends MapController {
             switch (cardName) {
                 case "Again":
                     drawPile.add(new Again());
+                    break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
                 case "BackUp":
                     drawPile.add(new BackUp());
+                    break;
                 case "LeftTurn":
                     drawPile.add(new LeftTurn());
+                    break;
                 case "Move1":
                     drawPile.add(new Move1());
+                    break;
                 case "Move2":
                     drawPile.add(new Move2());
+                    break;
                 case "Move3":
                     drawPile.add(new Move3());
+                    break;
                 case "PowerUp":
                     drawPile.add(new PowerUp());
+                    break;
                 case "RightTurn":
                     drawPile.add(new RightTurn());
+                    break;
                 case "UTurn":
                     drawPile.add(new UTurn());
+                    break;
             }
         }
 
@@ -270,7 +279,9 @@ public class DizzyHighwayController extends MapController {
         if (playerDrawPileMap.containsKey(clientId)) {
             playerDrawPileMap.remove(clientId);
         }
-        playerDrawPileMap.put(clientId, drawPile);
+
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        playerDrawPileMap.put(clientId, new ArrayList<>(drawPile));
 
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = playerDrawPileMap.get(clientId);
