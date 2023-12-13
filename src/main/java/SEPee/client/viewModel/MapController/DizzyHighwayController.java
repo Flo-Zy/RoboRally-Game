@@ -251,9 +251,8 @@ public class DizzyHighwayController extends MapController {
     public void initializeDrawPile(int clientId, ArrayList<String> clientHand){
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (!playerDrawPile.containsKey(clientId)) {
-            // Wenn nicht, erstelle einen neuen Kartenstapel für den Spieler
-            List<Card> drawPile = new Decks().getDeck();
-            playerDrawPile.put(clientId, drawPile);
+            // Wenn nicht, ordne dem
+            playerDrawPile.put(clientId, clientHand);
         }
 
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPile)
