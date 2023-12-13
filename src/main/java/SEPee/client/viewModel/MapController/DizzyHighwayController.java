@@ -305,6 +305,10 @@ public class DizzyHighwayController extends MapController {
         GridPane.setRowIndex(imageView, newY);
     }
 
+    public void robotTurned(){
+
+    }
+
 
 }
 
