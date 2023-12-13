@@ -295,6 +295,13 @@ public class ClientHandler implements Runnable {
                                 case "MoveIII":
                                     MoveIII.makeEffect(this.robot);
 
+                                    int x3 = this.robot.getX();
+                                    int y3 = this.robot.getY();
+                                    int clientID3 = this.clientId;
+
+                                    Movement movement3 = new Movement(clientID3, x3, y3);
+                                    String serializedMovement3 = Serialisierer.serialize(movement3);
+                                    broadcast(serializedMovement3);
                                     break;
                                 case "PowerUp":
 
