@@ -118,7 +118,7 @@ public class ClientHandler implements Runnable {
                             //                          }
 
 
-                            this.robot = new Robot(0,0,"right"); //initialize robots server side
+                            //this.robot = new Robot(0,0,"right"); //initialize robots server side
 
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -348,7 +348,7 @@ public class ClientHandler implements Runnable {
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
 
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
-
+                            this.robot = new Robot(0,0,"right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
 /*
