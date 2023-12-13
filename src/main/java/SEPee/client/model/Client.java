@@ -263,7 +263,7 @@ public class Client extends Application {
 
                             switch (controller.getCurrentPhase()) {
                                 case 0:
-                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) { // wenn currentPlayerID dieser ClientID hier entspricht
                                         System.out.println("Aufbauphase");
                                         Platform.runLater(() -> {
                                             controller.setStartingPoint();
@@ -279,18 +279,15 @@ public class Client extends Application {
                                     break;
                                 case 2:
                                     System.out.println("Programmierphase");
-                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
+                                        for (Player player : playerListClient) { // in Programmierphase is
+                                            // Schritt 1: init drawPile in totalHand
+                                            controller.initDrawPile(player.getId());
+                                            System.out.println("Player: " + player.getName() + " got 9 cards.");
 
+                                            // Schritt 2: Auswählen vom DrawPile
 
-                                        //init drawpil
-                                        controller.initDrawPile(clientId);
-
-
-                                        // ziehen vom Drawpile
-
-                                        // string an server?
-                                    }
-
+                                            // string an server?
+                                        }
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
@@ -312,21 +309,22 @@ public class Client extends Application {
                             }
  */
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
+                            // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
                             Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
-
-
                             break;
 
                         case "YourCards":
                             System.out.println("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
                             break;
+
                         case "NotYourCards":
                             System.out.println("Not Your Cards");
                             NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
                             break;
+
                         case "ShuffleCoding":
                             System.out.println("Shuffle Coding");
                             ShuffleCoding shuffleCoding = Deserialisierer.deserialize(serializedReceivedString, ShuffleCoding.class);

@@ -51,23 +51,18 @@ public class ClientController {
     @Setter
     @Getter
     private int id;
-    public MapController mapController;
+    public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     private ArrayList<Integer> takenStartPoints = new ArrayList<>();
-
-
     private ArrayList<String> playerNames = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML
     private TextField messageField;
-
     @FXML
     private VBox DizzyHighwayMap;
-
     @Getter
     @Setter
     private int currentPhase;
-
     @Getter
     private int startPointX;
     @Getter

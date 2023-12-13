@@ -243,6 +243,7 @@ public class ClientHandler implements Runnable {
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
                             String serializedCurrentPlayer = Serialisierer.serialize(currentplayer);
                             broadcast(serializedCurrentPlayer);
+
                             break;
                         case "SelectedCard":
                             System.out.println("Selected Card");

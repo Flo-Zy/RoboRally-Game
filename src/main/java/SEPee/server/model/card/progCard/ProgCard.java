@@ -6,7 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class ProgCard extends Card {
-    private String name;
-
     public void makeEffect(){}
 }

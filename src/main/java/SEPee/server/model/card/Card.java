@@ -6,6 +6,8 @@ import lombok.Setter;
 @Setter
 public abstract class Card {
     private String name;
+    private String imageUrl;
 
     public void makeEffect(){}
+
 }

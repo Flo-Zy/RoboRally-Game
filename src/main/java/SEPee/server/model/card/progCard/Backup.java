@@ -6,4 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Backup extends ProgCard {
+    public Backup() {
+        super();
+    }
+    @Override
+    public String getImageUrl() {
+        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_08.png";
+    }
 }

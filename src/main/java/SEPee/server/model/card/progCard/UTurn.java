@@ -5,4 +5,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UTurn extends ProgCard {
+    public UTurn() {
+        super();
+    }
+    @Override
+    public String getImageUrl() {
+        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_05.png";
+    }
 }

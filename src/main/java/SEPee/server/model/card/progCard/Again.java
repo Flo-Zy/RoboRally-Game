@@ -6,6 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Again extends ProgCard {
-    //Falls an erster Stelle, dann Handeln dass es nicht passieren darf
-    //
+    public Again() {
+        super();
+    }
+    @Override
+    public String getImageUrl() {
+        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_09.png";
+    }
 }

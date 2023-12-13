@@ -7,16 +7,26 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Decks {
-    private List<Card> deck1;
+    private List<Card> deck;
+    /*
     private List<Card> deck2;
     private List<Card> deck3;
     private List<Card> deck4;
     private List<Card> deck5;
     private List<Card> deck6;
+     */
+    public List<Card> getDeck() {
+        return deck;
+    }
 
-    public void Deck1() {
-        deck1 = new ArrayList<>();
-        initializeDeck(deck1);
+    public void setDeck(List<Card> deck) {
+        this.deck = deck;
+    }
+
+    public Decks() {
+        deck = new ArrayList<>();
+        initializeDeck(deck);
+        /*
         deck2 = new ArrayList<>();
         initializeDeck(deck2);
         deck3 = new ArrayList<>();
@@ -27,6 +37,7 @@ public class Decks {
         initializeDeck(deck5);
         deck6 = new ArrayList<>();
         initializeDeck(deck6);
+         */
     }
 
     private void initializeDeck(List<Card> deck) {
@@ -63,5 +74,4 @@ public class Decks {
     public void shuffle(List<Card> deck) {
         Collections.shuffle(deck);
     }
-
 }

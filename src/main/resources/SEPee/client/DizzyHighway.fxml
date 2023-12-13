@@ -43,9 +43,6 @@
                     <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-
-
-
                     <ImageView fx:id="field00" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -1453,6 +1450,7 @@
                         </image>
                     </ImageView>
 
+
                     <ImageView fx:id="Avatar1" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/BlauAvatar.png" />
@@ -1514,96 +1512,65 @@
                     <!-- Hand of 10 Card Spaces -->
                     <HBox fx:id="totalHand" prefHeight="100.0" prefWidth="650.0">
                         <children>
-                            <StackPane>
-                                <children>
                                     <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
-                            <StackPane>
-                                <children>
+
                                     <ImageView fx:id="hand9" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
                                             <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
-                                </children>
-                            </StackPane>
                         </children>
                     </HBox>
                     <!-- Installed Upgrades -->
@@ -1682,7 +1649,7 @@
                                 <children>
                                     <ImageView fx:id="discardPile" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                         <image>
-                                            <Image url="@/boardElementsPNGs/flippedCard.png" />
+                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
                                         </image>
                                     </ImageView>
                                 </children>
@@ -1737,6 +1704,6 @@
             </VBox>
         </VBox>
     </children>
-    <!-- cahtfenster von Client.fxml -->
+    <!-- Chatfenster von Client.fxml -->
 
 </AnchorPane>
