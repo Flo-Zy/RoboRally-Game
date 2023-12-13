@@ -264,48 +264,51 @@ public class DizzyHighwayController extends MapController {
                 case "UTurn":
                     drawPile.add(new UTurn());
             }
+        }
 
-            // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-            if (!playerDrawPileMap.containsKey(clientId)) {
-                // Wenn nicht, ordne dem player mit der clientId das drawPile zu
-                playerDrawPileMap.put(clientId, drawPile);
-            }
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (playerDrawPileMap.containsKey(clientId)) {
+            playerDrawPileMap.remove(clientId);
+        }
+        playerDrawPileMap.put(clientId, drawPile);
 
-            // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-            List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
 
-            // Prüfe, ob der Kartenstapel nicht leer ist
-            if (!drawPileClient.isEmpty()) {
-                // Hole die HBox mit fx:id="totalHand"
-                HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
+        // Prüfe, ob der Kartenstapel nicht leer ist
+        if (!drawPileClient.isEmpty()) {
+            // Hole die HBox mit fx:id="totalHand"
+            HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
 
-                // Prüfe, ob die HBox gefunden wurde
-                if (totalHand != null) {
-                    // Durchlaufe die ImageView-Elemente in der HBox
-                    for (int i = 0; i < totalHand.getChildren().size(); i++) {
-                        // Hole das i-te ImageView-Element
-                        ImageView imageView = (ImageView) totalHand.getChildren().get(i);
+            // Prüfe, ob die HBox gefunden wurde
+            if (totalHand != null) {
 
-                        // Prüfe, ob das ImageView-Element gefunden wurde
-                        if (imageView != null) {
-                            // Prüfe, ob es noch Karten im Kartenstapel gibt
-                            if (!drawPileClient.isEmpty()) {
-                                // Hole die oberste Karte vom Kartenstapel
-                                Card card = drawPileClient.remove(0);
+                // Durchlaufe die ersten 9 ImageView-Elemente in der HBox
+                for (int i = 0; i < 9; i++) {
+                    // Hole das i-te ImageView-Element
+                    ImageView imageView = (ImageView) totalHand.getChildren().get(i);
 
-                                // Setze das Bild des ImageView-Elements mit dem Bild der Karte
-                                Image cardImage = new Image(card.getImageUrl());
-                                imageView.setImage(cardImage);
+                    // Prüfe, ob das ImageView-Element gefunden wurde
+                    if (imageView != null) {
+                        // Prüfe, ob es noch Karten im Kartenstapel gibt
+                        if (!drawPileClient.isEmpty()) {
+                            // Hole die oberste Karte vom Kartenstapel
+                            Card topCard = drawPileClient.get(0);
+                            // Entferne die oberste Karte vom Kartenstapel
+                            drawPileClient.remove(0);
 
-                                // Mache das ImageView-Element sichtbar
-                                imageView.setVisible(true);
-                                imageView.setManaged(true);
-                            } else {
-                                // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
-                                imageView.setImage(null);
-                                imageView.setVisible(false);
-                                imageView.setManaged(false);
-                            }
+                            // Setze das Bild des ImageView-Elements mit dem Bild der Karte
+                            Image cardImage = new Image(topCard.getImageUrl());
+                            imageView.setImage(cardImage);
+
+                            // Mache das ImageView-Element sichtbar
+                            imageView.setVisible(true);
+                            imageView.setManaged(true);
+                        } else {
+                            // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
+                            imageView.setImage(null);
+                            imageView.setVisible(false);
+                            imageView.setManaged(false);
                         }
                     }
                 }

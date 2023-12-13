@@ -1513,63 +1513,43 @@
                     <HBox fx:id="totalHand" prefHeight="100.0" prefWidth="650.0">
                         <children>
                                     <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
 
                                     <ImageView fx:id="hand9" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                         </children>
                     </HBox>

@@ -234,19 +234,26 @@ public class ClientHandler implements Runnable {
                                 Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
                                 Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
 
-                                // wenn currentPhase = 2 -> YourCards (schicke jedem Client zuerst sein progDeck)
+                                // wenn currentPhase = 2 : YourCards (schicke jedem Client zuerst sein progDeck)
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
+
+                                        // ZU MACHEN: if - noch genug karten auf dem progDeck sind
+
                                         ArrayList<String> clientCards = new ArrayList<>();
-                                        for (Card card : player.getPlayerMat().getProgDeck()) {
+                                        for (int i=0; i<9; i++) { // die ersten 9 karten
+                                            Card card = player.getPlayerMat().getProgDeck().get(i);
                                             clientCards.add(card.getName());
                                         }
+
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
+
                                         System.out.println("Testttttttttt: " + player.getId() + ", " + serializedYourCards);
-                                        // sende an diesen Client sein gemischtes ProgDeck
+                                        // sende an diesen Client sein ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
-                                        // broadcast(serializedYourCards);
+
+                                        // ZU MACHEN: else - "ShuffleCoding" - messageType
                                     }
                                 }
 

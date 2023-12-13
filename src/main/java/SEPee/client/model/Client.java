@@ -280,9 +280,10 @@ public class Client extends Application {
                                 case 2:
                                     System.out.println("Programmierphase");
                                         for (Player player : playerListClient) { // in Programmierphase is
+
                                             // Schritt 1: init drawPile in totalHand
-                                            controller.initDrawPile(player.getId());
-                                            System.out.println("Player: " + player.getName() + " got 9 cards.");
+                                            // controller.initDrawPile(player.getId());
+                                            // System.out.println("Player: " + player.getName() + " got 9 cards.");
 
                                             // Schritt 2: Auswählen vom DrawPile
 
@@ -320,13 +321,14 @@ public class Client extends Application {
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
 
                             // Füge in ChatArea: transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
-                            controller.appendToChatArea(yourCards.getMessageBody().transformCardsInHandIntoString());
+                            controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
                             // update im ClientController die clientHand
                             controller.setClientHand(yourCards.getMessageBody().getCardsInHand());
+                            // Test korrekt: System.out.println(controller.getClientHand());
 
-                            // initialisiere 9 Karten in Hand des players
-                            controller.initDrawPile(controller.getId());
+                            // initialisiere die 9 Karten von YourCards in Hand des players
+                            controller.initDrawPile(controller.getId(), controller.getClientHand());
                             break;
 
                         case "NotYourCards":

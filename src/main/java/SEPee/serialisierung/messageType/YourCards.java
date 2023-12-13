@@ -49,7 +49,7 @@ public class YourCards extends Message{
             for (String str : cardsInHand) {
                 stringBuilder.append(str);
                 if(lastElement <= 7) {
-                    stringBuilder.append(" ,");
+                    stringBuilder.append(" ,\n");
                 }
                 lastElement++;
             }

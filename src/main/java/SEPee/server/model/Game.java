@@ -48,9 +48,12 @@ public class Game {
 
         if(currentPhase == 3) {
             currentPhase = 1;
-
         } else if (currentPhase == 1) { // Überspringen der Upgrade Phase
             currentPhase++;
+        } else if (currentPhase == 2) { // Programming Phase
+            for (Player player : playerList){
+                player.setPlayerMat(new PlayerMat(null, new Decks().getDeck(), null, null, null));
+            }
         }
     }
 

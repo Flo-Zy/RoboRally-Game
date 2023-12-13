@@ -9,7 +9,6 @@ import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
 //Später auslagern
 import SEPee.server.model.Player;
-import SEPee.server.model.card.Card;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -472,14 +471,14 @@ public class ClientController {
     }
 
 
-    public void initDrawPile(int clientId){
-        mapController.initializeDrawPile(clientId, clientHand);
+    public void initDrawPile(int clientId, ArrayList<String> clientHand){
+        // test korrekt: System.out.println("tessssst: " + clientHand);
+        mapController.initializeDrawPile(clientId, clientHand); // int, ArrayList<String>
     }
 
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);
-
     }
 
 
