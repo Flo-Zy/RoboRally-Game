@@ -1,4 +1,5 @@
 package SEPee.server.model.card.progCard;
+import SEPee.server.model.Robot;
 import lombok.Getter;
 import lombok.Setter;
 

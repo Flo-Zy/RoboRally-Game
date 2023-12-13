@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.card.progCard.RightTurn;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -285,7 +286,7 @@ public class Client extends Application {
                                             System.out.println("Player: " + player.getName() + " got 9 cards.");
                                         }
 
-                                        /*
+
                                         //harcode tester für MoveI - III
                                         PlayCard playCard = new PlayCard("MoveI");
                                         String serializedPlayCard = Serialisierer.serialize(playCard);
@@ -295,12 +296,19 @@ public class Client extends Application {
                                         String serializedPlayCard2 = Serialisierer.serialize(playCard2);
                                         writer.println(serializedPlayCard2);
 
-                                        PlayCard playCard3 = new PlayCard("MoveIII");
+                                        PlayCard rightTurn = new PlayCard("RightTurn");
+                                        String serializedRightTurn = Serialisierer.serialize(rightTurn);
+                                        writer.println(serializedRightTurn);
+
+
+
+                                    PlayCard playCard3 = new PlayCard("MoveIII");
                                         String serializedPlayCard3 = Serialisierer.serialize(playCard3);
                                         writer.println(serializedPlayCard3);
 
 
-                                         */
+
+
 
 
                                         // Schritt 2: Auswählen vom DrawPile

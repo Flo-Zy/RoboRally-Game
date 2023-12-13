@@ -6,6 +6,7 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.card.progCard.MoveI;
 import SEPee.server.model.card.progCard.MoveIII;
 import SEPee.server.model.card.progCard.MoveII;
+import SEPee.server.model.card.progCard.RightTurn;
 import SEPee.server.model.gameBoard.*;
 
 import java.io.BufferedReader;
@@ -308,6 +309,16 @@ public class ClientHandler implements Runnable {
                                     break;
 
                                 case "RightTurn":
+                                    RightTurn.makeEffect(this.robot);
+
+                                    int clientIDRightTurn = this.clientId;
+                                    String newOrientation = this.robot.getOrientation();
+
+
+                                    PlayerTurning playerTurning = new PlayerTurning(clientIDRightTurn, newOrientation);
+                                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                                    writer.println(serializedPlayerTurning);
+
 
                                     break;
 
