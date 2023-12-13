@@ -237,23 +237,23 @@ public class ClientHandler implements Runnable {
                                 // wenn currentPhase = 2 : YourCards (schicke jedem Client zuerst sein progDeck)
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
+                                        ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
 
-                                        // ZU MACHEN: if - noch genug karten auf dem progDeck sind
-
-                                        ArrayList<String> clientCards = new ArrayList<>();
-                                        for (int i=0; i<9; i++) { // die ersten 9 karten
-                                            Card card = player.getPlayerMat().getProgDeck().get(i);
+                                        int i=0;
+                                        while (i<9) {
+                                            // die ersten 9 karten ziehen
+                                            Card card = player.getPlayerMat().getProgDeck().get(0);
                                             clientCards.add(card.getName());
+                                            // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                            player.getPlayerMat().getProgDeck().remove(0);
+                                            i++;
                                         }
 
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
-
-                                        System.out.println("Testttttttttt: " + player.getId() + ", " + serializedYourCards);
+                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                         // sende an diesen Client sein ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
-
-                                        // ZU MACHEN: else - "ShuffleCoding" - messageType
                                     }
                                 }
 

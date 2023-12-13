@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,7 @@ public class Player {
         this.id=id;
         this.figure=figure;
         this.ready = false;
-        this.playerMat = new PlayerMat(null, new Decks().getDeck(), null, null, null);
+        this.playerMat = new PlayerMat(null, new Decks().getDeck(), null, null, new ArrayList<Card>());
     }
 
     public static void associateSocketWithId(Socket socket, int clientId) {
