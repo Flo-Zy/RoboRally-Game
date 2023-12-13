@@ -25,7 +25,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
-
 public class DizzyHighwayController extends MapController {
 
     @Setter
@@ -295,6 +294,18 @@ public class DizzyHighwayController extends MapController {
             }
         }
     }
+
+    public void movementPlayed(int clientId, int newX, int newY){
+
+        Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
+        Robot robot = playerRobotMap.get(player);
+
+        ImageView imageView = robotImageViewMap.get(robot);
+        GridPane.setColumnIndex(imageView, newX);
+        GridPane.setRowIndex(imageView, newY);
+    }
+
+
 }
 
 

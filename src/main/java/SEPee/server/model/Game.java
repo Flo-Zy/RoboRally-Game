@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.Movement;
 import SEPee.server.model.card.Decks;
 import SEPee.server.model.field.Field;
 import lombok.Getter;

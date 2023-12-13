@@ -254,6 +254,17 @@ public class ClientHandler implements Runnable {
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
 
+
+
+                                /*
+                                // tester block für movement case
+                                Movement movement = new Movement(2, 0,0);
+                                String serializedMovement = Serialisierer.serialize(movement);
+                                broadcast(serializedMovement);
+
+                                 */
+
+
                             } else {
                                 Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der (abhg. von Phase) dran ist
                             }
