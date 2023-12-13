@@ -32,8 +32,6 @@ public class ClientHandler implements Runnable {
     private PrintWriter writer;
     private Player player;
 
-
-
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
         this.clients = clients;
@@ -238,7 +236,6 @@ public class ClientHandler implements Runnable {
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
-
                                         int i=0;
                                         while (i<9) {
                                             // die ersten 9 karten ziehen
@@ -254,6 +251,14 @@ public class ClientHandler implements Runnable {
                                         System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                         // sende an diesen Client sein ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
+
+                                        NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                        String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                        for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                                            if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
+                                                writer.println(serializedNotYourCards);
+                                            }
+                                        }
                                     }
                                 }
 

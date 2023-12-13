@@ -29,9 +29,9 @@ public class Player {
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;
-        this.figure=figure;
+        this.figure= figure;
         this.ready = false;
-        this.playerMat = new PlayerMat(null, new Decks().getDeck(), null, null, new ArrayList<Card>());
+        this.playerMat = new PlayerMat(new Decks().getDeck());
     }
 
     public static void associateSocketWithId(Socket socket, int clientId) {

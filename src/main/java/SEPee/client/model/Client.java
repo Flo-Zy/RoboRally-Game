@@ -333,6 +333,8 @@ public class Client extends Application {
                         case "NotYourCards":
                             System.out.println("Not Your Cards");
                             NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
+                            System.out.println(notYourCards.getMessageBody().getClientID()+" hat "+notYourCards.getMessageBody().getCardsInHand()+
+                                    " Karten bekommen");
                             break;
 
                         case "ShuffleCoding":

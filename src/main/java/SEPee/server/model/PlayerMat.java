@@ -13,16 +13,16 @@ public class PlayerMat{
     @Getter
     @Setter
     private ArrayList<Card> progDeck;
-    private UpgradeCard[] upgradeSlot;
+    private UpgradeCard[] permanentSlot;
     private UpgradeCard[] temporarySlot;
     private ArrayList<Card> discardPile;
 
-    public PlayerMat(Card[] register, ArrayList<Card> progDeck, UpgradeCard[] upgradeSlot, UpgradeCard[] temporarySlot, ArrayList<Card> discardPile) {
-        this.register = register;
+    public PlayerMat(ArrayList<Card> progDeck) {
+        this.register = new Card[5];
         this.progDeck = progDeck;
-        this.upgradeSlot = upgradeSlot;
-        this.temporarySlot = temporarySlot;
-        this.discardPile = discardPile;
+        //this.permanentSlot = new UpgradeCard[3];
+        //this.temporarySlot = new UpgradeCard[3];
+        this.discardPile = new ArrayList<>();
     }
 
 }
