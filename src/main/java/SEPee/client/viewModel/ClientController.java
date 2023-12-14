@@ -235,6 +235,8 @@ public class ClientController {
         System.exit(0);
     }
 
+
+    //alte roboter auswahl mit buttons
     /*
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
@@ -311,6 +313,7 @@ public class ClientController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
+        //alte for schleife ohne disable
         /*
         // Erstellen von ImageView und Label für jeden Roboter und Hinzufügen zum GridPane
         for (int i = 1; i <= 6; i++) {
