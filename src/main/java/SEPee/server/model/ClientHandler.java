@@ -256,7 +256,7 @@ public class ClientHandler implements Runnable {
                                         String serializedNotYourCards = Serialisierer.serialize(notYourCards);
                                         for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
                                             if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
-                                                writer.println(serializedNotYourCards);
+                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(),serializedNotYourCards);
                                             }
                                         }
                                     }
