@@ -324,6 +324,18 @@ public class Client extends Application {
                                         String serializedUTurn = Serialisierer.serialize(uTurn);
                                         writer.println(serializedUTurn);
 
+                                        PlayCard again = new PlayCard("Again");
+                                        String serializedagain = Serialisierer.serialize(again);
+                                        writer.println(serializedagain);
+
+                                        PlayCard again2 = new PlayCard("Again");
+                                        String serializedagain2 = Serialisierer.serialize(again2);
+                                        writer.println(serializedagain2);
+
+                                        PlayCard playCard5 = new PlayCard("MoveII");
+                                        String serializedPlayCard5 = Serialisierer.serialize(playCard5);
+                                        writer.println(serializedPlayCard5);
+
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?

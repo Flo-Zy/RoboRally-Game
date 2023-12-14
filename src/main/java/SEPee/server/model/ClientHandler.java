@@ -32,6 +32,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter writer;
     private Player player;
     private Robot robot;
+    private String lastPlayedCard = null;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
@@ -248,8 +249,10 @@ public class ClientHandler implements Runnable {
 
 
                             //logik für karteneffekte
-                            switch (playCardCard){
-                                case "Again":
+                            switch (lastPlayedCard){
+                                case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                                    //lastPlayedCard = "BackUp";
+                                    BackUp.makeEffect(this.robot);
 
                                     break;
                                 case "Backup": //vielleicht auch Move Back steht beides in Anleitung Seite 24
