@@ -171,35 +171,29 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SendChat":
                             System.out.println("Send Chat");
-
                             SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
-
                             String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
 
                             int receivedSendChatFrom = clientId;
                             int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
 
                             boolean receivedChatisPrivate;
-
-
                             if (receivedSendChatTo == -1) {
                                 receivedChatisPrivate = false;
                                 ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                                broadcast(serializedReceivedChat);
 
+                                broadcast(serializedReceivedChat);
                             } else {
                                 receivedChatisPrivate = true;
                                 ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+
                                 sendToOneClient(receivedSendChatTo, serializedReceivedChat);
 
                                 // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
                                 if (!(receivedSendChatTo == receivedSendChatFrom)) {
                                     sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
-
                                 }
                             }
                             break;
@@ -212,23 +206,13 @@ public class ClientHandler implements Runnable {
                             System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            /*
-                            int messageFrom = Player.getClientIdFromSocket(this.clientSocket);
-
-                            System.out.println("message from socket :" + this.clientSocket);
-
-                            System.out.println("message from :" + messageFrom);
-
-                             */
-
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
-
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){ // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) { // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
                                 Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
                                 Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
 
@@ -245,18 +229,19 @@ public class ClientHandler implements Runnable {
                                             player.getPlayerMat().getProgDeck().remove(0);
                                             i++;
                                         }
-
+                                        // sendet Karten Infos an aktuellen player
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
                                         System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                         // sende an diesen Client sein ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
 
+                                        // sendet Karten Infos an alle anderen player
                                         NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
                                         String serializedNotYourCards = Serialisierer.serialize(notYourCards);
                                         for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
                                             if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
-                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(),serializedNotYourCards);
+                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
                                             }
                                         }
                                     }
@@ -267,16 +252,12 @@ public class ClientHandler implements Runnable {
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
 
-
-
                                 /*
                                 // tester block für movement case
                                 Movement movement = new Movement(2, 0,0);
                                 String serializedMovement = Serialisierer.serialize(movement);
                                 broadcast(serializedMovement);
-
-                                 */
-
+                                */
 
                             } else {
                                 Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der (abhg. von Phase) dran ist
