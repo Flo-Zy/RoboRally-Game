@@ -1457,7 +1457,7 @@
 
                     <ImageView fx:id="Avatar1" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/BlauAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar1.png" />
                         </image>
                         <rotate>
                             90
@@ -1466,7 +1466,7 @@
 
                     <ImageView fx:id="Avatar2" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/RotAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
                         </image>
                         <rotate>
                             90
@@ -1475,7 +1475,7 @@
 
                     <ImageView fx:id="Avatar3" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/GrunAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar3.png" />
                         </image>
                         <rotate>
                             90
@@ -1484,7 +1484,7 @@
 
                     <ImageView fx:id="Avatar4" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/LilaAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar4.png" />
                         </image>
                         <rotate>
                             90
@@ -1493,7 +1493,7 @@
 
                     <ImageView fx:id="Avatar5" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/GelbAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
                         </image>
                         <rotate>
                             90
@@ -1502,7 +1502,7 @@
 
                     <ImageView fx:id="Avatar6" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/OrangeAvatar.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
                         </image>
                         <rotate>
                             90

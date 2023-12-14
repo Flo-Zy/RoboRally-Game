@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
@@ -230,7 +231,7 @@ public class ClientController {
         }
         System.exit(0);
     }
-
+    /*
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
@@ -297,6 +298,7 @@ public class ClientController {
         return 0; // Default value if no selection or unexpected button is pressed
     }
 
+
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
         for (Player player : Client.getPlayerListClient()) {
@@ -314,6 +316,7 @@ public class ClientController {
             dialog.setTitle("Map auswählen");
             dialog.setHeaderText("Bitte wählen Sie eine Map:");
 
+            // Map selection or choosing "Cancel"
             Optional<String> result = dialog.showAndWait();
 
             if (result.isPresent()) {
