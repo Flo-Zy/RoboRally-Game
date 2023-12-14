@@ -3,6 +3,8 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.*;
 
 import java.io.BufferedReader;
@@ -12,9 +14,8 @@ import java.io.PrintWriter;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,16 +24,13 @@ import static SEPee.server.model.Player.*;
 
 @Getter
 @Setter
-
-
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private int clientId;
     private List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
-
-
+    private Robot robot;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
@@ -78,8 +76,42 @@ public class ClientHandler implements Runnable {
 
                             this.player = new Player(playerName, clientId, playerFigure);
 
+                            // set robot orientation
+
+                            //Robot robot = new Robot()
+
+                            //this.player.getRobot().setOrientation("right");switch (player.getFigure()) {
+                            //                                case 1:
+                            //                                    Robot robot1 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    Robot.;
+                            //                                    break;
+                            //                                case 2:
+                            //                                    Robot robot2 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 3:
+                            //                                    Robot robot3 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 4:
+                            //                                    Robot robot4 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 5:
+                            //                                    Robot robot5 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                case 6:
+                            //                                    Robot robot6 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                            //                                    break;
+                            //
+                            //                                default:
+                            //                                    System.out.println("Robot could not be initialized.");
+                            //                                    break;
+                            //                          }
 
 
+                            //this.robot = new Robot(0,0,"right"); //initialize robots server side
 
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -177,78 +209,220 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SendChat":
                             System.out.println("Send Chat");
-
                             SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
-
                             String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
 
                             int receivedSendChatFrom = clientId;
                             int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
 
                             boolean receivedChatisPrivate;
-
-
                             if (receivedSendChatTo == -1) {
                                 receivedChatisPrivate = false;
                                 ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-                                broadcast(serializedReceivedChat);
 
+                                broadcast(serializedReceivedChat);
                             } else {
                                 receivedChatisPrivate = true;
                                 ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-
                                 String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+
                                 sendToOneClient(receivedSendChatTo, serializedReceivedChat);
 
                                 // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
                                 if (!(receivedSendChatTo == receivedSendChatFrom)) {
                                     sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
-
                                 }
                             }
                             break;
                         case "PlayCard":
                             System.out.println("Play Card");
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
+
+                            // Card played für Karten Verständnis an alle clients schicken
+                            String playCardCard = playCard.getMessageBody().getCard();
+                            CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
+                            String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
+                            broadcast(serializedCardPlayed);
+
+
+                            //logik für karteneffekte
+                            switch (playCardCard){
+                                case "Again":
+
+                                    break;
+                                case "Backup": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+
+                                    break;
+
+                                case "MoveI":
+                                    MoveI.makeEffect(this.robot);
+
+                                    int x = this.robot.getX();
+                                    int y = this.robot.getY();
+                                    int clientID = this.clientId;
+
+                                    Movement movement = new Movement(clientID, x, y);
+                                    String serializedMovement = Serialisierer.serialize(movement);
+                                    Thread.sleep(750);
+                                    broadcast(serializedMovement);
+                                    break;
+
+                                case "MoveII":
+                                    MoveII.makeEffect(this.robot);
+
+                                    int x2 = this.robot.getX();
+                                    int y2 = this.robot.getY();
+                                    int clientID2 = this.clientId;
+
+                                    Movement movement2 = new Movement(clientID2, x2, y2);
+                                    String serializedMovement2 = Serialisierer.serialize(movement2);
+                                    Thread.sleep(750);
+                                    broadcast(serializedMovement2);
+                                    break;
+
+
+                                case "MoveIII":
+                                    MoveIII.makeEffect(this.robot);
+
+                                    int x3 = this.robot.getX();
+                                    int y3 = this.robot.getY();
+                                    int clientID3 = this.clientId;
+
+                                    Movement movement3 = new Movement(clientID3, x3, y3);
+                                    String serializedMovement3 = Serialisierer.serialize(movement3);
+                                    Thread.sleep(750);
+                                    broadcast(serializedMovement3);
+                                    break;
+                                case "PowerUp":
+
+                                    break;
+
+                                case "RightTurn":
+                                    RightTurn.makeEffect(this.robot);
+                                    int clientIDRightTurn = this.clientId;;
+                                    PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
+                                    String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
+                                    Thread.sleep(750);
+                                    broadcast(serializedPlayerTurningRight);
+                                    break;
+                                case "LeftTurn":
+                                    LeftTurn.makeEffect(this.robot);
+                                    int clientIDLeftTurn = this.clientId;;
+                                    PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
+                                    String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
+                                    Thread.sleep(750);
+                                    broadcast(serializedPlayerTurningLeft);
+                                    break;
+
+                                case "UTurn":
+
+                                    break;
+
+                                default:
+                                    System.out.println("unknown card name");
+                                    break;
+
+
+                            }
+
+                            // Karteneffekt messagtype fur alle clients verschicken (Movement)
+
                             break;
                         case "SetStartingPoint":
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
                             System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
-                            /*
-                            int messageFrom = Player.getClientIdFromSocket(this.clientSocket);
-
-                            System.out.println("message from socket :" + this.clientSocket);
-
-                            System.out.println("message from :" + messageFrom);
-
-                             */
-
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
-
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+                            this.robot = new Robot(0,0,"right");
+                            this.robot.setY(setStartingPoint.getMessageBody().getY());
+                            this.robot.setX(setStartingPoint.getMessageBody().getX());
+/*
+                            switch (player.getFigure()) {
+                                case 1:
+                                    Robot robot1 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    Robot.;
+                                    break;
+                                case 2:
+                                    Robot robot2 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    break;
 
+                                case 3:
+                                    Robot robot3 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    break;
+
+                                case 4:
+                                    Robot robot4 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    break;
+
+                                case 5:
+                                    Robot robot5 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    break;
+
+                                case 6:
+                                    Robot robot6 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
+                                    break;
+
+                                default:
+                                    System.out.println("Robot could not be initialized.");
+                                    break;
+                            }
+
+                            */
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
-                                Server.getGame().nextCurrentPhase();
-                                Server.setCountPlayerTurns(0);
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){ // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
+                                Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
+                                Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
 
+                                // wenn currentPhase = 2 : YourCards (schicke jedem Client zuerst sein progDeck)
+                                if (Server.getGame().getCurrentPhase() == 2) {
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
+                                        int i=0;
+                                        while (i<9) {
+                                            // die ersten 9 karten ziehen
+                                            Card card = player.getPlayerMat().getProgDeck().get(0);
+                                            clientCards.add(card.getName());
+                                            // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                            player.getPlayerMat().getProgDeck().remove(0);
+                                            i++;
+                                        }
+                                        // sendet Karten Infos an aktuellen player
+                                        YourCards yourCards = new YourCards(clientCards);
+                                        String serializedYourCards = Serialisierer.serialize(yourCards);
+                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
+                                        // sende an diesen Client sein ProgDeck
+                                        sendToOneClient(player.getId(), serializedYourCards);
+
+                                        // sendet Karten Infos an alle anderen player
+                                        NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                        String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                        for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                                            if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
+                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Aktive Spielphase setzen
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
+
                             } else {
-                                Server.getGame().nextPlayer();
+                                Server.getGame().setNextPlayersTurn(); // setzt im game Objekt des Servers den currentPlayer, der (abhg. von Phase) dran ist
                             }
 
                             CurrentPlayer currentplayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
                             String serializedCurrentPlayer = Serialisierer.serialize(currentplayer);
                             broadcast(serializedCurrentPlayer);
+
                             break;
                         case "SelectedCard":
                             System.out.println("Selected Card");
@@ -285,6 +459,8 @@ public class ClientHandler implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace(); // Other IO exceptions can be handled separately if needed
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
 
         } catch (IOException e) {

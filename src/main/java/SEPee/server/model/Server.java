@@ -51,7 +51,7 @@ public class Server extends Thread{
     private static Game game;
     @Getter
     @Setter
-    private static int countPlayerTurns = 0;
+    private static int countPlayerTurns = 0; // wie viele Player waren in aktueller Phase schon dran
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");

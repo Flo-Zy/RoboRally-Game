@@ -51,23 +51,21 @@ public class ClientController {
     @Setter
     @Getter
     private int id;
-    public MapController mapController;
+    public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     private ArrayList<Integer> takenStartPoints = new ArrayList<>();
-
-
     private ArrayList<String> playerNames = new ArrayList<>();
+    @Setter
+    @Getter
+    private ArrayList<String> clientHand = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML
     private TextField messageField;
-
     @FXML
     private VBox DizzyHighwayMap;
-
     @Getter
     @Setter
     private int currentPhase;
-
     @Getter
     private int startPointX;
     @Getter
@@ -302,7 +300,7 @@ public class ClientController {
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
         for (Player player : Client.getPlayerListClient()) {
-            String playerName = player.getName(); // Assuming the Player class has a method getName() that returns the name
+            String playerName = player.getName();
             playerNames.add(playerName);
         }
     }
@@ -336,16 +334,14 @@ public class ClientController {
                 mapController = dizzyHighwayController;
 
                 dizzyHighwayController.init(client, primaryStage);
-
                 dizzyHighwayController.setRootVBox(DizzyHighwayMap);
 
                 // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
-
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
-                //Hidde Bereit nicht bereit  button
+                //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -474,6 +470,24 @@ public class ClientController {
 
     }
 
+
+    public void initDrawPile(int clientId, ArrayList<String> clientHand){
+        // test korrekt: System.out.println("tessssst: " + clientHand);
+        mapController.initializeDrawPile(clientId, clientHand); // int, ArrayList<String>
+    }
+
+    public void initRegister(int clientId, ArrayList<String> clientHand){
+        mapController.initializeRegister(clientId, clientHand);
+    }
+
+
+    public void movementPlayed(int clientIdToMove, int newX, int newY) {
+        mapController.movementPlayed(clientIdToMove, newX, newY);
+    }
+
+    public void playerTurn(int clientIdToTurn, String rotation){
+        mapController.playerTurn(clientIdToTurn, rotation);
+    }
 
 
 
