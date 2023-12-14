@@ -283,9 +283,9 @@ public class DizzyHighwayController extends MapController {
                         // Prüfe, ob es noch Karten im Kartenstapel gibt
                         if (!drawPileClient.isEmpty()) {
                             // Hole die oberste Karte vom Kartenstapel
-                            Card topCard = drawPileClient.get(0);
+                            Card topCard = drawPileClient.get(i);
                             // Entferne die oberste Karte vom Kartenstapel
-                            drawPileClient.remove(0);
+                            // drawPileClient.remove(0);
 
                             // Setze das Bild des ImageView-Elements mit dem Bild der Karte
                             Image cardImage = new Image(topCard.getImageUrl());
@@ -344,7 +344,7 @@ public class DizzyHighwayController extends MapController {
 
                                 // gewählte Karte aus Hand unsichtbar machen
                                 handImageView.setVisible(false);
-                                handImageView.setManaged(false);
+                                // handImageView.setManaged(false);
 
                                 // sende serialisiertes SelectedCard
                                 SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter.get());
