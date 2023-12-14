@@ -315,7 +315,7 @@ public class DizzyHighwayController extends MapController {
         playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = playerDrawPileMap.get(clientId);
-
+        
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
             // Prüfe, ob die HBox totalHand gefunden wurde
@@ -343,7 +343,8 @@ public class DizzyHighwayController extends MapController {
                                 registerImageView.setManaged(true);
 
                                 // gewählte Karte aus Hand unsichtbar machen
-                                handImageView.setVisible(false);
+                                // handImageView.setVisible(false);
+                                handImageView.setImage(null);
                                 // handImageView.setManaged(false);
 
                                 // sende serialisiertes SelectedCard
@@ -385,8 +386,9 @@ public class DizzyHighwayController extends MapController {
                             handImageView.setManaged(true);
 
                             // gewählte Karte aus Hand unsichtbar machen
-                            registerImageView.setVisible(false);
-                            registerImageView.setManaged(false);
+                            // registerImageView.setVisible(false);
+                            registerImageView.setImage(null);
+                            // registerImageView.setManaged(false);
 
                             // sende serialisiertes SelectedCard
                             SelectedCard selectedCard = new SelectedCard(null, index2);
@@ -398,7 +400,7 @@ public class DizzyHighwayController extends MapController {
             }
         }
     }
-
+    
     public void movementPlayed(int clientId, int newX, int newY) {
 
         Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
