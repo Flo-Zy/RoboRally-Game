@@ -427,6 +427,14 @@ public class ClientHandler implements Runnable {
                         case "SelectedCard":
                             System.out.println("Selected Card");
                             SelectedCard selectedCard = Deserialisierer.deserialize(serializedReceivedString, SelectedCard.class);
+                            String card = selectedCard.getMessageBody().getCard();
+                            int cardRegister = selectedCard.getMessageBody().getRegister();
+                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
+                                }
+                            }
+                            System.out.println(card);
                             break;
                         case "SelectionFinished":
                             System.out.println("Selection Finished");

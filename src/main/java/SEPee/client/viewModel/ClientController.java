@@ -5,6 +5,7 @@ import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
+import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
 //Später auslagern
@@ -469,7 +470,6 @@ public class ClientController {
 
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
-
     }
 
     public void initDrawPile(){

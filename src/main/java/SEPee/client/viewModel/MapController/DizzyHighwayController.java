@@ -3,7 +3,9 @@ package SEPee.client.viewModel.MapController;
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.CardSelected;
 import SEPee.serialisierung.messageType.PlayerTurning;
+import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
@@ -78,6 +80,9 @@ public class DizzyHighwayController extends MapController {
     public HBox totalHand;
     @FXML
     public HBox totalRegister;
+
+    @Getter
+    ArrayList<Card> register;
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
@@ -336,13 +341,16 @@ public class DizzyHighwayController extends MapController {
                                 registerImageView.setVisible(true);
                                 registerImageView.setManaged(true);
 
+                                // gewählte Karte aus Hand unsichtbar machen
                                 handImageView.setVisible(false);
                                 handImageView.setManaged(false);
 
-                                counter.incrementAndGet();
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter.get());
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
 
-                                // Optional: Entferne die ausgewählte Karte aus der Hand
-                                // clientHand.remove(index);
+                                counter.incrementAndGet();
                             } else {
                                 System.out.println("Register voll");
                             }
