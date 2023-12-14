@@ -246,7 +246,9 @@ public class ClientHandler implements Runnable {
                             CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
                             String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
                             broadcast(serializedCardPlayed);
-
+                            if(!playCardCard.equals("Again")){
+                                lastPlayedCard = playCardCard;
+                            }
 
                             //logik für karteneffekte
                             switch (lastPlayedCard){
@@ -254,12 +256,18 @@ public class ClientHandler implements Runnable {
                                     lastPlayedCard = "BackUp";
                                     BackUp.makeEffect(this.robot);
 
-                                    break;
-                                case "Backup": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                                    int xBackup = this.robot.getX();
+                                    int yBackup = this.robot.getY();
+                                    int clientIDBackup = this.clientId;
 
+                                    Movement movementBackup = new Movement(clientIDBackup, xBackup, yBackup);
+                                    String serializedMovementBackup = Serialisierer.serialize(movementBackup);
+                                    Thread.sleep(750);
+                                    broadcast(serializedMovementBackup);
                                     break;
 
                                 case "MoveI":
+                                    //lastPlayedCard = "MoveI";
                                     MoveI.makeEffect(this.robot);
 
                                     int x = this.robot.getX();
@@ -273,6 +281,7 @@ public class ClientHandler implements Runnable {
                                     break;
 
                                 case "MoveII":
+                                    //lastPlayedCard = "MoveII";
                                     MoveII.makeEffect(this.robot);
 
                                     int x2 = this.robot.getX();
@@ -287,6 +296,7 @@ public class ClientHandler implements Runnable {
 
 
                                 case "MoveIII":
+                                    //lastPlayedCard = "MoveIII";
                                     MoveIII.makeEffect(this.robot);
 
                                     int x3 = this.robot.getX();
@@ -299,20 +309,23 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedMovement3);
                                     break;
                                 case "PowerUp":
+                                    //lastPlayedCard = "PowerUp";
 
                                     break;
 
                                 case "RightTurn":
+                                    //lastPlayedCard = "RightTurn";
                                     RightTurn.makeEffect(this.robot);
-                                    int clientIDRightTurn = this.clientId;;
+                                    int clientIDRightTurn = this.clientId;
                                     PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
                                     String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
                                     Thread.sleep(750);
                                     broadcast(serializedPlayerTurningRight);
                                     break;
                                 case "LeftTurn":
+                                    //lastPlayedCard = "LeftTurn";
                                     LeftTurn.makeEffect(this.robot);
-                                    int clientIDLeftTurn = this.clientId;;
+                                    int clientIDLeftTurn = this.clientId;
                                     PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
                                     String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
                                     Thread.sleep(750);
@@ -320,7 +333,15 @@ public class ClientHandler implements Runnable {
                                     break;
 
                                 case "UTurn":
-
+                                    //lastPlayedCard = "UTurn";
+                                    UTurn.makeEffect(this.robot);
+                                    int clientIDUTurn = this.clientId;
+                                    PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
+                                    String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
+                                    //send twice turn by 90 degrees in order to end up turning 180 degrees
+                                    Thread.sleep(750);
+                                    broadcast(serializedPlayerTurningUTurn);
+                                    broadcast(serializedPlayerTurningUTurn);
                                     break;
 
                                 default:
