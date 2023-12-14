@@ -405,6 +405,7 @@ public class Client extends Application {
                         case "CardSelected":
                             System.out.println("Card Selected");
                             CardSelected cardSelected = Deserialisierer.deserialize(serializedReceivedString, CardSelected.class);
+                            System.out.println("Player " + cardSelected.getMessageBody().getClientID() + " has set his register " + cardSelected.getMessageBody().getRegister());
                             break;
                         case "TimerStarted":
                             System.out.println("Timer Started");

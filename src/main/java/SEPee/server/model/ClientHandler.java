@@ -435,6 +435,9 @@ public class ClientHandler implements Runnable {
                                 }
                             }
                             System.out.println(card);
+                            CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
+                            String serializedCardSelected = Serialisierer.serialize(cardSelected);
+                            broadcast(serializedCardSelected);
                             break;
                         case "SelectionFinished":
                             System.out.println("Selection Finished");
