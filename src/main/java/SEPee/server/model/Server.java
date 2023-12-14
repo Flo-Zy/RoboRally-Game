@@ -106,7 +106,7 @@ public class Server extends Thread{
                         System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                         //welcome erstellen und an den Client schicken
 
-
+                        new Thread(new AliveMessageSender()).start();
 
                         System.out.println(clientID);
                         Welcome welcome = new Welcome(clientID);
@@ -124,6 +124,28 @@ public class Server extends Thread{
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static class AliveMessageSender implements Runnable {
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    sendAliveMessages();
+                    Thread.sleep(5000);  // Warte 5 Sekunden
+                }
+            } catch (InterruptedException e) {
+                System.out.println("AliveMessageSender wurde unterbrochen");
+            }
+        }
+    }
+
+    private static void sendAliveMessages() {
+        synchronized (clients) {
+            for (ClientHandler clientHandler : clients) {
+                clientHandler.sendAliveMessage();
+            }
         }
     }
 

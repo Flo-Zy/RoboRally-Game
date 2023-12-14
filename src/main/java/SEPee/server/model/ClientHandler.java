@@ -57,7 +57,8 @@ public class ClientHandler implements Runnable {
                     switch (input) {
                         //HelloServer wird oben behandelt beim Verbindungsaufbau
                         case "Alive":
-                            System.out.println("Alive");
+                            System.out.println("Alive zurück bekommen");
+                            //fehlt noch, dass wenn man kein alive zurückbekommt innerhalb 5 Sekunden, dann messageType connectionUpdate schicken
                             break;
                         case "PlayerValues":
                             System.out.println("Player Values erhalten");
@@ -467,5 +468,10 @@ public class ClientHandler implements Runnable {
         return x;
     }
 
+    public void sendAliveMessage() {
+        Alive alive = new Alive();
+        String serializedAlive = Serialisierer.serialize(alive);
+        writer.println(serializedAlive);
+    }
 
 }
