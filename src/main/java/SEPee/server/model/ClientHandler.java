@@ -78,44 +78,6 @@ public class ClientHandler implements Runnable {
 
                             this.player = new Player(playerName, clientId, playerFigure);
 
-                            // set robot orientation
-
-                            //Robot robot = new Robot()
-
-                            //this.player.getRobot().setOrientation("right");switch (player.getFigure()) {
-                            //                                case 1:
-                            //                                    Robot robot1 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    Robot.;
-                            //                                    break;
-                            //                                case 2:
-                            //                                    Robot robot2 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    break;
-                            //
-                            //                                case 3:
-                            //                                    Robot robot3 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    break;
-                            //
-                            //                                case 4:
-                            //                                    Robot robot4 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    break;
-                            //
-                            //                                case 5:
-                            //                                    Robot robot5 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    break;
-                            //
-                            //                                case 6:
-                            //                                    Robot robot6 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                            //                                    break;
-                            //
-                            //                                default:
-                            //                                    System.out.println("Robot could not be initialized.");
-                            //                                    break;
-                            //                          }
-
-
-                            //this.robot = new Robot(0,0,"right"); //initialize robots server side
-
-
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
                             //playerAdded senden an alle alten Clients
@@ -253,7 +215,7 @@ public class ClientHandler implements Runnable {
                             //logik für karteneffekte
                             switch (lastPlayedCard){
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
-                                    lastPlayedCard = "BackUp";
+                                    //lastPlayedCard = "BackUp";
                                     BackUp.makeEffect(this.robot);
 
                                     int xBackup = this.robot.getX();

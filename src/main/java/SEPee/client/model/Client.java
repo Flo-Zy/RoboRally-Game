@@ -145,6 +145,9 @@ public class Client extends Application {
                     switch (messageType) {
                         case "Alive":
                             System.out.println("Alive");
+                            Alive alive = new Alive();
+                            String serializedAlive = Serialisierer.serialize(alive);
+                            writer.println(serializedAlive);
                             break;
                         case "Welcome":
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
@@ -339,6 +342,8 @@ public class Client extends Application {
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?
+
+
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
