@@ -834,11 +834,18 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field73" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                    <ImageView fx:id="field73a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
+
+                    <ImageView fx:id="field73b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Custom/Reboot.png" />
+                        </image>
+                    </ImageView>
+
 
                     <ImageView fx:id="field74" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="4">
                         <image>

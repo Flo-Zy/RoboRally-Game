@@ -404,10 +404,19 @@ public class Client extends Application {
                         case "TimerStarted":
                             System.out.println("Timer Started");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
+
+                            //thread sleep 30000
+
+
                             break;
                         case "TimerEnded":
                             System.out.println("Timer Ended");
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
+                            // zu langsamen client IDS werden mitgegeben
+                            //weitere auswahl von karten unmoglich
+                            // random karten werden in leere Hand gelegt.
+
+
                             break;
                         case "CardsYouGotNow":
                             System.out.println("Cards You Got Now");
