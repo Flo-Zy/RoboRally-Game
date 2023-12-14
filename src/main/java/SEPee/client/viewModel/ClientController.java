@@ -311,7 +311,7 @@ public class ClientController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-
+        /*
         // Erstellen von ImageView und Label für jeden Roboter und Hinzufügen zum GridPane
         for (int i = 1; i <= 6; i++) {
             // Laden des Bildes für den Roboter
@@ -334,6 +334,32 @@ public class ClientController {
                 dialog.setResult(robotNumber); // Setzen des Ergebnisses
                 dialog.close(); // Schließen des Dialogs
             });
+        }*/
+        for (int i = 1; i <= 6; i++) {
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+
+            Label nameLabel = new Label("Robot " + i);
+            nameLabel.setAlignment(Pos.CENTER);
+
+            // Hinzufügen von ImageView und Label zum GridPane
+            grid.add(imageView, i - 1, 0);
+            grid.add(nameLabel, i - 1, 1);
+
+            // Überprüfen, ob der Roboter bereits genommen wurde
+            if (takenFigures.contains(i)) {
+                imageView.setDisable(true); // Deaktivieren des ImageView
+                imageView.setOpacity(0.1); // Reduzierung der Transparenz
+            } else {
+                // Event Handler für Klicks auf das ImageView
+                final int robotNumber = i;
+                imageView.setOnMouseClicked(event -> {
+                    dialog.setResult(robotNumber);
+                    dialog.close();
+                });
+            }
         }
 
         // Hinzufügen des GridPane zum Dialog
