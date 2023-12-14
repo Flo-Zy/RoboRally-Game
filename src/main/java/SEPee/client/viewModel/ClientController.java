@@ -234,6 +234,7 @@ public class ClientController {
         }
         System.exit(0);
     }
+
     /*
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
@@ -300,6 +301,7 @@ public class ClientController {
         }
         return 0; // Default value if no selection or unexpected button is pressed
     }*/
+
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
@@ -311,9 +313,9 @@ public class ClientController {
         grid.setVgap(10);
 
         // Erstellen von ImageView und Label für jeden Roboter und Hinzufügen zum GridPane
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 6; i++) {
             // Laden des Bildes für den Roboter
-            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar1.png" + i + ".png"); // Pfad zum Bild
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png"); // Pfad zum Bild
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(100); // Breite anpassen
             imageView.setFitHeight(100); // Höhe anpassen

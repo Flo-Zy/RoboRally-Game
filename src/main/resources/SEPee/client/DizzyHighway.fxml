@@ -1466,7 +1466,7 @@
 
                     <ImageView fx:id="Avatar2" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
                         </image>
                         <rotate>
                             90
@@ -1493,7 +1493,7 @@
 
                     <ImageView fx:id="Avatar5" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
                         </image>
                         <rotate>
                             90
@@ -1502,7 +1502,7 @@
 
                     <ImageView fx:id="Avatar6" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
+                            <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
                         </image>
                         <rotate>
                             90
