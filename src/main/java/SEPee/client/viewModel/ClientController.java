@@ -9,6 +9,8 @@ import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
 //Später auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,7 +58,7 @@ public class ClientController {
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
-    private ArrayList<String> clientHand = new ArrayList<>();
+    private ArrayList<Card> clientHand = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML
@@ -470,14 +472,13 @@ public class ClientController {
 
     }
 
-
-    public void initDrawPile(int clientId, ArrayList<String> clientHand){
+    public void initDrawPile(){
         // test korrekt: System.out.println("tessssst: " + clientHand);
-        mapController.initializeDrawPile(clientId, clientHand); // int, ArrayList<String>
+        mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
     }
 
-    public void initRegister(int clientId, ArrayList<String> clientHand){
-        mapController.initializeRegister(clientId, clientHand);
+    public void initRegister(){
+        mapController.initializeRegister(id, clientHand);
     }
 
 
