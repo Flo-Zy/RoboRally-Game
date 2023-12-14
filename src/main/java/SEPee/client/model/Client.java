@@ -257,7 +257,6 @@ public class Client extends Application {
                             System.out.println("Active Phase");
                             ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
                             controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
-
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.initRegister();

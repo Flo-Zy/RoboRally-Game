@@ -473,14 +473,12 @@ public class ClientController {
     }
 
     public void initDrawPile(){
-        // test korrekt: System.out.println("tessssst: " + clientHand);
         mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
     }
 
     public void initRegister(){
         mapController.initializeRegister(id, clientHand);
     }
-
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);

@@ -27,6 +27,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class DizzyHighwayController extends MapController {
 
     @Setter
@@ -314,6 +316,7 @@ public class DizzyHighwayController extends MapController {
             HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
 
             if (totalHand != null) {
+                AtomicInteger counter = new AtomicInteger(0);
                 // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
                 for (int i = 0; i < 9; i++) {
                     ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
@@ -323,18 +326,26 @@ public class DizzyHighwayController extends MapController {
 
                         // Füge den Event-Handler für das ImageView hinzu
                         handImageView.setOnMouseClicked(mouseEvent -> {
-                            // Hier könnte die Logik stehen, um die ausgewählte Karte zu verarbeiten
-                            // Zum Beispiel: clientHand.get(index) gibt die ausgewählte Karte zurück
+                            if (counter.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter.get());
 
-                            // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
-                            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(index);
-                            Image cardImage = new Image(clientHand.get(index).getImageUrl());
-                            registerImageView.setImage(cardImage);
-                            registerImageView.setVisible(true);
-                            registerImageView.setManaged(true);
+                                Image cardImage = new Image(clientHand.get(index).getImageUrl());
+                                registerImageView.setImage(cardImage);
 
-                            // Optional: Entferne die ausgewählte Karte aus der Hand
-                            // clientHand.remove(index);
+                                registerImageView.setVisible(true);
+                                registerImageView.setManaged(true);
+
+                                handImageView.setVisible(false);
+                                handImageView.setManaged(false);
+
+                                counter.incrementAndGet();
+
+                                // Optional: Entferne die ausgewählte Karte aus der Hand
+                                // clientHand.remove(index);
+                            } else {
+                                System.out.println("Register voll");
+                            }
                         });
                     }
                 }
