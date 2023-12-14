@@ -12,10 +12,13 @@ import SEPee.server.model.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -296,6 +299,47 @@ public class ClientController {
             return selectedRobotIndex;
         }
         return 0; // Default value if no selection or unexpected button is pressed
+    }*/
+    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
+        Dialog<Integer> dialog = new Dialog<>();
+        dialog.setTitle("Robot Selection");
+        dialog.setHeaderText("Please select a robot:");
+
+        // GridPane für die Anordnung der Bilder und Namen
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Erstellen von ImageView und Label für jeden Roboter und Hinzufügen zum GridPane
+        for (int i = 1; i <= 5; i++) {
+            // Laden des Bildes für den Roboter
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar1.png" + i + ".png"); // Pfad zum Bild
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100); // Breite anpassen
+            imageView.setFitHeight(100); // Höhe anpassen
+
+            // Erstellen eines Labels für den Namen des Roboters
+            Label nameLabel = new Label("Robot " + i);
+            nameLabel.setAlignment(Pos.CENTER); // Zentrieren des Texts
+
+            // Hinzufügen von ImageView und Label zum GridPane
+            grid.add(imageView, i - 1, 0); // Hinzufügen des ImageView
+            grid.add(nameLabel, i - 1, 1); // Hinzufügen des Labels unter dem ImageView
+
+            // Event Handler für Klicks auf das ImageView
+            final int robotNumber = i;
+            imageView.setOnMouseClicked(event -> {
+                dialog.setResult(robotNumber); // Setzen des Ergebnisses
+                dialog.close(); // Schließen des Dialogs
+            });
+        }
+
+        // Hinzufügen des GridPane zum Dialog
+        dialog.getDialogPane().setContent(grid);
+
+        // Anzeigen des Dialogs und Warten auf das Ergebnis
+        Optional<Integer> result = dialog.showAndWait();
+        return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
     }
 
 
