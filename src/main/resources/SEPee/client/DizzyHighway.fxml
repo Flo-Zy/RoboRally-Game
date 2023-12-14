@@ -161,9 +161,6 @@
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field12b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">

@@ -251,7 +251,7 @@ public class ClientHandler implements Runnable {
                             //logik für karteneffekte
                             switch (lastPlayedCard){
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
-                                    //lastPlayedCard = "BackUp";
+                                    lastPlayedCard = "BackUp";
                                     BackUp.makeEffect(this.robot);
 
                                     break;
@@ -343,38 +343,6 @@ public class ClientHandler implements Runnable {
                             this.robot = new Robot(0,0,"right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
-/*
-                            switch (player.getFigure()) {
-                                case 1:
-                                    Robot robot1 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    Robot.;
-                                    break;
-                                case 2:
-                                    Robot robot2 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    break;
-
-                                case 3:
-                                    Robot robot3 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    break;
-
-                                case 4:
-                                    Robot robot4 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    break;
-
-                                case 5:
-                                    Robot robot5 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    break;
-
-                                case 6:
-                                    Robot robot6 = new Robot(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY());
-                                    break;
-
-                                default:
-                                    System.out.println("Robot could not be initialized.");
-                                    break;
-                            }
-
-                            */
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
