@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class MoveIII extends ProgCard {
     public MoveIII() {
-        super();
+        super("MoveIII", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_03.png");
     }
 
     public static void makeEffect(Robot robot){
@@ -38,6 +38,6 @@ public class MoveIII extends ProgCard {
 
     @Override
     public String getImageUrl() {
-        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_02.png";
+        return "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_03.png";
     }
 }

@@ -10,7 +10,7 @@ public class MoveI extends ProgCard {
 
 
     public MoveI() {
-        super();
+        super("MoveI", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_01.png");
     }
 
     public static void makeEffect(Robot robot){

@@ -3,6 +3,7 @@ package SEPee.server.model;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
+import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.*;
 
@@ -23,8 +24,6 @@ import static SEPee.server.model.Player.*;
 
 @Getter
 @Setter
-
-
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private int clientId;
@@ -32,8 +31,6 @@ public class ClientHandler implements Runnable {
     private PrintWriter writer;
     private Player player;
     private Robot robot;
-
-
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;

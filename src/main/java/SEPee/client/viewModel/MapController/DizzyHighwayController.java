@@ -258,14 +258,14 @@ public class DizzyHighwayController extends MapController {
                 case "LeftTurn":
                     drawPile.add(new LeftTurn());
                     break;
-                case "Move1":
-                    drawPile.add(new Move1());
+                case "MoveI":
+                    drawPile.add(new MoveI());
                     break;
-                case "Move2":
-                    drawPile.add(new Move2());
+                case "MoveII":
+                    drawPile.add(new MoveII());
                     break;
-                case "Move3":
-                    drawPile.add(new Move3());
+                case "MoveIII":
+                    drawPile.add(new MoveIII());
                     break;
                 case "PowerUp":
                     drawPile.add(new PowerUp());
@@ -331,8 +331,7 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeRegister(int clientId, ArrayList<String> clientHand){
-     */
+    public void initializeRegister(int clientId, ArrayList<String> clientHand){}
 
     public void movementPlayed(int clientId, int newX, int newY) {
 
@@ -360,9 +359,6 @@ public class DizzyHighwayController extends MapController {
             }
         }
     }
-
-
-
 }
 
 
