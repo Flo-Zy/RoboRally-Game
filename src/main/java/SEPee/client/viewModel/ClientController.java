@@ -307,18 +307,20 @@ public class ClientController {
 
     public String showSelectMapDialog() {
 
-        //ChoiceDialog mit der Liste der Maps
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
-        dialog.setTitle("Map auswählen");
-        dialog.setHeaderText("Bitte wählen Sie eine Map:");
-
-        //Map auswählen oder "Abbrechen" wählen
-        Optional<String> result = dialog.showAndWait();
-
         String selectedMap = null;
-        if (result.isPresent()) {
-            selectedMap = result.get();
+
+        while (selectedMap == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
+            dialog.setTitle("Map auswählen");
+            dialog.setHeaderText("Bitte wählen Sie eine Map:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                selectedMap = result.get();
+            }
         }
+
         return selectedMap;
     }
 
@@ -469,7 +471,6 @@ public class ClientController {
         mapController.avatarAppear(player, x, y);
 
     }
-
 
     public void initDrawPile(int clientId, ArrayList<String> clientHand){
         // test korrekt: System.out.println("tessssst: " + clientHand);

@@ -254,6 +254,8 @@ public class Client extends Application {
                         case "CardPlayed":
                             System.out.println("Card Played");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
+
+                            
                             break;
                         case "ActivePhase":
                             System.out.println("Active Phase");
