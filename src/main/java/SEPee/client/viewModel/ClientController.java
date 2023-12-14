@@ -476,6 +476,10 @@ public class ClientController {
         mapController.initializeDrawPile(clientId, clientHand); // int, ArrayList<String>
     }
 
+    public void initRegister(int clientId, ArrayList<String> clientHand){
+        mapController.initializeRegister(clientId, clientHand);
+    }
+
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);

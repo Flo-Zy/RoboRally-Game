@@ -325,6 +325,10 @@ public class DizzyHighwayController extends MapController {
             }
         }
     }
+
+    public void initializeRegister(int clientId, ArrayList<String> clientHand){
+
+    }
 }
 
 
