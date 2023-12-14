@@ -310,38 +310,32 @@ public class DizzyHighwayController extends MapController {
         List<Card> drawPileClient = playerDrawPileMap.get(clientId);
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
-            HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
-            // totalRegister.setOnMouseClicked(mouseEvent -> );
+            // Prüfe, ob die HBox totalHand gefunden wurde
+            HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
 
-            // Prüfe, ob die HBox gefunden wurde
-            if (totalRegister != null) {
-                // Durchlaufe die alle 5 ImageView-Elemente in der HBox
-                for (int i = 0; i < 5; i++) {
-                    // Hole das i-te ImageView-Element
-                    ImageView imageView = (ImageView) totalRegister.getChildren().get(i);
+            if (totalHand != null) {
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 9; i++) {
+                    ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
 
-                    // Prüfe, ob das ImageView-Element gefunden wurde
-                    if (imageView != null) {
-                        // Prüfe, ob es noch Karten im Kartenstapel gibt
-                        if (!drawPileClient.isEmpty()) {
-                            // Hole die oberste Karte vom Kartenstapel
-                            Card topCard = drawPileClient.get(i);
-                            // Entferne die oberste Karte vom Kartenstapel
-                            // drawPileClient.remove(0);
+                    if (handImageView != null) {
+                        final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
 
-                            // Setze das Bild des ImageView-Elements mit dem Bild der Karte
-                            Image cardImage = new Image(topCard.getImageUrl());
-                            imageView.setImage(cardImage);
+                        // Füge den Event-Handler für das ImageView hinzu
+                        handImageView.setOnMouseClicked(mouseEvent -> {
+                            // Hier könnte die Logik stehen, um die ausgewählte Karte zu verarbeiten
+                            // Zum Beispiel: clientHand.get(index) gibt die ausgewählte Karte zurück
 
-                            // Mache das ImageView-Element sichtbar
-                            imageView.setVisible(true);
-                            imageView.setManaged(true);
-                        } else {
-                            // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
-                            imageView.setImage(null);
-                            imageView.setVisible(false);
-                            imageView.setManaged(false);
-                        }
+                            // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(index);
+                            Image cardImage = new Image(clientHand.get(index).getImageUrl());
+                            registerImageView.setImage(cardImage);
+                            registerImageView.setVisible(true);
+                            registerImageView.setManaged(true);
+
+                            // Optional: Entferne die ausgewählte Karte aus der Hand
+                            // clientHand.remove(index);
+                        });
                     }
                 }
             }
