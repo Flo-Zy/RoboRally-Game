@@ -316,6 +316,14 @@ public class Client extends Application {
                                         String serializedPlayCard4 = Serialisierer.serialize(playCard4);
                                         writer.println(serializedPlayCard4);
 
+                                        PlayCard backUp = new PlayCard("BackUp");
+                                        String serializedBackUp = Serialisierer.serialize(backUp);
+                                        writer.println(serializedBackUp);
+
+                                        PlayCard uTurn = new PlayCard("UTurn");
+                                        String serializedUTurn = Serialisierer.serialize(uTurn);
+                                        writer.println(serializedUTurn);
+
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?
