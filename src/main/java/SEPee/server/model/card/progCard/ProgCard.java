@@ -10,4 +10,5 @@ public abstract class ProgCard extends Card {
         super(name, imageUrl);
     }
     public void makeEffect(){}
+
 }

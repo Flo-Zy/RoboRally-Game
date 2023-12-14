@@ -7,12 +7,21 @@ import lombok.Setter;
 public class Robot {
     private int x;
     private int y;
-    private Orientation orientation;
+    //private Orientation orientation;
     //private int energyReserve;
+    private String orientation;
 
-    public Robot(int x, int y) {
+    /*
+    public void setOrientation(String orientation);{
+        orientation = this.orientation;
+    }
+
+     */
+
+    public Robot(int x, int y, String orientation) {
         this.x = x;
         this.y = y;
+        this.orientation = orientation;
         // Other initializations if needed
         //orientation
     }

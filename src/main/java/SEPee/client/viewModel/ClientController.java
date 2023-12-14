@@ -485,6 +485,10 @@ public class ClientController {
         mapController.movementPlayed(clientIdToMove, newX, newY);
     }
 
+    public void playerTurn(int clientIdToTurn, String rotation){
+        mapController.playerTurn(clientIdToTurn, rotation);
+    }
+
 
 
 

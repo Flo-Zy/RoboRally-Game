@@ -1,19 +1,29 @@
 package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
+import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.PlayerTurning;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.Decks;
+import javafx.application.Platform;
 import SEPee.server.model.card.progCard.*;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
@@ -82,7 +92,7 @@ public class DizzyHighwayController extends MapController {
 
         switch (player.getFigure()) {
             case 1:
-                Robot robot1 = new Robot(x, y); // set coordinates for robot1
+                Robot robot1 = new Robot(x, y, "right"); // set coordinates for robot1
                 playerRobotMap.put(player, robot1); //link player and robot
 
                 ImageView avatar1ImageView = Avatar1; // store imageview
@@ -97,7 +107,7 @@ public class DizzyHighwayController extends MapController {
 
                 break;
             case 2:
-                Robot robot2 = new Robot(x, y);
+                Robot robot2 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot2);
 
                 ImageView avatar2ImageView = Avatar2;
@@ -112,7 +122,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 3:
-                Robot robot3 = new Robot(x, y);
+                Robot robot3 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot3);
 
                 ImageView avatar3ImageView = Avatar3;
@@ -124,7 +134,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 4:
-                Robot robot4 = new Robot(x, y);
+                Robot robot4 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot4);
 
                 ImageView avatar4ImageView = Avatar4;
@@ -136,7 +146,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 5:
-                Robot robot5 = new Robot(x, y);
+                Robot robot5 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot5);
 
                 ImageView avatar5ImageView = Avatar5;
@@ -148,7 +158,7 @@ public class DizzyHighwayController extends MapController {
                 break;
 
             case 6:
-                Robot robot6 = new Robot(x, y);
+                Robot robot6 = new Robot(x, y, "right");
                 playerRobotMap.put(player, robot6);
 
                 ImageView avatar6ImageView = Avatar6;
@@ -173,12 +183,7 @@ public class DizzyHighwayController extends MapController {
         // send messagetype move
     }
 
-    private void rotateAvatar(int clientId, String rotateDirection) {
-        PlayerTurning playerTurning = new PlayerTurning(clientId, rotateDirection);
-        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-        Client.getWriter().println(serializedPlayerTurning);
-        // send messageType PlayerTurning
-    }
+
 
     //tester fur spätere kartenimplementierung:
     public void moveRobotTester(Robot robot) {
@@ -327,8 +332,37 @@ public class DizzyHighwayController extends MapController {
     }
 
     public void initializeRegister(int clientId, ArrayList<String> clientHand){
+     */
 
+    public void movementPlayed(int clientId, int newX, int newY) {
+
+        Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
+        Robot robot = playerRobotMap.get(player);
+
+        ImageView imageView = robotImageViewMap.get(robot);
+        GridPane.setColumnIndex(imageView, newX);
+        GridPane.setRowIndex(imageView, newY);
     }
+
+    public void playerTurn(int clientIdToTurn, String rotation) {
+        Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+
+        ImageView imageView = robotImageViewMap.get(robot);
+
+        if (imageView != null) {
+            double currentRotation = imageView.getRotate();
+            double rotationAmount = 90.0;
+
+            if (rotation.equals("clockwise")) {
+                imageView.setRotate(currentRotation + rotationAmount);
+            } else if (rotation.equals("counterclockwise")) {
+                imageView.setRotate(currentRotation - rotationAmount);
+            }
+        }
+    }
+
+
+
 }
 
 

@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.card.progCard.RightTurn;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -285,15 +286,39 @@ public class Client extends Application {
                                 case 2:
                                     System.out.println("Programmierphase");
                                         for (Player player : playerListClient) { // in Programmierphase is
-
                                             // Schritt 1: init drawPile in totalHand
                                             // controller.initDrawPile(player.getId());
                                             // System.out.println("Player: " + player.getName() + " got 9 cards.");
+                                        }
+
+                                        //harcode tester für MoveI - III
+                                        PlayCard playCard = new PlayCard("MoveI");
+                                        String serializedPlayCard = Serialisierer.serialize(playCard);
+                                        writer.println(serializedPlayCard);
+
+                                        PlayCard playCard2 = new PlayCard("MoveII");
+                                        String serializedPlayCard2 = Serialisierer.serialize(playCard2);
+                                        writer.println(serializedPlayCard2);
+
+                                        PlayCard rightTurn = new PlayCard("RightTurn");
+                                        String serializedRightTurn = Serialisierer.serialize(rightTurn);
+                                        writer.println(serializedRightTurn);
+
+                                        PlayCard playCard3 = new PlayCard("MoveIII");
+                                        String serializedPlayCard3 = Serialisierer.serialize(playCard3);
+                                        writer.println(serializedPlayCard3);
+
+                                        PlayCard leftTurn = new PlayCard("LeftTurn");
+                                        String serializedleftTurn = Serialisierer.serialize(leftTurn);
+                                        writer.println(serializedleftTurn);
+
+                                        PlayCard playCard4 = new PlayCard("MoveII");
+                                        String serializedPlayCard4 = Serialisierer.serialize(playCard4);
+                                        writer.println(serializedPlayCard4);
 
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?
-                                        }
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
@@ -382,6 +407,11 @@ public class Client extends Application {
                         case "PlayerTurning":
                             System.out.println("Player Turning");
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
+
+                            int clientIdToTurn = playerTurning.getMessageBody().getClientID();
+                            String rotation = playerTurning.getMessageBody().getRotation();
+                            controller.playerTurn(clientIdToTurn, rotation);
+
                             break;
                         case "DrawDamage":
                             System.out.println("Draw Damage");
