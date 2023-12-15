@@ -11,12 +11,14 @@ import java.util.ArrayList;
 @Setter
 public class Wall extends Field{
     //private int speed;
+    @Getter
     @SerializedName("orientations")
-    private String[] orientations;
+    private static String[] orientations;
     //private int[] registers;
     //private int count;
     public Wall(String isOnBoard, String[] orientations){
         super("Wall", isOnBoard);
         this.orientations = orientations;
     }
+
 }

@@ -12,8 +12,9 @@ import java.util.ArrayList;
 public class ConveyorBelt extends Field{
     @SerializedName("speed")
     private int speed;
+    @Getter
     @SerializedName("orientations")
-    private String[] orientations;
+    private static String[] orientations;
     //private int[] registers;
     //private int count;
     public ConveyorBelt(String isOnBoard, int speed, String[] orientations) {

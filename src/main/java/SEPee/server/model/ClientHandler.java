@@ -18,6 +18,7 @@ import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.sun.jdi.request.ThreadDeathRequest;
@@ -563,7 +564,10 @@ public class ClientHandler implements Runnable {
         // You need to create an instance or use a static method of DizzyHighway class, depending on your implementation
         DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
         List<Field> fields = highway.getFieldsAt(robotX, robotY);
-        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+
+        //System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        //System.out.println("Feld Übergabe: " + fields);
+
 
         StringBuilder result = new StringBuilder();
 
@@ -571,18 +575,17 @@ public class ClientHandler implements Runnable {
             if (field instanceof ConveyorBelt) {
                 // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
-                result.append("Conveyor Belt, ");
-                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+                String[] orientations = ConveyorBelt.getOrientations();
+                result.append("Conveyor Belt " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
                 // Additional checks or actions for laser
                 result.append("Laser, ");
-                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
             } else if (field instanceof Wall) {
                 System.out.println("Wall");
                 // Actions for wall
-                result.append("Wall, ");
-                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+                String[] orientations = Wall.getOrientations();
+                result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
                 // Actions for an empty field
                 System.out.println("Empty field");
@@ -610,6 +613,8 @@ public class ClientHandler implements Runnable {
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
+
+        System.out.println(result);
 
         return result.toString();
 

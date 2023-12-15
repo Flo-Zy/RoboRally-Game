@@ -708,9 +708,8 @@ public class DizzyHighway extends GameBoard {
             throw new IllegalArgumentException("Y-coordinate out of bounds");
         }
 
-        List<Field> fieldsAtXY = new ArrayList<>();
-
         // Get all fields at the specified x, y position
+        /*
         for (List<Field> fields : column) {
             if (y < fields.size()) {
                 fieldsAtXY.add(fields.get(y));
