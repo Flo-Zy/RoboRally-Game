@@ -78,6 +78,12 @@ public class DizzyHighwayController extends MapController {
     private Map<Integer, List<Card>> playerDrawPileMap;
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
+    private AtomicInteger counter1 = new AtomicInteger(0);
+
+    public void setCounter1(int counter){
+        counter1.set(counter);
+    }
+
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
@@ -315,8 +321,6 @@ public class DizzyHighwayController extends MapController {
             HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
             // Prüfe, ob die HBox totalRegister gefunden wurde
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
-
-            AtomicInteger counter1 = new AtomicInteger(0);
 
             if (totalHand != null && totalRegister != null) {
                 // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
