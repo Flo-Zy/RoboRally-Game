@@ -575,8 +575,18 @@ public class ClientHandler implements Runnable {
             if (field instanceof ConveyorBelt) {
                 // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
+
+
+                /*
                 String[] orientations = ConveyorBelt.getOrientations();
                 result.append("Conveyor Belt " + Arrays.toString(orientations) + ", ");
+                 */
+
+                String[] actualOrientation = highway.getOrientationOfField(robotX,robotY);
+                result.append("Conveyor Belt " + Arrays.toString(actualOrientation) + ", ");
+
+
+
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
                 // Additional checks or actions for laser

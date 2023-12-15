@@ -14,9 +14,20 @@ public abstract class Field {
     private String type;
     @SerializedName("isOnBoard")
     private String isOnBoard;
+    @Getter
+    private String [] orientation;
 
     public Field(String type, String isOnBoard) {
         this.type = type;
         this.isOnBoard = isOnBoard;
     }
+/*
+    public Field(String type, String isOnBoard, String[] orientation) {
+        this.type = type;
+        this.isOnBoard = isOnBoard;
+        this.orientation = orientation;
+    }
+
+ */
+
 }

@@ -708,19 +708,30 @@ public class DizzyHighway extends GameBoard {
             throw new IllegalArgumentException("Y-coordinate out of bounds");
         }
 
-        // Get all fields at the specified x, y position
-        /*
-        for (List<Field> fields : column) {
-            if (y < fields.size()) {
-                fieldsAtXY.add(fields.get(y));
-            } else {
-                break; // Stop if the index is out of bounds for this column
-            }
-        }
-
-         */
-
         List<Field> fieldsAtXY = column.get(y);
         return fieldsAtXY;
     }
+
+
+    public String[] getOrientationOfField(int x, int y) {
+        String[] orientationsXY = null; // Initialize the array with a default value
+
+        // Dynamically construct the variable name based on x and y coordinates
+        String variableName = "orientations" + x + y;
+
+        try {
+            // Use Java reflection to access the variable by its constructed name
+            orientationsXY = (String[]) this.getClass().getDeclaredField(variableName).get(this);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace(); // Handle exceptions appropriately
+        }
+
+        return orientationsXY;
+    }
+
+
+
+
+
+
 }
