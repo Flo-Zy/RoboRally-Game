@@ -88,6 +88,7 @@ public class DizzyHighwayController extends MapController {
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> playerDrawPileMap;
     private Map<Integer, Integer> indexToCounterMap;
+    private ArrayList<Zahlen> zahlen = new ArrayList<>();
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
@@ -357,7 +358,7 @@ public class DizzyHighwayController extends MapController {
                                 SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
                                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                 Client.getWriter().println(serializedCardSelected);
-
+                                zahlen.add(new Zahlen(index, counter1.get()));
                                 indexToCounterMap.put(index, counter1.get());
                                 counter1.incrementAndGet();
 
@@ -405,9 +406,9 @@ public class DizzyHighwayController extends MapController {
     }
 
     private int mapRegisterIndexToHandIndex(int registerIndex) {
-        for (int i = 0; i < indexToCounterMap.size(); i++) {
-            if(indexToCounterMap.get(i) == registerIndex){
-                return i;
+        for (int i = 0; i < zahlen.size(); i++) {
+            if(zahlen.get(i).register == registerIndex){
+                return zahlen.get(i).hand;
             }
         }
         return -1;
@@ -439,6 +440,16 @@ public class DizzyHighwayController extends MapController {
                 imageView.setRotate(currentRotation - rotationAmount);
             }
         }
+    }
+}
+
+class Zahlen{
+   public int hand;
+   public int register;
+
+    Zahlen(int hand, int register){
+        this.hand = hand;
+        this.register = register;
     }
 }
 
