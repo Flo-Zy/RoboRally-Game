@@ -5,6 +5,9 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
+import SEPee.server.model.field.ConveyorBelt;
+import SEPee.server.model.field.Field;
+import SEPee.server.model.field.*;
 import SEPee.server.model.gameBoard.*;
 
 import java.io.BufferedReader;
@@ -428,9 +431,42 @@ public class ClientHandler implements Runnable {
                                     SelectionFinished selectionFinished = new SelectionFinished(clientId);
                                     String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
                                     broadcast(serializedSelectionFinished);
-                                }
-                            }
 
+
+                                    //hardcode tester fur nachste phase
+                                    Server.getGame().nextCurrentPhase();
+                                    ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                    String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                    broadcast(serializedActivePhase);
+
+                                    // test which field robot is standing on
+
+
+                                    // alle robots server seitig nun auf 4,5
+                                    if(this.clientId == 1){
+                                        this.robot.setY(5);
+                                        this.robot.setX(4);
+                                    }
+                                    Movement movement1 = new Movement(1, 4, 5);
+                                    String serializedMovement1 = Serialisierer.serialize(movement1);
+                                    broadcast(serializedMovement1);
+
+                                    if(this.clientId == 2){
+                                        this.robot.setY(4);
+                                        this.robot.setX(6);
+                                    }
+                                    Movement movement2 = new Movement(2, 6, 4);
+                                    String serializedMovement2 = Serialisierer.serialize(movement2);
+                                    broadcast(serializedMovement2);
+
+
+                                    // checkRobotStandingField
+
+
+                                    // end of harcode block
+                                }
+                                checkRobotField();
+                            }
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
@@ -518,4 +554,61 @@ public class ClientHandler implements Runnable {
         writer.println(serializedAlive);
     }
 
+    private String checkRobotField() {
+        // Obtain the robot's current position
+        int robotX = this.robot.getX();
+        int robotY = this.robot.getY();
+
+        // Assuming you have a method in DizzyHighway to get the field at a specific position
+        // You need to create an instance or use a static method of DizzyHighway class, depending on your implementation
+        DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
+        List<Field> fields = highway.getFieldsAt(robotX, robotY);
+        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+
+        StringBuilder result = new StringBuilder();
+
+        for (Field field : fields) {
+            if (field instanceof ConveyorBelt) {
+                // Additional checks or actions for conveyor belt
+                System.out.println("ConveyorBelt");
+                result.append("Conveyor Belt, ");
+                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+            } else if (field instanceof Laser) {
+                System.out.println("Laser");
+                // Additional checks or actions for laser
+                result.append("Laser, ");
+                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+            } else if (field instanceof Wall) {
+                System.out.println("Wall");
+                // Actions for wall
+                result.append("Wall, ");
+                System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+            } else if (field instanceof Empty) {
+                // Actions for an empty field
+                System.out.println("Empty field");
+                result.append("Empty, ");
+            } else if (field instanceof StartPoint) {
+                System.out.println("Start point");
+                // Actions for a start point
+                result.append("Start Point, ");
+            } else if (field instanceof CheckPoint) {
+                System.out.println("Checkpoint");
+                // Actions for a check point
+                result.append("Check Point, ");
+            } else if (field instanceof EnergySpace) {
+                // Actions for an energy space
+                result.append("Energy Space, ");
+            } else {
+                // Default case
+                result.append("Unknown Field, ");
+            }
+        }
+
+        // Remove the last comma and space
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2);
+        }
+
+        return result.toString();
+    }
 }

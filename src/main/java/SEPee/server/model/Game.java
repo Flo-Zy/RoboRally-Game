@@ -45,11 +45,26 @@ public class Game {
 
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
+
+
+
+
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
         } else if (currentPhase == 2) { // Programming Phase
             currentPhase++;
+            // jetzt in AktivierungsPhase
+
+
+
+
+            System.out.println("Wir sind in der Phase:" + currentPhase);
+
+            //set teleports or clients
+
+
+
         }
     }
 

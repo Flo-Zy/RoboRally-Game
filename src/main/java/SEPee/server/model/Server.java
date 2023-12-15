@@ -106,7 +106,8 @@ public class Server extends Thread{
                         System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                         //welcome erstellen und an den Client schicken
 
-                        new Thread(new AliveMessageSender()).start();
+                        //alive message sender erst raus weil stört unnormal.
+                        // new Thread(new AliveMessageSender()).start();
 
                         System.out.println(clientID);
                         Welcome welcome = new Welcome(clientID);
