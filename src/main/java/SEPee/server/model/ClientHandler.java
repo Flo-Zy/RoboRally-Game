@@ -430,6 +430,7 @@ public class ClientHandler implements Runnable {
                             String card = selectedCard.getMessageBody().getCard();
                             int cardRegister = selectedCard.getMessageBody().getRegister();
 
+                            // NumRegister verringern, falls card == null
                             if(card == null){
                                 for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
                                     if(Server.getGame().getPlayerList().get(i).getId() == clientId){
@@ -437,7 +438,9 @@ public class ClientHandler implements Runnable {
                                                 Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() - 1);
                                     }
                                 }
-                            } else {
+                            }
+                            // NumRegister erhöhen, falls card != null
+                            else {
                                 for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
                                     if(Server.getGame().getPlayerList().get(i).getId() == clientId){
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
@@ -445,18 +448,25 @@ public class ClientHandler implements Runnable {
                                     }
                                 }
                             }
-
                             for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
-                                if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                // füge in register card hinzu
+                                if(Server.getGame().getPlayerList().get(i).getId() == clientId && card != null){
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
                                 }
+                                // falls card == null: lösche letztes card aus register
+                                else if(Server.getGame().getPlayerList().get(i).getId() == clientId && card == null){
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1);
+                                }
                             }
+
                             System.out.println(card);
                             CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
                             String serializedCardSelected = Serialisierer.serialize(cardSelected);
                             broadcast(serializedCardSelected);
 
                             for(int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                // wenn NumRegister == 5: sende SelectionFinished an Clients
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId &&
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() == 5) {
                                     SelectionFinished selectionFinished = new SelectionFinished(clientId);
