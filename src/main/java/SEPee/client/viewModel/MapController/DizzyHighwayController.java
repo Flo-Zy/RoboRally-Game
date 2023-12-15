@@ -87,12 +87,14 @@ public class DizzyHighwayController extends MapController {
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> playerDrawPileMap;
+    private Map<Integer, Integer> indexToCounterMap;
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>(); // init programmingPile
+        playerDrawPileMap = new HashMap<>();
+        indexToCounterMap = new HashMap<>();
     }
 
 
@@ -327,7 +329,6 @@ public class DizzyHighwayController extends MapController {
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
             if (totalHand != null && totalRegister != null) {
-
                 AtomicInteger counter1 = new AtomicInteger(0);
 
                 // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
@@ -340,7 +341,6 @@ public class DizzyHighwayController extends MapController {
                         // Füge den Event-Handler für das ImageView hinzu
                         handImageView.setOnMouseClicked(mouseEvent -> {
                             if (counter1.get() < 5) {
-
                                 // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
@@ -358,6 +358,7 @@ public class DizzyHighwayController extends MapController {
                                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                 Client.getWriter().println(serializedCardSelected);
 
+                                indexToCounterMap.put(index, counter1.get());
                                 counter1.incrementAndGet();
 
                             } else {
@@ -371,11 +372,11 @@ public class DizzyHighwayController extends MapController {
                     ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
 
                     if (registerImageView != null) {
-                        final int index2 = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                        final int registerIndex = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
 
                         // Füge den Event-Handler für das ImageView hinzu
                         registerImageView.setOnMouseClicked(mouseEvent -> {
-                            int indexNew = findNextEmptyHandIndex(totalHand);
+                            int indexNew = mapRegisterIndexToHandIndex(registerIndex);
 
                             if (indexNew < 9) {
                                 ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
@@ -390,7 +391,7 @@ public class DizzyHighwayController extends MapController {
                                 registerImageView.setImage(null);
 
                                 // sende serialisiertes SelectedCard
-                                SelectedCard selectedCard = new SelectedCard(null, index2);
+                                SelectedCard selectedCard = new SelectedCard(null, registerIndex);
                                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                 Client.getWriter().println(serializedCardSelected);
                             } else {
@@ -403,14 +404,13 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    private int findNextEmptyHandIndex(HBox totalHand) {
-        for (int i = 0; i < 9; i++) {
-            ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
-            if (handImageView != null && !totalHand.getChildren().get(i).isVisible()) {
+    private int mapRegisterIndexToHandIndex(int registerIndex) {
+        for (int i = 0; i < indexToCounterMap.size(); i++) {
+            if(indexToCounterMap.get(i) == registerIndex){
                 return i;
             }
         }
-        return 9; // Return an index outside the bounds if no empty position is found
+        return -1;
     }
 
 
