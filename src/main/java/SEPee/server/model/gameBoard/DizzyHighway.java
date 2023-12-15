@@ -719,6 +719,9 @@ public class DizzyHighway extends GameBoard {
             }
         }
 
+         */
+
+        List<Field> fieldsAtXY = column.get(y);
         return fieldsAtXY;
     }
 }

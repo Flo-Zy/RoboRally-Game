@@ -72,8 +72,8 @@ public class ClientHandler implements Runnable {
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
 
 
-                            for(int i = 0; i < Server.getPlayerList().size(); i++){
-                                if(playerFigure == Server.getPlayerList().get(i).getFigure()){
+                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
+                                if (playerFigure == Server.getPlayerList().get(i).getFigure()) {
                                     clientId = Server.getPlayerList().get(i).getId();
                                 }
                             }
@@ -112,22 +112,22 @@ public class ClientHandler implements Runnable {
                             if (Server.getReadyList().size() == 1) {
                                 Server.setGameMap(null);
                                 Server.setFirstReady(Server.getReadyList().get(Server.getReadyListIndex()));
-                                Server.setReadyListIndex(Server.getReadyListIndex()+1);
+                                Server.setReadyListIndex(Server.getReadyListIndex() + 1);
                                 SelectMap selectMap = new SelectMap();
                                 String serializedSelectMap = Serialisierer.serialize(selectMap);
                                 sendToOneClient(Server.getFirstReady(), serializedSelectMap);
                             }
-                            if(!setStatus.getMessageBody().isReady() && player.getId() == Server.getFirstReady()){
+                            if (!setStatus.getMessageBody().isReady() && player.getId() == Server.getFirstReady()) {
 
-                                if(checkNumReady() == 0){
+                                if (checkNumReady() == 0) {
                                     Server.setGameMap(null);
                                     Server.getReadyList().clear();
                                     Server.setReadyListIndex(0);
-                                }else {
+                                } else {
                                     Server.setGameMap(null);
                                     int nextId = checkNextReady();
                                     Server.setFirstReady(nextId);
-                                    Server.setReadyListIndex(Server.getReadyListIndex()+1);
+                                    Server.setReadyListIndex(Server.getReadyListIndex() + 1);
                                     SelectMap selectMap = new SelectMap();
                                     String serializedSelectMap = Serialisierer.serialize(selectMap);
                                     sendToOneClient(Server.getFirstReady(), serializedSelectMap);
@@ -137,7 +137,7 @@ public class ClientHandler implements Runnable {
                         case "MapSelected":
                             System.out.println("Map Selected");
                             MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
-                            if(!mapSelected.getMessageBody().getMap().equals("")) {
+                            if (!mapSelected.getMessageBody().getMap().equals("")) {
                                 broadcast(serializedReceivedString);
                                 //speicher die gewählte map (die gameMap)
                                 if (Server.getFirstReady() == player.getId())
@@ -155,8 +155,8 @@ public class ClientHandler implements Runnable {
 
                             }
                             //check alle ready und mind 2
-                            if(!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
-                                    && Server.getGameMap() != null){
+                            if (!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
+                                    && Server.getGameMap() != null) {
                                 Server.setGameStarted(true);
                                 //erstelle das Spiel
                                 Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap()));
@@ -212,12 +212,12 @@ public class ClientHandler implements Runnable {
                             CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
                             String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
                             broadcast(serializedCardPlayed);
-                            if(!playCardCard.equals("Again")){
+                            if (!playCardCard.equals("Again")) {
                                 lastPlayedCard = playCardCard;
                             }
 
                             //logik für karteneffekte
-                            switch (lastPlayedCard){
+                            switch (lastPlayedCard) {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
                                     //lastPlayedCard = "BackUp";
                                     BackUp.makeEffect(this.robot);
@@ -321,20 +321,20 @@ public class ClientHandler implements Runnable {
 
                             break;
                         case "SetStartingPoint":
-                            Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
+                            Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
                             System.out.println("Set Starting Points");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
-                            this.robot = new Robot(0,0,"right");
+                            this.robot = new Robot(0, 0, "right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
-                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){ // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
+                            if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) { // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
                                 Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
                                 Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
 
@@ -342,8 +342,8 @@ public class ClientHandler implements Runnable {
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
-                                        int i=0;
-                                        while (i<9) {
+                                        int i = 0;
+                                        while (i < 9) {
                                             // die ersten 9 karten ziehen
                                             Card card = player.getPlayerMat().getProgDeck().get(0);
                                             clientCards.add(card.getName());
@@ -361,8 +361,8 @@ public class ClientHandler implements Runnable {
                                         // sendet Karten Infos an alle anderen player
                                         NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
                                         String serializedNotYourCards = Serialisierer.serialize(notYourCards);
-                                        for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
-                                            if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
+                                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                            if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
                                                 sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
                                             }
                                         }
@@ -390,9 +390,9 @@ public class ClientHandler implements Runnable {
                             int cardRegister = selectedCard.getMessageBody().getRegister();
 
                             // NumRegister verringern, falls card == null
-                            if(card == null){
-                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
-                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                            if (card == null) {
+                                for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                    if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
                                                 Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() - 1);
                                     }
@@ -400,20 +400,20 @@ public class ClientHandler implements Runnable {
                             }
                             // NumRegister erhöhen, falls card != null
                             else {
-                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
-                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                    if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
                                                 Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() + 1);
                                     }
                                 }
                             }
-                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                            for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
                                 // füge in register card hinzu
-                                if(Server.getGame().getPlayerList().get(i).getId() == clientId && card != null){
+                                if (Server.getGame().getPlayerList().get(i).getId() == clientId && card != null) {
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
                                 }
                                 // falls card == null: lösche letztes card aus register
-                                else if(Server.getGame().getPlayerList().get(i).getId() == clientId && card == null){
+                                else if (Server.getGame().getPlayerList().get(i).getId() == clientId && card == null) {
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(
                                             Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1);
                                 }
@@ -424,7 +424,7 @@ public class ClientHandler implements Runnable {
                             String serializedCardSelected = Serialisierer.serialize(cardSelected);
                             broadcast(serializedCardSelected);
 
-                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                            for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
                                 // wenn NumRegister == 5: sende SelectionFinished an Clients
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId &&
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() == 5) {
@@ -443,7 +443,7 @@ public class ClientHandler implements Runnable {
 
 
                                     // alle robots server seitig nun auf 4,5
-                                    if(this.clientId == 1){
+                                    if (this.clientId == 1) {
                                         this.robot.setY(5);
                                         this.robot.setX(4);
                                     }
@@ -451,7 +451,7 @@ public class ClientHandler implements Runnable {
                                     String serializedMovement1 = Serialisierer.serialize(movement1);
                                     broadcast(serializedMovement1);
 
-                                    if(this.clientId == 2){
+                                    if (this.clientId == 2) {
                                         this.robot.setY(4);
                                         this.robot.setX(6);
                                     }
@@ -522,23 +522,23 @@ public class ClientHandler implements Runnable {
         System.out.println("Client with ID " + clientId + " not found.");
     }
 
-    public int checkNumReady(){
+    public int checkNumReady() {
         int numReady = 0;
-        for(int i = 0; i < Server.getPlayerList().size(); i++){
-            if(Server.getPlayerList().get(i).isReady()){
+        for (int i = 0; i < Server.getPlayerList().size(); i++) {
+            if (Server.getPlayerList().get(i).isReady()) {
                 numReady++;
             }
         }
         return numReady;
     }
 
-    public int checkNextReady(){
+    public int checkNextReady() {
         int x = 0;
-        if(Server.getReadyListIndex() < Server.getReadyList().size()) {
+        if (Server.getReadyListIndex() < Server.getReadyList().size()) {
             for (int i = 0; i < Server.getPlayerList().size(); i++) {
                 if (Server.getPlayerList().get(i).getId() == Server.getReadyList().get(Server.getReadyListIndex())
                         && !Server.getPlayerList().get(i).isReady()) {
-                    Server.setReadyListIndex(Server.getReadyListIndex()+1);
+                    Server.setReadyListIndex(Server.getReadyListIndex() + 1);
                     x = checkNextReady();
                 } else {
                     x = Server.getReadyList().get(Server.getReadyListIndex());
@@ -586,7 +586,7 @@ public class ClientHandler implements Runnable {
             } else if (field instanceof Empty) {
                 // Actions for an empty field
                 System.out.println("Empty field");
-                result.append("Empty, ");
+                //result.append("Empty, ");
             } else if (field instanceof StartPoint) {
                 System.out.println("Start point");
                 // Actions for a start point
@@ -600,15 +600,18 @@ public class ClientHandler implements Runnable {
                 result.append("Energy Space, ");
             } else {
                 // Default case
+                System.out.println("Field nicht gefunden");
                 result.append("Unknown Field, ");
             }
         }
 
         // Remove the last comma and space
+
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
 
         return result.toString();
+
     }
 }
