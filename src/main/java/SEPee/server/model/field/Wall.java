@@ -18,7 +18,7 @@ public class Wall extends Field{
     //private int count;
     public Wall(String isOnBoard, String[] orientations){
         super("Wall", isOnBoard);
-        this.orientations = orientations;
+        this.orientations=orientations;
     }
 
 }
