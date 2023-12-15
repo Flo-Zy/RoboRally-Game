@@ -5,8 +5,8 @@ import SEPee.server.model.field.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DizzyHighway extends GameBoard{
-    public DizzyHighway(){
+public class DizzyHighway extends GameBoard {
+    public DizzyHighway() {
 
         super("5B", "DizzyHighway", 13);
 
@@ -673,5 +673,52 @@ public class DizzyHighway extends GameBoard{
         column12.add(field12_9);
 
         this.addRow(column12);
+    }
+
+    /*
+    public Field getFieldAt(int x, int y) {
+        if (x < 0 || x >= this.getGameBoard().size()) {
+            throw new IllegalArgumentException("X-coordinate out of bounds");
+        }
+        List<List<Field>> column = this.getGameBoard().get(x);
+        if (y < 0 || y >= column.size()) {
+            throw new IllegalArgumentException("Y-coordinate out of bounds");
+        }
+
+
+        for (int i = 0, column.get(y).get(i), i++){
+            if(column.get(y).get(i)) == null{
+                break;
+            }
+            return column.get(y).get(i); // Assuming each cell has at least one Field object
+        }
+
+     }
+    */
+
+
+
+    public List<Field> getFieldsAt(int x, int y) {
+        if (x < 0 || x >= this.getGameBoard().size()) {
+            throw new IllegalArgumentException("X-coordinate out of bounds");
+        }
+
+        List<List<Field>> column = this.getGameBoard().get(x);
+        if (y < 0 || y >= column.size()) {
+            throw new IllegalArgumentException("Y-coordinate out of bounds");
+        }
+
+        List<Field> fieldsAtXY = new ArrayList<>();
+
+        // Get all fields at the specified x, y position
+        for (List<Field> fields : column) {
+            if (y < fields.size()) {
+                fieldsAtXY.add(fields.get(y));
+            } else {
+                break; // Stop if the index is out of bounds for this column
+            }
+        }
+
+        return fieldsAtXY;
     }
 }
