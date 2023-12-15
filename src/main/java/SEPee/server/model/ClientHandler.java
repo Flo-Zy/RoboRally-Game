@@ -383,10 +383,54 @@ public class ClientHandler implements Runnable {
                         case "SelectedCard":
                             System.out.println("Selected Card");
                             SelectedCard selectedCard = Deserialisierer.deserialize(serializedReceivedString, SelectedCard.class);
-                            break;
-                        case "SelectionFinished":
-                            System.out.println("Selection Finished");
-                            SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
+                            String card = selectedCard.getMessageBody().getCard();
+                            int cardRegister = selectedCard.getMessageBody().getRegister();
+
+                            // NumRegister verringern, falls card == null
+                            if(card == null){
+                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
+                                                Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() - 1);
+                                    }
+                                }
+                            }
+                            // NumRegister erhöhen, falls card != null
+                            else {
+                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
+                                                Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() + 1);
+                                    }
+                                }
+                            }
+                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                // füge in register card hinzu
+                                if(Server.getGame().getPlayerList().get(i).getId() == clientId && card != null){
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
+                                }
+                                // falls card == null: lösche letztes card aus register
+                                else if(Server.getGame().getPlayerList().get(i).getId() == clientId && card == null){
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1);
+                                }
+                            }
+
+                            System.out.println(card);
+                            CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
+                            String serializedCardSelected = Serialisierer.serialize(cardSelected);
+                            broadcast(serializedCardSelected);
+
+                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                // wenn NumRegister == 5: sende SelectionFinished an Clients
+                                if (Server.getGame().getPlayerList().get(i).getId() == clientId &&
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() == 5) {
+                                    SelectionFinished selectionFinished = new SelectionFinished(clientId);
+                                    String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
+                                    broadcast(serializedSelectionFinished);
+                                }
+                            }
+
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");

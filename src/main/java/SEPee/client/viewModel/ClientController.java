@@ -5,10 +5,13 @@ import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
+import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.serialisierung.messageType.SendChat;
 //Später auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -398,7 +401,6 @@ public class ClientController {
                 selectedMap = result.get();
             }
         }
-
         return selectedMap;
     }
 
@@ -550,13 +552,12 @@ public class ClientController {
 
     }
 
-    public void initDrawPile(int clientId, ArrayList<String> clientHand){
-        // test korrekt: System.out.println("tessssst: " + clientHand);
-        mapController.initializeDrawPile(clientId, clientHand); // int, ArrayList<String>
+    public void initDrawPile(){
+        mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
     }
 
-    public void initRegister(int clientId, ArrayList<String> clientHand){
-        mapController.initializeRegister(clientId, clientHand);
+    public void initRegister(){
+        mapController.initializeRegister(id, clientHand);
     }
 
 

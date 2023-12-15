@@ -1641,29 +1641,19 @@
                             <HBox fx:id="totalRegister" layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
                                 <children>
                                     <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                                     <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                                     <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                                     <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                                     <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
+
                                     </ImageView>
                                 </children>
                                 <HBox.margin>

@@ -8,17 +8,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class PlayerMat{
-
-    private Card[] register;
+    @Getter
+    @Setter
+    private ArrayList<String> register;
     @Getter
     @Setter
     private ArrayList<Card> progDeck;
     private UpgradeCard[] permanentSlot;
     private UpgradeCard[] temporarySlot;
     private ArrayList<Card> discardPile;
+    @Getter
+    @Setter
+    private int numRegister = 0;
 
     public PlayerMat(ArrayList<Card> progDeck) {
-        this.register = new Card[5];
+        this.register = new ArrayList<>(5);
         this.progDeck = progDeck;
         //this.permanentSlot = new UpgradeCard[3];
         //this.temporarySlot = new UpgradeCard[3];

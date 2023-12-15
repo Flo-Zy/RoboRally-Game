@@ -8,7 +8,8 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
-import SEPee.server.model.card.progCard.RightTurn;
+import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -261,10 +262,9 @@ public class Client extends Application {
                             System.out.println("Active Phase");
                             ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
                             controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
-
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
-                                // controller.initRegister(controller.getId(), controller.getClientHand());
+                                controller.initRegister();
                             }
                             break;
                         case "CurrentPlayer":
@@ -381,10 +381,42 @@ public class Client extends Application {
                             controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
                             // update im ClientController die clientHand
-                            controller.setClientHand(yourCards.getMessageBody().getCardsInHand());
+                            ArrayList<Card> drawPile = new ArrayList<>();
+                            for (String cardName : yourCards.getMessageBody().getCardsInHand()) {
+                                switch (cardName) {
+                                    case "Again":
+                                        drawPile.add(new Again());
+                                        break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                                    case "BackUp":
+                                        drawPile.add(new BackUp());
+                                        break;
+                                    case "LeftTurn":
+                                        drawPile.add(new LeftTurn());
+                                        break;
+                                    case "MoveI":
+                                        drawPile.add(new MoveI());
+                                        break;
+                                    case "MoveII":
+                                        drawPile.add(new MoveII());
+                                        break;
+                                    case "MoveIII":
+                                        drawPile.add(new MoveIII());
+                                        break;
+                                    case "PowerUp":
+                                        drawPile.add(new PowerUp());
+                                        break;
+                                    case "RightTurn":
+                                        drawPile.add(new RightTurn());
+                                        break;
+                                    case "UTurn":
+                                        drawPile.add(new UTurn());
+                                        break;
+                                }
+                            }
+                            controller.setClientHand(drawPile);
 
                             // initialisiere die 9 Karten von YourCards in Hand des players
-                            controller.initDrawPile(controller.getId(), controller.getClientHand());
+                            controller.initDrawPile();
                             break;
 
                         case "NotYourCards":
@@ -392,7 +424,10 @@ public class Client extends Application {
                             NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
                             System.out.println("(INFO) Player " + notYourCards.getMessageBody().getClientID() + " got " + notYourCards.getMessageBody().getCardsInHand() + " Cards");
                             break;
-
+                        case "SelectionFinished":
+                            SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
+                            System.out.println(selectionFinished.getMessageBody().getClientID() + ": Selection Finished");
+                            break;
                         case "ShuffleCoding":
                             System.out.println("Shuffle Coding");
                             ShuffleCoding shuffleCoding = Deserialisierer.deserialize(serializedReceivedString, ShuffleCoding.class);
@@ -400,6 +435,7 @@ public class Client extends Application {
                         case "CardSelected":
                             System.out.println("Card Selected");
                             CardSelected cardSelected = Deserialisierer.deserialize(serializedReceivedString, CardSelected.class);
+                            System.out.println("Player " + cardSelected.getMessageBody().getClientID() + " has set his register " + cardSelected.getMessageBody().getRegister());
                             break;
                         case "TimerStarted":
                             System.out.println("Timer Started");
