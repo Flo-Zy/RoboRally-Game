@@ -449,6 +449,28 @@ public class ClientHandler implements Runnable {
                                                 TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
                                                 String serializedTimerEnded = Serialisierer.serialize(timerEnded);
                                                 broadcast(serializedTimerEnded);
+
+                                                // missingClientCards an betreffende Clients versenden
+                                                ArrayList<String> missingClientCards = new ArrayList<>();
+
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    // wie viele Felder auf Register sind leer
+                                                    int i = 0;
+                                                    while (i < (5 - player.getPlayerMat().getNumRegister())) {
+                                                        // karten ziehen
+                                                        Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                        missingClientCards.add(card.getName());
+                                                        // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                                        player.getPlayerMat().getProgDeck().remove(0);
+                                                        i++;
+                                                    }
+                                                }
+                                                for(Integer clientID : clientIDsNotReady){
+                                                    CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
+                                                    String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
+                                                    sendToOneClient(clientID, serializedCardYouGotNow);
+                                                }
+
                                                 // Cancel the timer
                                                 timer.cancel();
                                             }

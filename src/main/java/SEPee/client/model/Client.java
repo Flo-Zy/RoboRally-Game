@@ -452,6 +452,41 @@ public class Client extends Application {
                         case "CardsYouGotNow":
                             System.out.println("Cards You Got Now");
                             CardsYouGotNow cardsYouGotNow = Deserialisierer.deserialize(serializedReceivedString, CardsYouGotNow.class);
+
+                            ArrayList<Card> nextCards = new ArrayList<>();
+
+                            for (String cardName : cardsYouGotNow.getMessageBody().getCards()) {
+                                switch (cardName) {
+                                    case "Again":
+                                        nextCards.add(new Again());
+                                        break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                                    case "BackUp":
+                                        nextCards.add(new BackUp());
+                                        break;
+                                    case "LeftTurn":
+                                        nextCards.add(new LeftTurn());
+                                        break;
+                                    case "MoveI":
+                                        nextCards.add(new MoveI());
+                                        break;
+                                    case "MoveII":
+                                        nextCards.add(new MoveII());
+                                        break;
+                                    case "MoveIII":
+                                        nextCards.add(new MoveIII());
+                                        break;
+                                    case "PowerUp":
+                                        nextCards.add(new PowerUp());
+                                        break;
+                                    case "RightTurn":
+                                        nextCards.add(new RightTurn());
+                                        break;
+                                    case "UTurn":
+                                        nextCards.add(new UTurn());
+                                        break;
+                                }
+                            }
+                            controller.fillEmptyRegister(nextCards);
                             break;
                         case "CurrentCards":
                             System.out.println("Current Cards");

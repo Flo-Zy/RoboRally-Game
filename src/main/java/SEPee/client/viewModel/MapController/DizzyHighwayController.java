@@ -416,6 +416,10 @@ public class DizzyHighwayController extends MapController {
         return -1;
     }
 
+    public void fillEmptyRegister(ArrayList<Card> nextCards){
+        int numCards = nextCards.size();
+    }
+
     public void movementPlayed(int clientId, int newX, int newY) {
 
         Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1

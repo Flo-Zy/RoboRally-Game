@@ -283,7 +283,6 @@ public class ClientController {
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
     }
 
-
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
         for (Player player : Client.getPlayerListClient()) {
@@ -467,6 +466,9 @@ public class ClientController {
         mapController.initializeRegister(id, clientHand);
     }
 
+    public void fillEmptyRegister(ArrayList<Card> nextCards){
+        mapController.fillEmptyRegister(nextCards);
+    }
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);
