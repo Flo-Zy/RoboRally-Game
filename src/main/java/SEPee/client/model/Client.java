@@ -290,14 +290,11 @@ public class Client extends Application {
                                     break;
                                 case 2:
                                     System.out.println("Programmierphase");
-                                        for (Player player : playerListClient) { // in Programmierphase is
-                                            // Schritt 1: init drawPile in totalHand
-                                            // controller.initDrawPile(player.getId());
-                                            // System.out.println("Player: " + player.getName() + " got 9 cards.");
+                                        for (Player player : playerListClient) {
+
                                         }
 
                                         /*
-
                                         //harcode tester für MoveI - III
                                         PlayCard playCard = new PlayCard("MoveI");
                                         String serializedPlayCard = Serialisierer.serialize(playCard);
@@ -346,10 +343,7 @@ public class Client extends Application {
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?
-
                                          */
-
-
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
@@ -360,16 +354,7 @@ public class Client extends Application {
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
                             controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
-/*
-                            int takenClientID = startingPointTaken.getMessageBody().getClientID();
-                            for (Player player : playerListClient) {
-                                if (player.getId() == takenClientID) {
-                                    controller.putAvatarDown(player, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
-                                    System.out.println("Starting Point taken for ID: " + player.getId() + ", figure: " + player.getFigure());
-                                    break;
-                                }
-                            }
- */
+
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
                             Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0

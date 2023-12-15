@@ -52,7 +52,6 @@ public class DizzyHighwayController extends MapController {
     @FXML
     private ImageView field09;
     private Stage stage;
-
     @FXML
     private ImageView Avatar1;
     @FXML
@@ -69,7 +68,6 @@ public class DizzyHighwayController extends MapController {
     public HBox totalHand;
     @FXML
     public HBox totalRegister;
-
     @Getter
     ArrayList<Card> register;
 
@@ -84,7 +82,6 @@ public class DizzyHighwayController extends MapController {
         counter1.set(counter);
     }
 
-
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
@@ -92,7 +89,6 @@ public class DizzyHighwayController extends MapController {
         playerDrawPileMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
-
 
     public void avatarAppear(Player player, int x, int y) {
         System.out.println("getFigure: " + player.getFigure());

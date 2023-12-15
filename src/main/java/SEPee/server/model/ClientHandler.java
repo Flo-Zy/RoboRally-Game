@@ -441,8 +441,8 @@ public class ClientHandler implements Runnable {
                                             public void run() {
                                                 // After 30 seconds, send TimerEnded
                                                 ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
-                                                for(Player player : Server.getGame().getPlayerList()){
-                                                    if(player.getPlayerMat().getNumRegister() < 5) {
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    if (player.getPlayerMat().getNumRegister() < 5) {
                                                         clientIDsNotReady.add(player.getId());
                                                     }
                                                 }
@@ -466,22 +466,24 @@ public class ClientHandler implements Runnable {
                                                         i++;
                                                     }
                                                 }
-                                                for(Integer clientID : clientIDsNotReady){
+                                                for (Integer clientID : clientIDsNotReady) {
                                                     CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
                                                     String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
+                                                Server.getGame().setNextPlayersTurn();
 
-                                                for(int i = 0; i < 5; i++){
-                                                    ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
-                                                    for(Player player : Server.getGame().getPlayerList()){
-                                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(),
-                                                                player.getPlayerMat().getRegister().get(i)));
-                                                    }
-                                                    CurrentCards currentCards = new CurrentCards(activeCards);
-                                                    String serializedCurrentCards = Serialisierer.serialize(currentCards);
-                                                    broadcast(serializedCurrentCards);
+                                                ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                            player.getPlayerMat().getRegister().get(0))); // 0. element aus register von jedem Player
                                                 }
+
+                                                // nulltes register wird an alle gesendet
+                                                CurrentCards currentCards = new CurrentCards(activeCards);
+                                                String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                                broadcast(serializedCurrentCards);
 
                                                 // Cancel the timer
                                                 timer.cancel();
@@ -495,10 +497,8 @@ public class ClientHandler implements Runnable {
                             ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                             String serializedActivePhase = Serialisierer.serialize(activePhase);
                             broadcast(serializedActivePhase);
-
-
-
                             break;
+
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);

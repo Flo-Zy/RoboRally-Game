@@ -4,10 +4,7 @@ import SEPee.client.model.Client;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.MapSelected;
-import SEPee.serialisierung.messageType.SelectedCard;
-import SEPee.serialisierung.messageType.SetStatus;
-import SEPee.serialisierung.messageType.SendChat;
+import SEPee.serialisierung.messageType.*;
 //Später auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
@@ -33,10 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ClientController {
     @FXML
