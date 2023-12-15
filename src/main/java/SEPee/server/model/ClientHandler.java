@@ -565,8 +565,14 @@ public class ClientHandler implements Runnable {
         DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
         List<Field> fields = highway.getFieldsAt(robotX, robotY);
 
-        //System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
         //System.out.println("Feld Übergabe: " + fields);
+        System.out.println("570 " + highway.field4_5.toString());
+        System.out.println("570 " + highway.field4_5.get(0).getType());
+
+        ConveyorBelt convobelto = (ConveyorBelt) highway.field4_5.get(0);
+        System.out.println("574 " + Arrays.toString(convobelto.getOrientation()));
+
 
 
         StringBuilder result = new StringBuilder();
@@ -577,13 +583,15 @@ public class ClientHandler implements Runnable {
                 System.out.println("ConveyorBelt");
 
 
-                /*
-                String[] orientations = ConveyorBelt.getOrientations();
-                result.append("Conveyor Belt " + Arrays.toString(orientations) + ", ");
-                 */
+                String[] orientations = field.getOrientation();
+                result.append("Conveyor Belt 587 " + Arrays.toString(orientations) + ", ");
 
+
+                /*
                 String[] actualOrientation = highway.getOrientationOfField(robotX,robotY);
                 result.append("Conveyor Belt " + Arrays.toString(actualOrientation) + ", ");
+
+                 */
 
 
 

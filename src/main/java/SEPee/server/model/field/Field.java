@@ -21,13 +21,18 @@ public abstract class Field {
         this.type = type;
         this.isOnBoard = isOnBoard;
     }
-/*
+
+
     public Field(String type, String isOnBoard, String[] orientation) {
         this.type = type;
         this.isOnBoard = isOnBoard;
         this.orientation = orientation;
     }
 
- */
+
+
+
+
+
 
 }
