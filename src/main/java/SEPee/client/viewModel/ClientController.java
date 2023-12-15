@@ -238,75 +238,6 @@ public class ClientController {
         System.exit(0);
     }
 
-
-    //alte roboter auswahl mit buttons
-    /*
-    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
-        Dialog<Integer> dialog = new Dialog<>();
-        dialog.setTitle("Robot Selection");
-        dialog.setHeaderText("Please select a robot:");
-
-        // Create buttons for each robot
-        ButtonType button1 = new ButtonType("Robot 1", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button2 = new ButtonType("Robot 2", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button3 = new ButtonType("Robot 3", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button4 = new ButtonType("Robot 4", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button5 = new ButtonType("Robot 5", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button6 = new ButtonType("Robot 6", ButtonBar.ButtonData.OK_DONE);
-
-        // Create a map to associate button types with integer values
-        HashMap<ButtonType, Integer> buttonMap = new HashMap<>();
-        buttonMap.put(button1, 1);
-        buttonMap.put(button2, 2);
-        buttonMap.put(button3, 3);
-        buttonMap.put(button4, 4);
-        buttonMap.put(button5, 5);
-        buttonMap.put(button6, 6);
-
-        // Add buttons to the dialog
-        dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
-
-        //show the dialog and wait for user input
-        dialog.initOwner(stage);
-
-        //disable previously selected buttons
-        for (Integer takenFigure : takenFigures) {
-            ButtonType buttonType = buttonMap.entrySet().stream()
-                    .filter(entry -> entry.getValue() == takenFigure)
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElse(null);
-
-            if (buttonType != null) {
-                Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
-                buttonNode.setDisable(true);
-            }
-        }
-
-        //show dialog, wait for input
-        Optional<Integer> result = dialog.showAndWait();
-
-        // Process user input and return the selected robot (index starting from 1)
-        if (result.isPresent()) {
-            int selectedRobotIndex = buttonMap.get(result.get());
-
-            // Get the selected button
-            ButtonType selectedButtonType = buttonMap.entrySet().stream()
-                    .filter(entry -> entry.getValue() == selectedRobotIndex)
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElse(null);
-
-            if (selectedButtonType != null) {
-                Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
-                selectedButton.setDisable(true); // Disable the selected button
-            }
-
-            return selectedRobotIndex;
-        }
-        return 0; // Default value if no selection or unexpected button is pressed
-    }*/
-
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
@@ -316,31 +247,7 @@ public class ClientController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        //alte for schleife ohne disable
-        /*
-        // Erstellen von ImageView und Label für jeden Roboter und Hinzufügen zum GridPane
-        for (int i = 1; i <= 6; i++) {
-            // Laden des Bildes für den Roboter
-            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png"); // Pfad zum Bild
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(100); // Breite anpassen
-            imageView.setFitHeight(100); // Höhe anpassen
 
-            // Erstellen eines Labels für den Namen des Roboters
-            Label nameLabel = new Label("Robot " + i);
-            nameLabel.setAlignment(Pos.CENTER); // Zentrieren des Texts
-
-            // Hinzufügen von ImageView und Label zum GridPane
-            grid.add(imageView, i - 1, 0); // Hinzufügen des ImageView
-            grid.add(nameLabel, i - 1, 1); // Hinzufügen des Labels unter dem ImageView
-
-            // Event Handler für Klicks auf das ImageView
-            final int robotNumber = i;
-            imageView.setOnMouseClicked(event -> {
-                dialog.setResult(robotNumber); // Setzen des Ergebnisses
-                dialog.close(); // Schließen des Dialogs
-            });
-        }*/
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
             ImageView imageView = new ImageView(image);

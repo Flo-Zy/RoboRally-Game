@@ -15,7 +15,7 @@ import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.sun.jdi.request.ThreadDeathRequest;
 import lombok.Getter;
@@ -428,6 +428,32 @@ public class ClientHandler implements Runnable {
                                     SelectionFinished selectionFinished = new SelectionFinished(clientId);
                                     String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
                                     broadcast(serializedSelectionFinished);
+                                    if(Server.getTimerSend() == 0){
+                                        // sende TimerStarted
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        broadcast(serializedTimerStarted);
+                                        Server.setTimerSend(1);
+                                        // wait 30 sec to send TimerEnded
+                                        Timer timer = new Timer();
+                                        timer.schedule(new TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                // After 30 seconds, send TimerEnded
+                                                ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
+                                                for(Player player : Server.getGame().getPlayerList()){
+                                                    if(player.getPlayerMat().getNumRegister() < 5) {
+                                                        clientIDsNotReady.add(player.getId());
+                                                    }
+                                                }
+                                                TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
+                                                String serializedTimerEnded = Serialisierer.serialize(timerEnded);
+                                                broadcast(serializedTimerEnded);
+                                                // Cancel the timer
+                                                timer.cancel();
+                                            }
+                                        }, 30000); // 30,000 milliseconds = 30 seconds
+                                    }
                                 }
                             }
 

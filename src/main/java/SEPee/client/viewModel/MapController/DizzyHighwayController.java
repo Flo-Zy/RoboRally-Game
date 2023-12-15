@@ -316,89 +316,79 @@ public class DizzyHighwayController extends MapController {
             // Prüfe, ob die HBox totalRegister gefunden wurde
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
-            AtomicBoolean checkRegister = new AtomicBoolean(true);
             AtomicInteger counter1 = new AtomicInteger(0);
 
-            while (checkRegister.get()) {
+            if (totalHand != null && totalRegister != null) {
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 9; i++) {
+                    ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
 
-                if (totalHand != null && totalRegister != null) {
-                    // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
-                    for (int i = 0; i < 9; i++) {
-                        ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+                    if (handImageView != null) {
+                        final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                        // Füge den Event-Handler für das ImageView hinzu
+                        handImageView.setOnMouseClicked(mouseEvent -> {
+                            if (counter1.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
-                        if (handImageView != null) {
-                            final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                                Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                registerImageView.setImage(cardImage);
 
-                            // Füge den Event-Handler für das ImageView hinzu
-                            handImageView.setOnMouseClicked(mouseEvent -> {
-                                if (counter1.get() < 5) {
-                                    // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
-                                    ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
+                                registerImageView.setVisible(true);
+                                registerImageView.setManaged(true);
 
-                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
-                                    registerImageView.setImage(cardImage);
+                                // gewählte Karte aus Hand unsichtbar machen
+                                handImageView.setVisible(false);
 
-                                    registerImageView.setVisible(true);
-                                    registerImageView.setManaged(true);
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
 
-                                    // gewählte Karte aus Hand unsichtbar machen
-                                    handImageView.setVisible(false);
+                                zahlen.add(new Zahlen(index, counter1.get()));
+                                indexToCounterMap.put(index, counter1.get());
 
-                                    // sende serialisiertes SelectedCard
-                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
-                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                    Client.getWriter().println(serializedCardSelected);
+                                counter1.incrementAndGet();
 
-                                    zahlen.add(new Zahlen(index, counter1.get()));
-                                    indexToCounterMap.put(index, counter1.get());
+                            } else {
+                                System.out.println("Register voll");
 
-                                    counter1.incrementAndGet();
-
-                                } else {
-                                    System.out.println("Register voll");
-
-                                }
-                            });
-                        }
-                    }
-                    // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
-                    for (int i = 0; i < 5; i++) {
-                        ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
-
-                        if (registerImageView != null) {
-                            final int registerIndex = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
-
-                            // Füge den Event-Handler für das ImageView hinzu
-                            registerImageView.setOnMouseClicked(mouseEvent -> {
-                                int indexNew = mapRegisterIndexToHandIndex(registerIndex);
-                                counter1.decrementAndGet();
-
-                                if (indexNew < 9) {
-                                    ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-
-                                    // Image cardImage = new Image(drawPileClient.get(index2).getImageUrl());
-                                    // handImageView.setImage(cardImage);
-
-                                    handImageView.setVisible(true);
-                                    // handImageView.setManaged(true);
-
-                                    // gewählte Karte aus Hand unsichtbar machen
-                                    registerImageView.setImage(null);
-
-                                    // sende serialisiertes SelectedCard
-                                    SelectedCard selectedCard = new SelectedCard(null, registerIndex);
-                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                    Client.getWriter().println(serializedCardSelected);
-                                } else {
-                                    System.out.println("Hand voll");
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
-                if (counter1.get() == 5) {
-                    checkRegister.set(false);
-                    break;
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 5; i++) {
+                    ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+
+                    if (registerImageView != null) {
+                        final int registerIndex = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                        // Füge den Event-Handler für das ImageView hinzu
+                        registerImageView.setOnMouseClicked(mouseEvent -> {
+                            int indexNew = mapRegisterIndexToHandIndex(registerIndex);
+                            counter1.decrementAndGet();
+
+                            if (indexNew < 9) {
+                                ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
+
+                                // Image cardImage = new Image(drawPileClient.get(index2).getImageUrl());
+                                // handImageView.setImage(cardImage);
+
+                                handImageView.setVisible(true);
+                                // handImageView.setManaged(true);
+
+                                // gewählte Karte aus Hand unsichtbar machen
+                                registerImageView.setImage(null);
+
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(null, registerIndex);
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
+                            } else {
+                                System.out.println("Hand voll");
+                            }
+                        });
+                    }
                 }
             }
         }
