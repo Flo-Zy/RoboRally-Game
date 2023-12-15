@@ -429,6 +429,23 @@ public class ClientHandler implements Runnable {
                             SelectedCard selectedCard = Deserialisierer.deserialize(serializedReceivedString, SelectedCard.class);
                             String card = selectedCard.getMessageBody().getCard();
                             int cardRegister = selectedCard.getMessageBody().getRegister();
+
+                            if(card == null){
+                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
+                                                Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() - 1);
+                                    }
+                                }
+                            } else {
+                                for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+                                    if(Server.getGame().getPlayerList().get(i).getId() == clientId){
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
+                                                Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() + 1);
+                                    }
+                                }
+                            }
+
                             for(int i = 0; i < Server.getGame().getPlayerList().size(); i++){
                                 if(Server.getGame().getPlayerList().get(i).getId() == clientId){
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
@@ -438,10 +455,16 @@ public class ClientHandler implements Runnable {
                             CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
                             String serializedCardSelected = Serialisierer.serialize(cardSelected);
                             broadcast(serializedCardSelected);
-                            break;
-                        case "SelectionFinished":
-                            System.out.println("Selection Finished");
-                            SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
+
+                            for(int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                if (Server.getGame().getPlayerList().get(i).getId() == clientId &&
+                                        Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() == 5) {
+                                    SelectionFinished selectionFinished = new SelectionFinished(clientId);
+                                    String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
+                                    broadcast(serializedSelectionFinished);
+                                }
+                            }
+
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");

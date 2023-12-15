@@ -397,7 +397,10 @@ public class Client extends Application {
                             NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
                             System.out.println("(INFO) Player " + notYourCards.getMessageBody().getClientID() + " got " + notYourCards.getMessageBody().getCardsInHand() + " Cards");
                             break;
-
+                        case "SelectionFinished":
+                            SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
+                            System.out.println(selectionFinished.getMessageBody().getClientID() + ": Selection Finished");
+                            break;
                         case "ShuffleCoding":
                             System.out.println("Shuffle Coding");
                             ShuffleCoding shuffleCoding = Deserialisierer.deserialize(serializedReceivedString, ShuffleCoding.class);
