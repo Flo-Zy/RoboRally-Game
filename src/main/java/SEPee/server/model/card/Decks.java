@@ -45,10 +45,10 @@ public class Decks {
             deck.add(new MoveI());
         }
         for (int i = 0; i < 3; i++) {
-            deck.add(new MoveIII());
+            deck.add(new MoveII());
         }
         for (int i = 0; i < 1; i++) {
-            deck.add(new MoveII());
+            deck.add(new MoveIII());
         }
         for (int i = 0; i < 3; i++) {
             deck.add(new RightTurn());

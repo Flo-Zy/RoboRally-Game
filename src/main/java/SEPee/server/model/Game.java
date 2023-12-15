@@ -53,7 +53,7 @@ public class Game {
         }
     }
 
-    public void setNextPlayersTurn(){ //nextPlayer ist keine getter methode!
+    public void setNextPlayersTurn(){
         if(currentPhase == 0) { // 0: Starting-Phase
             playerIndex++;
             currentPlayer = playerList.get(playerIndex);

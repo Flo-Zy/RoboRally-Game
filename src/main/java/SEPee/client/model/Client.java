@@ -296,6 +296,8 @@ public class Client extends Application {
                                             // System.out.println("Player: " + player.getName() + " got 9 cards.");
                                         }
 
+                                        /*
+
                                         //harcode tester für MoveI - III
                                         PlayCard playCard = new PlayCard("MoveI");
                                         String serializedPlayCard = Serialisierer.serialize(playCard);
@@ -344,6 +346,8 @@ public class Client extends Application {
                                             // Schritt 2: Auswählen vom DrawPile
 
                                             // string an server?
+
+                                         */
 
 
                                     break;
