@@ -269,6 +269,10 @@ public class Client extends Application {
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.initRegister();
+                                System.out.println(" Programmierungsphase");
+                            }
+                            if (controller.getCurrentPhase() == 3){
+                                System.out.println(" Aktivierungsphase");
                             }
                             break;
                         case "CurrentPlayer":
