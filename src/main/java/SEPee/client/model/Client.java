@@ -491,6 +491,9 @@ public class Client extends Application {
                         case "CurrentCards":
                             System.out.println("Current Cards");
                             CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
+                            for(int i = 0; i < currentCards.getMessageBody().getActiveCards().size(); i++){
+                                System.out.println(currentCards.getMessageBody().getActiveCards().get(i));
+                            }
                             break;
                         case "ReplaceCard":
                             System.out.println("Replace Card");

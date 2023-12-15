@@ -460,6 +460,7 @@ public class ClientHandler implements Runnable {
                                                         // karten ziehen
                                                         Card card = player.getPlayerMat().getProgDeck().get(0);
                                                         missingClientCards.add(card.getName());
+                                                        player.getPlayerMat().getRegister().add(card.getName());
                                                         // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
                                                         player.getPlayerMat().getProgDeck().remove(0);
                                                         i++;
@@ -471,6 +472,17 @@ public class ClientHandler implements Runnable {
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
 
+                                                for(int i = 0; i < 5; i++){
+                                                    ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                                    for(Player player : Server.getGame().getPlayerList()){
+                                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                                player.getPlayerMat().getRegister().get(i)));
+                                                    }
+                                                    CurrentCards currentCards = new CurrentCards(activeCards);
+                                                    String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                                    broadcast(serializedCurrentCards);
+                                                }
+
                                                 // Cancel the timer
                                                 timer.cancel();
                                             }
@@ -478,6 +490,13 @@ public class ClientHandler implements Runnable {
                                     }
                                 }
                             }
+
+                            Server.getGame().nextCurrentPhase();
+                            ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                            String serializedActivePhase = Serialisierer.serialize(activePhase);
+                            broadcast(serializedActivePhase);
+
+
 
                             break;
                         case "SelectedDamage":
