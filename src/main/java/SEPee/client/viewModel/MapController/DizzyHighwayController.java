@@ -430,7 +430,7 @@ public class DizzyHighwayController extends MapController {
 
     public void movementPlayed(int clientId, int newX, int newY) {
 
-        Player player = Client.getPlayerListClient().get(clientId - 1); //array bei 0 beginnend, Ids bei 1
+        Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
         Robot robot = playerRobotMap.get(player);
 
         ImageView imageView = robotImageViewMap.get(robot);

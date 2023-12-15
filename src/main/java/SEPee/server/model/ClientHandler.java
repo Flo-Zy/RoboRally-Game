@@ -201,6 +201,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
+                            Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
                             System.out.println("Play Card");
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
@@ -313,6 +314,40 @@ public class ClientHandler implements Runnable {
 
 
                             }
+                            // update im Server game Objekt den Roboter dieses Spielers
+                            for(Player player : Server.getGame().getPlayerList()){
+                                if(player.getId() == this.player.getId()){
+                                    player.setRobot(this.robot);
+                                }
+                            }
+
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
+                                Server.getGame().setNextPlayersTurn();
+
+                                if(Server.getRegisterCounter() <= 4) {
+                                    // nulltes register wird an alle gesendet
+                                    ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
+                                    }
+                                    Server.setRegisterCounter(Server.getRegisterCounter()+1);
+                                    CurrentCards currentCards = new CurrentCards(activeCards);
+                                    String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                    broadcast(serializedCurrentCards);
+                                    Server.setCountPlayerTurns(0);
+                                    // test
+                                    for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                        System.out.println(activeCard.getCard());
+                                    }
+                                }else{
+                                    Server.setRegisterCounter(0);
+                                    Server.getGame().nextCurrentPhase();
+                                    ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                    String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                    broadcast(serializedActivePhase);
+                                }
+                            }
 
                             // Karteneffekt messagtype fur alle clients verschicken (Movement)
 
@@ -327,6 +362,11 @@ public class ClientHandler implements Runnable {
                             this.robot = new Robot(0,0,"right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
+                            for(Player player : Server.getGame().getPlayerList()){
+                                if(player.getId() == this.player.getId()){
+                                    player.setRobot(this.robot);
+                                }
+                            }
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
@@ -474,16 +514,21 @@ public class ClientHandler implements Runnable {
                                                 Server.getGame().setNextPlayersTurn();
 
                                                 ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
-
                                                 for (Player player : Server.getGame().getPlayerList()) {
                                                     activeCards.add(new CurrentCards.ActiveCard(player.getId(),
-                                                            player.getPlayerMat().getRegister().get(0))); // 0. element aus register von jedem Player
+                                                            player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
                                                 }
+                                                Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
                                                 // nulltes register wird an alle gesendet
                                                 CurrentCards currentCards = new CurrentCards(activeCards);
                                                 String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                                 broadcast(serializedCurrentCards);
+                                                Server.setCountPlayerTurns(0);
+                                                // test
+                                                for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                                    System.out.println(activeCard.getCard());
+                                                }
 
                                                 // Cancel the timer
                                                 timer.cancel();

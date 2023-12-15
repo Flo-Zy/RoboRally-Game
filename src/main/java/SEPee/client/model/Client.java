@@ -45,6 +45,9 @@ public class Client extends Application {
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
+    private int turn; // Client ist an Stelle turn dran
+    private String yourCard; // Karte die du spielen wirst
+    private int cardPlayedCounter = 0; // Wie lange musst du warten, bist du dein PlayCard senden darfst
 
     public static void main(String[] args) {
         launch(args);
@@ -253,9 +256,16 @@ public class Client extends Application {
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
                             break;
                         case "CardPlayed":
+                            cardPlayedCounter++;
+                            if(turn == cardPlayedCounter+1){
+                                PlayCard playCard = new PlayCard(yourCard);
+                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                writer.println(serializedPlayCard);
+                            }
                             System.out.println("Card Played");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
-
+                            controller.appendToChatArea(">> Player " + cardPlayed.getMessageBody().getClientID() +
+                                    " played card " + cardPlayed.getMessageBody().getCard());
                             
                             break;
                         case "ActivePhase":
@@ -478,11 +488,26 @@ public class Client extends Application {
                             controller.fillEmptyRegister(nextCards);
                             break;
                         case "CurrentCards":
+                            cardPlayedCounter = 0;
+                            turn=-1;
+                            yourCard = null;
+                            // erhält ArrayList<ActiveCard>: Register und clientID an Stelle 0 von jedem Client (sortiert)
                             System.out.println("Current Cards");
+
                             CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
+                            // Bestimme, wann du dran bist und welche karte du spielen wirst
                             for(int i = 0; i < currentCards.getMessageBody().getActiveCards().size(); i++){
-                                System.out.println(currentCards.getMessageBody().getActiveCards().get(i));
+                                if(currentCards.getMessageBody().getActiveCards().get(i).getClientID() == controller.getId()){
+                                    turn = i+1; // +1, weil clientIDs bei 1 anfangen
+                                    yourCard = currentCards.getMessageBody().getActiveCards().get(i).getCard();
+                                }
                             }
+                            if(turn == 1){
+                                PlayCard playCard = new PlayCard(yourCard);
+                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                writer.println(serializedPlayCard);
+                            }
+
                             break;
                         case "ReplaceCard":
                             System.out.println("Replace Card");
