@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DizzyHighway extends GameBoard {
-
-    public List<Field> field4_5 = new ArrayList<>();
-
-
     public DizzyHighway() {
 
         super("5B", "DizzyHighway", 13);
@@ -230,7 +226,7 @@ public class DizzyHighway extends GameBoard {
         String[] orientations44 = {"bottom", "top"};
         field4_4.add(new ConveyorBelt("5B", 2, orientations44));
 
-        //List<Field> field4_5 = new ArrayList<>();
+        List<Field> field4_5 = new ArrayList<>();
         String[] orientations45 = {"bottom", "top"};
         field4_5.add(new ConveyorBelt("5B", 2, orientations45));
 
