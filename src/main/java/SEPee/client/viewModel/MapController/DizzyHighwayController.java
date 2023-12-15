@@ -306,7 +306,7 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeRegister(int clientId, ArrayList<Card> clientHand){
+    public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (playerDrawPileMap.containsKey(clientId)) {
             playerDrawPileMap.remove(clientId);
@@ -316,6 +316,9 @@ public class DizzyHighwayController extends MapController {
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = playerDrawPileMap.get(clientId);
 
+        // Hashmap die den Index der Karte nach klicken auf eine Karte in totalHand speichert
+        Map<Integer, Card> indexToCardMap = new HashMap<>();
+
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
             // Prüfe, ob die HBox totalHand gefunden wurde
@@ -324,6 +327,7 @@ public class DizzyHighwayController extends MapController {
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
             if (totalHand != null && totalRegister != null) {
+
                 AtomicInteger counter1 = new AtomicInteger(0);
 
                 // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
@@ -336,6 +340,7 @@ public class DizzyHighwayController extends MapController {
                         // Füge den Event-Handler für das ImageView hinzu
                         handImageView.setOnMouseClicked(mouseEvent -> {
                             if (counter1.get() < 5) {
+
                                 // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
@@ -346,9 +351,7 @@ public class DizzyHighwayController extends MapController {
                                 registerImageView.setManaged(true);
 
                                 // gewählte Karte aus Hand unsichtbar machen
-                                // handImageView.setVisible(false);
-                                handImageView.setImage(null);
-                                // handImageView.setManaged(false);
+                                handImageView.setVisible(false);
 
                                 // sende serialisiertes SelectedCard
                                 SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
@@ -372,64 +375,44 @@ public class DizzyHighwayController extends MapController {
 
                         // Füge den Event-Handler für das ImageView hinzu
                         registerImageView.setOnMouseClicked(mouseEvent -> {
-                            // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
-                            ImageView handImageView = (ImageView) totalHand.getChildren().get(index2);
+                            int indexNew = findNextEmptyHandIndex(totalHand);
 
-                            int indexNew = 0;
-                            if (handImageView.getImage() != null){
-                                indexNew = index2 + 1;
-                                handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                if (handImageView.getImage() != null){
-                                    indexNew++;
-                                    handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                    if (handImageView.getImage() != null){
-                                        indexNew++;
-                                        handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                        if (handImageView.getImage() != null){
-                                            indexNew++;
-                                            handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                            if (handImageView.getImage() != null){
-                                                indexNew++;
-                                                handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                                if (handImageView.getImage() != null){
-                                                    indexNew++;
-                                                    handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                                    if (handImageView.getImage() != null){
-                                                        indexNew++;
-                                                        handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                                        if (handImageView.getImage() != null){
-                                                            indexNew++;
-                                                            handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                            if (indexNew < 9) {
+                                ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
+
+                                // Image cardImage = new Image(drawPileClient.get(index2).getImageUrl());
+                                // handImageView.setImage(cardImage);
+
+                                handImageView.setVisible(true);
+                                // handImageView.setManaged(true);
+
+                                // gewählte Karte aus Hand unsichtbar machen
+                                registerImageView.setImage(null);
+
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(null, index2);
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
+                            } else {
+                                System.out.println("Hand voll");
                             }
-
-                            Image cardImage = new Image(drawPileClient.get(index2).getImageUrl());  // hier ist fehler, index2 ist register nummer, also wird bild von 1/2/3/4/5 topCard genommen
-                            handImageView.setImage(cardImage);
-
-                            handImageView.setVisible(true);
-                            handImageView.setManaged(true);
-
-                            // gewählte Karte aus Hand unsichtbar machen
-                            // registerImageView.setVisible(false);
-                            registerImageView.setImage(null);
-                            // registerImageView.setManaged(false);
-
-                            // sende serialisiertes SelectedCard
-                            SelectedCard selectedCard = new SelectedCard(null, index2);
-                            String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                            Client.getWriter().println(serializedCardSelected);
                         });
                     }
                 }
             }
         }
     }
+
+    private int findNextEmptyHandIndex(HBox totalHand) {
+        for (int i = 0; i < 9; i++) {
+            ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+            if (handImageView != null && !totalHand.getChildren().get(i).isVisible()) {
+                return i;
+            }
+        }
+        return 9; // Return an index outside the bounds if no empty position is found
+    }
+
 
     public void movementPlayed(int clientId, int newX, int newY) {
 
