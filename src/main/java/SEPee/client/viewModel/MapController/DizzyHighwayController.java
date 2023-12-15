@@ -417,7 +417,19 @@ public class DizzyHighwayController extends MapController {
     }
 
     public void fillEmptyRegister(ArrayList<Card> nextCards){
-        int numCards = nextCards.size();
+        int emptyIndex = 5 - nextCards.size();
+        int index = 0;
+        while(emptyIndex < 5){
+            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
+
+            Image cardImage = new Image(nextCards.get(index).getImageUrl());
+            registerImageView.setImage(cardImage);
+
+            registerImageView.setVisible(true);
+            registerImageView.setManaged(true);
+            index++;
+            emptyIndex++;
+        }
     }
 
     public void movementPlayed(int clientId, int newX, int newY) {
