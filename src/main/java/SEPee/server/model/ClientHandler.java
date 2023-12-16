@@ -382,6 +382,10 @@ public class ClientHandler implements Runnable {
                                     }
                                 } else{ // Server.getRegisterCounter() größer 4
                                     Server.setRegisterCounter(0);
+                                    Server.setTimerSend(0);
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        player.getPlayerMat().setNumRegister(0);
+                                    }
                                     Server.getGame().nextCurrentPhase();
 
                                     // entferne nachdem alle register in Phase 2 abgearbeitet wurden von jedem player das gesamte register
@@ -394,9 +398,46 @@ public class ClientHandler implements Runnable {
                                         System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
                                     }
 
+                                    // YourCards an Client senden wenn ActivePhase = 2
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
+                                        int i = 0;
+                                        while (i < 9) {
+                                            // die ersten 9 karten ziehen
+                                            Card card = player.getPlayerMat().getProgDeck().get(0);
+                                            clientCards.add(card.getName());
+                                            // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                            player.getPlayerMat().getProgDeck().remove(0);
+                                            i++;
+                                        }
+                                        clientHand = clientCards;
+
+                                        // test ob clientHand richtig gesetzt
+                                        for (String card : clientHand) {
+                                            System.out.println("Player " + player.getId() + ": " + card);
+                                        }
+
+                                        // sendet Karten Infos an aktuellen player
+                                        YourCards yourCards = new YourCards(clientCards);
+                                        String serializedYourCards = Serialisierer.serialize(yourCards);
+                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
+                                        // sende an diesen Client sein ProgDeck
+                                        sendToOneClient(player.getId(), serializedYourCards);
+
+                                        // sendet Karten Infos an alle anderen player
+                                        NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                        String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                            if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
+                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                            }
+                                        }
+                                    }
+
                                     ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                     String serializedActivePhase = Serialisierer.serialize(activePhase);
                                     broadcast(serializedActivePhase);
+
                                 }
                             }else{ //alle spieler waren noch nicht im aktuellen register dran, nächster Spieler soll seine Karte Spielen
                                 CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
@@ -441,7 +482,7 @@ public class ClientHandler implements Runnable {
                                 Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
                                 Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
 
-                                // wenn currentPhase = 2 : YourCards (schicke jedem Client zuerst sein progDeck)
+                                // wenn WIEDER currentPhase = 2: YourCards (schicke jedem Client zuerst sein progDeck)
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
@@ -458,7 +499,7 @@ public class ClientHandler implements Runnable {
 
                                         // test ob clientHand richtig gesetzt
                                         for (String card : clientHand) {
-                                            System.out.println("Player " + this.player.getId() + ": " + card);
+                                            System.out.println("Player " + player.getId() + ": " + card);
                                         }
 
                                         // sendet Karten Infos an aktuellen player
@@ -479,7 +520,7 @@ public class ClientHandler implements Runnable {
                                     }
                                 }
 
-                                // Aktive Spielphase setzen
+                                // Aktive Spielphase setzen (nachdem Karten in die Hands ausgeteilt wurden)
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                 broadcast(serializedActivePhase);
@@ -514,6 +555,7 @@ public class ClientHandler implements Runnable {
                                     if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
                                                 Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() + 1);
+                                        System.out.println( Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister());
                                     }
                                 }
                             }
@@ -593,6 +635,7 @@ public class ClientHandler implements Runnable {
                                                     activeCards.add(new CurrentCards.ActiveCard(player.getId(),
                                                             player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
                                                 }
+
                                                 Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
                                                 Server.getGame().nextCurrentPhase();

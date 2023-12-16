@@ -299,6 +299,8 @@ public class DizzyHighwayController extends MapController {
     }
 
     public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
+        zahlen.clear();
+        counter1.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (playerDrawPileMap.containsKey(clientId)) {
             playerDrawPileMap.remove(clientId);
@@ -319,6 +321,7 @@ public class DizzyHighwayController extends MapController {
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
             if (totalHand != null && totalRegister != null) {
+
                 // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
                 for (int i = 0; i < 9; i++) {
                     ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
@@ -395,6 +398,20 @@ public class DizzyHighwayController extends MapController {
                             });
 
                     }
+                }
+            }
+        }
+    }
+
+    public void setRegisterVisibilityFalse(){
+        // Prüfe, ob die HBox totalRegister gefunden wurde
+        HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
+
+        if (totalRegister != null) {
+            for (int i = 0; i < 5; i++) {
+                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+                if (registerImageView != null) {
+                    registerImageView.setImage(null);
                 }
             }
         }
