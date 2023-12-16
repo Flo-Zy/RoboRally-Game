@@ -64,7 +64,9 @@ public class DizzyHighway extends GameBoard {
         field1_0.add(new Empty("A"));
 
         List<Field> field1_1 = new ArrayList<>();
+        String[] orientations11Wall = {"bottom"};
         field1_1.add(new StartPoint("A"));
+        field1_1.add(new Wall("A", orientations11Wall));
 
         List<Field> field1_2 = new ArrayList<>();
         String[] orientations12 = {"top"};
@@ -87,7 +89,9 @@ public class DizzyHighway extends GameBoard {
         field1_7.add(new Wall("A", orientations17));
 
         List<Field> field1_8 = new ArrayList<>();
+        String[] orientations18Wall = {"top"};
         field1_8.add(new StartPoint("A"));
+        field1_8.add(new Wall("A", orientations18Wall));
 
         List<Field> field1_9 = new ArrayList<>();
         field1_9.add(new Empty("A"));
@@ -122,11 +126,11 @@ public class DizzyHighway extends GameBoard {
         field2_3.add(new Empty("A"));
 
         List<Field> field2_4 = new ArrayList<>();
-        String[] orientations24 = {"left"};
+        String[] orientations24 = {"right"};
         field2_4.add(new Wall("A", orientations24));
 
         List<Field> field2_5 = new ArrayList<>();
-        String[] orientations25 = {"left"};
+        String[] orientations25 = {"right"};
         field2_5.add(new Wall("A", orientations25));
 
         List<Field> field2_6 = new ArrayList<>();
@@ -171,10 +175,14 @@ public class DizzyHighway extends GameBoard {
         field3_3.add(new Empty("5B"));
 
         List<Field> field3_4 = new ArrayList<>();
-        field3_4.add(new Empty("5B"));
+        String[] orientations34Wall = {"left"};
+        //field3_4.add(new Empty("5B"));
+        field3_4.add(new Wall("5B", orientations34Wall));
 
         List<Field> field3_5 = new ArrayList<>();
-        field3_5.add(new Empty("5B"));
+        String[] orientations35Wall = {"left"};
+        //field3_5.add(new Empty("5B"));
+        field3_5.add(new Wall("5B", orientations35Wall));
 
         List<Field> field3_6 = new ArrayList<>();
         field3_6.add(new Empty("5B"));
@@ -282,7 +290,9 @@ public class DizzyHighway extends GameBoard {
         field5_5.add(new Empty("5B"));
 
         List<Field> field5_6 = new ArrayList<>();
-        field5_6.add(new Empty("5B"));
+        //field5_6.add(new Empty("5B"));
+        String[] orientations56Wall = {"right"};
+        field5_6.add(new Wall("5B", orientations56Wall));
 
         List<Field> field5_7 = new ArrayList<>();
         field5_7.add(new Empty("5B"));
@@ -318,7 +328,9 @@ public class DizzyHighway extends GameBoard {
         field6_1.add(new ConveyorBelt("5B", 2, orientations61));
 
         List<Field> field6_2 = new ArrayList<>();
-        field6_2.add(new Empty("5B"));
+        //field6_2.add(new Empty("5B"));
+        String[] orientations62Wall = {"bottom"};
+        field6_2.add(new Wall("5B", orientations62Wall));
 
         List<Field> field6_3 = new ArrayList<>();
         String[] orientations63Wall = {"top"};
@@ -333,7 +345,9 @@ public class DizzyHighway extends GameBoard {
         field6_4.add(new Laser("5B", orientations64Laser, 1));
 
         List<Field> field6_5 = new ArrayList<>();
-        field6_5.add(new Empty("5B"));
+        //field6_5.add(new Empty("5B"));
+        String[] orientations65Wall = {"top"};
+        field6_5.add(new Wall("5B", orientations65Wall));
 
         List<Field> field6_6 = new ArrayList<>();
         String[] orientations66Wall = {"left"};
@@ -378,7 +392,9 @@ public class DizzyHighway extends GameBoard {
         field7_2.add(new Empty("5B"));
 
         List<Field> field7_3 = new ArrayList<>();
-        field7_3.add(new RestartPoint("5B"));
+        //field7_3.add(new RestartPoint("5B"));
+        String[] orientations73Wall = {"right"};
+        field7_3.add(new Wall("5B", orientations73Wall));
 
         List<Field> field7_4 = new ArrayList<>();
         field7_4.add(new Empty("5B"));
@@ -441,7 +457,9 @@ public class DizzyHighway extends GameBoard {
         field8_5.add(new Empty("5B"));
 
         List<Field> field8_6 = new ArrayList<>();
-        field8_6.add(new Empty("5B"));
+        //field8_6.add(new Empty("5B"));
+        String[] orientations86Wall = {"left"};
+        field8_6.add(new Wall("5B", orientations86Wall));
 
         List<Field> field8_7 = new ArrayList<>();
         field8_7.add(new Empty("5B"));
@@ -486,7 +504,9 @@ public class DizzyHighway extends GameBoard {
         field9_3.add(new Laser("5B", orientations93Laser, 1));
 
         List<Field> field9_4 = new ArrayList<>();
-        field9_4.add(new Empty("5B"));
+        //field9_4.add(new Empty("5B"));
+        String[] orientations94Wall = {"bottom"};
+        field9_4.add(new Wall("5B", orientations94Wall));
 
         List<Field> field9_5 = new ArrayList<>();
         String[] orientations95Wall = {"top"};
@@ -501,7 +521,9 @@ public class DizzyHighway extends GameBoard {
         field9_6.add(new Laser("5B", orientations96Laser, 1));
 
         List<Field> field9_7 = new ArrayList<>();
-        field9_7.add(new Empty("5B"));
+        //field9_7.add(new Empty("5B"));
+        String[] orientations97Wall = {"top"};
+        field9_7.add(new Wall("5B", orientations97Wall));
 
         List<Field> field9_8 = new ArrayList<>();
         String[] orientations98 = {"right", "left"};
@@ -536,7 +558,9 @@ public class DizzyHighway extends GameBoard {
         field10_2.add(new Empty("5B"));
 
         List<Field> field10_3 = new ArrayList<>();
-        field10_3.add(new Empty("5B"));
+        //field10_3.add(new Empty("5B"));
+        String[] orientations103Wall = {"left"};
+        field10_3.add(new Wall("5B", orientations103Wall));
 
         List<Field> field10_4 = new ArrayList<>();
         field10_4.add(new Empty("5B"));
