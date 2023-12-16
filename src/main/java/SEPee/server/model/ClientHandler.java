@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sun.jdi.request.ThreadDeathRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -475,7 +474,7 @@ public class ClientHandler implements Runnable {
                                     Movement movement2 = new Movement(2, 6, 4);
                                     String serializedMovement2 = Serialisierer.serialize(movement2);
                                     broadcast(serializedMovement2);
-
+                                    /*
                                     if (this.clientId == 3) {
                                         this.robot.setX(4);
                                         this.robot.setY(1);

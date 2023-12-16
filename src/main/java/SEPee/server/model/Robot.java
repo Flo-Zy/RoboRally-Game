@@ -5,7 +5,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Robot {
+    @Getter
+    @Setter
     private int x;
+    @Getter
+    @Setter
     private int y;
     //private Orientation orientation;
     //private int energyReserve;
