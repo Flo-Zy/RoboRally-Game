@@ -221,7 +221,7 @@ public class ClientHandler implements Runnable {
                             switch (lastPlayedCard) {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
 
-                                    if (!movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (!movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         BackUp.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
@@ -239,7 +239,7 @@ public class ClientHandler implements Runnable {
                                     break;
                                 case "MoveI":
 
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
@@ -256,12 +256,12 @@ public class ClientHandler implements Runnable {
                                     break;
                                 case "MoveII":
 
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
@@ -278,17 +278,17 @@ public class ClientHandler implements Runnable {
                                     break;
                                 case "MoveIII":
 
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
@@ -345,15 +345,20 @@ public class ClientHandler implements Runnable {
                             broadcast(serializedCardPlayed);
 
                             // update im Server game Objekt den Roboter dieses Spielers
+                            //hasans losung
+                            /*
                             for(Player player : Server.getGame().getPlayerList()){
                                 if(player.getId() == this.player.getId()){
                                     player.setRobot(this.robot);
                                 }
                             }
+                             */
 
 
                             // wenn letzter Player aus PlayerList dran ist
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
+
+                                fieldActivation(); // Belts, lasers, checkpoints.. etc.
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
                                 if(Server.getRegisterCounter() <= 4) {
@@ -424,7 +429,6 @@ public class ClientHandler implements Runnable {
                                     player.setRobot(this.robot);
                                 }
                             }
-
                              */
 
                             // Find the associated Player and set the Robot for that Player
@@ -712,10 +716,10 @@ public class ClientHandler implements Runnable {
         writer.println(serializedAlive);
     }
 
-    private String checkRobotField() {
+    private String checkRobotField(Robot robot) {
         // Obtain the robot's current position
-        int robotX = this.robot.getX();
-        int robotY = this.robot.getY();
+        int robotX = robot.getX();
+        int robotY = robot.getY();
 
         // Assuming you have a method in DizzyHighway to get the field at a specific position
         // You need to create an instance or use a static method of DizzyHighway class, depending on your implementation
