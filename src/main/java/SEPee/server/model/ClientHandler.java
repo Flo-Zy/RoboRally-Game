@@ -291,12 +291,10 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedMovement3);
                                     break;
                                 case "PowerUp":
-                                    //lastPlayedCard = "PowerUp";
 
                                     break;
 
                                 case "RightTurn":
-                                    //lastPlayedCard = "RightTurn";
                                     RightTurn.makeEffect(this.robot);
                                     int clientIDRightTurn = this.clientId;
                                     PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
@@ -305,7 +303,6 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedPlayerTurningRight);
                                     break;
                                 case "LeftTurn":
-                                    //lastPlayedCard = "LeftTurn";
                                     LeftTurn.makeEffect(this.robot);
                                     int clientIDLeftTurn = this.clientId;
                                     PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
@@ -315,7 +312,6 @@ public class ClientHandler implements Runnable {
                                     break;
 
                                 case "UTurn":
-                                    //lastPlayedCard = "UTurn";
                                     UTurn.makeEffect(this.robot);
                                     int clientIDUTurn = this.clientId;
                                     PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
@@ -465,6 +461,7 @@ public class ClientHandler implements Runnable {
                                     Movement movement1 = new Movement(1, 4, 5);
                                     String serializedMovement1 = Serialisierer.serialize(movement1);
                                     broadcast(serializedMovement1);
+
 
                                     if (player.getId() == 2) {
                                         this.robot.setX(6);
