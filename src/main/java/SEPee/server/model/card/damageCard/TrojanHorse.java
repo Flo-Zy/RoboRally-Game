@@ -4,5 +4,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TrojanHorse {
+public class TrojanHorse extends DamageCard{
+    public TrojanHorse() {
+        super("TrojanHorse", " ");
+    }
+    @Override
+    public String getImageUrl() {
+        return " ";
+    }
 }

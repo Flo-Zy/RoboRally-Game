@@ -45,9 +45,7 @@ public class Client extends Application {
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
-    private int turn; // Client ist an Stelle turn dran
-    private String yourCard; // Karte die du spielen wirst
-    private int cardPlayedCounter = 0; // Wie lange musst du warten, bist du dein PlayCard senden darfst
+    private int registerCounter = 1;
     private ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -204,7 +202,6 @@ public class Client extends Application {
                             break;
                         case "MapSelected":
                             System.out.println("Map wurde gewählt");
-
                             String serializedReceivedMap = serializedReceivedString;
                             MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
 
@@ -219,8 +216,6 @@ public class Client extends Application {
                                     System.out.println("Invalid Map");
                                     break;
                             }
-
-
                             break;
                         case "GameStarted":
                             System.out.println("Game Started");
@@ -228,7 +223,6 @@ public class Client extends Application {
                             controller.loadDizzyHighwayFXML(this, primaryStage);
                             break;
                         case "ReceivedChat":
-
                             String serializedReceivedChat = serializedReceivedString;
                             ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
 
@@ -238,7 +232,6 @@ public class Client extends Application {
                                     fromName = playerListClient.get(i).getName();
                                 }
                             }
-                            //System.out.println(fromName);
                             if (fromName != null) {
                                 String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
                                 controller.appendToChatArea(receivedMessage);
@@ -257,15 +250,9 @@ public class Client extends Application {
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
                             break;
                         case "CardPlayed":
-                            cardPlayedCounter++;
-                            if(turn == cardPlayedCounter+1){
-                                PlayCard playCard = new PlayCard(yourCard);
-                                String serializedPlayCard = Serialisierer.serialize(playCard);
-                                writer.println(serializedPlayCard);
-                            }
                             System.out.println("Card Played");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
-                            controller.appendToChatArea(">> Player " + cardPlayed.getMessageBody().getClientID() +
+                            controller.appendToChatArea("> Player " + cardPlayed.getMessageBody().getClientID() +
                                     " played card " + cardPlayed.getMessageBody().getCard());
                             
                             break;
@@ -273,6 +260,7 @@ public class Client extends Application {
                             System.out.println("Active Phase");
                             ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
                             controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
+                            controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.initRegister();
@@ -302,57 +290,6 @@ public class Client extends Application {
                                     break;
                                 case 2:
                                     System.out.println("Programmierphase");
-
-                                        /*
-                                        //harcode tester für MoveI - III
-                                        PlayCard playCard = new PlayCard("MoveI");
-                                        String serializedPlayCard = Serialisierer.serialize(playCard);
-                                        writer.println(serializedPlayCard);
-
-                                        PlayCard playCard2 = new PlayCard("MoveII");
-                                        String serializedPlayCard2 = Serialisierer.serialize(playCard2);
-                                        writer.println(serializedPlayCard2);
-
-                                        PlayCard rightTurn = new PlayCard("RightTurn");
-                                        String serializedRightTurn = Serialisierer.serialize(rightTurn);
-                                        writer.println(serializedRightTurn);
-
-                                        PlayCard playCard3 = new PlayCard("MoveIII");
-                                        String serializedPlayCard3 = Serialisierer.serialize(playCard3);
-                                        writer.println(serializedPlayCard3);
-
-                                        PlayCard leftTurn = new PlayCard("LeftTurn");
-                                        String serializedleftTurn = Serialisierer.serialize(leftTurn);
-                                        writer.println(serializedleftTurn);
-
-                                        PlayCard playCard4 = new PlayCard("MoveII");
-                                        String serializedPlayCard4 = Serialisierer.serialize(playCard4);
-                                        writer.println(serializedPlayCard4);
-
-                                        PlayCard backUp = new PlayCard("BackUp");
-                                        String serializedBackUp = Serialisierer.serialize(backUp);
-                                        writer.println(serializedBackUp);
-
-                                        PlayCard uTurn = new PlayCard("UTurn");
-                                        String serializedUTurn = Serialisierer.serialize(uTurn);
-                                        writer.println(serializedUTurn);
-
-                                        PlayCard again = new PlayCard("Again");
-                                        String serializedagain = Serialisierer.serialize(again);
-                                        writer.println(serializedagain);
-
-                                        PlayCard again2 = new PlayCard("Again");
-                                        String serializedagain2 = Serialisierer.serialize(again2);
-                                        writer.println(serializedagain2);
-
-                                        PlayCard playCard5 = new PlayCard("MoveII");
-                                        String serializedPlayCard5 = Serialisierer.serialize(playCard5);
-                                        writer.println(serializedPlayCard5);
-
-                                            // Schritt 2: Auswählen vom DrawPile
-
-                                            // string an server?
-                                         */
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
@@ -496,26 +433,19 @@ public class Client extends Application {
                             controller.fillEmptyRegister(nextCards);
                             break;
                         case "CurrentCards":
-                            //cardPlayedCounter = 0;
-                            //turn=-1;
-                            //yourCard = null;
-                            // erhält ArrayList<ActiveCard>: Register und clientID an Stelle 0 von jedem Client (sortiert)
                             System.out.println("Current Cards");
 
                             CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
-                            // Bestimme, wann du dran bist und welche karte du spielen wirst
-                            /*for(int i = 0; i < currentCards.getMessageBody().getActiveCards().size(); i++){
-                                if(currentCards.getMessageBody().getActiveCards().get(i).getClientID() == controller.getId()){
-                                    turn = i+1; // +1, weil clientIDs bei 1 anfangen
-                                    yourCard = currentCards.getMessageBody().getActiveCards().get(i).getCard();
-                                }
-                            }
-                            if(turn == 1){
-                                PlayCard playCard = new PlayCard(yourCard);
-                                String serializedPlayCard = Serialisierer.serialize(playCard);
-                                writer.println(serializedPlayCard);
-                            }*/
+
                             activeRegister = currentCards.getMessageBody().getActiveCards();
+
+                            controller.appendToChatArea(">> Played Register: " + registerCounter);
+
+                            if (registerCounter == 5){
+                                registerCounter = 1;
+                            }else {
+                                registerCounter++;
+                            }
 
                             break;
                         case "ReplaceCard":

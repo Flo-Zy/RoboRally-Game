@@ -330,6 +330,21 @@ public class ClientHandler implements Runnable {
                                     }
                                     Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
+                                            Server.getGame().setSpam(Server.getGame().getSpam()+1);
+                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
+                                            Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
+                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
+                                            Server.getGame().setSpam(Server.getGame().getVirus()+1);
+                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
+                                            Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+                                        } else {
+                                            // füge sonst dem player in playerMat in den discardPile das 0. Register
+                                            player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
+                                        }
+                                    }
+
                                     CurrentCards currentCards = new CurrentCards(activeCards);
                                     String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                     broadcast(serializedCurrentCards);
@@ -509,7 +524,6 @@ public class ClientHandler implements Runnable {
                                                         Card card = player.getPlayerMat().getProgDeck().get(0);
                                                         missingClientCards.add(card.getName());
                                                         player.getPlayerMat().getRegister().add(card.getName());
-                                                        // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
                                                         player.getPlayerMat().getProgDeck().remove(0);
                                                         i++;
                                                     }
@@ -519,14 +533,23 @@ public class ClientHandler implements Runnable {
                                                     String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
-                                                for(Player player : Server.getGame().getPlayerList()){
-                                                    System.out.println(player.getName());
-                                                }
-                                                Server.getGame().setNextPlayersTurn();
 
                                                 for(Player player : Server.getGame().getPlayerList()){
-                                                    System.out.println(player.getName());
+                                                    if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
+                                                        Server.getGame().setSpam(Server.getGame().getSpam()+1);
+                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
+                                                        Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
+                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
+                                                        Server.getGame().setSpam(Server.getGame().getVirus()+1);
+                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
+                                                        Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+                                                    } else {
+                                                        // füge sonst dem player in playerMat in den discardPile das 0. Register
+                                                        player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
+                                                    }
                                                 }
+
+                                                Server.getGame().setNextPlayersTurn();
 
                                                 ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
                                                 for (Player player : Server.getGame().getPlayerList()) {
@@ -535,9 +558,8 @@ public class ClientHandler implements Runnable {
                                                 }
                                                 Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
-
-
                                                 Server.getGame().nextCurrentPhase();
+
                                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
                                                 broadcast(serializedActivePhase);

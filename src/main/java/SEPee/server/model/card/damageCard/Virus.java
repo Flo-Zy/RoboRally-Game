@@ -4,5 +4,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Virus {
+public class Virus extends DamageCard{
+    public Virus() {
+        super("Virus", " ");
+    }
+    @Override
+    public String getImageUrl() {
+        return " ";
+    }
 }

@@ -16,7 +16,9 @@ public class PlayerMat{
     private ArrayList<Card> progDeck;
     private UpgradeCard[] permanentSlot;
     private UpgradeCard[] temporarySlot;
-    private ArrayList<Card> discardPile;
+    @Getter
+    @Setter
+    private ArrayList<String> discardPile;
     @Getter
     @Setter
     private int numRegister = 0;
