@@ -46,10 +46,6 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
-
-
-
-
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
