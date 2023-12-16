@@ -48,6 +48,7 @@ public class Client extends Application {
     private int turn; // Client ist an Stelle turn dran
     private String yourCard; // Karte die du spielen wirst
     private int cardPlayedCounter = 0; // Wie lange musst du warten, bist du dein PlayCard senden darfst
+    private ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -301,9 +302,6 @@ public class Client extends Application {
                                     break;
                                 case 2:
                                     System.out.println("Programmierphase");
-                                        for (Player player : playerListClient) {
-
-                                        }
 
                                         /*
                                         //harcode tester für MoveI - III
@@ -358,6 +356,15 @@ public class Client extends Application {
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
+                                    if(currentPlayer.getMessageBody().getClientID() == controller.getId()) {
+                                        for (CurrentCards.ActiveCard activeCard : activeRegister) {
+                                            if (activeCard.getClientID() == controller.getId()) {
+                                                PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                writer.println(serializedPlayCard);
+                                            }
+                                        }
+                                    }
                                     break;
                             }
                             break;
@@ -489,15 +496,15 @@ public class Client extends Application {
                             controller.fillEmptyRegister(nextCards);
                             break;
                         case "CurrentCards":
-                            cardPlayedCounter = 0;
-                            turn=-1;
-                            yourCard = null;
+                            //cardPlayedCounter = 0;
+                            //turn=-1;
+                            //yourCard = null;
                             // erhält ArrayList<ActiveCard>: Register und clientID an Stelle 0 von jedem Client (sortiert)
                             System.out.println("Current Cards");
 
                             CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
                             // Bestimme, wann du dran bist und welche karte du spielen wirst
-                            for(int i = 0; i < currentCards.getMessageBody().getActiveCards().size(); i++){
+                            /*for(int i = 0; i < currentCards.getMessageBody().getActiveCards().size(); i++){
                                 if(currentCards.getMessageBody().getActiveCards().get(i).getClientID() == controller.getId()){
                                     turn = i+1; // +1, weil clientIDs bei 1 anfangen
                                     yourCard = currentCards.getMessageBody().getActiveCards().get(i).getCard();
@@ -507,7 +514,8 @@ public class Client extends Application {
                                 PlayCard playCard = new PlayCard(yourCard);
                                 String serializedPlayCard = Serialisierer.serialize(playCard);
                                 writer.println(serializedPlayCard);
-                            }
+                            }*/
+                            activeRegister = currentCards.getMessageBody().getActiveCards();
 
                             break;
                         case "ReplaceCard":

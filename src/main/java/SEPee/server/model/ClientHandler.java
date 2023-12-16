@@ -317,6 +317,7 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
+
                             // wenn letzter Player aus PlayerList dran ist
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
@@ -334,6 +335,9 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedCurrentCards);
 
                                     Server.setCountPlayerTurns(0);
+                                    CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
+                                    String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                    broadcast(serializedCurrentPlayer);
 
                                     // test
                                     for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
@@ -347,6 +351,10 @@ public class ClientHandler implements Runnable {
                                     String serializedActivePhase = Serialisierer.serialize(activePhase);
                                     broadcast(serializedActivePhase);
                                 }
+                            }else{ //alle spieler waren noch nicht im aktuellen register dran, nächster Spieler soll seine Karte Spielen
+                                CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                broadcast(serializedCurrentPlayer);
                             }
 
                             // Karteneffekt messagtype fur alle clients verschicken (Movement)
@@ -511,7 +519,14 @@ public class ClientHandler implements Runnable {
                                                     String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
+                                                for(Player player : Server.getGame().getPlayerList()){
+                                                    System.out.println(player.getName());
+                                                }
                                                 Server.getGame().setNextPlayersTurn();
+
+                                                for(Player player : Server.getGame().getPlayerList()){
+                                                    System.out.println(player.getName());
+                                                }
 
                                                 ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
                                                 for (Player player : Server.getGame().getPlayerList()) {
@@ -520,11 +535,24 @@ public class ClientHandler implements Runnable {
                                                 }
                                                 Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
+
+
+                                                Server.getGame().nextCurrentPhase();
+                                                ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                                String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                                broadcast(serializedActivePhase);
+
+                                                System.out.println(Server.getGame().getCurrentPhase());
+
                                                 // nulltes register wird an alle gesendet
                                                 CurrentCards currentCards = new CurrentCards(activeCards);
                                                 String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                                 broadcast(serializedCurrentCards);
+
                                                 Server.setCountPlayerTurns(0);
+                                                CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                                String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                                broadcast(serializedCurrentPlayer);
                                                 // test
                                                 for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
                                                     System.out.println(activeCard.getCard());
@@ -537,11 +565,6 @@ public class ClientHandler implements Runnable {
                                     }
                                 }
                             }
-
-                            Server.getGame().nextCurrentPhase();
-                            ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
-                            String serializedActivePhase = Serialisierer.serialize(activePhase);
-                            broadcast(serializedActivePhase);
                             break;
 
                         case "SelectedDamage":
