@@ -24,13 +24,17 @@ public class DizzyHighway extends GameBoard {
 
         List<Field> field0_3 = new ArrayList<>();
         field0_3.add(new StartPoint("A"));
+        String[] orientations03 = {"bottom"};
+        field0_3.add(new Wall("A", orientations03));
 
         List<Field> field0_4 = new ArrayList<>();
         String[] orientations04 = {"right"};
         field0_4.add(new Antenna("A", orientations04));
 
         List<Field> field0_5 = new ArrayList<>();
-        field0_5.add(new Empty("A"));
+        //field0_5.add(new Empty("A"));
+        String[] orientations05 = {"top"};
+        field0_5.add(new Wall("A", orientations05));
 
         List<Field> field0_6 = new ArrayList<>();
         field0_6.add(new StartPoint("A"));
@@ -77,6 +81,8 @@ public class DizzyHighway extends GameBoard {
 
         List<Field> field1_4 = new ArrayList<>();
         field1_4.add(new StartPoint("A"));
+        String[] orientations14 = {"left"};
+        field1_4.add(new Wall("A", orientations14));
 
         List<Field> field1_5 = new ArrayList<>();
         field1_5.add(new StartPoint("A"));
