@@ -482,7 +482,35 @@ public class ClientHandler implements Runnable {
 
                                     // end of harcode block
                                 }
-                                checkRobotField();
+                                String input1 = checkRobotField();
+
+                                if(input1.contains("ConveyorBelt")){
+                                    if(input1.contains("[bottom")){
+                                        //roboter eins nach unten schieben mit movement weil führt nach unten
+                                        Movement movementBottom = new Movement(this.clientId, this.robot.getX(), this.robot.getY());
+                                    }else if(input1.contains("[top")){
+                                        //nach oben schieben
+                                    }else if(input1.contains("[right")){
+                                        //nach rechts schieben
+                                    }else if(input1.contains("[left")){
+                                        //nach links schieben
+                                    }
+                                }else if(input1.contains("Laser")){
+
+                                }else if(input1.contains("Wall")){
+
+                                }else if(input1.contains("Empty")){
+
+                                }else if(input1.contains("StartPoint")){
+
+                                }else if(input1.contains("CheckPoint")){
+
+                                }else if(input1.contains("EnergySpace")){
+
+                                }else{
+                                    System.out.println("Unknown field");
+                                }
+
                             }
                             break;
                         case "SelectedDamage":
@@ -591,7 +619,7 @@ public class ClientHandler implements Runnable {
                 // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
-                result.append("Conveyor Belt " + Arrays.toString(orientations) + ", ");
+                result.append("ConveyorBelt " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
                 // Additional checks or actions for laser
@@ -604,22 +632,22 @@ public class ClientHandler implements Runnable {
             } else if (field instanceof Empty) {
                 // Actions for an empty field
                 System.out.println("Empty field");
-                //result.append("Empty, ");
+                result.append("Empty, ");
             } else if (field instanceof StartPoint) {
                 System.out.println("Start point");
                 // Actions for a start point
-                result.append("Start Point, ");
+                result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
                 System.out.println("Checkpoint");
                 // Actions for a check point
-                result.append("Check Point, ");
+                result.append("CheckPoint, ");
             } else if (field instanceof EnergySpace) {
                 // Actions for an energy space
-                result.append("Energy Space, ");
+                result.append("EnergySpace, ");
             } else {
                 // Default case
                 System.out.println("Field nicht gefunden");
-                result.append("Unknown Field, ");
+                result.append("UnknownField, ");
             }
         }
 
