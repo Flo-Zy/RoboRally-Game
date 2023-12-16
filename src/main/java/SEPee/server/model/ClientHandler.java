@@ -343,6 +343,13 @@ public class ClientHandler implements Runnable {
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
 
+                            // Find the associated Player and set the Robot for that Player
+                            Player associatedPlayer = Server.getGame().getPlayerList().get(clientId - 1);
+                            associatedPlayer.setRobot(this.robot);
+
+                            // Add the Game class (which implements RobotPositionChangeListener) as a listener to the Robot
+                            this.robot.addPositionChangeListener(Server.getGame());
+
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
                             broadcast(serializedStartingPointTaken);
 
@@ -456,7 +463,7 @@ public class ClientHandler implements Runnable {
                                     if (player.getId() == 1) {
                                         this.robot.setX(4);
                                         this.robot.setY(5);
-                                        Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
+                                        //Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
                                     }
                                     Movement movement1 = new Movement(1, 4, 5);
                                     String serializedMovement1 = Serialisierer.serialize(movement1);
@@ -466,7 +473,7 @@ public class ClientHandler implements Runnable {
                                     if (player.getId() == 2) {
                                         this.robot.setX(6);
                                         this.robot.setY(4);
-                                        Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
+                                        //Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
                                     }
                                     Movement movement2 = new Movement(2, 6, 4);
                                     String serializedMovement2 = Serialisierer.serialize(movement2);
