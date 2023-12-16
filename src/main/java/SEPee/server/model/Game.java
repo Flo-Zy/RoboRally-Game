@@ -139,19 +139,6 @@ public class Game implements Robot.RobotPositionChangeListener {
             }
         }
     }
-
-    private int determineClientIdForRobot(Robot robot) {
-        for (Player player : playerList) {
-            if (player.getRobot() == robot) {
-                // Found the matching robot in the playerList
-                return player.getId();
-            }
-        }
-        // Return a default or error value if the robot is not found
-        System.out.println("-1 returned on 141 Game");
-        return -1; // Modify this default value as needed
-    }
-
     /** TIMER:
      long start,end;
      double tim;
