@@ -18,8 +18,7 @@ import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +35,7 @@ public class ClientHandler implements Runnable {
     private Player player;
     private Robot robot;
     private String lastPlayedCard = null;
+    private ArrayList<String> clientHand;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
@@ -204,6 +204,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
+                            Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
                             System.out.println("Play Card");
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
@@ -211,8 +212,8 @@ public class ClientHandler implements Runnable {
                             String playCardCard = playCard.getMessageBody().getCard();
                             CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
                             String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
-                            broadcast(serializedCardPlayed);
-                            if (!playCardCard.equals("Again")) {
+
+                            if(!playCardCard.equals("Again")){
                                 lastPlayedCard = playCardCard;
                             }
 
@@ -234,8 +235,8 @@ public class ClientHandler implements Runnable {
                                     String serializedMovementBackup = Serialisierer.serialize(movementBackup);
                                     Thread.sleep(750);
                                     broadcast(serializedMovementBackup);
-                                    break;
 
+                                    break;
                                 case "MoveI":
 
                                     if (movePossibleWall(checkRobotField(), this.robot)) {
@@ -253,7 +254,6 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedMovement);
                                     break;
-
                                 case "MoveII":
 
                                     if (movePossibleWall(checkRobotField(), this.robot)) {
@@ -271,8 +271,6 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedMovement2);
                                     break;
-
-
                                 case "MoveIII":
 
                                     if (movePossibleWall(checkRobotField(), this.robot)) {
@@ -291,10 +289,10 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedMovement3);
                                     break;
                                 case "PowerUp":
-
+                                    //lastPlayedCard = "PowerUp";
                                     break;
-
                                 case "RightTurn":
+                                    //lastPlayedCard = "RightTurn";
                                     RightTurn.makeEffect(this.robot);
                                     int clientIDRightTurn = this.clientId;
                                     PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
@@ -303,6 +301,7 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedPlayerTurningRight);
                                     break;
                                 case "LeftTurn":
+                                    //lastPlayedCard = "LeftTurn";
                                     LeftTurn.makeEffect(this.robot);
                                     int clientIDLeftTurn = this.clientId;
                                     PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
@@ -310,8 +309,8 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedPlayerTurningLeft);
                                     break;
-
                                 case "UTurn":
+                                    //lastPlayedCard = "UTurn";
                                     UTurn.makeEffect(this.robot);
                                     int clientIDUTurn = this.clientId;
                                     PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
@@ -321,12 +320,73 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedPlayerTurningUTurn);
                                     broadcast(serializedPlayerTurningUTurn);
                                     break;
-
                                 default:
                                     System.out.println("unknown card name");
                                     break;
 
 
+                            }
+
+                            broadcast(serializedCardPlayed);
+
+                            // update im Server game Objekt den Roboter dieses Spielers
+                            for(Player player : Server.getGame().getPlayerList()){
+                                if(player.getId() == this.player.getId()){
+                                    player.setRobot(this.robot);
+                                }
+                            }
+
+
+                            // wenn letzter Player aus PlayerList dran ist
+                            if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
+                                Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
+
+                                if(Server.getRegisterCounter() <= 4) {
+                                    // n. register wird an alle gesendet
+                                    ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(), player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // n. element aus register von jedem Player
+                                    }
+
+                                    discardCurrentRegister();
+
+                                    Server.setRegisterCounter(Server.getRegisterCounter()+1);
+
+                                    CurrentCards currentCards = new CurrentCards(activeCards);
+                                    String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                    broadcast(serializedCurrentCards);
+
+                                    Server.setCountPlayerTurns(0);
+                                    CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
+                                    String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                    broadcast(serializedCurrentPlayer);
+
+                                    // test
+                                    for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                        System.out.println(activeCard.getCard());
+                                    }
+                                } else{ // Server.getRegisterCounter() größer 4
+                                    Server.setRegisterCounter(0);
+                                    Server.getGame().nextCurrentPhase();
+
+                                    // entferne nachdem alle register in Phase 2 abgearbeitet wurden von jedem player das gesamte register
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        player.getPlayerMat().getRegister().clear();
+                                    }
+
+                                    // teste ob alle register leer
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
+                                    }
+
+                                    ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                    String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                    broadcast(serializedActivePhase);
+                                }
+                            }else{ //alle spieler waren noch nicht im aktuellen register dran, nächster Spieler soll seine Karte Spielen
+                                CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                broadcast(serializedCurrentPlayer);
                             }
 
                             // Karteneffekt messagtype fur alle clients verschicken (Movement)
@@ -342,6 +402,15 @@ public class ClientHandler implements Runnable {
                             this.robot = new Robot(0, 0, "right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
+                            /*
+                            // hasans Lösung
+                            for(Player player : Server.getGame().getPlayerList()){
+                                if(player.getId() == this.player.getId()){
+                                    player.setRobot(this.robot);
+                                }
+                            }
+
+                             */
 
                             // Find the associated Player and set the Robot for that Player
                             Player associatedPlayer = Server.getGame().getPlayerList().get(clientId - 1);
@@ -370,6 +439,13 @@ public class ClientHandler implements Runnable {
                                             player.getPlayerMat().getProgDeck().remove(0);
                                             i++;
                                         }
+                                        clientHand = clientCards;
+
+                                        // test ob clientHand richtig gesetzt
+                                        for (String card : clientHand) {
+                                            System.out.println("Player " + this.player.getId() + ": " + card);
+                                        }
+
                                         // sendet Karten Infos an aktuellen player
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
@@ -450,98 +526,91 @@ public class ClientHandler implements Runnable {
                                     SelectionFinished selectionFinished = new SelectionFinished(clientId);
                                     String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
                                     broadcast(serializedSelectionFinished);
+                                    if(Server.getTimerSend() == 0){
+                                        // sende TimerStarted
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        broadcast(serializedTimerStarted);
+                                        Server.setTimerSend(1);
+                                        // wait 30 sec to send TimerEnded
+                                        Timer timer = new Timer();
+                                        timer.schedule(new TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                // After 30 seconds, send TimerEnded
+                                                ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    if (player.getPlayerMat().getNumRegister() < 5) {
+                                                        clientIDsNotReady.add(player.getId());
+                                                    }
+                                                }
+                                                TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
+                                                String serializedTimerEnded = Serialisierer.serialize(timerEnded);
+                                                broadcast(serializedTimerEnded);
 
+                                                // missingClientCards an betreffende Clients versenden
+                                                ArrayList<String> missingClientCards = new ArrayList<>();
 
-                                    //hardcode tester fur nachste phase
-                                    Server.getGame().nextCurrentPhase();
-                                    ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
-                                    String serializedActivePhase = Serialisierer.serialize(activePhase);
-                                    broadcast(serializedActivePhase);
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    // wie viele Felder auf Register sind leer
+                                                    int i = 0;
+                                                    while (i < (5 - player.getPlayerMat().getNumRegister())) {
+                                                        // karten ziehen
+                                                        Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                        missingClientCards.add(card.getName());
+                                                        player.getPlayerMat().getRegister().add(card.getName());
+                                                        player.getPlayerMat().getProgDeck().remove(0);
+                                                        i++;
+                                                    }
+                                                }
+                                                for (Integer clientID : clientIDsNotReady) {
+                                                    CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
+                                                    String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
+                                                    sendToOneClient(clientID, serializedCardYouGotNow);
+                                                }
 
-                                    // test which field robot is standing on
+                                                discardCurrentRegister();
 
-                                    if (player.getId() == 1) {
-                                        this.robot.setX(4);
-                                        this.robot.setY(5);
-                                        //Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
+                                                Server.getGame().setNextPlayersTurn();
+
+                                                ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                                for (Player player : Server.getGame().getPlayerList()) {
+                                                    activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                            player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
+                                                }
+                                                Server.setRegisterCounter(Server.getRegisterCounter()+1);
+
+                                                Server.getGame().nextCurrentPhase();
+
+                                                ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                                String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                                broadcast(serializedActivePhase);
+
+                                                System.out.println(Server.getGame().getCurrentPhase());
+
+                                                // nulltes register wird an alle gesendet
+                                                CurrentCards currentCards = new CurrentCards(activeCards);
+                                                String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                                broadcast(serializedCurrentCards);
+
+                                                Server.setCountPlayerTurns(0);
+                                                CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                                String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                                broadcast(serializedCurrentPlayer);
+                                                // test
+                                                for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                                    System.out.println(activeCard.getCard());
+                                                }
+
+                                                // Cancel the timer
+                                                timer.cancel();
+                                            }
+                                        }, 30000); // 30,000 milliseconds = 30 seconds
                                     }
-                                    Movement movement1 = new Movement(1, 4, 5);
-                                    String serializedMovement1 = Serialisierer.serialize(movement1);
-                                    broadcast(serializedMovement1);
-
-
-                                    if (player.getId() == 2) {
-                                        this.robot.setX(6);
-                                        this.robot.setY(4);
-                                        //Server.getGame().getPlayerList().get(clientId-1).setRobot(this.robot);
-                                    }
-                                    Movement movement2 = new Movement(2, 6, 4);
-                                    String serializedMovement2 = Serialisierer.serialize(movement2);
-                                    broadcast(serializedMovement2);
-                                    /*
-                                    if (this.clientId == 3) {
-                                        this.robot.setX(4);
-                                        this.robot.setY(1);
-                                    }
-
-                                    Movement movement3 = new Movement(3, 4, 1);
-                                    String serializedMovement3 = Serialisierer.serialize(movement3);
-                                    broadcast(serializedMovement3);
-
-
-                                    if (this.clientId == 4) {
-                                        this.robot.setX(7);
-                                        this.robot.setY(6);
-                                    }
-                                    Movement movement4 = new Movement(4, 7, 6);
-                                    String serializedMovement4 = Serialisierer.serialize(movement4);
-                                    broadcast(serializedMovement4);
-
-                                     */
-
-                                    // checkRobotStandingField
-
-
-                                    // end of harcode block
                                 }
-                                String input1 = checkRobotField();
-
-
-                                fieldActivation();
-
-                                /*
-                                if(input1.contains("ConveyorBelt")){
-                                    if(input1.contains("[bottom")){
-                                        //roboter eins nach unten schieben mit movement weil führt nach unten
-                                        Movement movementBottom = new Movement(this.clientId, this.robot.getX(), this.robot.getY());
-                                    }else if(input1.contains("[top")){
-                                        //nach oben schieben
-                                    }else if(input1.contains("[right")){
-                                        //nach rechts schieben
-                                    }else if(input1.contains("[left")){
-                                        //nach links schieben
-                                    }
-                                }else if(input1.contains("Laser")){
-
-                                }else if(input1.contains("Wall")){
-
-                                }else if(input1.contains("Empty")){
-
-                                }else if(input1.contains("StartPoint")){
-
-                                }else if(input1.contains("CheckPoint")){
-
-                                }else if(input1.contains("EnergySpace")){
-
-                                }else{
-                                    System.out.println("Unknown field");
-                                }
-
-                                 */
-
                             }
-
                             break;
+
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
@@ -722,4 +791,21 @@ public class ClientHandler implements Runnable {
         //checkpoint
 
     }
+    public void discardCurrentRegister(){
+        for(Player player : Server.getGame().getPlayerList()){
+            if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
+                Server.getGame().setSpam(Server.getGame().getSpam()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
+                Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
+                Server.getGame().setSpam(Server.getGame().getVirus()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
+                Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+            } else {
+                // füge sonst dem player in playerMat in den discardPile das n. Register
+                player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
+            }
+        }
+    }
+
 }

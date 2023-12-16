@@ -1,10 +1,12 @@
 package SEPee.serialisierung.messageType;
 
+import java.util.ArrayList;
+
 public class CardsYouGotNow extends Message{
     //private String messageType;
     private CardsYouGotNowBody messageBody;
 
-    public CardsYouGotNow(String[] cards) {
+    public CardsYouGotNow(ArrayList<String> cards) {
         super("CardsYouGotNow");
         //this.messageType = "CardsYouGotNow";
         this.messageBody = new CardsYouGotNowBody(cards);
@@ -30,17 +32,17 @@ public class CardsYouGotNow extends Message{
     }
 
     public static class CardsYouGotNowBody {
-        String[] cards;
+        ArrayList<String> cards;
 
-        public CardsYouGotNowBody(String[] cards) {
+        public CardsYouGotNowBody(ArrayList<String> cards) {
             this.cards = cards;
         }
 
-        public String[] getCards() {
+        public ArrayList<String> getCards() {
             return cards;
         }
 
-        public void setCards(String[] cards) {
+        public void setCards(ArrayList<String> cards) {
             this.cards = cards;
         }
 
