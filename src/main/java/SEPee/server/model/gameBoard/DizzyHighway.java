@@ -713,24 +713,6 @@ public class DizzyHighway extends GameBoard {
     }
 
 
-    public String[] getOrientationOfField(int x, int y) {
-        String[] orientationsXY = null; // Initialize the array with a default value
-
-        // Dynamically construct the variable name based on x and y coordinates
-        String variableName = "orientations" + x + y;
-
-        try {
-            // Use Java reflection to access the variable by its constructed name
-            orientationsXY = (String[]) this.getClass().getDeclaredField(variableName).get(this);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace(); // Handle exceptions appropriately
-        }
-
-        return orientationsXY;
-    }
-
-
-
 
 
 

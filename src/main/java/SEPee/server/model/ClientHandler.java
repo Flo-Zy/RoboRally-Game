@@ -445,21 +445,37 @@ public class ClientHandler implements Runnable {
 
                                     // alle robots server seitig nun auf 4,5
                                     if (this.clientId == 1) {
-                                        this.robot.setY(5);
                                         this.robot.setX(4);
+                                        this.robot.setY(5);
                                     }
                                     Movement movement1 = new Movement(1, 4, 5);
                                     String serializedMovement1 = Serialisierer.serialize(movement1);
                                     broadcast(serializedMovement1);
 
                                     if (this.clientId == 2) {
-                                        this.robot.setY(4);
                                         this.robot.setX(6);
+                                        this.robot.setY(4);
                                     }
                                     Movement movement2 = new Movement(2, 6, 4);
                                     String serializedMovement2 = Serialisierer.serialize(movement2);
                                     broadcast(serializedMovement2);
 
+                                    if (this.clientId == 3) {
+                                        this.robot.setX(4);
+                                        this.robot.setY(1);
+                                    }
+                                    Movement movement3 = new Movement(3,4,1);
+                                    String serializedMovement3 = Serialisierer.serialize(movement3);
+                                    broadcast(serializedMovement3);
+
+
+                                    if (this.clientId == 4) {
+                                        this.robot.setX(7);
+                                        this.robot.setY(6);
+                                    }
+                                    Movement movement4 = new Movement(4,7,6);
+                                    String serializedMovement4 = Serialisierer.serialize(movement4);
+                                    broadcast(serializedMovement4);
 
                                     // checkRobotStandingField
 
@@ -565,6 +581,7 @@ public class ClientHandler implements Runnable {
         DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
         List<Field> fields = highway.getFieldsAt(robotX, robotY);
 
+        //tester string
         System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
 
         StringBuilder result = new StringBuilder();

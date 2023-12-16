@@ -17,7 +17,7 @@ public class Wall extends Field{
     //private int[] registers;
     //private int count;
     public Wall(String isOnBoard, String[] orientations){
-        super("Wall", isOnBoard);
+        super("Wall", isOnBoard, orientations);
         this.orientations=orientations;
     }
 
