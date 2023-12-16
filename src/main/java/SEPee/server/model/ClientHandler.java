@@ -221,7 +221,7 @@ public class ClientHandler implements Runnable {
                             switch (lastPlayedCard) {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
 
-                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                    if (!movePossibleWall(checkRobotField(), this.robot)) {
                                         BackUp.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
@@ -257,7 +257,12 @@ public class ClientHandler implements Runnable {
                                 case "MoveII":
 
                                     if (movePossibleWall(checkRobotField(), this.robot)) {
-                                        MoveII.makeEffect(this.robot);
+                                        MoveI.makeEffect(this.robot);
+                                    } else {
+                                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                                    }
+                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                        MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -274,7 +279,17 @@ public class ClientHandler implements Runnable {
                                 case "MoveIII":
 
                                     if (movePossibleWall(checkRobotField(), this.robot)) {
-                                        MoveIII.makeEffect(this.robot);
+                                        MoveI.makeEffect(this.robot);
+                                    } else {
+                                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                                    }
+                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                        MoveI.makeEffect(this.robot);
+                                    } else {
+                                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                                    }
+                                    if (movePossibleWall(checkRobotField(), this.robot)) {
+                                        MoveI.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
