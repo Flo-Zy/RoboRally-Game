@@ -209,7 +209,7 @@ public class ClientHandler implements Runnable {
                             String playCardCard = playCard.getMessageBody().getCard();
                             CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
                             String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
-                            broadcast(serializedCardPlayed);
+
                             if(!playCardCard.equals("Again")){
                                 lastPlayedCard = playCardCard;
                             }
@@ -228,8 +228,8 @@ public class ClientHandler implements Runnable {
                                     String serializedMovementBackup = Serialisierer.serialize(movementBackup);
                                     Thread.sleep(750);
                                     broadcast(serializedMovementBackup);
-                                    break;
 
+                                    break;
                                 case "MoveI":
                                     //lastPlayedCard = "MoveI";
                                     MoveI.makeEffect(this.robot);
@@ -243,7 +243,6 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedMovement);
                                     break;
-
                                 case "MoveII":
                                     //lastPlayedCard = "MoveII";
                                     MoveII.makeEffect(this.robot);
@@ -257,8 +256,6 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedMovement2);
                                     break;
-
-
                                 case "MoveIII":
                                     //lastPlayedCard = "MoveIII";
                                     MoveIII.makeEffect(this.robot);
@@ -274,9 +271,7 @@ public class ClientHandler implements Runnable {
                                     break;
                                 case "PowerUp":
                                     //lastPlayedCard = "PowerUp";
-
                                     break;
-
                                 case "RightTurn":
                                     //lastPlayedCard = "RightTurn";
                                     RightTurn.makeEffect(this.robot);
@@ -295,7 +290,6 @@ public class ClientHandler implements Runnable {
                                     Thread.sleep(750);
                                     broadcast(serializedPlayerTurningLeft);
                                     break;
-
                                 case "UTurn":
                                     //lastPlayedCard = "UTurn";
                                     UTurn.makeEffect(this.robot);
@@ -307,13 +301,15 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedPlayerTurningUTurn);
                                     broadcast(serializedPlayerTurningUTurn);
                                     break;
-
                                 default:
                                     System.out.println("unknown card name");
                                     break;
 
 
                             }
+
+                            broadcast(serializedCardPlayed);
+
                             // update im Server game Objekt den Roboter dieses Spielers
                             for(Player player : Server.getGame().getPlayerList()){
                                 if(player.getId() == this.player.getId()){
@@ -321,28 +317,32 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
+                            // wenn letzter Player aus PlayerList dran ist
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
-                                Server.getGame().setNextPlayersTurn();
+                                Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
                                 if(Server.getRegisterCounter() <= 4) {
-                                    // nulltes register wird an alle gesendet
+                                    // n. register wird an alle gesendet
                                     ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
                                     for (Player player : Server.getGame().getPlayerList()) {
-                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(),
-                                                player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
+                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(), player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // n. element aus register von jedem Player
                                     }
                                     Server.setRegisterCounter(Server.getRegisterCounter()+1);
+
                                     CurrentCards currentCards = new CurrentCards(activeCards);
                                     String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                     broadcast(serializedCurrentCards);
+
                                     Server.setCountPlayerTurns(0);
+
                                     // test
                                     for(CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
                                         System.out.println(activeCard.getCard());
                                     }
-                                }else{
+                                } else{ // Server.getRegisterCounter() größer 4
                                     Server.setRegisterCounter(0);
                                     Server.getGame().nextCurrentPhase();
+
                                     ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                     String serializedActivePhase = Serialisierer.serialize(activePhase);
                                     broadcast(serializedActivePhase);

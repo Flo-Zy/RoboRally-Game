@@ -276,6 +276,7 @@ public class Client extends Application {
                             if(controller.getCurrentPhase() == 2){
                                 controller.initRegister();
                             }
+                            // else if(){
                             break;
                         case "CurrentPlayer":
                             System.out.println("Current Player");
