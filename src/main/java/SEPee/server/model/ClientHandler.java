@@ -679,7 +679,7 @@ public class ClientHandler implements Runnable {
             } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
                 Server.getGame().setSpam(Server.getGame().getWurm() + 1);
             } else {
-                // füge sonst dem player in playerMat in den discardPile das 0. Register
+                // füge sonst dem player in playerMat in den discardPile das n. Register
                 player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
             }
         }
