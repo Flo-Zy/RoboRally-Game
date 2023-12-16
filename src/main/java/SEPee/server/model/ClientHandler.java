@@ -33,6 +33,7 @@ public class ClientHandler implements Runnable {
     private Player player;
     private Robot robot;
     private String lastPlayedCard = null;
+    private ArrayList<String> clientHand;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
         this.clientSocket = clientSocket;
@@ -350,6 +351,16 @@ public class ClientHandler implements Runnable {
                                     Server.setRegisterCounter(0);
                                     Server.getGame().nextCurrentPhase();
 
+                                    // entferne nachdem alle register in Phase 2 abgearbeitet wurden von jedem player das gesamte register
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        player.getPlayerMat().getRegister().clear();
+                                    }
+
+                                    // teste ob alle register leer
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
+                                    }
+
                                     ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                     String serializedActivePhase = Serialisierer.serialize(activePhase);
                                     broadcast(serializedActivePhase);
@@ -390,8 +401,8 @@ public class ClientHandler implements Runnable {
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
-                                        int i=0;
-                                        while (i<9) {
+                                        int i = 0;
+                                        while (i < 9) {
                                             // die ersten 9 karten ziehen
                                             Card card = player.getPlayerMat().getProgDeck().get(0);
                                             clientCards.add(card.getName());
@@ -399,6 +410,13 @@ public class ClientHandler implements Runnable {
                                             player.getPlayerMat().getProgDeck().remove(0);
                                             i++;
                                         }
+                                        clientHand = clientCards;
+
+                                        // test ob clientHand richtig gesetzt
+                                        for (String card : clientHand) {
+                                            System.out.println("Player " + this.player.getId() + ": " + card);
+                                        }
+
                                         // sendet Karten Infos an aktuellen player
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
@@ -409,8 +427,8 @@ public class ClientHandler implements Runnable {
                                         // sendet Karten Infos an alle anderen player
                                         NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
                                         String serializedNotYourCards = Serialisierer.serialize(notYourCards);
-                                        for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
-                                            if(Server.getGame().getPlayerList().get(j).getId() != player.getId()){
+                                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                            if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
                                                 sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
                                             }
                                         }
