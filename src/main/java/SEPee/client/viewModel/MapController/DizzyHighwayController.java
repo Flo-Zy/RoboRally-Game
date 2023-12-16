@@ -368,7 +368,7 @@ public class DizzyHighwayController extends MapController {
                         // Füge den Event-Handler für das ImageView hinzu
 
                             registerImageView.setOnMouseClicked(mouseEvent -> {
-                                if(counter1.get() < 5 ) {
+                                if(counter1.get() > 0 && counter1.get() < 5 ) {
                                     int indexNew = mapRegisterIndexToHandIndex(registerIndex);
                                     counter1.decrementAndGet();
 
