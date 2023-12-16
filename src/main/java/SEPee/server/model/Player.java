@@ -17,6 +17,8 @@ public class Player {
     private String name;
     private int id;
     private boolean ready;
+    @Getter
+    @Setter
     private Robot robot;
     private int figure;
     private Card[] hand;
@@ -32,6 +34,7 @@ public class Player {
         this.figure= figure;
         this.ready = false;
         this.playerMat = new PlayerMat(new Decks().getDeck());
+        this.robot = new Robot(0,0, "left" );
     }
 
     public static void associateSocketWithId(Socket socket, int clientId) {

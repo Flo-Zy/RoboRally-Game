@@ -17,6 +17,7 @@ import lombok.Setter;
 @Setter
 public class Game {
     private List<List<List<Field>>> gameBoard;
+    @Getter
     private ArrayList<Player> playerList;
     // private ArrayList<Player> priorityPlayerList;
     private int playerIndex;
