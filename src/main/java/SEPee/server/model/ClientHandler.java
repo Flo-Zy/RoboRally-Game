@@ -328,22 +328,10 @@ public class ClientHandler implements Runnable {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         activeCards.add(new CurrentCards.ActiveCard(player.getId(), player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // n. element aus register von jedem Player
                                     }
-                                    Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
-                                    for(Player player : Server.getGame().getPlayerList()){
-                                        if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
-                                            Server.getGame().setSpam(Server.getGame().getSpam()+1);
-                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
-                                            Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
-                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
-                                            Server.getGame().setSpam(Server.getGame().getVirus()+1);
-                                        } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
-                                            Server.getGame().setSpam(Server.getGame().getWurm() + 1);
-                                        } else {
-                                            // füge sonst dem player in playerMat in den discardPile das 0. Register
-                                            player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
-                                        }
-                                    }
+                                    discardCurrentRegister();
+
+                                    Server.setRegisterCounter(Server.getRegisterCounter()+1);
 
                                     CurrentCards currentCards = new CurrentCards(activeCards);
                                     String serializedCurrentCards = Serialisierer.serialize(currentCards);
@@ -534,20 +522,7 @@ public class ClientHandler implements Runnable {
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
 
-                                                for(Player player : Server.getGame().getPlayerList()){
-                                                    if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
-                                                        Server.getGame().setSpam(Server.getGame().getSpam()+1);
-                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
-                                                        Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
-                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
-                                                        Server.getGame().setSpam(Server.getGame().getVirus()+1);
-                                                    } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
-                                                        Server.getGame().setSpam(Server.getGame().getWurm() + 1);
-                                                    } else {
-                                                        // füge sonst dem player in playerMat in den discardPile das 0. Register
-                                                        player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
-                                                    }
-                                                }
+                                                discardCurrentRegister();
 
                                                 Server.getGame().setNextPlayersTurn();
 
@@ -673,6 +648,23 @@ public class ClientHandler implements Runnable {
         Alive alive = new Alive();
         String serializedAlive = Serialisierer.serialize(alive);
         writer.println(serializedAlive);
+    }
+
+    public void discardCurrentRegister(){
+        for(Player player : Server.getGame().getPlayerList()){
+            if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
+                Server.getGame().setSpam(Server.getGame().getSpam()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
+                Server.getGame().setSpam(Server.getGame().getTrojanHorse()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
+                Server.getGame().setSpam(Server.getGame().getVirus()+1);
+            } else if(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
+                Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+            } else {
+                // füge sonst dem player in playerMat in den discardPile das 0. Register
+                player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
+            }
+        }
     }
 
 }
