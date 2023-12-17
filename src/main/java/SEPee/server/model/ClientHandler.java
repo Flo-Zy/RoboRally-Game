@@ -221,7 +221,7 @@ public class ClientHandler implements Runnable {
                             switch (lastPlayedCard) {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
 
-                                    if (!movePossibleWall(checkRobotField(this.robot), this.robot)) {
+                                    if (movePossibleWallBack(checkRobotField(this.robot), this.robot)) {
                                         BackUp.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
@@ -793,6 +793,19 @@ public class ClientHandler implements Runnable {
         return true;
     }
 
+    public static boolean movePossibleWallBack(String fieldCheck, Robot robot) {
+        if (fieldCheck.contains("Wall [bottom") && robot.getOrientation().equals("top")) {
+            return false;
+        } else if (fieldCheck.contains("Wall [top") && robot.getOrientation().equals("bottom")) {
+            return false;
+        } else if (fieldCheck.contains("Wall [right") && robot.getOrientation().equals("left")) {
+            return false;
+        } else if (fieldCheck.contains("Wall [left") && robot.getOrientation().equals("right")) {
+            return false;
+        }
+        return true;
+    }
+
 
     public void fieldActivation() {
         // Conveyor Belts
@@ -905,9 +918,17 @@ public class ClientHandler implements Runnable {
                 broadcast(serializedMovement);
 
                 if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [right")){
-                    PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
-                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                    writer.println(serializedPlayerTurning);
+                    if(standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")){
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        writer.println(serializedPlayerTurning);
+                    }if(standingOnBlueConveyorBelt.contains("ConveyorBelt [top")){
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        writer.println(serializedPlayerTurning);
+                    }
                 }
 
             }else if (stillOnBlue.contains("ConveyorBelt [bottom")){
