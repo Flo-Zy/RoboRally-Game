@@ -1028,12 +1028,12 @@ public class ClientHandler implements Runnable {
                 if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [top")){
                     if(standingOnBlueConveyorBelt.contains("ConveyorBelt [right")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }if(standingOnBlueConveyorBelt.contains("ConveyorBelt [left")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
@@ -1049,12 +1049,12 @@ public class ClientHandler implements Runnable {
                 if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [right")){
                     if(standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }if(standingOnBlueConveyorBelt.contains("ConveyorBelt [top")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
@@ -1071,12 +1071,12 @@ public class ClientHandler implements Runnable {
 
                     if(standingOnBlueConveyorBelt.contains("ConveyorBelt [left")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }if(standingOnBlueConveyorBelt.contains("ConveyorBelt [right")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
@@ -1095,12 +1095,12 @@ public class ClientHandler implements Runnable {
 
                     if(standingOnBlueConveyorBelt.contains("ConveyorBelt [top")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }if(standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")){
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
