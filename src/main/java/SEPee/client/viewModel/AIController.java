@@ -85,7 +85,6 @@ public class AIController {
         visibilityButton.setOnAction(event -> toggleVisibility());
         */
     }
-
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
