@@ -831,7 +831,7 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i);
+                checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
 
             } else if (standingOnBlueConveyor.contains("ConveyorBelt [right")){
@@ -841,7 +841,7 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i);
+                checkConveyorBeltAgain(i,standingOnBlueConveyor);
 
             }else if (standingOnBlueConveyor.contains("ConveyorBelt [bottom")){
 
@@ -851,7 +851,7 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i);
+                checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
             }else if (standingOnBlueConveyor.contains("ConveyorBelt [left")){
 
@@ -861,7 +861,7 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i);
+                checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
             }
         }
@@ -879,7 +879,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void checkConveyorBeltAgain(int j){
+    private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt){
 
         String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
@@ -891,12 +891,24 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
+                if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [top")){
+                    PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                    writer.println(serializedPlayerTurning);
+                }
+
             }else if (stillOnBlue.contains("ConveyorBelt [right")){
                 Server.getGame().getPlayerList().get(j).getRobot().setX(Server.getGame().getPlayerList().get(j).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), Server.getGame().getPlayerList().get(j).getRobot().getX(), Server.getGame().getPlayerList().get(j).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
+
+                if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [right")){
+                    PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                    writer.println(serializedPlayerTurning);
+                }
 
             }else if (stillOnBlue.contains("ConveyorBelt [bottom")){
                 Server.getGame().getPlayerList().get(j).getRobot().setY(Server.getGame().getPlayerList().get(j).getRobot().getY() + 1);
@@ -905,6 +917,18 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
+                if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")){
+
+                    Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+
+
+                    PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                    writer.println(serializedPlayerTurning);
+                }
+
+
+
             }else if (stillOnBlue.contains("ConveyorBelt [left")){
                 Server.getGame().getPlayerList().get(j).getRobot().setX(Server.getGame().getPlayerList().get(j).getRobot().getX() - 1);
 
@@ -912,8 +936,45 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
+                if(!standingOnBlueConveyorBelt.contains("ConveyorBelt [left")){
+
+                    Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+
+                    PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                    writer.println(serializedPlayerTurning);
+                }
+
             }
         }
+    }
+
+    private String getResultingOrientation(String turningDirection, Robot robot){
+        if (turningDirection.equals("clockwise")) {
+            switch (robot.getOrientation()) {
+                case "top":
+                    return "right";
+                case "bottom":
+                    return "left";
+                case "left":
+                    return "top";
+                case "right":
+                    return "bottom";
+            }
+        }else {
+            switch (robot.getOrientation()){
+                case "top":
+                    return "left";
+                case "bottom":
+                    return "right";
+                case "left":
+                    return "bottom";
+                case "right":
+                    return "top";
+            }
+        }
+        //da solltem an nie hinkommen
+        return "---";
     }
 
     public void discardCurrentRegister(){
