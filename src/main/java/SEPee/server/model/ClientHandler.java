@@ -244,7 +244,12 @@ public class ClientHandler implements Runnable {
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
 
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
+
+
                                         // check robots
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
@@ -263,13 +268,20 @@ public class ClientHandler implements Runnable {
 
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
+
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -287,19 +299,26 @@ public class ClientHandler implements Runnable {
 
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
                                         checkForRobotsAndMove(this.robot);
-                                        MoveI.makeEffect(this.robot);
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -545,9 +564,14 @@ public class ClientHandler implements Runnable {
 
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+
                             this.robot = new Robot(0, 0, "right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
+
+                            this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
+                            this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
+
                             /*
                             // hasans Lösung
                             for(Player player : Server.getGame().getPlayerList()){
@@ -862,8 +886,6 @@ public class ClientHandler implements Runnable {
             }
         }
     }
-
-
     private void checkForRobotsBackAndMove(Robot robot) {
         String orientation = robot.getOrientation();
         int xCoordinatePushingRobot = robot.getX();
@@ -918,7 +940,163 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    private boolean checkForRebootAndTeleport(Robot robot){
+        String orientation = robot.getOrientation();
+        int xCoordinate = robot.getX();
+        int yCoordinate = robot.getY();
 
+        switch (orientation) {
+            case "top":
+                if (yCoordinate - 1 < 0 && xCoordinate < 3) {
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }else if(yCoordinate - 1 < 0 && xCoordinate > 12){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+                            /*
+                            player.getRobot().setOrientation("right");
+
+                            PlayerTurning playerTurning = new PlayerTurning();
+
+                             */
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            //Reboot direction verschicken
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+                break;
+            case "right":
+                if (xCoordinate + 1 > 12) {
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        if (robot.equals(player.getRobot())) {
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                if (yCoordinate + 1 < 10 && xCoordinate < 3) {
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }else if(yCoordinate + 1 > 10 && xCoordinate > 2){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+            case "left":
+                if (xCoordinate - 1 < 0) {
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        if (robot.equals(player.getRobot())) {
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+
+        }
+        return true;
+    }
 
     private void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
