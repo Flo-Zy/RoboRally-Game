@@ -364,6 +364,15 @@ public class ClientHandler implements Runnable {
                                 }
 
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
+
+                                for(Player player : Server.getGame().getPlayerList()) {
+                                    if(!player.getPlayerMat().getReceivedDamageCards().isEmpty()){
+                                        DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
+                                        String serializedDrawDamage = Serialisierer.serialize(drawDamage);
+                                        broadcast(serializedDrawDamage);
+                                    }
+                                }
+
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
                                 if(Server.getRegisterCounter() <= 4) {
@@ -485,6 +494,8 @@ public class ClientHandler implements Runnable {
                                                 player.getPlayerMat().getProgDeck().remove(0);
                                                 i++;
                                             }
+
+
 
                                             YourCards yourCards = new YourCards(clientCards);
                                             String serializedYourCards = Serialisierer.serialize(yourCards);
