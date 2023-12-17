@@ -46,7 +46,8 @@ public class Client extends Application {
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
     private int registerCounter = 1;
-    private ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    @Getter
+    private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);

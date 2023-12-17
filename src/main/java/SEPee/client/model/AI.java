@@ -39,13 +39,13 @@ public class AI extends Application {
     private String selectedMap1;
     @Getter
     @Setter
-    private static ArrayList<Integer> takenFigures = new ArrayList<>();
+    private static ArrayList<Integer> takenFigures = Client.getTakenFigures();
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
     private int registerCounter = 1;
-    private ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    private ArrayList<CurrentCards.ActiveCard> activeRegister = Client.getActiveRegister();
 
     public static void main(String[] args) {
         launch(args);
