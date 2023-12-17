@@ -13,11 +13,13 @@ public class GameBoard {
     private String boardId;
     private String bordName;
     private List<List<List<Field>>> gameBoard; // Spalte(Zeile(FelderTypen()))
+    private int checkpointAmount;
 
-    GameBoard(String boardId, String bordName, int sumColumns){
+    GameBoard(String boardId, String bordName, int sumColumns, int checkpointAmount){
         this.boardId = boardId;
         this.bordName = bordName;
         this.gameBoard = new ArrayList<>(sumColumns);
+        this.checkpointAmount = checkpointAmount;
     }
 
     public void addRow(List<List<Field>> row) {

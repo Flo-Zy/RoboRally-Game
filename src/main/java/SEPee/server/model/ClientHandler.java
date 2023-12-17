@@ -145,7 +145,7 @@ public class ClientHandler implements Runnable {
                                     switch (mapSelected.getMessageBody().getMap()) {
                                         case "DizzyHighway":
                                             DizzyHighway dizzyHighway = new DizzyHighway();
-                                            Server.setGameMap(dizzyHighway.getGameBoard());
+                                            Server.setGameMap(dizzyHighway);
                                             break;
                                     /*Später für weitere Maps
                                     case " ":
@@ -160,9 +160,9 @@ public class ClientHandler implements Runnable {
                                     && Server.getGameMap() != null) {
                                 Server.setGameStarted(true);
                                 //erstelle das Spiel
-                                Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap()));
+                                Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap().getGameBoard(), Server.getGameMap()));
                                 //Sende an alle Clients Spiel wird gestarted
-                                GameStarted gameStarted = new GameStarted(Server.getGameMap());
+                                GameStarted gameStarted = new GameStarted(Server.getGameMap().getGameBoard());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
                                 System.out.println("Das Spiel wird gestartet");
@@ -223,6 +223,7 @@ public class ClientHandler implements Runnable {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
 
                                     if (movePossibleWallBack(checkRobotField(this.robot), this.robot)) {
+                                        checkForRobotsBackAndMove(this.robot);
                                         BackUp.makeEffect(this.robot);
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
@@ -241,7 +242,15 @@ public class ClientHandler implements Runnable {
                                 case "MoveI":
 
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+
+                                        checkForRobotsAndMove(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
+
+
+                                        // check robots
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -258,12 +267,21 @@ public class ClientHandler implements Runnable {
                                 case "MoveII":
 
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+                                        checkForRobotsAndMove(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
+
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+                                        checkForRobotsAndMove(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -280,17 +298,27 @@ public class ClientHandler implements Runnable {
                                 case "MoveIII":
 
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+                                        checkForRobotsAndMove(this.robot);
+
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+                                        checkForRobotsAndMove(this.robot);
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
                                     if (movePossibleWall(checkRobotField(this.robot), this.robot)) {
-                                        MoveI.makeEffect(this.robot);
+                                        checkForRobotsAndMove(this.robot);
+                                        if (checkForRebootAndTeleport(this.robot)){
+                                            MoveI.makeEffect(this.robot);
+                                        }
                                     } else {
                                         System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                                     }
@@ -359,7 +387,20 @@ public class ClientHandler implements Runnable {
                             // wenn letzter Player aus PlayerList dran ist
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
 
+                                for (Player player: Server.getGame().getPlayerList()){
+                                    player.getPlayerMat().getReceivedDamageCards().clear();
+                                }
+
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
+
+                                for(Player player : Server.getGame().getPlayerList()) {
+                                    if(!player.getPlayerMat().getReceivedDamageCards().isEmpty()){
+                                        DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
+                                        String serializedDrawDamage = Serialisierer.serialize(drawDamage);
+                                        broadcast(serializedDrawDamage);
+                                    }
+                                }
+
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
                                 if(Server.getRegisterCounter() <= 4) {
@@ -482,6 +523,8 @@ public class ClientHandler implements Runnable {
                                                 i++;
                                             }
 
+
+
                                             YourCards yourCards = new YourCards(clientCards);
                                             String serializedYourCards = Serialisierer.serialize(yourCards);
                                             System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
@@ -521,9 +564,14 @@ public class ClientHandler implements Runnable {
 
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+
                             this.robot = new Robot(0, 0, "right");
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
+
+                            this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
+                            this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
+
                             /*
                             // hasans Lösung
                             for(Player player : Server.getGame().getPlayerList()){
@@ -785,6 +833,271 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    private void checkForRobotsAndMove(Robot robot) {
+        String orientation = robot.getOrientation();
+        int xCoordinatePushingRobot = robot.getX();
+        int yCoordinatePushingRobot = robot.getY();
+
+        for (Player player : Server.getGame().getPlayerList()) {
+            int xPlayerFleeingRobot = player.getRobot().getX();
+            int yPlayerFleeingRobot = player.getRobot().getY();
+
+            switch (orientation) {
+                case "top":
+                    if (yPlayerFleeingRobot == yCoordinatePushingRobot - 1 && xPlayerFleeingRobot == xCoordinatePushingRobot) {
+                        player.getRobot().setY(yPlayerFleeingRobot - 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "right":
+                    if (xPlayerFleeingRobot == xCoordinatePushingRobot + 1 && yPlayerFleeingRobot == yCoordinatePushingRobot) {
+                        player.getRobot().setX(xPlayerFleeingRobot + 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "left":
+                    if (xPlayerFleeingRobot == xCoordinatePushingRobot - 1 && yPlayerFleeingRobot == yCoordinatePushingRobot) {
+                        player.getRobot().setX(xPlayerFleeingRobot - 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "bottom":
+                    if (yPlayerFleeingRobot == yCoordinatePushingRobot + 1 && xPlayerFleeingRobot == xCoordinatePushingRobot) {
+                        player.getRobot().setY(yPlayerFleeingRobot + 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+            }
+        }
+    }
+    private void checkForRobotsBackAndMove(Robot robot) {
+        String orientation = robot.getOrientation();
+        int xCoordinatePushingRobot = robot.getX();
+        int yCoordinatePushingRobot = robot.getY();
+
+        for (Player player : Server.getGame().getPlayerList()) {
+            int xPlayerFleeingRobot = player.getRobot().getX();
+            int yPlayerFleeingRobot = player.getRobot().getY();
+
+            switch (orientation) {
+                case "top":
+                    if (yPlayerFleeingRobot == yCoordinatePushingRobot + 1 && xPlayerFleeingRobot == xCoordinatePushingRobot) {
+                        player.getRobot().setY(yPlayerFleeingRobot + 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "right":
+                    if (xPlayerFleeingRobot == xCoordinatePushingRobot - 1 && yPlayerFleeingRobot == yCoordinatePushingRobot) {
+                        player.getRobot().setX(xPlayerFleeingRobot - 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "left":
+                    if (xPlayerFleeingRobot == xCoordinatePushingRobot + 1 && yPlayerFleeingRobot == yCoordinatePushingRobot) {
+                        player.getRobot().setX(xPlayerFleeingRobot + 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+                case "bottom":
+                    if (yPlayerFleeingRobot == yCoordinatePushingRobot - 1 && xPlayerFleeingRobot == xCoordinatePushingRobot) {
+                        player.getRobot().setY(yPlayerFleeingRobot - 1);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private boolean checkForRebootAndTeleport(Robot robot){
+        String orientation = robot.getOrientation();
+        int xCoordinate = robot.getX();
+        int yCoordinate = robot.getY();
+
+        switch (orientation) {
+            case "top":
+                if (yCoordinate - 1 < 0 && xCoordinate < 3) {
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }else if(yCoordinate - 1 < 0 && xCoordinate > 12){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+                            /*
+                            player.getRobot().setOrientation("right");
+
+                            PlayerTurning playerTurning = new PlayerTurning();
+
+                             */
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            //Reboot direction verschicken
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+                break;
+            case "right":
+                if (xCoordinate + 1 > 12) {
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        if (robot.equals(player.getRobot())) {
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                if (yCoordinate + 1 < 10 && xCoordinate < 3) {
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }else if(yCoordinate + 1 > 10 && xCoordinate > 2){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(robot.equals(player.getRobot())){
+                            player.getRobot().setX(7);
+                            player.getRobot().setY(3);
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+            case "left":
+                if (xCoordinate - 1 < 0) {
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        if (robot.equals(player.getRobot())) {
+                            player.getRobot().setX(player.getRobot().getStartingPointX());
+                            player.getRobot().setY(player.getRobot().getStartingPointY());
+
+                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
+                            String serializedMovement = Serialisierer.serialize(movement);
+                            broadcast(serializedMovement);
+
+                            Reboot reboot = new Reboot(player.getId());
+                            String serializedReboot = Serialisierer.serialize(reboot);
+                            broadcast(serializedReboot);
+
+                            RebootDirection rebootDirection = new RebootDirection("bottom");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            broadcast(serializedRebootDirection);
+
+                            return false;
+                        }
+                    }
+                }
+
+                break;
+
+        }
+        return true;
+    }
+
     private void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
             client.writer.println(serializedObjectToSend);
@@ -1000,15 +1313,125 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkBoardLaser(int i){
-
+        String standingOnBoardLaser = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if(standingOnBoardLaser.contains("Laser")){
+            if(Server.getGame().getSpam() > 0){
+                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+            }
+        }
     }
 
     private void checkRobotLasers(int i){
+        String robotOrientation = Server.getGame().getPlayerList().get(i).getRobot().getOrientation();
+        Robot yourRobot = Server.getGame().getPlayerList().get(i).getRobot();
 
+        switch (robotOrientation){
+            case "top":
+                Robot targetRobot1 = new Robot(yourRobot.getX(), -9999, "top");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getY() < yourRobot.getY() &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getY() > targetRobot1.getY()){
+                        targetRobot1 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot1.getY() != -9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot1)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "right":
+                Robot targetRobot2 = new Robot(9999, yourRobot.getY(), "right");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() > yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() < targetRobot2.getX()){
+                        targetRobot2 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot2.getX() != 9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot2)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                Robot targetRobot3 = new Robot(yourRobot.getX(), 9999, "bottom");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() > yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() < targetRobot3.getY()){
+                        targetRobot3 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot3.getY() != 9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot3)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "left":
+                Robot targetRobot4 = new Robot(-9999, yourRobot.getY(), "left");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() < yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() > targetRobot4.getX()){
+                        targetRobot4 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot4.getX() != -9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot4)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     private void checkCheckpoint(int i){
+        String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if(standingOnCheckPoint.contains("CheckPoint")) {
 
+            Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
+            int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
+
+            if(Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount){
+                GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
+                String serializedGameFinished = Serialisierer.serialize(gameFinished);
+                broadcast(serializedGameFinished);
+            }
+        }
     }
 
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
