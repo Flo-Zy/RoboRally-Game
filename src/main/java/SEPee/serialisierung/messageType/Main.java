@@ -10,24 +10,58 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
+
+        /* test HelloClient
+        HelloClient helloClient = new HelloClient("Version 1.0");
+        String serializedHelloClient = Serialisierer.serialize(helloClient);
+        System.out.println(serializedHelloClient);
+
+        //test ConectionUpdate
+        ConnectionUpdate connectionUpdate = new ConnectionUpdate(9001, false, "AIControl");
+        String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+        System.out.println(serializedConnectionUpdate);
+
+        ConnectionUpdate deserializedConnectionUpdate = Deserialisierer.deserialize(serializedConnectionUpdate, ConnectionUpdate.class);
+        System.out.println(deserializedConnectionUpdate.getMessageBody().isConnected()); //erwarte false
+
+        //test DrawDamage
+        String[] testCardsArray = {"Spam", "..."};
+        DrawDamage drawDamage = new DrawDamage(42, testCardsArray);
+        String serializedDrawDamage = Serialisierer.serialize(drawDamage);
+        System.out.println(serializedDrawDamage);
+
+        DrawDamage deserializedDrawDamage = Deserialisierer.deserialize(serializedDrawDamage, DrawDamage.class);
+        System.out.println(deserializedDrawDamage.getMessageBody().getClientID()); //warum nicht getCars?!
+
+        //test PickDamage
+        String[] testAvailablePiles = {"Virus", "Trojan"};
+        PickDamage pickDamage = new PickDamage(2, testAvailablePiles);
+        String serializedPickDamage = Serialisierer.serialize(pickDamage);
+        System.out.println(serializedPickDamage);
+
+        //test SelectedDamage
+        String[] testCardsSelectedDamage = {"Virus", "Trojan"};
+        SelectedDamage selectedDamage = new SelectedDamage(testCardsSelectedDamage);
+        String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
+        System.out.println(serializedSelectedDamage);
+
+
         //test selectMap
         SelectMap selectMap = new SelectMap();
         String testmap = Serialisierer.serialize(selectMap);
         System.out.println(testmap);
 
-        /*
+
+
         DizzyHighway dizzyHighway = new DizzyHighway();
         GameStarted gameStarted = new GameStarted(dizzyHighway.getGameBoard());
         String serializedGameStarted = Serialisierer.serialize(gameStarted);
         System.out.println(serializedGameStarted);
 
-        /*
-        //deserialisieren klappt noch nicht für die map
+
+        //deserialisieren
         GameStarted deserializedGameStarted = Deserialisierer.deserialize(serializedGameStarted, GameStarted.class);
         System.out.println(deserializedGameStarted.getMessageBody().getGameMap());
-
-         */
-
 
         //test HelloClient als child Klasse von Message
         HelloClient helloClient = new HelloClient("Version 1.0");
@@ -43,7 +77,7 @@ public class Main {
         System.out.println(deserialisierterHelloClient.getMessageBody().getProtocol());
 
 
-        /*
+
 
         // test PlayerValues serialisation
         PlayerValues player = new PlayerValues("Alice", 100);
@@ -145,8 +179,23 @@ public class Main {
         CurrentCards currentCards = new CurrentCards(activeCards);
         String serializedCurrentCards = Serialisierer.serialize(currentCards);
         System.out.println(serializedCurrentCards);
+        */
 
-         */
+        ArrayList<String> clientCards = new ArrayList<>();
+        /*
+        Für tatsächlichen Code im ClientHandler:
+
+        for(Player player : Server.getGame().getPriorityList())
+            for(Card card : player.getPlayerMat().getProgDeck())
+                clientCards.add(card.getName());
+            }
+        }
+        */
+        clientCards.add("card1");
+        clientCards.add("...");
+        YourCards yourCards = new YourCards(clientCards);
+        String serializedYourCards = Serialisierer.serialize(yourCards);
+        System.out.println(serializedYourCards);
 
         /**
         // test GameStarted serialisation

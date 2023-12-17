@@ -10,17 +10,6 @@ public class HelloClient extends Message{
         this.messageBody = new HelloClientBody(protocol);
     }
 
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
-
     public HelloClientBody getMessageBody() {
         return messageBody;
     }

@@ -1,8 +1,15 @@
 package SEPee.server.model;
 
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.Decks;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @Setter
@@ -10,18 +17,34 @@ public class Player {
     private String name;
     private int id;
     private boolean ready;
+    @Getter
+    @Setter
     private Robot robot;
     private int figure;
     private Card[] hand;
+    @Getter
+    @Setter
     private PlayerMat playerMat;
     private int checkpointTokens;
+    private static Map<Socket, Integer> socketIdMap = new ConcurrentHashMap<>();
 
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;
-        this.figure=figure;
+        this.figure= figure;
         this.ready = false;
+        this.playerMat = new PlayerMat(new Decks().getDeck());
+        this.robot = new Robot(0,0, "left" );
     }
+
+    public static void associateSocketWithId(Socket socket, int clientId) {
+        socketIdMap.put(socket, clientId);
+    }
+
+    public static int getClientIdFromSocket(Socket socket) {
+        return socketIdMap.getOrDefault(socket, 666); // Returns 666 if socket ID not found
+    }
+
 
     public void draw(){}
     public void fillRegister(Card[] chosenCards){}

@@ -7,12 +7,32 @@ import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 public class PlayerMat{
-    private Card[] register;
+    @Getter
+    @Setter
+    private ArrayList<String> register;
+    @Getter
+    @Setter
     private ArrayList<Card> progDeck;
-    private UpgradeCard[] upgradeSlot;
+    private UpgradeCard[] permanentSlot;
     private UpgradeCard[] temporarySlot;
-    private ArrayList<Card> discardPile;
+    @Getter
+    @Setter
+    private ArrayList<String> discardPile;
+    @Getter
+    @Setter
+    private int numRegister = 0;
+    @Getter
+    @Setter
+    private ArrayList<String> clientHand;
+
+    public PlayerMat(ArrayList<Card> progDeck) {
+        this.register = new ArrayList<>(5);
+        this.progDeck = progDeck;
+        //this.permanentSlot = new UpgradeCard[3];
+        //this.temporarySlot = new UpgradeCard[3];
+        this.discardPile = new ArrayList<>();
+        this.clientHand = new ArrayList<>();
+    }
+
 }

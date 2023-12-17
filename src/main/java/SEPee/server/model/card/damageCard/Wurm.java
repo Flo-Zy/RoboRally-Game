@@ -4,5 +4,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Wurm {
+public class Wurm extends DamageCard{
+    public Wurm() {
+        super("Wurm", " ");
+    }
+    @Override
+    public String getImageUrl() {
+        return " ";
+    }
 }

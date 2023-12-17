@@ -1,6 +1,7 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Direction;
-import SEPee.server.model.Position;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,16 +10,15 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class Wall extends Field{
-    private boolean isBlockedNorth = false;
-    private boolean isBlockedEast = false;
-    private boolean isBlockedSouth = false;
-    private boolean isBlockedWest = false;
-
-
-
-    public Wall(Position position, ArrayList<Direction> direction){
-        super("Wall", position, direction);
+    //private int speed;
+    @Getter
+    @SerializedName("orientations")
+    private static String[] orientations;
+    //private int[] registers;
+    //private int count;
+    public Wall(String isOnBoard, String[] orientations){
+        super("Wall", isOnBoard, orientations);
+        this.orientations=orientations;
     }
-
 
 }

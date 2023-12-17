@@ -1,10 +1,12 @@
 package SEPee.serialisierung.messageType;
 
+import java.util.ArrayList;
+
 public class TimerEnded extends Message{
     // private String messageType;
     private TimerEndedBody messageBody;
 
-    public TimerEnded(int[] clientIDs) {
+    public TimerEnded(ArrayList<Integer> clientIDs) {
         super("TimerEnded");
         // this.messageType = "TimerEnded";
         this.messageBody = new TimerEndedBody(clientIDs);
@@ -29,16 +31,16 @@ public class TimerEnded extends Message{
     }
 
     public static class TimerEndedBody {
-        int[] clientIDs;
-        public TimerEndedBody(int[] clientIDs) {
+        ArrayList<Integer> clientIDs;
+        public TimerEndedBody(ArrayList<Integer> clientIDs) {
             this.clientIDs = clientIDs;
         }
 
-        public int[] getClientIDs() {
+        public ArrayList<Integer> getClientIDs() {
             return clientIDs;
         }
 
-        public void setClientIDs(int[] clientIDs) {
+        public void setClientIDs(ArrayList<Integer> clientIDs) {
             this.clientIDs = clientIDs;
         }
     }

@@ -1,7 +1,6 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Direction;
-import SEPee.server.model.Position;
-import javafx.geometry.Pos;
+
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,14 @@ import java.util.ArrayList;
 @Setter
 public class Antenna extends Field{
 
-    public Antenna(Position position, ArrayList<Direction> direction){
-        super("Antenna", position, direction);
+    //private int speed;
+    @SerializedName("orientations")
+    private String[] orientations;
+    //private int[] registers;
+    //private int count;
+
+    public Antenna(String isOnBoard, String[] orientations) {
+        super("Antenna", isOnBoard);
+        this.orientations = orientations;
     }
 }

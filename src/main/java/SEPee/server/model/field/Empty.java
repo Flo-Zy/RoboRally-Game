@@ -1,13 +1,19 @@
 package SEPee.server.model.field;
-import SEPee.server.model.Position;
+
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Empty extends Field{
+public class Empty extends Field {
+    //private int speed;
+    //private String[] orientations;
+    //private int[] registers;
+    //private int count;
 
-    public Empty(Position position){
-        super("Empty", position);
+    public Empty(String isOnBoard){
+        super("Empty", isOnBoard);
     }
 }
