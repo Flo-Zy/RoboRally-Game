@@ -521,6 +521,17 @@ public class Client extends Application {
                             System.out.println("GameFinished");
                             GameFinished gameFinished = Deserialisierer.deserialize(serializedReceivedString, GameFinished.class);
                             //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
+                            int winnerId = gameFinished.getMessageBody().getClientID();
+
+                            for(Player player : playerListClient) {
+                                if (player.getId() == winnerId) {
+                                    System.out.println("winner id ist " + winnerId);
+                                    controller.appendToChatArea(player.getName() + " has won this game!!");
+                                    System.out.println("ausgabe hier");
+                                }
+                            }
+                            Thread.sleep(10000);
+                            controller.shutdown();
                             break;
                         default:
                             //kann man entfernen?
