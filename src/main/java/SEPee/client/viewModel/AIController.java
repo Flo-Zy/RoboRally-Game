@@ -2,7 +2,8 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.AI;
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
+import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.MapController.DizzyHighwayControllerAI;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.MapSelected;
@@ -51,11 +52,11 @@ public class AIController {
     @Getter
     private int id;
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
-    private ArrayList<Integer> takenStartPoints = new ArrayList<>();
+    private ArrayList<Integer> takenStartPoints = ClientController.getTakenStartPoints();
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
-    private ArrayList<Card> clientHand = new ArrayList<>();
+    private ArrayList<Card> clientHand = ClientController.getClientHand();
     @FXML
     private TextArea chatArea;
     @FXML
@@ -64,11 +65,11 @@ public class AIController {
     private VBox DizzyHighwayMap;
     @Getter
     @Setter
-    private int currentPhase;
+    private int currentPhase = ClientController.getCurrentPhase();
     @Getter
-    private int startPointX;
+    private int startPointX = ClientController.getStartPointX();
     @Getter
-    private int startPointY;
+    private int startPointY = ClientController.getStartPointY();
 
 
     public void init(AI ai, Stage stage) {
@@ -261,16 +262,16 @@ public class AIController {
     public void loadDizzyHighwayFXMLAI(AI ai, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighwayAI.fxml"));
                 Node dizzyHighway = loader.load();
 
                 // Get  controller
-                DizzyHighwayController dizzyHighwayController = loader.getController();
+                DizzyHighwayControllerAI dizzyHighwayControllerAI = loader.getController();
 
-                mapController = dizzyHighwayController;
+                mapController = dizzyHighwayControllerAI;
 
-                dizzyHighwayController.init(ai, primaryStage);
-                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+                dizzyHighwayControllerAI.init(ai, primaryStage);
+                dizzyHighwayControllerAI.setRootVBox(DizzyHighwayMap);
 
                 // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
@@ -327,6 +328,9 @@ public class AIController {
         // Zufällige Auswahl eines verfügbaren StartingPoints für die AI
         Random random = new Random();
         int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
+        if (selectedStartingPoint == 0){
+            selectedStartingPoint = 1;
+        }
 
         // Process the selected StartingPoint
         setStartingPointXY(selectedStartingPoint);

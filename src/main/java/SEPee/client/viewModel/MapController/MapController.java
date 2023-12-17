@@ -4,7 +4,6 @@ import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class MapController {
     public void setCounter1(int counter){};
@@ -15,4 +14,14 @@ public abstract class MapController {
     public void fillEmptyRegister(ArrayList<Card> nextCards){}
     public void movementPlayed(int clientId, int newX, int newY){}
     public void playerTurn(int clientIdtoTurn, String rotation){}
+
+    class Zahlen{
+        public int hand;
+        public int register;
+
+        Zahlen(int hand, int register){
+            this.hand = hand;
+            this.register = register;
+        }
+    }
 }
