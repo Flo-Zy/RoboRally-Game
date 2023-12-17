@@ -1146,7 +1146,99 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkRobotLasers(int i){
-        
+        String robotOrientation = Server.getGame().getPlayerList().get(i).getRobot().getOrientation();
+        Robot yourRobot = Server.getGame().getPlayerList().get(i).getRobot();
+
+        switch (robotOrientation){
+            case "top":
+                Robot targetRobot1 = new Robot(yourRobot.getX(), -9999, "top");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getY() < yourRobot.getY() &&
+                        Server.getGame().getPlayerList().get(j).getRobot().getY() > targetRobot1.getY()){
+                        targetRobot1 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot1.getY() != -9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot1)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "right":
+                Robot targetRobot2 = new Robot(9999, yourRobot.getY(), "right");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() > yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() < targetRobot2.getX()){
+                        targetRobot2 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot2.getX() != 9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot2)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                Robot targetRobot3 = new Robot(yourRobot.getX(), 9999, "bottom");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() > yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() < targetRobot3.getY()){
+                        targetRobot3 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot3.getY() != 9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot3)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+            case "left":
+                Robot targetRobot4 = new Robot(-9999, yourRobot.getY(), "left");
+                for(int j = 0; j < Server.getGame().getPlayerList().size(); j++){
+                    if(!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() < yourRobot.getX() &&
+                            Server.getGame().getPlayerList().get(j).getRobot().getX() > targetRobot4.getX()){
+                        targetRobot4 = Server.getGame().getPlayerList().get(j).getRobot();
+                    }
+                }
+                if(targetRobot4.getX() != -9999){
+                    for(Player player : Server.getGame().getPlayerList()){
+                        if(player.getRobot().equals(targetRobot4)){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     private void checkCheckpoint(int i){
