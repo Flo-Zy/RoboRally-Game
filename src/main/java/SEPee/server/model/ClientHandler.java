@@ -145,7 +145,7 @@ public class ClientHandler implements Runnable {
                                     switch (mapSelected.getMessageBody().getMap()) {
                                         case "DizzyHighway":
                                             DizzyHighway dizzyHighway = new DizzyHighway();
-                                            Server.setGameMap(dizzyHighway.getGameBoard());
+                                            Server.setGameMap(dizzyHighway);
                                             break;
                                     /*Später für weitere Maps
                                     case " ":
@@ -160,9 +160,9 @@ public class ClientHandler implements Runnable {
                                     && Server.getGameMap() != null) {
                                 Server.setGameStarted(true);
                                 //erstelle das Spiel
-                                Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap()));
+                                Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap().getGameBoard(), Server.getGameMap()));
                                 //Sende an alle Clients Spiel wird gestarted
-                                GameStarted gameStarted = new GameStarted(Server.getGameMap());
+                                GameStarted gameStarted = new GameStarted(Server.getGameMap().getGameBoard());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
                                 System.out.println("Das Spiel wird gestartet");
@@ -358,6 +358,10 @@ public class ClientHandler implements Runnable {
 
                             // wenn letzter Player aus PlayerList dran ist
                             if(Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()){
+
+                                for (Player player: Server.getGame().getPlayerList()){
+                                    player.getPlayerMat().getReceivedDamageCards().clear();
+                                }
 
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
@@ -1000,14 +1004,38 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkBoardLaser(int i){
+        String standingOnBoardLaser = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if(standingOnBoardLaser.contains("Laser")){
+            if(Server.getGame().getSpam() > 0){
+                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+            }
+        }
 
     }
 
     private void checkRobotLasers(int i){
-
+        
     }
 
     private void checkCheckpoint(int i){
+        String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if(standingOnCheckPoint.contains("CheckPoint")) {
+
+            Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
+            int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
+
+            if(Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount){
+                GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
+                String serializedGameFinished = Serialisierer.serialize(gameFinished);
+                broadcast(serializedGameFinished);
+            }
+
+        }
+
+
+
 
     }
 

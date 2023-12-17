@@ -4,6 +4,7 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.field.Field;
+import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 //import SEPee.serialisierung.messageType.HelloClient;
@@ -39,7 +40,7 @@ public class Server extends Thread{
     private static int readyListIndex = 0;
     @Getter
     @Setter
-    private static List<List<List<Field>>> gameMap;
+    private static GameBoard gameMap;
     @Getter
     @Setter
     private static int firstReady;

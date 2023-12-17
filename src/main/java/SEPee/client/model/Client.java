@@ -478,6 +478,20 @@ public class Client extends Application {
                         case "DrawDamage":
                             System.out.println("Draw Damage");
                             DrawDamage drawDamage = Deserialisierer.deserialize(serializedReceivedString, DrawDamage.class);
+
+                            int damagedID = drawDamage.getMessageBody().getClientID(); // die ID die karten ziehen soll!
+
+                            ArrayList<String> damageCardsDrawn = drawDamage.getMessageBody().getCards();
+
+                            for(Player player : playerListClient) {
+                                if (player.getId() == damagedID) {
+                                    controller.appendToChatArea(player.getName() + " hat diese Karten kassiert: " + damageCardsDrawn + "!");
+                                }
+                            }
+
+
+
+
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");

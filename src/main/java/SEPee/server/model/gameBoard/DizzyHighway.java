@@ -8,7 +8,7 @@ import java.util.List;
 public class DizzyHighway extends GameBoard {
     public DizzyHighway() {
 
-        super("5B", "DizzyHighway", 13);
+        super("5B", "DizzyHighway", 13, 1);
 
         // column 0
         List<List<Field>> column0 = new ArrayList<>(10);
