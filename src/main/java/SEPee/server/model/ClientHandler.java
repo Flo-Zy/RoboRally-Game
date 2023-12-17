@@ -925,8 +925,7 @@ public class ClientHandler implements Runnable {
         return true;
     }
 
-
-    public void fieldActivation() {
+    public void fieldActivation() throws InterruptedException {
         // Conveyor Belts
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
 
@@ -939,6 +938,7 @@ public class ClientHandler implements Runnable {
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkBoardLaser(i);
+
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkRobotLasers(i);
@@ -950,7 +950,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void checkBlueAndGreenConveyorBelts(int i){
+    private void checkBlueAndGreenConveyorBelts(int i) throws InterruptedException {
         //blue conveyor
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if(standingOnBlueConveyor.contains("ConveyorBelt")) {
@@ -1011,7 +1011,9 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt){
+    private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
+
+        Thread.sleep(750);
 
         String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
@@ -1076,7 +1078,7 @@ public class ClientHandler implements Runnable {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                        writer.println(serializedPlayerTurning);
+                        broadcast(serializedPlayerTurning);
                     }
                 }
 
@@ -1100,12 +1102,15 @@ public class ClientHandler implements Runnable {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), getResultingOrientation( "clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                        writer.println(serializedPlayerTurning);
+                        broadcast(serializedPlayerTurning);
                     }
                 }
 
             }
         }
+
+
+
     }
 
     private String getResultingOrientation(String turningDirection, Robot robot){
