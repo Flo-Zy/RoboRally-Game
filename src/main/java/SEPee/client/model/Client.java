@@ -263,6 +263,7 @@ public class Client extends Application {
                             controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
+                                controller.setRegisterVisibilityFalse();
                                 controller.initRegister();
                                 System.out.println(" Programmierungsphase");
                             }
@@ -282,6 +283,7 @@ public class Client extends Application {
                                         Platform.runLater(() -> {
                                             controller.setStartingPoint();
                                             System.out.println("StartingPoint wurde gewählt");
+
                                             SetStartingPoint setStartingPoint = new SetStartingPoint(controller.getStartPointX(), controller.getStartPointY());
                                             String serializedSetStartingPoint = Serialisierer.serialize(setStartingPoint);
                                             writer.println(serializedSetStartingPoint);
@@ -360,10 +362,10 @@ public class Client extends Application {
                                         break;
                                 }
                             }
-                            controller.setClientHand(drawPile);
+                                controller.setClientHand(drawPile);
+                                // initialisiere die 9 Karten von YourCards in Hand des players
+                                controller.initDrawPile();
 
-                            // initialisiere die 9 Karten von YourCards in Hand des players
-                            controller.initDrawPile();
                             break;
 
                         case "NotYourCards":

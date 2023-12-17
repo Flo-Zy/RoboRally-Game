@@ -22,6 +22,9 @@ public class PlayerMat{
     @Getter
     @Setter
     private int numRegister = 0;
+    @Getter
+    @Setter
+    private ArrayList<String> clientHand;
 
     public PlayerMat(ArrayList<Card> progDeck) {
         this.register = new ArrayList<>(5);
@@ -29,6 +32,7 @@ public class PlayerMat{
         //this.permanentSlot = new UpgradeCard[3];
         //this.temporarySlot = new UpgradeCard[3];
         this.discardPile = new ArrayList<>();
+        this.clientHand = new ArrayList<>();
     }
 
 }

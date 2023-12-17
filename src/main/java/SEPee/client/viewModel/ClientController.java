@@ -460,6 +460,10 @@ public class ClientController {
         mapController.initializeRegister(id, clientHand);
     }
 
+    public void setRegisterVisibilityFalse(){
+        mapController.setRegisterVisibilityFalse();
+    }
+
     public void fillEmptyRegister(ArrayList<Card> nextCards){
         mapController.fillEmptyRegister(nextCards);
     }
