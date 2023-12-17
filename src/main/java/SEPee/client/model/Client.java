@@ -362,10 +362,10 @@ public class Client extends Application {
                                         break;
                                 }
                             }
-                            controller.setClientHand(drawPile);
+                                controller.setClientHand(drawPile);
+                                // initialisiere die 9 Karten von YourCards in Hand des players
+                                controller.initDrawPile();
 
-                            // initialisiere die 9 Karten von YourCards in Hand des players
-                            controller.initDrawPile();
                             break;
 
                         case "NotYourCards":

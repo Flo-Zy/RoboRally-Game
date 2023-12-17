@@ -20,6 +20,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.*;
 
+import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -388,6 +389,14 @@ public class ClientHandler implements Runnable {
                                     }
                                     Server.getGame().nextCurrentPhase();
 
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        System.out.println("Player " + player.getId() + " discardPile: " + player.getPlayerMat().getDiscardPile());
+                                    }
+
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
+                                    }
+
                                     // entferne nachdem alle register in Phase 2 abgearbeitet wurden von jedem player das gesamte register
                                     for(Player player : Server.getGame().getPlayerList()){
                                         player.getPlayerMat().getRegister().clear();
@@ -400,37 +409,89 @@ public class ClientHandler implements Runnable {
 
                                     // YourCards an Client senden wenn ActivePhase = 2
                                     for (Player player : Server.getGame().getPlayerList()) {
-                                        ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
-                                        int i = 0;
-                                        while (i < 9) {
-                                            // die ersten 9 karten ziehen
-                                            Card card = player.getPlayerMat().getProgDeck().get(0);
-                                            clientCards.add(card.getName());
-                                            // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
-                                            player.getPlayerMat().getProgDeck().remove(0);
-                                            i++;
-                                        }
-                                        clientHand = clientCards;
-
-                                        // test ob clientHand richtig gesetzt
-                                        for (String card : clientHand) {
-                                            System.out.println("Player " + player.getId() + ": " + card);
-                                        }
-
-                                        // sendet Karten Infos an aktuellen player
-                                        YourCards yourCards = new YourCards(clientCards);
-                                        String serializedYourCards = Serialisierer.serialize(yourCards);
-                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
-                                        // sende an diesen Client sein ProgDeck
-                                        sendToOneClient(player.getId(), serializedYourCards);
-
-                                        // sendet Karten Infos an alle anderen player
-                                        NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
-                                        String serializedNotYourCards = Serialisierer.serialize(notYourCards);
-                                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                                            if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
-                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                        if(player.getPlayerMat().getProgDeck().size() >= 9){
+                                            ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
+                                            int i = 0;
+                                            while (i < 9) {
+                                                // die ersten 9 karten ziehen
+                                                Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                clientCards.add(card.getName());
+                                                // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                                player.getPlayerMat().getProgDeck().remove(0);
+                                                i++;
                                             }
+                                            player.getPlayerMat().setClientHand(clientCards);
+
+                                            // test ob clientHand richtig gesetzt
+                                            for (String card : player.getPlayerMat().getClientHand()) {
+                                                System.out.println("Player " + player.getId() + ": " + card);
+                                            }
+
+                                            // sendet Karten Infos an aktuellen player
+                                            YourCards yourCards = new YourCards(clientCards);
+                                            String serializedYourCards = Serialisierer.serialize(yourCards);
+                                            System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
+                                            // sende an diesen Client sein ProgDeck
+                                            sendToOneClient(player.getId(), serializedYourCards);
+
+                                            // sendet Karten Infos an alle anderen player
+                                            NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                            String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                            for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                                if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
+                                                    sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                                }
+                                            }
+                                        }else {
+                                            ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
+                                            int leftCards = player.getPlayerMat().getProgDeck().size();
+                                            int i = 0;
+                                            while (i < leftCards) {
+                                                Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                clientCards.add(card.getName());
+                                                // die ersten restlichen Karten vom progDeck des player.getPlayerMat() entfernen
+                                                player.getPlayerMat().getProgDeck().remove(0);
+                                                i++;
+                                            }
+                                            player.getPlayerMat().setClientHand(clientCards);
+
+                                            // test ob clientHand richtig gesetzt
+                                            for (String card : player.getPlayerMat().getClientHand()) {
+                                                System.out.println("Player " + player.getId() + ": " + card);
+                                            }
+
+                                            ShuffleCoding shuffleCoding = new ShuffleCoding(player.getId());
+                                            String serializedShuffleCoding = Serialisierer.serialize(shuffleCoding);
+                                            sendToOneClient(player.getId(), serializedShuffleCoding);
+
+                                            ArrayList<Card> newDrawPile = stringToCard(player.getPlayerMat().getDiscardPile());
+                                            Collections.shuffle(newDrawPile);
+                                            player.getPlayerMat().setProgDeck(newDrawPile);
+
+                                            i = 0;
+                                            while (i < 9 - leftCards) {
+                                                Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                clientCards.add(card.getName());
+                                                // die restlichen Karten vom progDeck des player.getPlayerMat() entfernen
+                                                player.getPlayerMat().getProgDeck().remove(0);
+                                                i++;
+                                            }
+
+                                            YourCards yourCards = new YourCards(clientCards);
+                                            String serializedYourCards = Serialisierer.serialize(yourCards);
+                                            System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
+                                            // sende an diesen Client sein ProgDeck
+                                            sendToOneClient(player.getId(), serializedYourCards);
+
+                                            // sendet Karten Infos an alle anderen player
+                                            NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                            String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                            for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                                if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
+                                                    sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                                }
+                                            }
+
                                         }
                                     }
 
@@ -486,37 +547,37 @@ public class ClientHandler implements Runnable {
                                 if (Server.getGame().getCurrentPhase() == 2) {
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         ArrayList<String> clientCards = new ArrayList<>(); // 9 KartenNamen
-                                        int i = 0;
-                                        while (i < 9) {
-                                            // die ersten 9 karten ziehen
-                                            Card card = player.getPlayerMat().getProgDeck().get(0);
-                                            clientCards.add(card.getName());
-                                            // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
-                                            player.getPlayerMat().getProgDeck().remove(0);
-                                            i++;
-                                        }
-                                        clientHand = clientCards;
-
-                                        // test ob clientHand richtig gesetzt
-                                        for (String card : clientHand) {
-                                            System.out.println("Player " + player.getId() + ": " + card);
-                                        }
-
-                                        // sendet Karten Infos an aktuellen player
-                                        YourCards yourCards = new YourCards(clientCards);
-                                        String serializedYourCards = Serialisierer.serialize(yourCards);
-                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
-                                        // sende an diesen Client sein ProgDeck
-                                        sendToOneClient(player.getId(), serializedYourCards);
-
-                                        // sendet Karten Infos an alle anderen player
-                                        NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
-                                        String serializedNotYourCards = Serialisierer.serialize(notYourCards);
-                                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                                            if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
-                                                sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                            int i = 0;
+                                            while (i < 9) {
+                                                // die ersten 9 karten ziehen
+                                                Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                clientCards.add(card.getName());
+                                                // die ersten 9 karten vom progDeck des player.getPlayerMat() entfernen
+                                                player.getPlayerMat().getProgDeck().remove(0);
+                                                i++;
                                             }
-                                        }
+                                            player.getPlayerMat().setClientHand(clientCards);
+
+                                            // test ob clientHand richtig gesetzt
+                                            for (String card : player.getPlayerMat().getClientHand()) {
+                                                System.out.println("Player " + player.getId() + ": " + card);
+                                            }
+
+                                            // sendet Karten Infos an aktuellen player
+                                            YourCards yourCards = new YourCards(clientCards);
+                                            String serializedYourCards = Serialisierer.serialize(yourCards);
+                                            System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
+                                            // sende an diesen Client sein ProgDeck
+                                            sendToOneClient(player.getId(), serializedYourCards);
+
+                                            // sendet Karten Infos an alle anderen player
+                                            NotYourCards notYourCards = new NotYourCards(player.getId(), clientCards.size());
+                                            String serializedNotYourCards = Serialisierer.serialize(notYourCards);
+                                            for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                                                if (Server.getGame().getPlayerList().get(j).getId() != player.getId()) {
+                                                    sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
+                                                }
+                                            }
                                     }
                                 }
 
@@ -562,10 +623,23 @@ public class ClientHandler implements Runnable {
                             for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
                                 // füge in register card hinzu
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId && card != null) {
+                                    //gelegte Karte dem Register hinzufügen
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
+                                    //gelegte Karte von der Hand entfernen
+                                    for(int j = 0; j < Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().size(); j++){
+                                        if(card.equals(Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().get(j))){
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().remove(j);
+                                            break;
+                                        }
+                                    }
                                 }
                                 // falls card == null: lösche letztes card aus register
                                 else if (Server.getGame().getPlayerList().get(i).getId() == clientId && card == null) {
+                                    //letze Karte vom register in die Hand einfügen
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().add(
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().get(
+                                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1));
+                                    //letze Karte vom Register entfernen
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(
                                             Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1);
                                 }
@@ -625,6 +699,8 @@ public class ClientHandler implements Runnable {
                                                     String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
                                                     sendToOneClient(clientID, serializedCardYouGotNow);
                                                 }
+
+                                                discardHand();
 
                                                 discardCurrentRegister();
 
@@ -865,5 +941,55 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+
+    public void discardHand() {
+        for (Player player : Server.getGame().getPlayerList()) {
+            for (String card : player.getPlayerMat().getClientHand()) {
+                player.getPlayerMat().getDiscardPile().add(card);
+            }
+            player.getPlayerMat().getClientHand().clear(); // Leere die Hand des Spielers
+            for(String discardCard : player.getPlayerMat().getDiscardPile()){
+                System.out.println(player.getId()+ ": "+ discardCard);
+            }
+        }
+    }
+
+    public ArrayList<Card> stringToCard(ArrayList<String> stringCards){
+        ArrayList<Card> kartenStapel = new ArrayList<>();
+        for (String cardName : stringCards) {
+            switch (cardName) {
+                case "Again":
+                    kartenStapel.add(new Again());
+                    break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                case "BackUp":
+                    kartenStapel.add(new BackUp());
+                    break;
+                case "LeftTurn":
+                    kartenStapel.add(new LeftTurn());
+                    break;
+                case "MoveI":
+                    kartenStapel.add(new MoveI());
+                    break;
+                case "MoveII":
+                    kartenStapel.add(new MoveII());
+                    break;
+                case "MoveIII":
+                    kartenStapel.add(new MoveIII());
+                    break;
+                case "PowerUp":
+                    kartenStapel.add(new PowerUp());
+                    break;
+                case "RightTurn":
+                    kartenStapel.add(new RightTurn());
+                    break;
+                case "UTurn":
+                    kartenStapel.add(new UTurn());
+                    break;
+            }
+        }
+        return kartenStapel;
+    }
+
+
 
 }
