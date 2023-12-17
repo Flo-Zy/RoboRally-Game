@@ -16,6 +16,12 @@ public class Robot {
     //private int energyReserve;
     private String orientation;
     private List<RobotPositionChangeListener> listeners = new ArrayList<>();
+    @Getter
+    @Setter
+    private int startingPointX;
+    @Getter
+    @Setter
+    private int startingPointY;
 
     public Robot(int x, int y, String orientation) {
         this.x = x;

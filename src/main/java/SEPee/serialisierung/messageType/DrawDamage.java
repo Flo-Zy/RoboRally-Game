@@ -1,9 +1,11 @@
 package SEPee.serialisierung.messageType;
 
+import java.util.ArrayList;
+
 public class DrawDamage extends Message{
     private DrawDamage.DrawDamageBody messageBody;
 
-    public DrawDamage(int clientID, String[] cards) {
+    public DrawDamage(int clientID, ArrayList<String> cards) {
         super("DrawDamage");
         this.messageBody = new DrawDamage.DrawDamageBody(clientID, cards);
     }
@@ -18,9 +20,9 @@ public class DrawDamage extends Message{
 
     public static class DrawDamageBody {
         private int clientID;
-        private String[] cards;
+        private ArrayList<String> cards;
 
-        public DrawDamageBody(int clientID, String[] cards) {
+        public DrawDamageBody(int clientID, ArrayList<String> cards) {
             this.clientID = clientID;
             this.cards = cards;
         }
@@ -33,11 +35,11 @@ public class DrawDamage extends Message{
             this.clientID = clientID;
         }
 
-        public String[] getCards() {
+        public ArrayList<String> getCards() {
             return cards;
         }
 
-        public void setCards(String[] cards) {
+        public void setCards(ArrayList<String> cards) {
             this.cards = cards;
         }
     }

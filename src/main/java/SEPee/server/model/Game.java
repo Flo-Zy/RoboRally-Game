@@ -10,6 +10,7 @@ import SEPee.server.model.card.Card;
 import SEPee.server.model.card.Decks;
 import SEPee.server.model.card.upgradeCard.UpgradeCard;
 import SEPee.server.model.field.Field;
+import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,11 +29,12 @@ public class Game implements Robot.RobotPositionChangeListener {
     private int spam;
     private int trojanHorse;
     private int wurm;
+    private GameBoard boardClass;
     //private DamageDecks damageDecks;
     //private UpgradeShop upgradeShop;
     //private ArrayList<SpecialCard> specialCardsDeck;
 
-    public Game(ArrayList<Player> playerList, List<List<List<Field>>> gameBoard){
+    public Game(ArrayList<Player> playerList, List<List<List<Field>>> gameBoard, GameBoard boardClass){
         this.gameBoard = gameBoard;
         this.playerList = playerList;
         this.playerIndex = 0;
@@ -42,14 +44,12 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.virus = 18;
         this.trojanHorse = 12;
         this.wurm = 6;
+        this.boardClass = boardClass;
+
     }
 
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
-
-
-
-
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
