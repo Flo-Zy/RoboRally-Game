@@ -1,12 +1,12 @@
 package SEPee.client.model;
+// flo stinkt MEGA
 
-import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.AIController;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
-//auslagern
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
@@ -16,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,11 +25,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-public class Client extends Application {
+public class AI extends Application {
 
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
@@ -40,14 +40,13 @@ public class Client extends Application {
     private String selectedMap1;
     @Getter
     @Setter
-    private static ArrayList<Integer> takenFigures = new ArrayList<>();
+    private static ArrayList<Integer> takenFigures = Client.getTakenFigures();
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
     private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
     private int registerCounter = 1;
-    @Getter
-    private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    private ArrayList<CurrentCards.ActiveCard> activeRegister = Client.getActiveRegister();
 
     public static void main(String[] args) {
         launch(args);
@@ -56,16 +55,15 @@ public class Client extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Client.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/AI.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            primaryStage.setTitle("Client");
+            primaryStage.setTitle("AI");
             primaryStage.setScene(scene);
 
-            ClientController controller = loader.getController();
+            AIController aiController = loader.getController();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
@@ -97,14 +95,14 @@ public class Client extends Application {
                 }
                 //save taken figures in takenFigures
                 for (Player player : playerListClient) {
-                    Client.getTakenFigures().add(player.getFigure());
+                    AI.getTakenFigures().add(player.getFigure());
                 }
 
                 //Stage wird initialisiert
-                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                controller.init(this, primaryStage);
+                primaryStage.setOnCloseRequest(event -> aiController.shutdown());
+                aiController.init(this, primaryStage);
 
-                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                PlayerValues playerValues = new PlayerValues(aiController.getName(), aiController.getFigure());
                 String serializedPlayerValues = Serialisierer.serialize(playerValues);
                 writer.println(serializedPlayerValues);
 
@@ -112,7 +110,7 @@ public class Client extends Application {
 
 
                 // Send HelloServer back to the server
-                HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
+                HelloServer helloServer = new HelloServer("EifrigeEremiten", true, "Version 1.0");
                 String serializedHelloServer = Serialisierer.serialize(helloServer);
                 writer.println(serializedHelloServer);
 
@@ -121,18 +119,18 @@ public class Client extends Application {
             } else {
 
                 //socket.close();
-                controller.shutdown();
+                aiController.shutdown();
                 //System.exit(0);
             }
 
-            startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
+            startServerMessageProcessing(socket, reader, aiController, primaryStage, writer);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
+    private void startServerMessageProcessing(Socket socket, BufferedReader reader, AIController aiController, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
                 while (!receivedHelloClient) {
@@ -148,7 +146,7 @@ public class Client extends Application {
 
                     switch (messageType) {
                         case "Alive":
-                            System.out.println("Alive");
+                            System.out.println("AI - Alive");
                             Alive alive = new Alive();
                             String serializedAlive = Serialisierer.serialize(alive);
                             writer.println(serializedAlive);
@@ -156,9 +154,9 @@ public class Client extends Application {
                         case "Welcome":
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                            controller.setId(receivedId);
+                            aiController.setId(receivedId);
                             // PlayerValues schicken
-                            PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                            PlayerValues playerValues = new PlayerValues(aiController.getName(), aiController.getFigure());
                             String serializedPlayerValues = Serialisierer.serialize(playerValues);
                             writer.println(serializedPlayerValues);
 
@@ -175,13 +173,13 @@ public class Client extends Application {
                             // Add the new player to the client-side playerList
                             playerListClient.add(newPlayer);
 
-                            System.out.println("Player added");
+                            System.out.println("AI - Player added");
                             for (int i = 0; i < playerListClient.size(); i++) {
                                 System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
                             }
                             break;
                         case "PlayerStatus":
-                            System.out.println("PlayerStatus");
+                            System.out.println("AI - PlayerStatus");
                             PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
                             for (int i = 0; i < playerListClient.size(); i++) {
                                 if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
@@ -190,19 +188,22 @@ public class Client extends Application {
                             }
                             break;
                         case "SelectMap":
-                            System.out.println("SelectMap" + controller.getName());
+                            System.out.println("AI - SelectMap" + aiController.getName());
                             SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
+                            // lade ArrayList<String> mit einem element: "DizzyHighway"
                             mapList = selectMap.getMessageBody().getAvailableMaps();
+
                             Platform.runLater(() -> {
-                                selectedMap1 = controller.showSelectMapDialog();
+                                selectedMap1 = "DizzyHighway";
                                 System.out.println(selectedMap1);
                                 MapSelected mapSelected = new MapSelected(selectedMap1);
                                 String serializedMapSelected = Serialisierer.serialize(mapSelected);
                                 writer.println(serializedMapSelected);
                             });
+
                             break;
                         case "MapSelected":
-                            System.out.println("Map wurde gewählt");
+                            System.out.println("AI - Map wurde gewählt");
                             String serializedReceivedMap = serializedReceivedString;
                             MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
 
@@ -214,14 +215,14 @@ public class Client extends Application {
                                     mapController = loader.getController();
                                     break;
                                 default:
-                                    System.out.println("Invalid Map");
+                                    System.out.println("AI - Invalid Map");
                                     break;
                             }
                             break;
                         case "GameStarted":
-                            System.out.println("Game Started");
+                            System.out.println("AI - Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
-                            controller.loadDizzyHighwayFXML(this, primaryStage);
+                            aiController.loadDizzyHighwayFXMLAI(this, primaryStage);
                             break;
                         case "ReceivedChat":
                             String serializedReceivedChat = serializedReceivedString;
@@ -235,10 +236,10 @@ public class Client extends Application {
                             }
                             if (fromName != null) {
                                 String receivedMessage = (fromName + ": " + deserializedReceivedChat.getMessageBody().getMessage());
-                                controller.appendToChatArea(receivedMessage);
+                                aiController.appendToChatArea(receivedMessage);
                             } else {
                                 String receivedMessage = (deserializedReceivedChat.getMessageBody().getMessage());
-                                controller.appendToChatArea(receivedMessage);
+                                aiController.appendToChatArea(receivedMessage);
                             }
                             break;
                         case "Error":
@@ -247,45 +248,45 @@ public class Client extends Application {
                             System.out.println(deserializedError.getMessageBody().getError());
                             break;
                         case "ConnectionUpdate":
-                            System.out.println("Connection Update");
+                            System.out.println("AI - Connection Update");
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
                             break;
                         case "CardPlayed":
-                            System.out.println("Card Played");
+                            System.out.println("AI - Card Played");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
-                            controller.appendToChatArea("> Player " + cardPlayed.getMessageBody().getClientID() +
+                            aiController.appendToChatArea("> Player " + cardPlayed.getMessageBody().getClientID() +
                                     " played card " + cardPlayed.getMessageBody().getCard());
                             
                             break;
                         case "ActivePhase":
-                            System.out.println("Active Phase");
+                            System.out.println("AI - Active Phase");
                             ActivePhase activePhase = Deserialisierer.deserialize(serializedReceivedString, ActivePhase.class);
-                            controller.setCurrentPhase(activePhase.getMessageBody().getPhase());
-                            controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
+                            aiController.setCurrentPhase(activePhase.getMessageBody().getPhase());
+                            aiController.appendToChatArea(">> Active Phase: " + aiController.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
-                            if(controller.getCurrentPhase() == 2){
-                                controller.setRegisterVisibilityFalse();
-                                controller.initRegister();
+                            if(aiController.getCurrentPhase() == 2){
+                                aiController.setRegisterVisibilityFalse();
+                                aiController.initRegister();
                                 System.out.println(" Programmierungsphase");
                             }
-                            if (controller.getCurrentPhase() == 3){
+                            if (aiController.getCurrentPhase() == 3){
                                 System.out.println(" Aktivierungsphase");
                             }
                             break;
                         case "CurrentPlayer":
-                            System.out.println("Current Player");
+                            System.out.println("AI - Current Player");
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
-                            System.out.println("Client current Player checker: " + currentPlayer.getMessageBody().getClientID());
+                            System.out.println("AI current Player checker: " + currentPlayer.getMessageBody().getClientID());
 
-                            switch (controller.getCurrentPhase()) {
+                            switch (aiController.getCurrentPhase()) {
                                 case 0:
-                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) { // wenn currentPlayerID dieser ClientID hier entspricht
+                                    if (aiController.getId() == currentPlayer.getMessageBody().getClientID()) { // wenn currentPlayerID dieser ClientID hier entspricht
                                         System.out.println("Aufbauphase");
                                         Platform.runLater(() -> {
-                                            controller.setStartingPoint();
+                                            aiController.setStartingPoint();
                                             System.out.println("StartingPoint wurde gewählt");
 
-                                            SetStartingPoint setStartingPoint = new SetStartingPoint(controller.getStartPointX(), controller.getStartPointY());
+                                            SetStartingPoint setStartingPoint = new SetStartingPoint(aiController.getStartPointX(), aiController.getStartPointY());
                                             String serializedSetStartingPoint = Serialisierer.serialize(setStartingPoint);
                                             writer.println(serializedSetStartingPoint);
                                         });
@@ -299,9 +300,9 @@ public class Client extends Application {
                                     break;
                                 case 3:
                                     System.out.println("Aktivierungsphase");
-                                    if(currentPlayer.getMessageBody().getClientID() == controller.getId()) {
+                                    if(currentPlayer.getMessageBody().getClientID() == aiController.getId()) {
                                         for (CurrentCards.ActiveCard activeCard : activeRegister) {
-                                            if (activeCard.getClientID() == controller.getId()) {
+                                            if (activeCard.getClientID() == aiController.getId()) {
                                                 PlayCard playCard = new PlayCard(activeCard.getCard());
                                                 String serializedPlayCard = Serialisierer.serialize(playCard);
                                                 writer.println(serializedPlayCard);
@@ -312,23 +313,23 @@ public class Client extends Application {
                             }
                             break;
                         case "StartingPointTaken":
-                            System.out.println("Starting Point Taken");
+                            System.out.println("AI - Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
-                            controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            aiController.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
 
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
                             Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
-                            controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            aiController.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
                             break;
 
                         case "YourCards":
-                            System.out.println("Your Cards");
+                            System.out.println("AI - Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
 
                             // Füge in ChatArea: transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
-                            controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
+                            aiController.appendToChatArea("AI Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
                             // update im ClientController die clientHand
                             ArrayList<Card> drawPile = new ArrayList<>();
@@ -363,44 +364,44 @@ public class Client extends Application {
                                         break;
                                 }
                             }
-                                controller.setClientHand(drawPile);
-                                // initialisiere die 9 Karten von YourCards in Hand des players
-                                controller.initDrawPile();
+                            aiController.setClientHand(drawPile);
 
+                            // initialisiere die 9 Karten von YourCards in Hand des players
+                            aiController.initDrawPile();
                             break;
 
                         case "NotYourCards":
-                            System.out.println("Not Your Cards");
+                            System.out.println("AI - Not Your Cards");
                             NotYourCards notYourCards = Deserialisierer.deserialize(serializedReceivedString, NotYourCards.class);
                             System.out.println("(INFO) Player " + notYourCards.getMessageBody().getClientID() + " got " + notYourCards.getMessageBody().getCardsInHand() + " Cards");
                             break;
                         case "SelectionFinished":
                             SelectionFinished selectionFinished = Deserialisierer.deserialize(serializedReceivedString, SelectionFinished.class);
-                            System.out.println(selectionFinished.getMessageBody().getClientID() + ": Selection Finished");
+                            System.out.println("AI - " + selectionFinished.getMessageBody().getClientID() + ": Selection Finished");
                             break;
                         case "ShuffleCoding":
-                            System.out.println("Shuffle Coding");
+                            System.out.println("AI - Shuffle Coding");
                             ShuffleCoding shuffleCoding = Deserialisierer.deserialize(serializedReceivedString, ShuffleCoding.class);
                             break;
                         case "CardSelected":
-                            System.out.println("Card Selected");
+                            System.out.println("AI - Card Selected");
                             CardSelected cardSelected = Deserialisierer.deserialize(serializedReceivedString, CardSelected.class);
-                            System.out.println("Player " + cardSelected.getMessageBody().getClientID() + " has set his register " + cardSelected.getMessageBody().getRegister());
+                            System.out.println("AI - Player " + cardSelected.getMessageBody().getClientID() + " has set his register " + cardSelected.getMessageBody().getRegister());
                             break;
                         case "TimerStarted":
-                            System.out.println("Timer Started");
+                            System.out.println("AI - Timer Started");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
-                            controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
+                            aiController.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
                             //thread sleep 30000
                             break;
                         case "TimerEnded":
-                            System.out.println("Timer Ended");
+                            System.out.println("AI - Timer Ended");
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
-                            controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
-                            controller.mapController.setCounter1(5);
+                            aiController.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
+                            aiController.mapController.setCounter1(5);
                             break;
                         case "CardsYouGotNow":
-                            System.out.println("Cards You Got Now");
+                            System.out.println("AI - Cards You Got Now");
                             CardsYouGotNow cardsYouGotNow = Deserialisierer.deserialize(serializedReceivedString, CardsYouGotNow.class);
 
                             ArrayList<Card> nextCards = new ArrayList<>();
@@ -436,15 +437,15 @@ public class Client extends Application {
                                         break;
                                 }
                             }
-                            controller.fillEmptyRegister(nextCards);
+                            aiController.fillEmptyRegister(nextCards);
                             break;
                         case "CurrentCards":
-                            System.out.println("Current Cards");
+                            System.out.println("AI - Current Cards");
                             CurrentCards currentCards = Deserialisierer.deserialize(serializedReceivedString, CurrentCards.class);
 
                             activeRegister = currentCards.getMessageBody().getActiveCards();
 
-                            controller.appendToChatArea(">> Played Register: " + registerCounter);
+                            aiController.appendToChatArea(">> Played Register: " + registerCounter);
 
                             if (registerCounter == 5){
                                 registerCounter = 1;
@@ -453,18 +454,18 @@ public class Client extends Application {
                             }
 
                             break;
-                        case "ReplaceCard":
+                        case "AI - ReplaceCard":
                             System.out.println("Replace Card");
                             ReplaceCard replaceCard = Deserialisierer.deserialize(serializedReceivedString, ReplaceCard.class);
                             break;
-                        case "Movement":
+                        case "AI - Movement":
                             System.out.println("Movement");
                             Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
 
                             int clientIdToMove = movement.getMessageBody().getClientID();
                             int newX = movement.getMessageBody().getX();
                             int newY = movement.getMessageBody().getY();
-                            controller.movementPlayed(clientIdToMove,newX, newY);
+                            aiController.movementPlayed(clientIdToMove,newX, newY);
 
                             break;
                         case "PlayerTurning":
@@ -473,26 +474,12 @@ public class Client extends Application {
 
                             int clientIdToTurn = playerTurning.getMessageBody().getClientID();
                             String rotation = playerTurning.getMessageBody().getRotation();
-                            controller.playerTurn(clientIdToTurn, rotation);
+                            aiController.playerTurn(clientIdToTurn, rotation);
 
                             break;
                         case "DrawDamage":
                             System.out.println("Draw Damage");
                             DrawDamage drawDamage = Deserialisierer.deserialize(serializedReceivedString, DrawDamage.class);
-
-                            int damagedID = drawDamage.getMessageBody().getClientID(); // die ID die karten ziehen soll!
-
-                            ArrayList<String> damageCardsDrawn = drawDamage.getMessageBody().getCards();
-
-                            for(Player player : playerListClient) {
-                                if (player.getId() == damagedID) {
-                                    controller.appendToChatArea(player.getName() + " hat diese Karten kassiert: " + damageCardsDrawn + "!");
-                                }
-                            }
-
-
-
-
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");
@@ -522,17 +509,6 @@ public class Client extends Application {
                             System.out.println("GameFinished");
                             GameFinished gameFinished = Deserialisierer.deserialize(serializedReceivedString, GameFinished.class);
                             //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
-                            int winnerId = gameFinished.getMessageBody().getClientID();
-
-                            for(Player player : playerListClient) {
-                                if (player.getId() == winnerId) {
-                                    System.out.println("winner id ist " + winnerId);
-                                    controller.appendToChatArea(player.getName() + " has won this game!!");
-                                    System.out.println("ausgabe hier");
-                                }
-                            }
-                            Thread.sleep(10000);
-                            controller.shutdown();
                             break;
                         default:
                             //kann man entfernen?

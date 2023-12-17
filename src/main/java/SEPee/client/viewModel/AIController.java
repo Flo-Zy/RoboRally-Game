@@ -1,28 +1,27 @@
 package SEPee.client.viewModel;
 
+import SEPee.client.model.AI;
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
+import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.MapController.DizzyHighwayControllerAI;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
-//Später auslagern
+import SEPee.serialisierung.messageType.MapSelected;
+import SEPee.serialisierung.messageType.SendChat;
+import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.progCard.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +31,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 
-public class ClientController {
+public class AIController {
     @FXML
     private Button sendButton;
     @FXML
@@ -53,12 +52,11 @@ public class ClientController {
     @Getter
     private int id;
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
-    @Getter
-    private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
+    private ArrayList<Integer> takenStartPoints = ClientController.getTakenStartPoints();
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
-    private static ArrayList<Card> clientHand = new ArrayList<>();
+    private ArrayList<Card> clientHand = ClientController.getClientHand();
     @FXML
     private TextArea chatArea;
     @FXML
@@ -67,52 +65,27 @@ public class ClientController {
     private VBox DizzyHighwayMap;
     @Getter
     @Setter
-    private static int currentPhase;
+    private int currentPhase = ClientController.getCurrentPhase();
     @Getter
-    private static int startPointX;
+    private int startPointX = ClientController.getStartPointX();
     @Getter
-    private static int startPointY;
+    private int startPointY = ClientController.getStartPointY();
 
 
+    public void init(AI ai, Stage stage) {
+        // setze namen der AI
+        this.name = "AI";
 
-    public void init(Client Client, Stage stage) {
+        // setze Roboter der AI
+        figure = showRobotSelectionDialogAI(Client.getTakenFigures());
+        this.setFigure(figure);
 
-        boolean validUsername = false;
-
-        while (!validUsername) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Username");
-            dialog.setHeaderText("Please enter your username:");
-            dialog.setContentText("Username:");
-            Optional<String> result = dialog.showAndWait();
-
-            if (result.isPresent() && !result.get().trim().isEmpty()) {
-                this.name = result.get().trim();
-                stage.setTitle("Client - " + name);
-                validUsername = true;
-
-                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
-                setFigure(figure);
-
-                sendButton.setOnAction(event -> sendMessage());
-                visibilityButton.setText("Alle");
-                visibilityButton.setOnAction(event -> toggleVisibility());
-                //stage.setOnCloseRequest(event -> shutdown());
-
-                //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
-            } else {
-                //falls Username empty
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                alert.showAndWait();
-
-                Platform.exit();
-            }
-        }
+        /*
+        sendButton.setOnAction(event -> sendMessage());
+        visibilityButton.setText("Alle");
+        visibilityButton.setOnAction(event -> toggleVisibility());
+        */
     }
-
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
@@ -121,7 +94,7 @@ public class ClientController {
             System.out.println("send message selected id " + getSelectedRecipientId());
 
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
-            Client.getWriter().println(serializedSendChat);
+            AI.getWriter().println(serializedSendChat);
 
             messageField.clear();
         }
@@ -154,12 +127,12 @@ public class ClientController {
         System.out.println(ready);
         SetStatus setStatus = new SetStatus(ready);
         String serializedSetStatus = Serialisierer.serialize(setStatus);
-        Client.getWriter().println(serializedSetStatus);
+        AI.getWriter().println(serializedSetStatus);
 
         //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
         MapSelected mapSelected = new MapSelected("");
         String serializedMapSelected = Serialisierer.serialize(mapSelected);
-        Client.getWriter().println(serializedMapSelected);
+        AI.getWriter().println(serializedMapSelected);
     }
 
     private int selectedRecipientId = -1; // Initialize with a default value
@@ -233,49 +206,22 @@ public class ClientController {
         System.exit(0);
     }
 
-    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
-        Dialog<Integer> dialog = new Dialog<>();
-        dialog.setTitle("Robot Selection");
-        dialog.setHeaderText("Please select a robot:");
-
-        // GridPane für die Anordnung der Bilder und Namen
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-
+    private int showRobotSelectionDialogAI(ArrayList<Integer> takenFigures) {
+        ArrayList<Integer> availableRobots = new ArrayList<>();
         for (int i = 1; i <= 6; i++) {
-            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-
-            Label nameLabel = new Label("Robot " + i);
-            nameLabel.setAlignment(Pos.CENTER);
-
-            // Hinzufügen von ImageView und Label zum GridPane
-            grid.add(imageView, i - 1, 0);
-            grid.add(nameLabel, i - 1, 1);
-
-            // Überprüfen, ob der Roboter bereits genommen wurde
-            if (takenFigures.contains(i)) {
-                imageView.setDisable(true); // Deaktivieren des ImageView
-                imageView.setOpacity(0.1); // Reduzierung der Transparenz
-            } else {
-                // Event Handler für Klicks auf das ImageView
-                final int robotNumber = i;
-                imageView.setOnMouseClicked(event -> {
-                    dialog.setResult(robotNumber);
-                    dialog.close();
-                });
+            if (!takenFigures.contains(i)) {
+                availableRobots.add(i);
             }
         }
 
-        // Hinzufügen des GridPane zum Dialog
-        dialog.getDialogPane().setContent(grid);
+        if (availableRobots.isEmpty()) {
+            // Keine verfügbaren Roboter mehr
+            return 0;
+        }
 
-        // Anzeigen des Dialogs und Warten auf das Ergebnis
-        Optional<Integer> result = dialog.showAndWait();
-        return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
+        // Zufällige Auswahl eines verfügbaren Roboters für die KI
+        Random random = new Random();
+        return availableRobots.get(random.nextInt(availableRobots.size()));
     }
 
     private void initializePlayerNames() {
@@ -286,7 +232,12 @@ public class ClientController {
         }
     }
 
+    // Dialog nicht notwendig, da AI automatisch DizzyHighway auswählt
+    /*
     public String showSelectMapDialog() {
+
+        String selectedMap = null;
+
 
         String selectedMap = null;
 
@@ -302,22 +253,25 @@ public class ClientController {
                 selectedMap = result.get();
             }
         }
+
         return selectedMap;
     }
 
-    public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
+     */
+
+    public void loadDizzyHighwayFXMLAI(AI ai, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighwayAI.fxml"));
                 Node dizzyHighway = loader.load();
 
                 // Get  controller
-                DizzyHighwayController dizzyHighwayController = loader.getController();
+                DizzyHighwayControllerAI dizzyHighwayControllerAI = loader.getController();
 
-                mapController = dizzyHighwayController;
+                mapController = dizzyHighwayControllerAI;
 
-                dizzyHighwayController.init(client, primaryStage);
-                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+                dizzyHighwayControllerAI.init(ai, primaryStage);
+                dizzyHighwayControllerAI.setRootVBox(DizzyHighwayMap);
 
                 // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
@@ -359,64 +313,27 @@ public class ClientController {
     }
 
     public void setStartingPoint() {
-        Dialog<Integer> dialog = new Dialog<>();
-        dialog.setTitle("Startingpoint Selection");
-        dialog.setHeaderText("Please select a Startingpoint:");
-
-        // Create buttons for each robot
-        ButtonType button1 = new ButtonType("Start 1", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button2 = new ButtonType("Start 2", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button3 = new ButtonType("Start 3", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button4 = new ButtonType("Start 4", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button5 = new ButtonType("Start 5", ButtonBar.ButtonData.OK_DONE);
-        ButtonType button6 = new ButtonType("Start 6", ButtonBar.ButtonData.OK_DONE);
-
-        // Create a map to associate button types with integer values
-        HashMap<ButtonType, Integer> buttonMap = new HashMap<>();
-        buttonMap.put(button1, 1);
-        buttonMap.put(button2, 2);
-        buttonMap.put(button3, 3);
-        buttonMap.put(button4, 4);
-        buttonMap.put(button5, 5);
-        buttonMap.put(button6, 6);
-
-        // Add buttons to the dialog
-        dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
-
-        //show the dialog and wait for user input
-        //dialog.initOwner(stage);
-
-        //disable previously selected buttons
-        for (Integer takenStartingPoint : takenStartPoints) {
-            ButtonType buttonType = buttonMap.entrySet().stream()
-                    .filter(entry -> entry.getValue() == takenStartingPoint)
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElse(null);
-
-            if (buttonType != null) {
-                Node buttonNode = dialog.getDialogPane().lookupButton(buttonType);
-                buttonNode.setDisable(true);
+        ArrayList<Integer> availableStartingPoints = new ArrayList<>();
+        for (int i = 1; i <= 6; i++) {
+            if (!takenStartPoints.contains(i)) {
+                availableStartingPoints.add(i);
             }
         }
-        //show dialog, wait for input
-        Optional<Integer> result = dialog.showAndWait();
-        // Process user input and return the selected robot (index starting from 1)
-        if (result.isPresent()) {
-            int selectedStartingpoint = buttonMap.get(result.get());
-            // Get the selected button
-            ButtonType selectedButtonType = buttonMap.entrySet().stream()
-                    .filter(entry -> entry.getValue() == selectedStartingpoint)
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElse(null);
 
-            if (selectedButtonType != null) {
-                Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
-                selectedButton.setDisable(true); // Disable the selected button
-            }
-            setStartingPointXY(selectedStartingpoint);
+        if (availableStartingPoints.isEmpty()) {
+            // Kein verfügbarer StartingPoint mehr
+            return;
         }
+
+        // Zufällige Auswahl eines verfügbaren StartingPoints für die AI
+        Random random = new Random();
+        int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
+        if (selectedStartingPoint == 0){
+            selectedStartingPoint = 1;
+        }
+
+        // Process the selected StartingPoint
+        setStartingPointXY(selectedStartingPoint);
     }
 
     public void setStartingPointXY(int StartingPointNumber){
