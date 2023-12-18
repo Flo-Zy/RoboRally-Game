@@ -968,7 +968,7 @@ public class ClientHandler implements Runnable {
                             return false;
                         }
                     }
-                }else if(yCoordinate - 1 < 0 && xCoordinate > 12){
+                }else if(yCoordinate - 1 < 0 && xCoordinate >= 3){
                     for(Player player : Server.getGame().getPlayerList()){
                         if(robot.equals(player.getRobot())){
                             player.getRobot().setX(7);
@@ -1023,7 +1023,7 @@ public class ClientHandler implements Runnable {
                 }
                 break;
             case "bottom":
-                if (yCoordinate + 1 < 10 && xCoordinate < 3) {
+                if (yCoordinate + 1 > 10 && xCoordinate < 3) {
                     for(Player player : Server.getGame().getPlayerList()){
                         if(robot.equals(player.getRobot())){
                             player.getRobot().setX(player.getRobot().getStartingPointX());
