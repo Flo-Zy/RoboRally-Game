@@ -311,9 +311,6 @@ public class DizzyHighwayController extends MapController {
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = playerDrawPileMap.get(clientId);
 
-        // Hashmap die den Index der Karte nach klicken auf eine Karte in totalHand speichert
-        Map<Integer, Card> indexToCardMap = new HashMap<>();
-
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
             // Prüfe, ob die HBox totalHand gefunden wurde
@@ -332,6 +329,7 @@ public class DizzyHighwayController extends MapController {
                         // Füge den Event-Handler für das ImageView hinzu
                         //if(counter1.get() <= 4 ) {
                             handImageView.setOnMouseClicked(mouseEvent -> {
+
                                 if (counter1.get() < 5) {
                                     // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                     ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
@@ -353,7 +351,8 @@ public class DizzyHighwayController extends MapController {
                                     zahlen.add(new Zahlen(index, counter1.get()));
                                     indexToCounterMap.put(index, counter1.get());
 
-                                    counter1.incrementAndGet();
+                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                    counter1.set(smallestEmptyRegisterIndex);
 
                                 } else {
                                     System.out.println("Register voll");
@@ -368,25 +367,22 @@ public class DizzyHighwayController extends MapController {
                     ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
 
                     if (registerImageView != null) {
-                        final int registerIndex = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
-                        // Füge den Event-Handler für das ImageView hinzu
+                        final int registerIndex = i;
 
-                            registerImageView.setOnMouseClicked(mouseEvent -> {
-                                if(counter1.get() > 0 && counter1.get() < 5 ) {
+                        registerImageView.setOnMouseClicked(mouseEvent -> {
+                            if (registerImageView.getImage() != null) {
+                                if (counter1.get() > 0 && counter1.get() < 5) {
                                     int indexNew = mapRegisterIndexToHandIndex(registerIndex);
                                     counter1.decrementAndGet();
 
                                     if (indexNew < 9) {
                                         ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
-
-                                        // Image cardImage = new Image(drawPileClient.get(index2).getImageUrl());
-                                        // handImageView.setImage(cardImage);
-
                                         handImageView.setVisible(true);
-                                        // handImageView.setManaged(true);
 
-                                        // gewählte Karte aus Hand unsichtbar machen
                                         registerImageView.setImage(null);
+
+                                        int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                        counter1.set(smallestEmptyRegisterIndex);
 
                                         // sende serialisiertes SelectedCard
                                         SelectedCard selectedCard = new SelectedCard(null, registerIndex);
@@ -396,13 +392,24 @@ public class DizzyHighwayController extends MapController {
                                         System.out.println("Hand voll");
                                     }
                                 }
-                            });
-
+                            }
+                        });
                     }
                 }
             }
         }
     }
+
+    private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
+        for (int i = 0; i < 5; i++) {
+            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+            if (registerImageView.getImage() == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     public void setRegisterVisibilityFalse(){
         // Prüfe, ob die HBox totalRegister gefunden wurde
