@@ -87,7 +87,7 @@
 
                     <ImageView fx:id="field04b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Antenne.png" />
+                            <Image url="@/boardElementsPNGs/Antenne.png" />
                         </image>
                     </ImageView>
 
@@ -165,7 +165,7 @@
 
                     <ImageView fx:id="field12b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             90
@@ -228,7 +228,7 @@
 
                     <ImageView fx:id="field17b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             270
@@ -267,7 +267,7 @@
 
                     <ImageView fx:id="field20b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/GreenConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
                         <rotate>
                             90
@@ -300,7 +300,7 @@
 
                     <ImageView fx:id="field24b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             180
@@ -315,7 +315,7 @@
 
                     <ImageView fx:id="field25b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             180
@@ -348,7 +348,7 @@
 
                     <ImageView fx:id="field29b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/GreenConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
                         <rotate>
                             90
@@ -403,28 +403,10 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field37b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="7">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
-                    </ImageView>
-
                     <ImageView fx:id="field38a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="8">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field38b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="8">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field39a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="9">
@@ -435,7 +417,7 @@
 
                     <ImageView fx:id="field39b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="9">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
+                            <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
@@ -447,7 +429,7 @@
 
                     <ImageView fx:id="field40b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                         <rotate>
                             180
@@ -462,8 +444,11 @@
 
                     <ImageView fx:id="field41b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field42a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
@@ -474,7 +459,7 @@
 
                     <ImageView fx:id="field42b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                         <rotate>
                             180
@@ -489,11 +474,15 @@
 
                     <ImageView fx:id="field43b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyorRightTurn.png" />
                         </image>
                         <rotate>
                             180
                         </rotate>
+                        <scaleX>
+                            -1
+                        </scaleX>
+
                     </ImageView>
 
                     <ImageView fx:id="field44a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
@@ -502,28 +491,10 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field44b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            180
-                        </rotate>
-                    </ImageView>
-
                     <ImageView fx:id="field45a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field45b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            180
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field46a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="6">
@@ -534,11 +505,8 @@
 
                     <ImageView fx:id="field46b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyorRightTurn.png" />
                         </image>
-                        <rotate>
-                            180
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field47a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
@@ -549,7 +517,7 @@
 
                     <ImageView fx:id="field47b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                         <scaleX>
                             -1
@@ -564,11 +532,8 @@
 
                     <ImageView fx:id="field48b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
-                        <rotate>
-                            -90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field49" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
@@ -577,6 +542,17 @@
                         </image>
                     </ImageView>
 
+                    <ImageView fx:id="field49b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field49c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                    </ImageView>
 
                     <ImageView fx:id="field50a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
                         <image>
@@ -584,31 +560,11 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field50b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            180
-                        </rotate>
-                    </ImageView>
 
                     <ImageView fx:id="field51a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="1">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field51b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
-                        </image>
-                        <scaleX>
-                            -1
-                        </scaleX>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field52a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="2">
@@ -619,7 +575,7 @@
 
                     <ImageView fx:id="field52b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
+                            <Image url="@/boardElementsPNGs/Checkpoint4.png" />
                         </image>
                     </ImageView>
 
@@ -659,15 +615,6 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field58b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="8">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
-                    </ImageView>
-
                     <ImageView fx:id="field59" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="9">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -690,7 +637,7 @@
 
                     <ImageView fx:id="field61b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyorLeftBottom.png" />
                         </image>
                         <rotate>
                             -90
@@ -711,16 +658,7 @@
 
                     <ImageView fx:id="field63b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserBeam.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field63c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
                         <rotate>
                             90
@@ -735,16 +673,7 @@
 
                     <ImageView fx:id="field64b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserShooterOne.png" />
-                        </image>
-                        <rotate>
-                            -90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field64c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/GearGreenClockwise.png" />
                         </image>
                         <rotate>
                             -90
@@ -765,17 +694,8 @@
 
                     <ImageView fx:id="field66b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserBeam.png" />
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field66c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
-                        </image>
-                        <rotate>
-
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field67" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="7">
@@ -788,15 +708,6 @@
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field68b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="8">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field69" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="9">
@@ -821,7 +732,7 @@
 
                     <ImageView fx:id="field71b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="1">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
                         <rotate>
                             -90
@@ -842,7 +753,7 @@
 
                     <ImageView fx:id="field73b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/Custom/Reboot.png" />
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
                     </ImageView>
 
@@ -861,7 +772,7 @@
 
                     <ImageView fx:id="field75b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
+                            <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
@@ -873,7 +784,7 @@
 
                     <ImageView fx:id="field76b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserShooterOne.png" />
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
                         <rotate>
                             180
@@ -882,7 +793,7 @@
 
                     <ImageView fx:id="field76c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             180
@@ -901,15 +812,6 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field78b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="8">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
-                    </ImageView>
-
                     <ImageView fx:id="field79" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="9">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
@@ -918,25 +820,22 @@
 
 
 
-                    <ImageView fx:id="field80" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
+                    <ImageView fx:id="field80a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field81a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                    <ImageView fx:id="field80b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                            <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field81b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                    <ImageView fx:id="field81" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                        <rotate>
-                            -90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field82" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="2">
@@ -953,25 +852,25 @@
 
                     <ImageView fx:id="field83b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserShooterOne.png" />
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field83c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field84a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
+                    <ImageView fx:id="field84" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field84b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
                         </image>
                     </ImageView>
 
@@ -981,10 +880,28 @@
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field86" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
+                    <ImageView fx:id="field86a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field86b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                        <rotate>
+                            180
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field86c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field87" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="7">
@@ -1001,7 +918,7 @@
 
                     <ImageView fx:id="field88b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
                         <rotate>
                             90
@@ -1016,30 +933,39 @@
 
 
 
-                    <ImageView fx:id="field90" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                    <ImageView fx:id="field90a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field91a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
+                    <ImageView fx:id="field90b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field90c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field91" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field91b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            -90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field92" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                    <ImageView fx:id="field92a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field92b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
                     </ImageView>
 
@@ -1051,23 +977,23 @@
 
                     <ImageView fx:id="field93b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserBeam.png" />
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field93c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                    <ImageView fx:id="field94a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field94b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             180
                         </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field94" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="4">
-                        <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
                     </ImageView>
 
                     <ImageView fx:id="field95a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
@@ -1078,20 +1004,8 @@
 
                     <ImageView fx:id="field95b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserShooterOne.png" />
+                            <Image url="@/boardElementsPNGs/GearRedCounterClockwise.png" />
                         </image>
-                        <rotate>
-                            90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field95c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
-                        </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field96a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
@@ -1102,25 +1016,19 @@
 
                     <ImageView fx:id="field96b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/LaserBeam.png" />
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field96c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/SimpleWall.png" />
-                        </image>
-                        <rotate>
-                            -90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field97" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="7">
+                    <ImageView fx:id="field97a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="7">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field97b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="7">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Pit.png" />
                         </image>
                     </ImageView>
 
@@ -1132,7 +1040,7 @@
 
                     <ImageView fx:id="field98b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/GreenConveyorLeftBottom.png" />
                         </image>
                         <rotate>
                             90
@@ -1146,55 +1054,130 @@
                     </ImageView>
 
 
-                    <ImageView fx:id="field100" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
+                    <ImageView fx:id="field100a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field101a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
+                    <ImageView fx:id="field100b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserBeam.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field101" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field101b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
+                    <ImageView fx:id="field102a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field102b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                        <image>
+                            <Image url="@/boardElementsPNGs/Checkpoint1.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field102c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                        <rotate>
+                            90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field102d" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                        <rotate>
+                            90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field103a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field103b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                         <rotate>
                             -90
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field102" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                    <ImageView fx:id="field103c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserBeam.png" />
+                        </image>
+                        <rotate>
+                            -90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field104a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="4">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field103" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
+                    <ImageView fx:id="field104b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserBeam.png" />
+                        </image>
+                        <rotate>
+                            90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field105a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="5">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field104" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="4">
+                    <ImageView fx:id="field105b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="5">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserBeam.png" />
+                        </image>
+                        <rotate>
+                            90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field106a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="6">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field105" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="5">
+                    <ImageView fx:id="field106b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
+                        <rotate>
+                            -90
+                        </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field106" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="6">
+                    <ImageView fx:id="field106c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                            <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
+                        <rotate>
+                            90
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field107a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
@@ -1205,46 +1188,62 @@
 
                     <ImageView fx:id="field107b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
+                            <Image url="@/boardElementsPNGs/Checkpoint3.png" />
                         </image>
                     </ImageView>
 
-
-                    <ImageView fx:id="field108a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="8">
+                    <ImageView fx:id="field107c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
                         <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field108b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="8">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
-                        </image>
-                        <scaleY>
-                            -1
-                        </scaleY>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field109a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
+                    <ImageView fx:id="field107d" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                        <rotate>
+                            -90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field108" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="8">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field109b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                    </ImageView>
-
-
-                    <ImageView fx:id="field110" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11">
+                    <ImageView fx:id="field109" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field110a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11">
+                        <image>
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field110b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11">
+                        <image>
+                            <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                        <rotate>
+                            180
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field110c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png"/>
+                        </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field111a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="1">
@@ -1255,10 +1254,10 @@
 
                     <ImageView fx:id="field111b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="1">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                         <rotate>
-                            90
+                            180
                         </rotate>
                     </ImageView>
 
@@ -1270,11 +1269,11 @@
 
                     <ImageView fx:id="field112b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
-                        <scaleY>
-                            -1
-                        </scaleY>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field113a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="3">
@@ -1285,8 +1284,11 @@
 
                     <ImageView fx:id="field113b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="3">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyorRightTurn.png" />
                         </image>
+                       <rotate>
+                           180
+                       </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field114a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="4">
@@ -1297,19 +1299,13 @@
 
                     <ImageView fx:id="field114b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="4">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field115a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="5">
+                    <ImageView fx:id="field115" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="5">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field115b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="5">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
@@ -1321,9 +1317,15 @@
 
                     <ImageView fx:id="field116b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="6">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyorRightTurn.png" />
                         </image>
+                        <scaleX>
+                            -1
+                        </scaleX>
                     </ImageView>
+
+
+
 
                     <ImageView fx:id="field117a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="7">
                         <image>
@@ -1333,7 +1335,7 @@
 
                     <ImageView fx:id="field117b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="7">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
@@ -1345,11 +1347,8 @@
 
                     <ImageView fx:id="field118b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueMergeConveyorFromUp+RightToDown.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
-                        <rotate>
-                            180
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field119a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="9">
@@ -1360,74 +1359,62 @@
 
                     <ImageView fx:id="field119b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="9">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field120a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
+                    <ImageView fx:id="field120" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field120b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/EnergyRed.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field121a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="1">
+                    <ImageView fx:id="field121" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="1">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field121b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="1">
+                    <ImageView fx:id="field122" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2">
                         <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field123" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field124a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field124b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="4">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
+                        </image>
+                        <rotate>
+                            90
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field125a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="5">
+                        <image>
+                            <Image url="@/boardElementsPNGs/emptyField.png" />
+                        </image>
+                    </ImageView>
+
+                    <ImageView fx:id="field125b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="5">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             -90
                         </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field122a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2">
-                        <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field122b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2">
-                        <image>
-                            <Image url="@/boardElementsPNGs/2016TileSetA/BlueConveyor.png" />
-                        </image>
-                        <rotate>
-                            -90
-                        </rotate>
-                    </ImageView>
-
-                    <ImageView fx:id="field123a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
-                        <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field123b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
-                        <image>
-                            <Image url="@/boardElementsPNGs/Custom/Checkpoint1.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field124" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="4">
-                        <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
-                    </ImageView>
-
-                    <ImageView fx:id="field125" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="5">
-                        <image>
-                            <Image url="@/boardElementsPNGs/emptyField.png" />
-                        </image>
                     </ImageView>
 
                     <ImageView fx:id="field126" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="6">
