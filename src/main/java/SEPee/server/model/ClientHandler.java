@@ -228,16 +228,16 @@ public class ClientHandler implements Runnable {
                             //logik für karteneffekte
                             switch (lastPlayedCard) {
                                 case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
-                                    handleRobotMovement(1, true);
-                                    break;
-                                case "MoveI":
                                     handleRobotMovement(1, false);
                                     break;
+                                case "MoveI":
+                                    handleRobotMovement(1, true);
+                                    break;
                                 case "MoveII":
-                                    handleRobotMovement(2, false);
+                                    handleRobotMovement(2, true);
                                     break;
                                 case "MoveIII":
-                                    handleRobotMovement(3, false);
+                                    handleRobotMovement(3, true);
                                     break;
                                 case "PowerUp":
                                     //lastPlayedCard = "PowerUp";
@@ -757,18 +757,20 @@ public class ClientHandler implements Runnable {
         System.out.println("Client with ID " + clientId + " not found.");
     }
 
-    private void handleRobotMovement(int moves, boolean isBackward) throws InterruptedException {
+    private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
         for (int i = 0; i < moves; i++) {
-            boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isBackward);
+            boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
             if (canMove) {
-                checkForRobotsAndMove(this.robot, isBackward);
+                checkForRobotsAndMove(this.robot, isForward);
 
-                if (!isBackward && checkForRebootAndTeleport(this.robot)) {
+                if (isForward && checkForRebootAndTeleport(this.robot)) {
                     MoveI.makeEffect(this.robot);
+                } else{
+                    BackUp.makeEffect(this.robot);
                 }
             } else {
-                if (!isBackward) {
+                if (isForward) {
                     System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
                 } else {
                     System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
@@ -786,7 +788,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkForRobotsAndMove(Robot robot, boolean isBackward) {
+    private void checkForRobotsAndMove(Robot robot, boolean isForward) {
         String orientation = robot.getOrientation();
         int xCoordinatePushingRobot = robot.getX();
         int yCoordinatePushingRobot = robot.getY();
@@ -795,32 +797,31 @@ public class ClientHandler implements Runnable {
             int xPlayerFleeingRobot = player.getRobot().getX();
             int yPlayerFleeingRobot = player.getRobot().getY();
 
-            if (shouldPush(isBackward, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
-                movePlayerRobot(player, isBackward, orientation);
+            if (shouldPush(isForward, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                movePlayerRobot(player, isForward, orientation);
             }
         }
     }
-
-    private boolean shouldPush(boolean isBackward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
+    private boolean shouldPush(boolean isForward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
         switch (orientation) {
             case "top":
-                boolean topCondition = (isBackward && yFleeing == yPushing + 1 && xFleeing == xPushing) ||
-                        (!isBackward && yFleeing == yPushing - 1 && xFleeing == xPushing);
+                boolean topCondition = (isForward && yFleeing == yPushing - 1 && xFleeing == xPushing) ||
+                        (!isForward && yFleeing == yPushing + 1 && xFleeing == xPushing);
                 System.out.println("Top condition: " + topCondition);
                 return topCondition;
             case "right":
-                boolean rightCondition = (isBackward && xFleeing == xPushing - 1 && yFleeing == yPushing) ||
-                        (!isBackward && xFleeing == xPushing + 1 && yFleeing == yPushing);
+                boolean rightCondition = (isForward && xFleeing == xPushing + 1 && yFleeing == yPushing) ||
+                        (!isForward && xFleeing == xPushing - 1 && yFleeing == yPushing);
                 System.out.println("Right condition: " + rightCondition);
                 return rightCondition;
             case "left":
-                boolean leftCondition = (isBackward && xFleeing == xPushing + 1 && yFleeing == yPushing) ||
-                        (!isBackward && xFleeing == xPushing - 1 && yFleeing == yPushing);
+                boolean leftCondition = (isForward && xFleeing == xPushing - 1 && yFleeing == yPushing) ||
+                        (!isForward && xFleeing == xPushing + 1 && yFleeing == yPushing);
                 System.out.println("Left condition: " + leftCondition);
                 return leftCondition;
             case "bottom":
-                boolean bottomCondition = (isBackward && yFleeing == yPushing - 1 && xFleeing == xPushing) ||
-                        (!isBackward && yFleeing == yPushing + 1 && xFleeing == xPushing);
+                boolean bottomCondition = (isForward && yFleeing == yPushing + 1 && xFleeing == xPushing) ||
+                        (!isForward && yFleeing == yPushing - 1 && xFleeing == xPushing);
                 System.out.println("Bottom condition: " + bottomCondition);
                 return bottomCondition;
             default:
@@ -828,22 +829,22 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void movePlayerRobot(Player player, boolean isBackward, String orientation) {
+    private void movePlayerRobot(Player player, boolean isForward, String orientation) {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
         switch (orientation) {
             case "top":
-                y = isBackward ? y + 1 : y - 1;
+                y = isForward ? y - 1 : y + 1;
                 break;
             case "right":
-                x = isBackward ? x - 1 : x + 1;
+                x = isForward ? x + 1 : x - 1;
                 break;
             case "left":
-                x = isBackward ? x + 1 : x - 1;
+                x = isForward ? x - 1 : x + 1;
                 break;
             case "bottom":
-                y = isBackward ? y - 1 : y + 1;
+                y = isForward ? y + 1 : y - 1;
                 break;
         }
 
@@ -856,6 +857,7 @@ public class ClientHandler implements Runnable {
         String serializedMovement = Serialisierer.serialize(movement);
         broadcast(serializedMovement);
     }
+
 
     private boolean checkForRebootAndTeleport(Robot robot) {
         String orientation = robot.getOrientation();
@@ -1072,7 +1074,10 @@ public class ClientHandler implements Runnable {
                 // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
-                result.append("ConveyorBelt " + Arrays.toString(orientations) + ", ");
+                int speed = field.getSpeed();
+
+                result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
+
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
                 // Additional checks or actions for laser
@@ -1128,24 +1133,19 @@ public class ClientHandler implements Runnable {
         } else if (fieldCheck.contains("Wall [left") && (robot.getOrientation().equals("left") && isForward || robot.getOrientation().equals("right") && !isForward)) {
             canMove = false;
         }
-
         return canMove;
     }
 
     public void fieldActivation() throws InterruptedException {
         // Conveyor Belts
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
-
-            //tester strings checker
-            System.out.println("size of playerlist " + Server.getGame().getPlayerList().size());
-            System.out.println(Server.getGame().getPlayerList().get(i));
-            System.out.println("708 name: " + Server.getGame().getPlayerList().get(i).getName() + " figure: " + Server.getGame().getPlayerList().get(i).getFigure() + " x:" + Server.getGame().getPlayerList().get(i).getRobot().getX() + ", y:" + Server.getGame().getPlayerList().get(i).getRobot().getY());
-
-            checkBlueAndGreenConveyorBelts(i);
+            checkBlueConveyorBelts(i);
+        }
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            checkGreenConveyorBelts(i);
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkBoardLaser(i);
-
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkRobotLasers(i);
@@ -1153,14 +1153,12 @@ public class ClientHandler implements Runnable {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkCheckpoint(i);
         }
-
-
     }
 
-    private void checkBlueAndGreenConveyorBelts(int i) throws InterruptedException {
+    private void checkBlueConveyorBelts (int i) throws InterruptedException {
         //blue conveyor
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
-        if (standingOnBlueConveyor.contains("ConveyorBelt")) {
+        if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
             if (standingOnBlueConveyor.contains("ConveyorBelt [top")) {
 
                 //falls austreten aus blu conveyor funktioniert set nur einseitig!
@@ -1202,6 +1200,41 @@ public class ClientHandler implements Runnable {
 
                 checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
+            }
+        }
+    }
+
+    private void checkGreenConveyorBelts (int i) throws InterruptedException {
+        //blue conveyor
+        String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if (standingOnBlueConveyor.contains("ConveyorBelt 1")) {
+            if (standingOnBlueConveyor.contains("ConveyorBelt [top")) {
+                Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() - 1);
+
+                Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt [right")) {
+                Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() + 1);
+
+                Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt [bottom")) {
+                Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() + 1);
+
+                Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt [left")) {
+                Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() - 1);
+
+                Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
             }
         }
     }

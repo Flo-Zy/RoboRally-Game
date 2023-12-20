@@ -18,7 +18,7 @@ public class ConveyorBelt extends Field{
     //private int[] registers;
     //private int count;
     public ConveyorBelt(String isOnBoard, int speed, String[] orientations) {
-        super("ConveyorBelt", isOnBoard, orientations);
+        super("ConveyorBelt", isOnBoard, speed, orientations);
         this.speed = speed;
         this.orientations = orientations;
     }
