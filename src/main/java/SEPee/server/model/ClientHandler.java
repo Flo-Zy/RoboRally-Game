@@ -141,7 +141,7 @@ public class ClientHandler implements Runnable {
                             if (!mapSelected.getMessageBody().getMap().equals("")) {
                                 broadcast(serializedReceivedString);
                                 //speicher die gewählte map (die gameMap)
-                                if (Server.getFirstReady() == player.getId())
+                                if (Server.getFirstReady() == player.getId()) {
                                     switch (mapSelected.getMessageBody().getMap()) {
                                         case "DizzyHighway":
                                             DizzyHighway dizzyHighway = new DizzyHighway();
@@ -160,7 +160,7 @@ public class ClientHandler implements Runnable {
                                             Server.setGameMap(deathTrap);
                                             break;
                                     }
-
+                                }
                             }
                             //check alle ready und mind 2
                             if (!Server.isGameStarted() && checkNumReady() >= 2 && checkNumReady() == Server.getPlayerList().size()
@@ -172,6 +172,7 @@ public class ClientHandler implements Runnable {
                                 MapSelected mapSelected1 = new MapSelected(Server.getGameMap().getBordName());
                                 String serializedMapSelected1 = Serialisierer.serialize(mapSelected1);
                                 broadcast(serializedMapSelected1);
+
                                 //Sende an alle Clients Spiel wird gestarted
                                 GameStarted gameStarted = new GameStarted(Server.getGameMap().getGameBoard());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
@@ -283,17 +284,6 @@ public class ClientHandler implements Runnable {
                             }
 
                             broadcast(serializedCardPlayed);
-
-                            // update im Server game Objekt den Roboter dieses Spielers
-                            //hasans losung
-                            /*
-                            for(Player player : Server.getGame().getPlayerList()){
-                                if(player.getId() == this.player.getId()){
-                                    player.setRobot(this.robot);
-                                }
-                            }
-                             */
-
 
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
@@ -475,27 +465,23 @@ public class ClientHandler implements Runnable {
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
-                            this.robot = new Robot(0, 0, "right");
+                            if(Server.getGameMap().getBordName().equals("DeathTrap")) {
+                                this.robot = new Robot(0, 0, "left");
+                            } else {
+                                this.robot = new Robot(0, 0, "right");
+                            }
+
                             this.robot.setY(setStartingPoint.getMessageBody().getY());
                             this.robot.setX(setStartingPoint.getMessageBody().getX());
 
                             this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
                             this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
 
-                            /*
-                            // hasans Lösung
-                            for(Player player : Server.getGame().getPlayerList()){
-                                if(player.getId() == this.player.getId()){
-                                    player.setRobot(this.robot);
-                                }
-                            }
-                             */
-
-                            // Find the associated Player and set the Robot for that Player
+                            //finds the associated Player and set the robot for that player
                             Player associatedPlayer = Server.getGame().getPlayerList().get(clientId - 1);
                             associatedPlayer.setRobot(this.robot);
 
-                            // Add the Game class (which implements RobotPositionChangeListener) as a listener to the Robot
+                            // Adds the game class(which implements RobotPositionChangeListener)as a listener to the robot
                             this.robot.addPositionChangeListener(Server.getGame());
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
