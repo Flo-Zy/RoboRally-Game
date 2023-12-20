@@ -424,7 +424,7 @@ public class ClientController {
     }
 
     public void addTakenStartingPoints(int x, int y){
-        int combinedValue = x*10 + y;
+        int combinedValue = x * 10 + y;
         switch(combinedValue){
             case 11:
                 takenStartPoints.add(1);
@@ -442,6 +442,30 @@ public class ClientController {
                 takenStartPoints.add(5);
                 break;
             case 18:
+                takenStartPoints.add(6);
+                break;
+        }
+    }
+
+    public void addTakenStartingPointsDeathTrap(int x, int y){
+        int combinedValue = x * 10 + y;
+        switch(combinedValue){
+            case 111:
+                takenStartPoints.add(1);
+                break;
+            case 123:
+                takenStartPoints.add(2);
+                break;
+            case 114:
+                takenStartPoints.add(3);
+                break;
+            case 115:
+                takenStartPoints.add(4);
+                break;
+            case 126:
+                takenStartPoints.add(5);
+                break;
+            case 118:
                 takenStartPoints.add(6);
                 break;
         }
@@ -504,7 +528,12 @@ public class ClientController {
                 Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
                 selectedButton.setDisable(true); // Disable the selected button
             }
-            setStartingPointXY(selectedStartingpoint);
+
+            if(Client.getSelectedMap1().equals("DeathTrap")) {
+                setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
+            } else {
+                setStartingPointXY(selectedStartingpoint);
+            }
         }
     }
 
@@ -532,6 +561,35 @@ public class ClientController {
                 break;
             case 6:
                 startPointX = 1;
+                startPointY = 8;
+                break;
+        }
+    }
+
+    public void setStartingPointXYDeathTrap(int StartingPointNumber){
+        switch(StartingPointNumber){
+            case 1:
+                startPointX = 11;
+                startPointY = 1;
+                break;
+            case 2:
+                startPointX = 12;
+                startPointY = 3;
+                break;
+            case 3:
+                startPointX = 11;
+                startPointY = 4;
+                break;
+            case 4:
+                startPointX = 11;
+                startPointY = 5;
+                break;
+            case 5:
+                startPointX = 12;
+                startPointY = 6;
+                break;
+            case 6:
+                startPointX = 11;
                 startPointY = 8;
                 break;
         }
