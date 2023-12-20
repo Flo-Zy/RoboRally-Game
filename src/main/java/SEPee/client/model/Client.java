@@ -192,7 +192,7 @@ public class Client extends Application {
                             }
                             break;
                         case "SelectMap":
-                            System.out.println("SelectMap" + controller.getName());
+                            System.out.println("SelectMap von " + controller.getName());
                             SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
                             mapList = selectMap.getMessageBody().getAvailableMaps();
                             Platform.runLater(() -> {
@@ -213,10 +213,12 @@ public class Client extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "DizzyHighway":
+                                    selectedMap1 = "DizzyHighway";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     DizzyHighwayController mapController0 = loader.getController();
                                     break;
                                 case "ExtraCrispy":
+                                    selectedMap1 = "ExtraCrispy";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                                     ExtraCrispyController mapController1 = loader.getController();
                                     break;
@@ -228,7 +230,15 @@ public class Client extends Application {
                         case "GameStarted":
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
-                            controller.loadDizzyHighwayFXML(this, primaryStage);
+
+                            if(selectedMap1.equals("DizzyHighway")) {
+                                controller.loadDizzyHighwayFXML(this, primaryStage);
+                            } else if(selectedMap1.equals("ExtraCrispy")) {
+                                controller.loadExtraCrispyFXML(this, primaryStage);
+                            }
+
+                            // weitere Maps
+
                             break;
                         case "ReceivedChat":
                             String serializedReceivedChat = serializedReceivedString;

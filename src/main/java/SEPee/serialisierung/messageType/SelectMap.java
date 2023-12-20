@@ -39,6 +39,7 @@ public class SelectMap extends Message{
 
         public SelectMapBody() {
             availableMaps.add("DizzyHighway");
+            availableMaps.add("ExtraCrispy");
         }
 
         public ArrayList<String> getAvailableMaps() {
