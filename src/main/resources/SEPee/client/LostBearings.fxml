@@ -893,9 +893,6 @@
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field84a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
@@ -932,9 +929,6 @@
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
-                        <rotate>
-                            90
-                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field87a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="7">
@@ -1005,6 +999,15 @@
                     <ImageView fx:id="field93b" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
+                        </image>
+                        <rotate>
+                            -180
+                        </rotate>
+                    </ImageView>
+
+                    <ImageView fx:id="field93c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                        <image>
+                            <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
                             -180
