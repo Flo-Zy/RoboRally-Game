@@ -72,62 +72,40 @@ public class Server extends Thread{
                 PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
                 writer.println(serializedHelloClient);
 
-                if (!playerList.isEmpty()) {
-                    for (int i = 0; i < playerList.size(); i++) {
-                        PlayerAdded givePlayerlist = new PlayerAdded(playerList.get(i).getId(), playerList.get(i).getName(), playerList.get(i).getFigure());
-                        String serializedGivePlayerlist = Serialisierer.serialize(givePlayerlist);
-                        writer.println(serializedGivePlayerlist);
-                    }
-                }
-                PlayerAdded givePlayerlist = new PlayerAdded(-999, "", -999);
-                String serializedGivePlayerlist = Serialisierer.serialize(givePlayerlist);
-                writer.println(serializedGivePlayerlist);
-
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String playerValues1 = reader.readLine();
-                PlayerValues deserializedPlayerValues1 = Deserialisierer.deserialize(playerValues1, PlayerValues.class);
-                String playerName = deserializedPlayerValues1.getMessageBody().getName();
-                int playerFigure = deserializedPlayerValues1.getMessageBody().getFigure();
 
-                //speichert Spielerobjekt in playerList im Server
-                clientID = assigningClientID();
-                Server.getPlayerList().add(new Player(playerName, clientID, playerFigure));
+                // Empfange Antwort vom Client
+                String serializedHelloServer = reader.readLine();
+                System.out.println(serializedHelloServer);
+                HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
+                if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
+                    clientID = assigningClientID();
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, clients, clientID);
+                    clients.add(clientHandler);
+                    //associate socket with ID in the Player object
+                    Player.associateSocketWithId(clientSocket, clientID);
 
-                    // Empfange Antwort vom Client
+                    System.out.println("101 server: " + Player.getClientIdFromSocket(clientSocket));
 
-                    String serializedHelloServer = reader.readLine();
-                    System.out.println(serializedHelloServer);
-                    HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
+                    new Thread(clientHandler).start();
+                    System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
+                    //welcome erstellen und an den Client schicken
 
-                    if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
-                        ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
-                        clients.add(clientHandler);
+                    //alive message sender erst raus weil stört unnormal.
+                    // new Thread(new AliveMessageSender()).start();
 
-                        //associate socket with ID in the Player object
-                        Player.associateSocketWithId(clientSocket, clientID);
+                    System.out.println(clientID);
+                    Welcome welcome = new Welcome(clientID);
+                    String serializedWelcome = Serialisierer.serialize(welcome);
+                    writer.println(serializedWelcome);
 
-                        System.out.println("101 server: " + Player.getClientIdFromSocket(clientSocket));
+                } else {
+                    System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
+                    clientSocket.close();
 
-
-                        new Thread(clientHandler).start();
-                        System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
-                        //welcome erstellen und an den Client schicken
-
-                        //alive message sender erst raus weil stört unnormal.
-                        // new Thread(new AliveMessageSender()).start();
-
-                        System.out.println(clientID);
-                        Welcome welcome = new Welcome(clientID);
-                        String serializedWelcome = Serialisierer.serialize(welcome);
-                        writer.println(serializedWelcome);
-
-                    } else {
-                        System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
-                        clientSocket.close();
-
-                        //FEHLERMELDUNG BEHEBEN socket muss richtig geschlossen werden
-                    }
+                    //FEHLERMELDUNG BEHEBEN socket muss richtig geschlossen werden
                 }
+            }
 
 
         } catch (IOException e) {

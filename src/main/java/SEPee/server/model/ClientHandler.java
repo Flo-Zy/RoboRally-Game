@@ -38,9 +38,10 @@ public class ClientHandler implements Runnable {
     private String lastPlayedCard = null;
     private ArrayList<String> clientHand;
 
-    public ClientHandler(Socket clientSocket, List<ClientHandler> clients) {
+    public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
         this.clients = clients;
+        this.clientId = clientId;
 
         try {
             this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -70,17 +71,11 @@ public class ClientHandler implements Runnable {
                             PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedReceivedString, PlayerValues.class);
                             playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
-
-
-                            for (int i = 0; i < Server.getPlayerList().size(); i++) {
-                                if (playerFigure == Server.getPlayerList().get(i).getFigure()) {
-                                    clientId = Server.getPlayerList().get(i).getId();
-                                }
-                            }
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                             associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure);
+                            Server.getPlayerList().add(player);
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 

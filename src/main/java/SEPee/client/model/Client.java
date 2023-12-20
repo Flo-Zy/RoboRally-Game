@@ -33,8 +33,8 @@ import lombok.Setter;
 @Getter
 public class Client extends Application {
 
-    private static final String SERVER_IP = "localhost";
-    private static final int SERVER_PORT = 8886;
+    private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    private static final int SERVER_PORT = 52018;
     @Getter
     @Setter
     private static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
@@ -80,42 +80,6 @@ public class Client extends Application {
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
             if (deserializedHelloClient.getMessageType().equals("HelloClient") && deserializedHelloClient.getMessageBody().getProtocol().equals("Version 1.0")) {
-                boolean x = true;
-                while (x) {
-                    String serializedPlayerlist = reader.readLine();
-                    Message deserializedPlayerlist = Deserialisierer.deserialize(serializedPlayerlist, Message.class);
-                    if (deserializedPlayerlist.getMessageType().equals("PlayerAdded")) {
-                        PlayerAdded addPlayer = Deserialisierer.deserialize(serializedPlayerlist, PlayerAdded.class);
-                        if (addPlayer.getMessageBody().getClientID() < 0) {
-                            x = false;
-                        } else {
-                            playerListClient.add(new Player(addPlayer.getMessageBody().getName(), addPlayer.getMessageBody().getClientID(), addPlayer.getMessageBody().getFigure()));
-                        }
-                    } else {
-                        x = false;
-                    }
-                }
-
-                for (int i = 0; i < playerListClient.size(); i++) {
-                    System.out.println(playerListClient.get(i).getName());
-                    System.out.println(playerListClient.get(i).getFigure());
-                }
-                //save taken figures in takenFigures
-                for (Player player : playerListClient) {
-                    Client.getTakenFigures().add(player.getFigure());
-                }
-
-                //Stage wird initialisiert
-                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                controller.init(this, primaryStage);
-
-                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
-                String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                writer.println(serializedPlayerValues);
-
-                primaryStage.show();
-
-
                 // Send HelloServer back to the server
                 HelloServer helloServer = new HelloServer("EifrigeEremiten", false, "Version 1.0");
                 String serializedHelloServer = Serialisierer.serialize(helloServer);
@@ -159,16 +123,23 @@ public class Client extends Application {
                             writer.println(serializedAlive);
                             break;
                         case "Welcome":
+                            System.out.println("Welcome");
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
-                            // PlayerValues schicken
-                            PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
-                            String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                            writer.println(serializedPlayerValues);
-
+                            //Stage wird initialisiert
+                            Platform.runLater(() -> {
+                                primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                                controller.init(this, primaryStage);
+                                // PlayerValues schicken
+                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                                String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                                writer.println(serializedPlayerValues);
+                                primaryStage.show();
+                            });
                             break;
                         case "PlayerAdded":
+                            System.out.println("PlayerAdded");
                             PlayerAdded playerAdded = Deserialisierer.deserialize(serializedReceivedString, PlayerAdded.class);
                             String name = playerAdded.getMessageBody().getName();
                             int id = playerAdded.getMessageBody().getClientID();
@@ -179,6 +150,9 @@ public class Client extends Application {
 
                             // Add the new player to the client-side playerList
                             playerListClient.add(newPlayer);
+                            for(Player player : playerListClient){
+                                getTakenFigures().add(player.getFigure());
+                            }
 
                             System.out.println("Player added");
                             for (int i = 0; i < playerListClient.size(); i++) {
@@ -212,10 +186,10 @@ public class Client extends Application {
                             MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
 
                             FXMLLoader loader;
-
+                            System.out.println(deserializedReceivedMap.getMessageBody().getMap());
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
-                                case "DizzyHighway":
+                                case "Dizzy Highway":
                                     selectedMap1 = "DizzyHighway";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     DizzyHighwayController mapController0 = loader.getController();
@@ -240,11 +214,13 @@ public class Client extends Application {
                                     System.out.println("Invalid Map");
                                     break;
                             }
+                            System.out.println(selectedMap1);
                             break;
+
                         case "GameStarted":
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
-
+                            System.out.println(selectedMap1);
                             if(selectedMap1.equals("DizzyHighway")) {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
                             } else if(selectedMap1.equals("ExtraCrispy")) {
@@ -358,7 +334,13 @@ public class Client extends Application {
 
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
-                            Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
+                            Player avatarPlayer = new Player("", -999,-999);
+                            for(Player player : playerListClient){
+                                if(player.getId() == startingPointTaken.getMessageBody().getClientID()){
+                                    avatarPlayer = player;
+                                }
+                            }
+                            //Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             System.out.println("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
                             break;
