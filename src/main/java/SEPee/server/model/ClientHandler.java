@@ -1052,6 +1052,12 @@ public class ClientHandler implements Runnable {
         } else if(Server.getGameMap().getBordName().equals("ExtraCrispy")) {
             ExtraCrispy extraCrispy = new ExtraCrispy();
             fields = extraCrispy.getFieldsAt(robotX, robotY);
+        } else if (Server.getGameMap().getBordName().equals("DeathTrap")) {
+            DeathTrap deathTrap = new DeathTrap();
+            fields = deathTrap.getFieldsAt(robotX, robotY);
+        } else if (Server.getGameMap().getBordName().equals("LostBearings")) {
+            LostBearings lostBearings = new LostBearings();
+            fields = lostBearings.getFieldsAt(robotX, robotY);
         }
 
         //tester string
