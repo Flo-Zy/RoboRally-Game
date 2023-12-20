@@ -16,6 +16,12 @@
         <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
             <fx:include source="ExtraCrispy.fxml"/>
         </VBox>
+        <VBox fx:id="LostBearingsMap" managed="false" visible="false">
+            <fx:include source="LostBearings.fxml"/>
+        </VBox>
+        <VBox fx:id="DeathTrapMap" managed="false" visible="false">
+            <fx:include source="DeathTrap.fxml"/>
+        </VBox>
 
         <!-- Rechte HBox (Chatarea VBox) -->
         <VBox prefHeight="645.0" prefWidth="287.0" spacing="10" HBox.hgrow="NEVER" VBox.vgrow="ALWAYS">

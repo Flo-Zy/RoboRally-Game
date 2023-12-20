@@ -40,6 +40,8 @@ public class SelectMap extends Message{
         public SelectMapBody() {
             availableMaps.add("DizzyHighway");
             availableMaps.add("ExtraCrispy");
+            availableMaps.add("LostBearings");
+            availableMaps.add("DeathTrap");
         }
 
         public ArrayList<String> getAvailableMaps() {

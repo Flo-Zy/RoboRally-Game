@@ -1,9 +1,7 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
-import SEPee.client.viewModel.MapController.ExtraCrispyController;
-import SEPee.client.viewModel.MapController.MapController;
+import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 //Später auslagern
@@ -68,6 +66,10 @@ public class ClientController {
     private VBox DizzyHighwayMap;
     @FXML
     private VBox ExtraCrispyMap;
+    @FXML
+    private VBox LostBearingsMap;
+    @FXML
+    private VBox DeathTrapMap;
     @Getter
     @Setter
     private static int currentPhase;
@@ -363,7 +365,62 @@ public class ClientController {
                 e.printStackTrace();
             }
         });
+    }
 
+    public void loadLostBearingsFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
+                Node lostBearings = loader.load();
+
+                // Get  controller
+                LostBearingsController lostBearingsController = loader.getController();
+
+                mapController = lostBearingsController;
+
+                lostBearingsController.init(client, primaryStage);
+                lostBearingsController.setRootVBox(LostBearingsMap);
+
+                // set loaded FXML to VBox
+                LostBearingsMap.getChildren().setAll(lostBearings);
+                LostBearingsMap.setVisible(true);
+                LostBearingsMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadDeathTrapFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
+                Node deathTrap = loader.load();
+
+                // Get  controller
+                DeathTrapController deathTrapController = loader.getController();
+
+                mapController = deathTrapController;
+
+                deathTrapController.init(client, primaryStage);
+                deathTrapController.setRootVBox(DeathTrapMap);
+
+                // set loaded FXML to VBox
+                DeathTrapMap.getChildren().setAll(deathTrap);
+                DeathTrapMap.setVisible(true);
+                DeathTrapMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void addTakenStartingPoints(int x, int y){

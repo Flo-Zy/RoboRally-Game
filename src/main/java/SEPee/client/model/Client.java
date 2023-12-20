@@ -1,8 +1,10 @@
 package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.MapController.DeathTrapController;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
 import SEPee.client.viewModel.MapController.ExtraCrispyController;
+import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -222,6 +224,17 @@ public class Client extends Application {
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                                     ExtraCrispyController mapController1 = loader.getController();
                                     break;
+                                case "LostBearings":
+                                    selectedMap1 = "LostBearings";
+                                    loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
+                                    LostBearingsController mapController2 = loader.getController();
+                                    break;
+                                case "DeathTrap":
+                                    selectedMap1 = "DeathTrap";
+                                    loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
+                                    DeathTrapController mapController3 = loader.getController();
+                                    break;
+
                                 default:
                                     System.out.println("Invalid Map");
                                     break;
@@ -235,6 +248,10 @@ public class Client extends Application {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
                             } else if(selectedMap1.equals("ExtraCrispy")) {
                                 controller.loadExtraCrispyFXML(this, primaryStage);
+                            } else if(selectedMap1.equals("LostBearings")) {
+                                controller.loadLostBearingsFXML(this, primaryStage);
+                            } else if(selectedMap1.equals("DeathTrap")) {
+                                controller.loadDeathTrapFXML(this, primaryStage);
                             }
 
                             // weitere Maps

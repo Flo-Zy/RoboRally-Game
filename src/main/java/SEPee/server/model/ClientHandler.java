@@ -150,7 +150,15 @@ public class ClientHandler implements Runnable {
                                         case "ExtraCrispy":
                                             ExtraCrispy extraCrispy = new ExtraCrispy();
                                             Server.setGameMap(extraCrispy);
-                                        break;
+                                            break;
+                                        case "LostBearings":
+                                            LostBearings lostBearings = new LostBearings();
+                                            Server.setGameMap(lostBearings);
+                                            break;
+                                        case "DeathTrap":
+                                            DeathTrap deathTrap = new DeathTrap();
+                                            Server.setGameMap(deathTrap);
+                                            break;
                                     }
 
                             }
