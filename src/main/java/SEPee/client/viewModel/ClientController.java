@@ -2,6 +2,7 @@ package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
+import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -65,6 +66,8 @@ public class ClientController {
     private TextField messageField;
     @FXML
     private VBox DizzyHighwayMap;
+    @FXML
+    private VBox ExtraCrispyMap;
     @Getter
     @Setter
     private static int currentPhase;
@@ -323,6 +326,35 @@ public class ClientController {
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    public void loadExtraCrispyFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
+                Node extraCrispy = loader.load();
+
+                // Get  controller
+                ExtraCrispyController extraCrispyController = loader.getController();
+
+                mapController = extraCrispyController;
+
+                extraCrispyController.init(client, primaryStage);
+                extraCrispyController.setRootVBox(ExtraCrispyMap);
+
+                // set loaded FXML to VBox
+                ExtraCrispyMap.getChildren().setAll(extraCrispy);
+                ExtraCrispyMap.setVisible(true);
+                ExtraCrispyMap.setManaged(true);
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);

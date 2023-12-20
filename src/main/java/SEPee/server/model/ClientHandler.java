@@ -147,11 +147,10 @@ public class ClientHandler implements Runnable {
                                             DizzyHighway dizzyHighway = new DizzyHighway();
                                             Server.setGameMap(dizzyHighway);
                                             break;
-                                    /*Später für weitere Maps
-                                    case " ":
-
+                                        case "ExtraCrispy":
+                                            ExtraCrispy extraCrispy = new ExtraCrispy();
+                                            Server.setGameMap(extraCrispy);
                                         break;
-                                     */
                                     }
 
                             }
@@ -1045,10 +1044,15 @@ public class ClientHandler implements Runnable {
         int robotX = robot.getX();
         int robotY = robot.getY();
 
-        // Assuming you have a method in DizzyHighway to get the field at a specific position
-        // You need to create an instance or use a static method of DizzyHighway class, depending on your implementation
-        DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
-        List<Field> fields = highway.getFieldsAt(robotX, robotY);
+        List<Field> fields = new ArrayList<>();
+
+        if(Server.getGameMap().getBordName().equals("DizzyHighway")) {
+            DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
+            fields = highway.getFieldsAt(robotX, robotY);
+        } else if(Server.getGameMap().getBordName().equals("ExtraCrispy")) {
+            ExtraCrispy extraCrispy = new ExtraCrispy();
+            fields = extraCrispy.getFieldsAt(robotX, robotY);
+        }
 
         //tester string
         System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);

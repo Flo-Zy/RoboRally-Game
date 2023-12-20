@@ -13,6 +13,9 @@
         <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
             <fx:include source="DizzyHighway.fxml"/>
         </VBox>
+        <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
+            <fx:include source="ExtraCrispy.fxml"/>
+        </VBox>
 
         <!-- Rechte HBox (Chatarea VBox) -->
         <VBox prefHeight="645.0" prefWidth="287.0" spacing="10" HBox.hgrow="NEVER" VBox.vgrow="ALWAYS">

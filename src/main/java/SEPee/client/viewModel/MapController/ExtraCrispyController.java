@@ -20,7 +20,7 @@ import lombok.Setter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DizzyHighwayController extends MapController {
+public class ExtraCrispyController extends MapController {
 
     @Setter
     @FXML
@@ -327,37 +327,37 @@ public class DizzyHighwayController extends MapController {
                         final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
                         // Füge den Event-Handler für das ImageView hinzu
                         //if(counter1.get() <= 4 ) {
-                            handImageView.setOnMouseClicked(mouseEvent -> {
+                        handImageView.setOnMouseClicked(mouseEvent -> {
 
-                                if (counter1.get() < 5) {
-                                    // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
-                                    ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
+                            if (counter1.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
-                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
-                                    registerImageView.setImage(cardImage);
+                                Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                registerImageView.setImage(cardImage);
 
-                                    registerImageView.setVisible(true);
-                                    registerImageView.setManaged(true);
+                                registerImageView.setVisible(true);
+                                registerImageView.setManaged(true);
 
-                                    // gewählte Karte aus Hand unsichtbar machen
-                                    handImageView.setVisible(false);
+                                // gewählte Karte aus Hand unsichtbar machen
+                                handImageView.setVisible(false);
 
-                                    // sende serialisiertes SelectedCard
-                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
-                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                    Client.getWriter().println(serializedCardSelected);
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
 
-                                    zahlen.add(new Zahlen(index, counter1.get()));
-                                    indexToCounterMap.put(index, counter1.get());
+                                zahlen.add(new Zahlen(index, counter1.get()));
+                                indexToCounterMap.put(index, counter1.get());
 
-                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
-                                    counter1.set(smallestEmptyRegisterIndex);
+                                int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                counter1.set(smallestEmptyRegisterIndex);
 
-                                } else {
-                                    System.out.println("Register voll");
+                            } else {
+                                System.out.println("Register voll");
 
-                                }
-                            });
+                            }
+                        });
                         //}
                     }
                 }

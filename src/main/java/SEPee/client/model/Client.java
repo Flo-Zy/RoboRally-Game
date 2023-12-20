@@ -2,6 +2,7 @@ package SEPee.client.model;
 
 import SEPee.client.viewModel.ClientController;
 import SEPee.client.viewModel.MapController.DizzyHighwayController;
+import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -10,6 +11,7 @@ import SEPee.serialisierung.messageType.Error;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
+import SEPee.server.model.gameBoard.ExtraCrispy;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -206,12 +208,17 @@ public class Client extends Application {
                             String serializedReceivedMap = serializedReceivedString;
                             MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
 
-                            DizzyHighwayController mapController = null;
+                            FXMLLoader loader;
+
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "DizzyHighway":
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
-                                    mapController = loader.getController();
+                                    loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                                    DizzyHighwayController mapController0 = loader.getController();
+                                    break;
+                                case "ExtraCrispy":
+                                    loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
+                                    ExtraCrispyController mapController1 = loader.getController();
                                     break;
                                 default:
                                     System.out.println("Invalid Map");
