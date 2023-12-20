@@ -222,6 +222,9 @@
                         <scaleX>
                             -1
                         </scaleX>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field16a" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
@@ -466,7 +469,7 @@
                             <Image url="@/boardElementsPNGs/Pusher135Left.png" />
                         </image>
                         <rotate>
-                            180
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -475,7 +478,7 @@
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                         <rotate>
-                            180
+                            -90
                         </rotate>
                     </ImageView>
 
