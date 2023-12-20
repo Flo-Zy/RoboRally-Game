@@ -900,7 +900,7 @@
                             <Image url="@/boardElementsPNGs/Pusher24Left.png" />
                         </image>
                         <rotate>
-                            -90
+                            90
                         </rotate>
                     </ImageView>
 
@@ -960,6 +960,9 @@
                         <image>
                             <Image url="@/boardElementsPNGs/Pusher24Left.png" />
                         </image>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field77c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="7">
@@ -1113,7 +1116,7 @@
                             <Image url="@/boardElementsPNGs/Pusher135Left.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1429,7 +1432,7 @@
 
                     <ImageView fx:id="field118c" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="8">
                         <image>
-                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf8.png" />
+                            <Image url="@/boardElementsPNGs/2005TileSetA/Knopf6.png" />
                         </image>
                     </ImageView>
 
@@ -1537,7 +1540,7 @@
                             <Image url="@/boardElementsPNGs/Reboot.png" />
                         </image>
                         <rotate>
-                            -90
+                            90
                         </rotate>
                     </ImageView>
 
