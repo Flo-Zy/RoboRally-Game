@@ -168,6 +168,10 @@ public class ClientHandler implements Runnable {
                                 Server.setGameStarted(true);
                                 //erstelle das Spiel
                                 Server.setGame(new Game(Server.getPlayerList(), Server.getGameMap().getGameBoard(), Server.getGameMap()));
+
+                                MapSelected mapSelected1 = new MapSelected(Server.getGameMap().getBordName());
+                                String serializedMapSelected1 = Serialisierer.serialize(mapSelected1);
+                                broadcast(serializedMapSelected1);
                                 //Sende an alle Clients Spiel wird gestarted
                                 GameStarted gameStarted = new GameStarted(Server.getGameMap().getGameBoard());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
