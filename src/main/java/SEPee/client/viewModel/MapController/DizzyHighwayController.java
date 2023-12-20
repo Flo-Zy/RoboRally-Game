@@ -370,7 +370,7 @@ public class DizzyHighwayController extends MapController {
 
                         registerImageView.setOnMouseClicked(mouseEvent -> {
                             if (registerImageView.getImage() != null) {
-                                if (counter1.get() > 0 && counter1.get() < 5) {
+                                if (counter1.get() < 5) {
                                     int indexNew = mapRegisterIndexToHandIndex(registerIndex);
                                     counter1.decrementAndGet();
 
