@@ -278,39 +278,33 @@ public class LostBearings extends GameBoard {
         field5_2.add(new EnergySpace("1A", 1));
 
         List<Field> field5_3 = new ArrayList<>();
-        String[] orientations53 = {"right", "left"};
+        String[] orientations53 = {"bottom", "top"};
         field5_3.add(new ConveyorBelt("1A", 2, orientations53));
-        String[] orientations53Laser = {"top"};
-        field5_3.add(new Laser("1A", orientations53Laser,1));
+        String[] orientations53Wall = {"right"};
+        field5_3.add(new Wall("1A", orientations53Wall));
 
         List<Field> field5_4 = new ArrayList<>();
-        String[] orientations54Laser = {"top"};
-        field5_4.add(new Laser("1A", orientations54Laser,1));
+        String[] orientations54Gear = {"counterclockwise"};
+        field5_4.add(new Gear("1A", orientations54Gear));
 
         List<Field> field5_5 = new ArrayList<>();
-        String[] orientations55Laser = {"top"};
-        field5_5.add(new Laser("1A", orientations55Laser,1));
-        String[] orientations55Wall = {"right"};
-        field5_5.add(new Wall("1A", orientations55Wall));
+        String[] orientations55Gear = {"clockwise"};
+        field5_5.add(new Gear("1A", orientations55Gear));
 
         List<Field> field5_6 = new ArrayList<>();
-        String[] orientations56Belt = {"right, left"};
+        String[] orientations56Belt = {"top, bottom"};
         field5_6.add(new ConveyorBelt("1A", 2, orientations56Belt));
-        String[] orientations56Laser = {"top"};
-        field5_6.add(new Laser("1A", orientations56Laser,1));
+        String[] orientations56Wall = {"right"};
+        field5_6.add(new Wall("1A", orientations56Wall));
 
         List<Field> field5_7 = new ArrayList<>();
-        field5_7.add(new CheckPoint("1A"));
-        String[] orientations57Wall = {"bottom"};
-        field5_7.add(new Wall("1A", orientations57Wall));
+        field5_7.add(new EnergySpace("1A", 1));
 
         List<Field> field5_8 = new ArrayList<>();
-        String[] orientations58Wall = {"top"};
-        field5_8.add(new Wall("1A", orientations58Wall));
+        field5_8.add(new Empty("1A"));
 
         List<Field> field5_9 = new ArrayList<>();
-        String[] orientations59Laser = {"right"};
-        field5_9.add(new Laser("1A", orientations59Laser,1));
+        field5_9.add(new Empty("1A"));
 
         column5.add(field5_0);
         column5.add(field5_1);
@@ -329,44 +323,41 @@ public class LostBearings extends GameBoard {
         List<List<Field>> column6 = new ArrayList<>(10);
 
         List<Field> field6_0 = new ArrayList<>();
-        field6_0.add(new Empty("4A"));
+        field6_0.add(new Empty("1A"));
 
         List<Field> field6_1 = new ArrayList<>();
-        String[] orientations61 = {"right", "bottom"};
-        field6_1.add(new ConveyorBelt("4A", 1, orientations61));
+        String[] orientations61 = {"right", "left"};
+        field6_1.add(new ConveyorBelt("1A", 1, orientations61));
 
         List<Field> field6_2 = new ArrayList<>();
-        field6_2.add(new Pit("4A"));
+        field6_2.add(new Pit("1A"));
 
         List<Field> field6_3 = new ArrayList<>();
-        String[] orientations63Wall = {"right"};
-        field6_3.add(new Wall("4A", orientations63Wall));
-        field6_3.add(new Pit("4A"));
+        String[] orientations63Wall = {"left"};
+        String[] orientations63Laser = {"left"};
+        field6_3.add(new Wall("1A", orientations63Wall));
+        field6_3.add(new Laser("1A", orientations63Laser, 1));
 
         List<Field> field6_4 = new ArrayList<>();
-        String[] orientations64Gear = {"clockwise"};
-        field6_4.add(new Wall("4A", orientations64Gear));
+        field6_4.add(new Empty("1A"));
 
         List<Field> field6_5 = new ArrayList<>();
-        String[] orientations65Wall = {"left"};
-        field6_5.add(new Wall("4A", orientations65Wall));
+        field6_5.add(new Empty("1A"));
 
         List<Field> field6_6 = new ArrayList<>();
-        field6_6.add(new Pit("4A"));
-        String[] orientations66Wall = {"right"};
-        field6_6.add(new Wall("4A", orientations66Wall));
+        String[] orientations66Wall = {"left"};
+        String[] orientations66Laser = {"right"};
+        field6_6.add(new Wall("1A", orientations66Wall));
+        field6_6.add(new Laser("1A", orientations66Laser, 1));
 
         List<Field> field6_7 = new ArrayList<>();
-        field6_7.add(new Pit("4A"));
+        field6_7.add(new Pit("1A"));
 
         List<Field> field6_8 = new ArrayList<>();
-        field6_8.add(new Empty("4A"));
+        field6_8.add(new Empty("1A"));
 
         List<Field> field6_9 = new ArrayList<>();
-        String[] orientations69Wall = {"right"};
-        String[] orientations69Laser = {"left"};
-        field6_9.add(new Wall("4A", orientations69Wall));
-        field6_9.add(new Laser("4A", orientations69Laser, 1));
+        field6_9.add(new Empty("1A"));
 
         column6.add(field6_0);
         column6.add(field6_1);
@@ -385,42 +376,38 @@ public class LostBearings extends GameBoard {
         List<List<Field>> column7 = new ArrayList<>(10);
 
         List<Field> field7_0 = new ArrayList<>();
-        field7_0.add(new Empty("4A"));
+        field7_0.add(new Empty("1A"));
 
         List<Field> field7_1 = new ArrayList<>();
         String[] orientations71 = {"right", "left"};
-        field7_1.add(new ConveyorBelt("4A", 1, orientations71));
+        field7_1.add(new ConveyorBelt("1A", 1, orientations71));
 
         List<Field> field7_2 = new ArrayList<>();
-        field7_2.add(new Empty("4A"));
+        field7_2.add(new Empty("1A"));
 
         List<Field> field7_3 = new ArrayList<>();
         String[] orientations73Laser = {"right"};
-        String[] orientations73Wall = {"left"};
-        field7_3.add(new Wall("4A", orientations73Wall));
-        field7_3.add(new Laser("4A", orientations73Laser, 1));
+        field7_3.add(new Laser("1A", orientations73Laser, 1));
 
         List<Field> field7_4 = new ArrayList<>();
-        field7_4.add(new Empty("4A"));
+        field7_4.add(new EnergySpace("1A", 1));
 
         List<Field> field7_5 = new ArrayList<>();
-        field7_5.add(new EnergySpace("4A", 1));
+        String[] orientations75 = {"clockwise"};
+        field7_5.add(new Gear("1A", orientations75));
 
         List<Field> field7_6 = new ArrayList<>();
-        String[] orientations76Wall = {"left"};
         String[] orientations76Laser = {"right"};
-        field7_6.add(new Wall("4A", orientations76Wall));
-        field7_6.add(new Laser("4A", orientations76Laser, 1));
+        field7_6.add(new Laser("1A", orientations76Laser, 1));
 
         List<Field> field7_7 = new ArrayList<>();
-        field7_7.add(new Empty("4A"));
+        field7_7.add(new Empty("1A"));
 
         List<Field> field7_8 = new ArrayList<>();
-        field7_8.add(new Empty("4A"));
+        field7_8.add(new Empty("1A"));
 
         List<Field> field7_9 = new ArrayList<>();
-        String[] orientations79Wall = {"left"};
-        field7_9.add(new Wall("4A", orientations79Wall));
+        field7_9.add(new Empty("1A"));
 
         column7.add(field7_0);
         column7.add(field7_1);
@@ -439,43 +426,38 @@ public class LostBearings extends GameBoard {
         List<List<Field>> column8 = new ArrayList<>(10);
 
         List<Field> field8_0 = new ArrayList<>();
-        field8_0.add(new EnergySpace("4A", 1));
-        String[] orientations80Wall = {"right"};
-        field8_0.add(new Wall("4A", orientations80Wall));
+        field8_0.add(new Empty("1A"));
 
         List<Field> field8_1 = new ArrayList<>();
-        field8_1.add(new Empty("4A"));
+        String[] orientations81 = {"right", "left"};
+        field8_1.add(new ConveyorBelt("1A", 1, orientations81));
 
         List<Field> field8_2 = new ArrayList<>();
-        field8_2.add(new Empty("4A"));
+        field8_2.add(new CheckPoint("1A"));
 
         List<Field> field8_3 = new ArrayList<>();
-        String[] orientations83Wall = {"right"};
         String[] orientations83Laser = {"left"};
-        field8_3.add(new Wall("4A", orientations83Wall));
-        field8_3.add(new Laser("4A", orientations83Laser, 1));
+        field8_3.add(new Laser("1A", orientations83Laser, 1));
 
         List<Field> field8_4 = new ArrayList<>();
-        field8_4.add(new Empty("4A"));
+        String[] orientations84 = {"counterclockwise"};
+        field8_4.add(new Gear("1A", orientations84));
 
         List<Field> field8_5 = new ArrayList<>();
-        field8_5.add(new Empty("4A"));
+        field8_5.add(new EnergySpace("1A", 1));
 
         List<Field> field8_6 = new ArrayList<>();
-        String[] orientations86Wall = {"right"};
-        String[] orientations86Laser = {"left"};
-        field8_6.add(new Wall("4A", orientations86Wall));
-        field8_6.add(new Laser("4A", orientations86Laser, 1));
+        String[] orientations86Laser = {"right"};
+        field8_6.add(new Laser("1A", orientations86Laser, 1));
 
         List<Field> field8_7 = new ArrayList<>();
-        field8_7.add(new Empty("4A"));
+        field8_7.add(new CheckPoint("1A"));
 
         List<Field> field8_8 = new ArrayList<>();
-        String[] orientations88 = {"right", "left"};
-        field8_8.add(new ConveyorBelt("4A", 1, orientations88));
+        field8_8.add(new Empty("1A"));
 
         List<Field> field8_9 = new ArrayList<>();
-        field8_9.add(new Empty("4A"));
+        field8_9.add(new Empty("1A"));
 
         column8.add(field8_0);
         column8.add(field8_1);
