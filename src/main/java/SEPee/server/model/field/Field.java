@@ -16,6 +16,8 @@ public abstract class Field {
     private String isOnBoard;
     @Getter
     private String [] orientation;
+    @Getter
+    private int speed;
 
     private int checkPointNumber;
 
@@ -23,7 +25,6 @@ public abstract class Field {
         this.type = type;
         this.isOnBoard = isOnBoard;
     }
-
 
     public Field(String type, String isOnBoard, String[] orientation) {
         this.type = type;
@@ -36,6 +37,14 @@ public abstract class Field {
         this.isOnBoard = isOnBoard;
         this.checkPointNumber = checkPointNumber;
     }
+    public Field(String type, String isOnBoard, int speed, String[] orientation) {
+        this.type = type;
+        this.isOnBoard = isOnBoard;
+        this.orientation = orientation;
+        this.speed = speed;
+
+    }
+
 
 
 

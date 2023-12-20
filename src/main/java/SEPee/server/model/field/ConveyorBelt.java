@@ -11,14 +11,14 @@ import java.util.ArrayList;
 @Setter
 public class ConveyorBelt extends Field{
     @SerializedName("speed")
-    private int speed;
+    private static int speed;
     @Getter
     @SerializedName("orientations")
     private static String[] orientations;
     //private int[] registers;
     //private int count;
     public ConveyorBelt(String isOnBoard, int speed, String[] orientations) {
-        super("ConveyorBelt", isOnBoard, orientations);
+        super("ConveyorBelt", isOnBoard, speed, orientations);
         this.speed = speed;
         this.orientations = orientations;
     }

@@ -1553,7 +1553,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar1.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1562,7 +1562,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1571,7 +1571,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar3.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1580,7 +1580,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar4.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1589,7 +1589,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 
@@ -1598,7 +1598,7 @@
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
                         </image>
                         <rotate>
-                            90
+                            -90
                         </rotate>
                     </ImageView>
 

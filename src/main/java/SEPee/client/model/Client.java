@@ -41,7 +41,8 @@ public class Client extends Application {
     @Getter
     @Setter
     private static ArrayList<String> mapList = new ArrayList<>();
-    private String selectedMap1;
+    @Getter
+    private static String selectedMap1;
     @Getter
     @Setter
     private static ArrayList<Integer> takenFigures = new ArrayList<>();
@@ -348,7 +349,12 @@ public class Client extends Application {
                         case "StartingPointTaken":
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
-                            controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+
+                            if(selectedMap1.equals("DeathTrap")) {
+                                controller.addTakenStartingPointsDeathTrap(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            } else {
+                                controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
+                            }
 
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
