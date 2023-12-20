@@ -406,7 +406,7 @@ public class DeathTrapController extends MapController {
                 return i;
             }
         }
-        return -1;
+        return 5;
     }
 
     public void setRegisterVisibilityFalse(){

@@ -41,6 +41,7 @@ public class FieldTypeAdapterFactory implements TypeAdapterFactory {
                     String[] orientations = null;
                     int[] registers = null;
                     String isOnBoard = "";
+                    int checkPointNumber = 0;
                     int count = 0;
                     int speed = 0;
 
@@ -52,6 +53,9 @@ public class FieldTypeAdapterFactory implements TypeAdapterFactory {
                                 break;
                             case "isOnBoard":
                                 isOnBoard = gson.fromJson(in, String.class);
+                                break;
+                            case "checkPointNumber":
+                                checkPointNumber = gson.fromJson(in, int.class);
                                 break;
                             case "orientations":
                                 orientations = gson.fromJson(in, String[].class);
@@ -95,7 +99,7 @@ public class FieldTypeAdapterFactory implements TypeAdapterFactory {
                         case "EnergySpace":
                             return (T) new EnergySpace(isOnBoard, count);
                         case "CheckPoint":
-                            return (T) new CheckPoint(isOnBoard);
+                            return (T) new CheckPoint(isOnBoard, checkPointNumber);
                         case "RestartPoint":
                             return (T) new RestartPoint(isOnBoard);
                         default:
