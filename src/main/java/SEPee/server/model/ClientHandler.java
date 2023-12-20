@@ -1163,7 +1163,7 @@ public class ClientHandler implements Runnable {
         //blue conveyor
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
-            if (standingOnBlueConveyor.contains("ConveyorBelt [top")) {
+            if (standingOnBlueConveyor.contains("ConveyorBelt 2 [top")) {
 
                 //falls austreten aus blu conveyor funktioniert set nur einseitig!
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() - 1);
@@ -1175,7 +1175,7 @@ public class ClientHandler implements Runnable {
                 checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [right")) {
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [right")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
@@ -1184,7 +1184,7 @@ public class ClientHandler implements Runnable {
 
                 checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [bottom")) {
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [bottom")) {
 
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() + 1);
 
@@ -1194,7 +1194,7 @@ public class ClientHandler implements Runnable {
 
                 checkConveyorBeltAgain(i, standingOnBlueConveyor);
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [left")) {
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [left")) {
 
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() - 1);
 
@@ -1208,32 +1208,32 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkGreenConveyorBelts (int i) throws InterruptedException {
+    private void checkGreenConveyorBelts (int i){
         //blue conveyor
-        String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
-        if (standingOnBlueConveyor.contains("ConveyorBelt 1")) {
-            if (standingOnBlueConveyor.contains("ConveyorBelt [top")) {
+        String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
+            if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [right")) {
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [right")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [bottom")) {
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [bottom")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-            } else if (standingOnBlueConveyor.contains("ConveyorBelt [left")) {
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [left")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());

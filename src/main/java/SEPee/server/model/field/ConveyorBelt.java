@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Setter
 public class ConveyorBelt extends Field{
     @SerializedName("speed")
-    private int speed;
+    private static int speed;
     @Getter
     @SerializedName("orientations")
     private static String[] orientations;
