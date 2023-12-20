@@ -406,7 +406,7 @@ public class ExtraCrispyController extends MapController {
                 return i;
             }
         }
-        return -1;
+        return 5;
     }
 
 
@@ -433,7 +433,7 @@ public class ExtraCrispyController extends MapController {
                 return storedInt;
             }
         }
-        return 5;
+        return -1;
     }
 
     public void fillEmptyRegister(ArrayList<Card> nextCards){

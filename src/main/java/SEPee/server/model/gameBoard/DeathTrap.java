@@ -673,6 +673,8 @@ public class DeathTrap extends GameBoard {
         field12_3.add(new StartPoint("A"));
 
         List<Field> field12_4 = new ArrayList<>();
+        String[] orientations124Wall = {"bottom"};
+        field12_4.add(new Wall("A", orientations124Wall));
         field12_4.add(new Empty("A"));
 
         List<Field> field12_5 = new ArrayList<>();
