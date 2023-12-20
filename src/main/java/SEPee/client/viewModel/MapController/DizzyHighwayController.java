@@ -1,6 +1,5 @@
 package SEPee.client.viewModel.MapController;
 
-import SEPee.client.model.AI;
 import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
@@ -78,7 +77,7 @@ public class DizzyHighwayController extends MapController {
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
 
-    public void setCounter1(int counter){
+    public void setCounter1(int counter) {
         counter1.set(counter);
     }
 
@@ -327,37 +326,37 @@ public class DizzyHighwayController extends MapController {
                         final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
                         // Füge den Event-Handler für das ImageView hinzu
                         //if(counter1.get() <= 4 ) {
-                            handImageView.setOnMouseClicked(mouseEvent -> {
+                        handImageView.setOnMouseClicked(mouseEvent -> {
 
-                                if (counter1.get() < 5) {
-                                    // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
-                                    ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
+                            if (counter1.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
-                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
-                                    registerImageView.setImage(cardImage);
+                                Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                registerImageView.setImage(cardImage);
 
-                                    registerImageView.setVisible(true);
-                                    registerImageView.setManaged(true);
+                                registerImageView.setVisible(true);
+                                registerImageView.setManaged(true);
 
-                                    // gewählte Karte aus Hand unsichtbar machen
-                                    handImageView.setVisible(false);
+                                // gewählte Karte aus Hand unsichtbar machen
+                                handImageView.setVisible(false);
 
-                                    // sende serialisiertes SelectedCard
-                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
-                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                    Client.getWriter().println(serializedCardSelected);
+                                // sende serialisiertes SelectedCard
+                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
+                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                Client.getWriter().println(serializedCardSelected);
 
-                                    zahlen.add(new Zahlen(index, counter1.get()));
-                                    indexToCounterMap.put(index, counter1.get());
+                                zahlen.add(new Zahlen(index, counter1.get()));
+                                indexToCounterMap.put(index, counter1.get());
 
-                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
-                                    counter1.set(smallestEmptyRegisterIndex);
+                                int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                counter1.set(smallestEmptyRegisterIndex);
 
-                                } else {
-                                    System.out.println("Register voll");
+                            } else {
+                                System.out.println("Register voll");
 
-                                }
-                            });
+                            }
+                        });
                         //}
                     }
                 }
@@ -410,7 +409,7 @@ public class DizzyHighwayController extends MapController {
     }
 
 
-    public void setRegisterVisibilityFalse(){
+    public void setRegisterVisibilityFalse() {
         // Prüfe, ob die HBox totalRegister gefunden wurde
         HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
@@ -427,7 +426,7 @@ public class DizzyHighwayController extends MapController {
     private int mapRegisterIndexToHandIndex(int registerIndex) {
         int storedInt;
         for (int i = 0; i < zahlen.size(); i++) {
-            if(zahlen.get(i).register == registerIndex){
+            if (zahlen.get(i).register == registerIndex) {
                 storedInt = zahlen.get(i).hand;
                 zahlen.remove(i); // entferne handIndex mit entsprechendem registerIndex
                 return storedInt;
@@ -436,10 +435,10 @@ public class DizzyHighwayController extends MapController {
         return -1;
     }
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards){
+    public void fillEmptyRegister(ArrayList<Card> nextCards) {
         int emptyIndex = 5 - nextCards.size();
         int index = 0;
-        while(emptyIndex < 5){
+        while (emptyIndex < 5) {
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
             Image cardImage = new Image(nextCards.get(index).getImageUrl());
@@ -478,8 +477,13 @@ public class DizzyHighwayController extends MapController {
             }
         }
     }
-}
 
+
+
+
+
+    
+}
 
 
 

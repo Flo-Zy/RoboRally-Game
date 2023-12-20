@@ -478,4 +478,5 @@ public class LostBearingsController extends MapController {
             }
         }
     }
+
 }

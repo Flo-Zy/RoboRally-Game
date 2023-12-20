@@ -849,6 +849,10 @@ public class ClientHandler implements Runnable {
     }
 
 
+    private void rebootThisRobot(Robot robot, boolean toReboot){
+
+    }
+
     private boolean checkForRebootAndTeleport(Robot robot) {
         String orientation = robot.getOrientation();
         int xCoordinate = robot.getX();
@@ -1002,7 +1006,6 @@ public class ClientHandler implements Runnable {
                 }
 
                 break;
-
         }
         return true;
     }
