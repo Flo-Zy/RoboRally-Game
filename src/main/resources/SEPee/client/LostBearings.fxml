@@ -470,6 +470,9 @@
                         <scaleX>
                             -1
                         </scaleX>
+                        <rotate>
+                            180
+                        </rotate>
                     </ImageView>
 
                     <ImageView fx:id="field42" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
@@ -525,7 +528,7 @@
                             <Image url="@/boardElementsPNGs/GreenConveyorLeftBottom.png" />
                         </image>
                         <rotate>
-                            180
+                            90
                         </rotate>
                         <scaleX>
                             -1
