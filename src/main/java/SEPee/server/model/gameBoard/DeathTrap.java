@@ -17,7 +17,7 @@ public class DeathTrap extends GameBoard {
         field0_0.add(new Empty("2A"));
 
         List<Field> field0_1 = new ArrayList<>();
-        field0_1.add(new CheckPoint("2A"));
+        field0_1.add(new CheckPoint("2A", 5));
 
         List<Field> field0_2 = new ArrayList<>();
         field0_2.add(new Empty("2A"));
@@ -94,7 +94,7 @@ public class DeathTrap extends GameBoard {
         field1_6.add(new Empty("2A"));
 
         List<Field> field1_7 = new ArrayList<>();
-        field1_7.add(new CheckPoint("2A"));
+        field1_7.add(new CheckPoint("2A", 1));
 
         List<Field> field1_8 = new ArrayList<>();
         String[] orientations18Wall = {"left"};
@@ -252,7 +252,7 @@ public class DeathTrap extends GameBoard {
         String[] orientations44Wall = {"top"};
         field4_4.add(new Wall("2A", orientations44Wall));
         field4_4.add(new Wall("2A", orientations43Wall));
-        field4_4.add(new CheckPoint("2A"));
+        field4_4.add(new CheckPoint("2A", 2));
 
         List<Field> field4_5 = new ArrayList<>();
         field4_3.add(new Wall("2A", orientations44Wall));
@@ -427,7 +427,7 @@ public class DeathTrap extends GameBoard {
         field7_7.add(new PushPanel("2A", orientations77, register77));
 
         List<Field> field7_8 = new ArrayList<>();
-        field7_8.add(new CheckPoint("2A"));
+        field7_8.add(new CheckPoint("2A", 3));
 
         List<Field> field7_9 = new ArrayList<>();
         String[] orientations79 = {"right", "left"};
@@ -460,7 +460,7 @@ public class DeathTrap extends GameBoard {
         field8_1.add(new PushPanel("2A", orientations81, register81));
 
         List<Field> field8_2 = new ArrayList<>();
-        field8_2.add(new CheckPoint("2A"));
+        field8_2.add(new CheckPoint("2A", 4));
 
         List<Field> field8_3 = new ArrayList<>();
         String[] orientations83Wall = {"left"};
@@ -691,7 +691,7 @@ public class DeathTrap extends GameBoard {
         field12_8.add(new Empty("A"));
 
         List<Field> field12_9 = new ArrayList<>();
-        field12_9.add(new CheckPoint("A"));
+        field12_9.add(new Empty("A"));
 
         column12.add(field12_0);
         column12.add(field12_1);

@@ -236,7 +236,7 @@ public class LostBearings extends GameBoard {
         field4_4.add(new Empty("1A"));
 
         List<Field> field4_5 = new ArrayList<>();
-        field4_5.add(new CheckPoint("1A"));
+        field4_5.add(new CheckPoint("1A", 2));
 
         List<Field> field4_6 = new ArrayList<>();
         field4_6.add(new Empty("1A"));
@@ -433,7 +433,7 @@ public class LostBearings extends GameBoard {
         field8_1.add(new ConveyorBelt("1A", 1, orientations81));
 
         List<Field> field8_2 = new ArrayList<>();
-        field8_2.add(new CheckPoint("1A"));
+        field8_2.add(new CheckPoint("1A", 3));
 
         List<Field> field8_3 = new ArrayList<>();
         String[] orientations83Laser = {"left"};
@@ -451,7 +451,7 @@ public class LostBearings extends GameBoard {
         field8_6.add(new Laser("1A", orientations86Laser, 1));
 
         List<Field> field8_7 = new ArrayList<>();
-        field8_7.add(new CheckPoint("1A"));
+        field8_7.add(new CheckPoint("1A", 4));
 
         List<Field> field8_8 = new ArrayList<>();
         field8_8.add(new Empty("1A"));
@@ -594,7 +594,7 @@ public class LostBearings extends GameBoard {
         field11_3.add(new Empty("1A"));
 
         List<Field> field11_4 = new ArrayList<>();
-        field11_4.add(new CheckPoint("1A"));
+        field11_4.add(new CheckPoint("1A", 1));
 
         List<Field> field11_5 = new ArrayList<>();
         field11_5.add(new Empty("1A"));

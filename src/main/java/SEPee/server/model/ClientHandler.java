@@ -1093,7 +1093,8 @@ public class ClientHandler implements Runnable {
             } else if (field instanceof CheckPoint) {
                 System.out.println("Checkpoint");
                 // Actions for a check point
-                result.append("CheckPoint, ");
+                int checkPointNumber = field.getCheckPointNumber();
+                result.append("CheckPoint, [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
                 // Actions for an energy space
                 result.append("EnergySpace, ");
@@ -1315,7 +1316,7 @@ public class ClientHandler implements Runnable {
 
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
-        if (standingOnCheckPoint.contains("CheckPoint")) {
+        if (standingOnCheckPoint.contains("CheckPoint [1")) {
 
             Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
             int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
@@ -1324,7 +1325,16 @@ public class ClientHandler implements Runnable {
                 GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
                 String serializedGameFinished = Serialisierer.serialize(gameFinished);
                 broadcast(serializedGameFinished);
+            }/*else if(standingOnCheckPoint.contains("CheckPoint [2"){
+
+            }else if(standingOnCheckPoint.contains("CheckPoint [3"){
+
+            }else if(standingOnCheckPoint.contains("CheckPoint [4"){
+
+            }else if(standingOnCheckPoint.contains("CheckPoint [5"){
+
             }
+            */
         }
     }
 

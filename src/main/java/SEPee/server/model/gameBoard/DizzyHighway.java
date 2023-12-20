@@ -671,7 +671,7 @@ public class DizzyHighway extends GameBoard {
         field12_2.add(new ConveyorBelt("5B", 2, orientations122));
 
         List<Field> field12_3 = new ArrayList<>();
-        field12_3.add(new CheckPoint("5B"));
+        field12_3.add(new CheckPoint("5B", 1));
 
         List<Field> field12_4 = new ArrayList<>();
         field12_4.add(new Empty("5B"));
