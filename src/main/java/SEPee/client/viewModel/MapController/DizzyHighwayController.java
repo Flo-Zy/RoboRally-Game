@@ -358,7 +358,6 @@ public class DizzyHighwayController extends MapController {
 
                                     int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
                                     counter1.set(smallestEmptyRegisterIndex);
-                                    System.out.println(counterRegister.get()+"9999999999999999999999999");
                                     if(counterRegister.get() == 5){
                                         TimerStarted timerStarted = new TimerStarted();
                                         String serializedTimerStarted = Serialisierer.serialize(timerStarted);
@@ -450,9 +449,10 @@ public class DizzyHighwayController extends MapController {
     }
 
     public void fillEmptyRegister(ArrayList<Card> nextCards){
-        int emptyIndex = 5 - nextCards.size();
         int index = 0;
-        while(emptyIndex < 5){
+        int emptyIndex;
+        while(index < nextCards.size()){
+            emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
             Image cardImage = new Image(nextCards.get(index).getImageUrl());
@@ -461,7 +461,6 @@ public class DizzyHighwayController extends MapController {
             registerImageView.setVisible(true);
             registerImageView.setManaged(true);
             index++;
-            emptyIndex++;
         }
     }
 

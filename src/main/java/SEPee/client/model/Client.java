@@ -12,6 +12,7 @@ import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.ExtraCrispy;
 import javafx.application.Application;
@@ -383,6 +384,18 @@ public class Client extends Application {
                                     case "UTurn":
                                         drawPile.add(new UTurn());
                                         break;
+                                    case "Spam":
+                                        drawPile.add(new Spam());
+                                        break;
+                                    case "Virus":
+                                        drawPile.add(new Virus());
+                                        break;
+                                    case "Wurm":
+                                        drawPile.add(new Wurm());
+                                        break;
+                                    case "TrojanHorse":
+                                        drawPile.add(new TrojanHorse());
+                                        break;
                                 }
                             }
                                 controller.setClientHand(drawPile);
@@ -456,6 +469,18 @@ public class Client extends Application {
                                         break;
                                     case "UTurn":
                                         nextCards.add(new UTurn());
+                                        break;
+                                    case "Spam":
+                                        nextCards.add(new Spam());
+                                        break;
+                                    case "Virus":
+                                        nextCards.add(new Virus());
+                                        break;
+                                    case "Wurm":
+                                        nextCards.add(new Wurm());
+                                        break;
+                                    case "TrojanHorse":
+                                        nextCards.add(new TrojanHorse());
                                         break;
                                 }
                             }
