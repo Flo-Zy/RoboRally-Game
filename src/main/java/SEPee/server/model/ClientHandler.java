@@ -1098,7 +1098,7 @@ public class ClientHandler implements Runnable {
                 System.out.println("Checkpoint");
                 // Actions for a check point
                 int checkPointNumber = field.getCheckPointNumber();
-                result.append("CheckPoint, [" + checkPointNumber + "], ");
+                result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
                 // Actions for an energy space
                 result.append("EnergySpace, ");
@@ -1349,26 +1349,40 @@ public class ClientHandler implements Runnable {
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
-
-            Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
-            int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
-
-            if (Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount) {
-                GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
-                String serializedGameFinished = Serialisierer.serialize(gameFinished);
-                broadcast(serializedGameFinished);
-            }/*else if(standingOnCheckPoint.contains("CheckPoint [2"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [3"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [4"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [5"){
-
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0){ //check whether no checkPoints were reached before
+                checkGameFinished(i);
             }
-            */
+        }else if(standingOnCheckPoint.contains("CheckPoint [2")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1){ //check whether one checkPoint was reached before
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [3")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2){
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [4")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3){
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [5")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4){
+                checkGameFinished(i);
+            }
         }
     }
+
+    private void checkGameFinished(int i){
+        Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
+        int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
+
+        if (Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount) {
+            GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
+            String serializedGameFinished = Serialisierer.serialize(gameFinished);
+            broadcast(serializedGameFinished);
+        }
+    }
+
+
 
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
 
