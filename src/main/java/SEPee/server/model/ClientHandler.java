@@ -757,7 +757,7 @@ public class ClientHandler implements Runnable {
 
                 if (isForward) {
                     MoveI.makeEffect(this.robot);
-                } else{
+                } else {
                     BackUp.makeEffect(this.robot);
                 }
             } else {
@@ -1588,21 +1588,31 @@ public class ClientHandler implements Runnable {
             if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
 
-
                 if (rebootTo.equals("rebootField")){
                     robot.setX(Server.getGame().getBoardClass().getRebootX());
-                    System.out.println("test print rebootThisRobot to x: " + Server.getGame().getBoardClass().getRebootX());
                     robot.setY(Server.getGame().getBoardClass().getRebootY());
-                    System.out.println("test print rebootThisRobot to y: " + Server.getGame().getBoardClass().getRebootY());
-
                     robot.setAlreadyRebooted(false);
-                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY());
-                    String serializedMovement = Serialisierer.serialize(movement);
 
+                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
+                    String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
-                    
+
+                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
+                    String serializedReboot = Serialisierer.serialize(reboot);
+                    broadcast(serializedReboot);
 
                 } else if (rebootTo.equals("startingPoint")) {
+                    robot.setX(robot.getStartingPointX());
+                    robot.setY(robot.getStartingPointY());
+                    robot.setAlreadyRebooted(false);
+
+                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
+                    String serializedMovement = Serialisierer.serialize(movement);
+                    broadcast(serializedMovement);
+
+                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
+                    String serializedReboot = Serialisierer.serialize(reboot);
+                    broadcast(serializedReboot);
 
                 } else {
                     System.out.println("Invalid Reboot String");
