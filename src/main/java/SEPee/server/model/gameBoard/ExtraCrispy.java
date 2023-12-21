@@ -364,7 +364,7 @@ public class ExtraCrispy extends GameBoard {
 
         List<Field> field6_4 = new ArrayList<>();
         String[] orientations64Gear = {"clockwise"};
-        field6_4.add(new Wall("4A", orientations64Gear));
+        field6_4.add(new Gear("4A", orientations64Gear));
 
         List<Field> field6_5 = new ArrayList<>();
         String[] orientations65Wall = {"left"};

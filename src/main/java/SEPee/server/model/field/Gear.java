@@ -14,7 +14,7 @@ public class Gear extends Field{
     //private int[] registers;
     //private int count;
     public Gear(String isOnBoard, String[] orientations){
-        super("Gear", isOnBoard);
+        super("Gear", isOnBoard, orientations);
         this.orientations = orientations;
     }
 }
