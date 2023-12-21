@@ -25,6 +25,8 @@ public class Robot {
     @Getter
     @Setter
     private int startingPointY;
+    @Setter
+    private boolean alreadyRebooted = false;
 
     public Robot(int x, int y, String orientation) {
         this.x = x;
@@ -46,21 +48,24 @@ public class Robot {
     public void setX(int x) {
         this.x = x;
         notifyPositionChange();
-
-        GameBoard gameBoard = Server.getGame().getBoardClass();
-        String rebootTo = gameBoard.checkRebootConditions(x, y);
-        if (!rebootTo.equals("continue")){
-            ClientHandler.rebootThisRobot(x, y, rebootTo);
-        }
+        handleReboot();
     }
 
     public void setY(int y) {
         this.y = y;
         notifyPositionChange();
+        handleReboot();
+    }
 
+    private void handleReboot() {
         GameBoard gameBoard = Server.getGame().getBoardClass();
         String rebootTo = gameBoard.checkRebootConditions(x, y);
-        if (!rebootTo.equals("continue")){
+        System.out.println("rebootTo: " + rebootTo);
+
+        if (!rebootTo.equals("continue") && !alreadyRebooted) {
+            alreadyRebooted = true; // Set the flag to prevent repeated reboots
+
+            System.out.println("Rebooting this robot to: " + rebootTo);
             ClientHandler.rebootThisRobot(x, y, rebootTo);
         }
     }
@@ -79,6 +84,8 @@ public class Robot {
         this.orientation = orientation;
         notifyPositionChange();
     }
+
+
 
 
 }

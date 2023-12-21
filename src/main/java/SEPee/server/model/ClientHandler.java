@@ -32,7 +32,7 @@ import static SEPee.server.model.Player.*;
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private int clientId;
-    private List<ClientHandler> clients;
+    private static List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
     private Robot robot;
@@ -730,7 +730,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void broadcast(String serializedObjectToSend) {
+    private static void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
             client.writer.println(serializedObjectToSend);
         }
@@ -1586,6 +1586,7 @@ public class ClientHandler implements Runnable {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
             if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+
 
                 if (rebootTo.equals("rebootField")){
                     robot.setX(Server.getGame().getBoardClass().getRebootX());
