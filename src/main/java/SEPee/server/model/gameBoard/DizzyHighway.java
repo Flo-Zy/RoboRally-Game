@@ -742,6 +742,12 @@ public class DizzyHighway extends GameBoard {
         return fieldsAtXY;
     }
 
+    public int getRebootX(){
+        return 7;
+    }
+    public int getRebootY(){
+        return 3;
+    }
 
 
 

@@ -722,4 +722,29 @@ public class DeathTrap extends GameBoard {
         List<Field> fieldsAtXY = column.get(y);
         return fieldsAtXY;
     }
+
+
+    public String checkRebootConditions(int xCoordinate, int yCoordinate) {
+        String rebootTo = "continue";
+
+        if ((yCoordinate < 0 && xCoordinate <= 9 ) || (xCoordinate < 0) || (yCoordinate > 10 && xCoordinate < 3)) {
+            // top left condition, left condition, bottom left condition, weil starting board links ist
+            rebootTo = "startingPoint";
+        } else if ((yCoordinate < 0 && xCoordinate >= 3) || (xCoordinate > 12) || (yCoordinate > 10 && xCoordinate >= 3)) {
+            // top right, right, bottom right conditions
+            rebootTo = "rebootField";
+        }
+        return rebootTo;
+    }
+
+    public int getRebootX(){
+        return 12;
+    }
+
+    public int getRebootY(){
+        return 9;
+    }
+
+
+
 }

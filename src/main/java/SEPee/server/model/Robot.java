@@ -1,4 +1,7 @@
 package SEPee.server.model;
+import SEPee.client.model.Client;
+import SEPee.client.viewModel.MapController.MapController;
+import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,11 +46,23 @@ public class Robot {
     public void setX(int x) {
         this.x = x;
         notifyPositionChange();
+
+        GameBoard gameBoard = Server.getGame().getBoardClass();
+        String rebootTo = gameBoard.checkRebootConditions(x, y);
+        if (!rebootTo.equals("continue")){
+            ClientHandler.rebootThisRobot(x, y, rebootTo);
+        }
     }
 
     public void setY(int y) {
         this.y = y;
         notifyPositionChange();
+
+        GameBoard gameBoard = Server.getGame().getBoardClass();
+        String rebootTo = gameBoard.checkRebootConditions(x, y);
+        if (!rebootTo.equals("continue")){
+            ClientHandler.rebootThisRobot(x, y, rebootTo);
+        }
     }
 
     private void notifyPositionChange() {

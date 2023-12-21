@@ -1,5 +1,6 @@
 package SEPee.server.model;
 
+import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -754,7 +755,7 @@ public class ClientHandler implements Runnable {
             if (canMove) {
                 checkForRobotsAndMove(this.robot, isForward);
 
-                if (isForward && checkForRebootAndTeleport(this.robot)) {
+                if (isForward) {
                     MoveI.makeEffect(this.robot);
                 } else{
                     BackUp.makeEffect(this.robot);
@@ -1581,4 +1582,29 @@ public class ClientHandler implements Runnable {
         return kartenStapel;
     }
 
+    public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo){
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
+                Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+
+                if (rebootTo.equals("rebootField")){
+                    robot.setX(Server.getGame().getBoardClass().getRebootX());
+                    System.out.println("test print rebootThisRobot to x: " + Server.getGame().getBoardClass().getRebootX());
+                    robot.setY(Server.getGame().getBoardClass().getRebootY());
+                    System.out.println("test print rebootThisRobot to y: " + Server.getGame().getBoardClass().getRebootY());
+
+                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY());
+                    String serializedMovement = Serialisierer.serialize(movement);
+                    broadcast(serializedMovement);
+                    
+
+                } else if (rebootTo.equals("startingPoint")) {
+
+                } else {
+                    System.out.println("Invalid Reboot String");
+                }
+
+            }
+        }
+    }
 }

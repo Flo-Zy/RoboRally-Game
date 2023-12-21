@@ -15,22 +15,6 @@ public abstract class MapController {
     public void fillEmptyRegister(ArrayList<Card> nextCards){}
     public void movementPlayed(int clientId, int newX, int newY){}
     public void playerTurn(int clientIdtoTurn, String rotation){}
-
-    public String checkRebootConditions (Robot robot) {
-        int xCoordinate = robot.getX();
-        int yCoordinate = robot.getY();
-        String rebootTo = "continue";
-
-        if ((yCoordinate < 0 && xCoordinate < 3) || (xCoordinate < 0) || (yCoordinate > 10 && xCoordinate < 3)) {
-            // top left condition, left condition, bottom left condition, weil starting board links ist
-            rebootTo = "startingPoint";
-        } else if ((yCoordinate < 0 && xCoordinate >= 3) || (xCoordinate > 12) || (yCoordinate > 10 && xCoordinate >= 3)) {
-            // top right, right, bottom right conditions
-            rebootTo = "rebootField";
-        }
-        return rebootTo;
-    }
-
     class Zahlen{
         public int hand;
         public int register;
@@ -40,4 +24,5 @@ public abstract class MapController {
             this.register = register;
         }
     }
+
 }
