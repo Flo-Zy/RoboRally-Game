@@ -754,7 +754,13 @@ public class ExtraCrispy extends GameBoard {
     }
 
 
+    public int getRebootX(){
+        return 0;
+    }
 
+    public int getRebootY(){
+        return 0;
+    }
 
 
 }

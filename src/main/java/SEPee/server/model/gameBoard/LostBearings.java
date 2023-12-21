@@ -691,7 +691,13 @@ public class LostBearings extends GameBoard {
         return fieldsAtXY;
     }
 
+    public int getRebootX(){
+        return 0;
+    }
 
+    public int getRebootY(){
+        return 0;
+    }
 
 
 
