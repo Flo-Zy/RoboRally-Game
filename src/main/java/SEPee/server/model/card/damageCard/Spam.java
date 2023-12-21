@@ -10,6 +10,6 @@ public class Spam extends DamageCard{
     }
     @Override
     public String getImageUrl() {
-        return " ";
+        return "/boardElementsPNGs/DamageCards/Spam.png";
     }
 }

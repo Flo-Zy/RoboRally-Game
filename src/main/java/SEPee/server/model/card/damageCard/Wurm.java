@@ -10,6 +10,6 @@ public class Wurm extends DamageCard{
     }
     @Override
     public String getImageUrl() {
-        return " ";
+        return "/boardElementsPNGs/DamageCards/Worm.png";
     }
 }

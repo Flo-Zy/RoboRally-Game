@@ -10,6 +10,6 @@ public class Virus extends DamageCard{
     }
     @Override
     public String getImageUrl() {
-        return " ";
+        return "/boardElementsPNGs/DamageCards/Virus.png";
     }
 }

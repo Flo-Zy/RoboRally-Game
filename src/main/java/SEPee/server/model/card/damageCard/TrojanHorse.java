@@ -10,6 +10,6 @@ public class TrojanHorse extends DamageCard{
     }
     @Override
     public String getImageUrl() {
-        return " ";
+        return "/boardElementsPNGs/DamageCards/TrojanHorse.png";
     }
 }
