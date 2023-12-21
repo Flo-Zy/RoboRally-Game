@@ -1594,6 +1594,7 @@ public class ClientHandler implements Runnable {
                     robot.setY(Server.getGame().getBoardClass().getRebootY());
                     System.out.println("test print rebootThisRobot to y: " + Server.getGame().getBoardClass().getRebootY());
 
+                    robot.setAlreadyRebooted(false);
                     Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY());
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
