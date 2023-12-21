@@ -117,7 +117,7 @@ public class Client extends Application {
 
                     switch (messageType) {
                         case "Alive":
-                            System.out.println("Alive");
+                            //System.out.println("Alive");
                             Alive alive = new Alive();
                             String serializedAlive = Serialisierer.serialize(alive);
                             writer.println(serializedAlive);
@@ -190,22 +190,22 @@ public class Client extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "Dizzy Highway":
-                                    selectedMap1 = "DizzyHighway";
+                                    selectedMap1 = "Dizzy Highway";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     DizzyHighwayController mapController0 = loader.getController();
                                     break;
-                                case "ExtraCrispy":
-                                    selectedMap1 = "ExtraCrispy";
+                                case "Extra Crispy":
+                                    selectedMap1 = "Extra Crispy";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                                     ExtraCrispyController mapController1 = loader.getController();
                                     break;
-                                case "LostBearings":
-                                    selectedMap1 = "LostBearings";
+                                case "Lost Bearings":
+                                    selectedMap1 = "Lost Bearings";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
                                     LostBearingsController mapController2 = loader.getController();
                                     break;
-                                case "DeathTrap":
-                                    selectedMap1 = "DeathTrap";
+                                case "Death Trap":
+                                    selectedMap1 = "Death Trap";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
                                     DeathTrapController mapController3 = loader.getController();
                                     break;
@@ -221,7 +221,7 @@ public class Client extends Application {
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
                             System.out.println(selectedMap1);
-                            if(selectedMap1.equals("DizzyHighway")) {
+                            if(selectedMap1.equals("Dizzy Highway")) {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
                             } else if(selectedMap1.equals("ExtraCrispy")) {
                                 controller.loadExtraCrispyFXML(this, primaryStage);
@@ -348,7 +348,7 @@ public class Client extends Application {
                         case "YourCards":
                             System.out.println("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
-
+                            System.out.println(yourCards.getMessageBody().getCardsInHand());
                             // Füge in ChatArea: transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
                             controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
@@ -362,7 +362,7 @@ public class Client extends Application {
                                     case "BackUp":
                                         drawPile.add(new BackUp());
                                         break;
-                                    case "LeftTurn":
+                                    case "TurnLeft":
                                         drawPile.add(new LeftTurn());
                                         break;
                                     case "MoveI":
@@ -377,7 +377,7 @@ public class Client extends Application {
                                     case "PowerUp":
                                         drawPile.add(new PowerUp());
                                         break;
-                                    case "RightTurn":
+                                    case "TurnRight":
                                         drawPile.add(new RightTurn());
                                         break;
                                     case "UTurn":
@@ -388,6 +388,7 @@ public class Client extends Application {
                                 controller.setClientHand(drawPile);
                                 // initialisiere die 9 Karten von YourCards in Hand des players
                                 controller.initDrawPile();
+                                controller.initRegister();
 
                             break;
 
