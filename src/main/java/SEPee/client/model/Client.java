@@ -224,11 +224,11 @@ public class Client extends Application {
                             System.out.println(selectedMap1);
                             if(selectedMap1.equals("Dizzy Highway")) {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("ExtraCrispy")) {
+                            } else if(selectedMap1.equals("Extra Crispy")) {
                                 controller.loadExtraCrispyFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("LostBearings")) {
+                            } else if(selectedMap1.equals("Lost Bearings")) {
                                 controller.loadLostBearingsFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("DeathTrap")) {
+                            } else if(selectedMap1.equals("Death Trap")) {
                                 controller.loadDeathTrapFXML(this, primaryStage);
                             }
 
@@ -327,7 +327,7 @@ public class Client extends Application {
                             System.out.println("Starting Point Taken");
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
 
-                            if(selectedMap1.equals("DeathTrap")) {
+                            if(selectedMap1.equals("Death Trap")) {
                                 controller.addTakenStartingPointsDeathTrap(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             } else {
                                 controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
@@ -449,7 +449,7 @@ public class Client extends Application {
                                     case "BackUp":
                                         nextCards.add(new BackUp());
                                         break;
-                                    case "LeftTurn":
+                                    case "TurnLeft":
                                         nextCards.add(new LeftTurn());
                                         break;
                                     case "MoveI":
@@ -464,7 +464,7 @@ public class Client extends Application {
                                     case "PowerUp":
                                         nextCards.add(new PowerUp());
                                         break;
-                                    case "RightTurn":
+                                    case "TurnRight":
                                         nextCards.add(new RightTurn());
                                         break;
                                     case "UTurn":
