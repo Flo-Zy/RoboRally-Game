@@ -4,6 +4,7 @@ import SEPee.client.model.AI;
 import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
+import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
@@ -77,6 +78,7 @@ public class DeathTrapController extends MapController {
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
+    private AtomicInteger counterRegister = new AtomicInteger(0);
 
     public void setCounter1(int counter){
         counter1.set(counter);
@@ -301,6 +303,7 @@ public class DeathTrapController extends MapController {
     public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
         zahlen.clear();
         counter1.set(0);
+        counterRegister.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (playerDrawPileMap.containsKey(clientId)) {
             playerDrawPileMap.remove(clientId);
@@ -343,15 +346,21 @@ public class DeathTrapController extends MapController {
                                 handImageView.setVisible(false);
 
                                 // sende serialisiertes SelectedCard
-                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
+                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get()+1);
                                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                 Client.getWriter().println(serializedCardSelected);
 
                                 zahlen.add(new Zahlen(index, counter1.get()));
                                 indexToCounterMap.put(index, counter1.get());
 
+                                counterRegister.incrementAndGet();
                                 int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
                                 counter1.set(smallestEmptyRegisterIndex);
+                                if(counterRegister.get() == 5){
+                                    TimerStarted timerStarted = new TimerStarted();
+                                    String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                    Client.getWriter().println(serializedTimerStarted);
+                                }
 
                             } else {
                                 System.out.println("Register voll");
@@ -372,7 +381,8 @@ public class DeathTrapController extends MapController {
                             if (registerImageView.getImage() != null) {
                                 if (counter1.get() < 5) {
                                     int indexNew = mapRegisterIndexToHandIndex(registerIndex);
-                                    counter1.decrementAndGet();
+                                    //counter1.decrementAndGet();
+                                    counterRegister.decrementAndGet();
 
                                     if (indexNew < 9) {
                                         ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
@@ -384,7 +394,7 @@ public class DeathTrapController extends MapController {
                                         counter1.set(smallestEmptyRegisterIndex);
 
                                         // sende serialisiertes SelectedCard
-                                        SelectedCard selectedCard = new SelectedCard(null, registerIndex);
+                                        SelectedCard selectedCard = new SelectedCard(null, registerIndex+1);
                                         String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                         Client.getWriter().println(serializedCardSelected);
                                     } else {
@@ -436,9 +446,10 @@ public class DeathTrapController extends MapController {
     }
 
     public void fillEmptyRegister(ArrayList<Card> nextCards){
-        int emptyIndex = 5 - nextCards.size();
+        int emptyIndex;
         int index = 0;
-        while(emptyIndex < 5){
+        while(index < nextCards.size()){
+            emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
             Image cardImage = new Image(nextCards.get(index).getImageUrl());
@@ -447,13 +458,17 @@ public class DeathTrapController extends MapController {
             registerImageView.setVisible(true);
             registerImageView.setManaged(true);
             index++;
-            emptyIndex++;
         }
     }
 
     public void movementPlayed(int clientId, int newX, int newY) {
-
-        Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
+        Player player = new Player("", -999, -999);
+        for(Player player2 : Client.getPlayerListClient()){
+            if(player2.getId() == clientId){
+                player = player2;
+            }
+        }
+        //Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
         Robot robot = playerRobotMap.get(player);
 
         ImageView imageView = robotImageViewMap.get(robot);
@@ -462,7 +477,14 @@ public class DeathTrapController extends MapController {
     }
 
     public void playerTurn(int clientIdToTurn, String rotation) {
-        Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+        Player player = new Player("", -999, -999);
+        for(Player player2 : Client.getPlayerListClient()){
+            if(player2.getId() == clientIdToTurn){
+                player = player2;
+            }
+        }
+        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+        Robot robot = playerRobotMap.get(player);
 
         ImageView imageView = robotImageViewMap.get(robot);
 

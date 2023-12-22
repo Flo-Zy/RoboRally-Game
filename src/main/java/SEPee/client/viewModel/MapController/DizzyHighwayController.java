@@ -363,7 +363,6 @@ public class DizzyHighwayController extends MapController {
                                         String serializedTimerStarted = Serialisierer.serialize(timerStarted);
                                         Client.getWriter().println(serializedTimerStarted);
                                     }
-
                             } else {
                                 System.out.println("Register voll");
 
