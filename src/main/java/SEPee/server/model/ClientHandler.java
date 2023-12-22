@@ -1271,21 +1271,21 @@ public class ClientHandler implements Runnable {
             if (shouldActivate) {
                 if (standingOnPushPanel.contains("PushPanel [top")) {
                     //push down
-                    robot.setY(robot.getY() + 1);
+                    robot.setY(robot.getY() - 1);
 
 
                 } else if (standingOnPushPanel.contains("PushPanel [left")) {
                     //push right
-                    robot.setX(robot.getX() + 1);
+                    robot.setX(robot.getX() - 1);
 
 
                 } else if (standingOnPushPanel.contains("PushPanel [right")) {
                     //push left
-                    robot.setX(robot.getX() - 1);
+                    robot.setX(robot.getX() + 1);
 
                 } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
                     //push top
-                    robot.setY(robot.getY() - 1);
+                    robot.setY(robot.getY() + 1);
 
                 }
                 Movement movement = new Movement(robotId, robot.getX(), robot.getY());
