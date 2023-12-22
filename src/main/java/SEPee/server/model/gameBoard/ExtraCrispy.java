@@ -351,7 +351,7 @@ public class ExtraCrispy extends GameBoard {
         field6_0.add(new Empty("4A"));
 
         List<Field> field6_1 = new ArrayList<>();
-        String[] orientations61 = {"right", "bottom"};
+        String[] orientations61 = {"bottom", "right"};
         field6_1.add(new ConveyorBelt("4A", 1, orientations61));
 
         List<Field> field6_2 = new ArrayList<>();
@@ -407,7 +407,7 @@ public class ExtraCrispy extends GameBoard {
         field7_0.add(new Empty("4A"));
 
         List<Field> field7_1 = new ArrayList<>();
-        String[] orientations71 = {"right", "left"};
+        String[] orientations71 = {"left", "right"};
         field7_1.add(new ConveyorBelt("4A", 1, orientations71));
 
         List<Field> field7_2 = new ArrayList<>();
@@ -595,12 +595,14 @@ public class ExtraCrispy extends GameBoard {
         field10_4.add(new Wall("4A", orientation104Wall));
 
         List<Field> field10_5 = new ArrayList<>();
-        String[] orientation105Wall = {"top"};
-        field10_5.add(new Wall("4A", orientation105Wall));
+        String[] orientation105Laser = {"top"};
+        field10_5.add(new Laser("4A", orientation105Laser, 1));
 
         List<Field> field10_6 = new ArrayList<>();
-        String[] orientation106Belt = {"left, right"};
+        String[] orientation106Belt = {"left", "right"};
         field10_6.add(new ConveyorBelt("4A", 2, orientation106Belt));
+        String[] orientation106Laser = {"top"};
+        field10_6.add(new Laser("4A", orientation106Laser, 1));
 
         List<Field> field10_7 = new ArrayList<>();
         field10_7.add(new CheckPoint("4A", 3));
