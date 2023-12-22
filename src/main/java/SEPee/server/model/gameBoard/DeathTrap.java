@@ -91,7 +91,8 @@ public class DeathTrap extends GameBoard {
         field1_5.add(new ConveyorBelt("2A", 1, orientations15Belt));
 
         List<Field> field1_6 = new ArrayList<>();
-        field1_6.add(new Empty("2A"));
+        String[] orientations16Wall = {"right"};
+        field1_6.add(new Wall("2A", orientations16Wall));
 
         List<Field> field1_7 = new ArrayList<>();
         field1_7.add(new CheckPoint("2A", 1));
@@ -294,7 +295,7 @@ public class DeathTrap extends GameBoard {
 
         List<Field> field5_1 = new ArrayList<>();
         String[] orientations51 = {"left", "right"};
-        field5_1.add(new ConveyorBelt("2A", 2, orientations51));
+        field5_1.add(new ConveyorBelt("2A", 1, orientations51));
 
         List<Field> field5_2 = new ArrayList<>();
         field5_2.add(new Empty("2A"));
@@ -352,7 +353,6 @@ public class DeathTrap extends GameBoard {
         List<Field> field6_3 = new ArrayList<>();
         String[] orientations63Wall = {"bottom"};
         field6_3.add(new Wall("2A", orientations63Wall));
-        field6_3.add(new Empty("2A"));
 
         List<Field> field6_4 = new ArrayList<>();
         String[] orientations64Wall = {"top"};
@@ -523,11 +523,14 @@ public class DeathTrap extends GameBoard {
         field9_3.add(new ConveyorBelt("2A", 1, orientations91));
 
         List<Field> field9_4 = new ArrayList<>();
+        String[] orientations94Wall = {"right"};
+        field9_4.add(new Wall("2A", orientations94Wall));
         String[] orientations94 = {"top", "left"};
         field9_4.add(new ConveyorBelt("2A", 1, orientations94));
 
         List<Field> field9_5 = new ArrayList<>();
-        field9_5.add(new Empty("2A"));
+        String[] orientations95Wall = {"right"};
+        field9_5.add(new Wall("2A", orientations95Wall));
 
         List<Field> field9_6 = new ArrayList<>();
         field9_6.add(new Empty("2A"));

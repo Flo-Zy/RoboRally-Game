@@ -326,7 +326,7 @@ public class LostBearings extends GameBoard {
         field6_0.add(new Empty("1A"));
 
         List<Field> field6_1 = new ArrayList<>();
-        String[] orientations61 = {"right", "left"};
+        String[] orientations61 = {"left", "right"};
         field6_1.add(new ConveyorBelt("1A", 1, orientations61));
 
         List<Field> field6_2 = new ArrayList<>();
