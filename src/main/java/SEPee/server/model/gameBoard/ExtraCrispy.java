@@ -183,14 +183,17 @@ public class ExtraCrispy extends GameBoard {
         //field3_3.add(new Empty("4A"));
 
         List<Field> field3_4 = new ArrayList<>();
-        String[] orientations34Wall = {"left, top"};
+        String[] orientations34Wall = {"left"};
         field3_4.add(new Wall("4A", orientations34Wall));
-        //field3_4.add(new Wall("4A", ))
+        String[] orientations34Wall2 = {"top"};
+        field3_4.add(new Wall("4A", orientations34Wall2));
         field3_4.add(new EnergySpace("4A", 1));
 
         List<Field> field3_5 = new ArrayList<>();
-        String[] orientations35Wall = {"left, bottom"};
+        String[] orientations35Wall = {"left"};
         field3_5.add(new Wall("4A", orientations35Wall));
+        String[] orientations35Wall2 = {"bottom"};
+        field3_5.add(new Wall("4A", orientations35Wall2));
 
         List<Field> field3_6 = new ArrayList<>();
         String[] orientations36Wall = {"top"};
