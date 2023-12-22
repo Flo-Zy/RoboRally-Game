@@ -218,6 +218,11 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
+                            if(Server.getCountPlayerTurns() == 0) {
+                                for (Player player : Server.getGame().getPlayerList()) {
+                                    player.getPlayerMat().getReceivedDamageCards().clear();
+                                }
+                            }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
                             PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
@@ -289,9 +294,9 @@ public class ClientHandler implements Runnable {
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
 
-                                for (Player player : Server.getGame().getPlayerList()) {
+                                /*for (Player player : Server.getGame().getPlayerList()) {
                                     player.getPlayerMat().getReceivedDamageCards().clear();
-                                }
+                                }*/
 
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
 
@@ -1716,6 +1721,12 @@ public class ClientHandler implements Runnable {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
             if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+
+                //if robot rebooted he receives two spam cards
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
 
                 if (rebootTo.equals("rebootField")){
                     robot.setX(Server.getGame().getBoardClass().getRebootX());
