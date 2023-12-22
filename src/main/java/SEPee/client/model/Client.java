@@ -133,7 +133,7 @@ public class Client extends Application {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.init(this, primaryStage);
                                 // PlayerValues schicken
-                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure());
+                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                 String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                 writer.println(serializedPlayerValues);
                                 primaryStage.show();
@@ -147,7 +147,7 @@ public class Client extends Application {
                             int figure = playerAdded.getMessageBody().getFigure();
 
                             // Create a new Player object
-                            Player newPlayer = new Player(name, id, figure);
+                            Player newPlayer = new Player(name, id, figure+1);
 
                             // Add the new player to the client-side playerList
                             playerListClient.add(newPlayer);
