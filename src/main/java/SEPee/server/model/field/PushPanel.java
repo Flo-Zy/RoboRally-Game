@@ -10,12 +10,10 @@ public class PushPanel extends Field {
     //private int speed;
     @SerializedName("orientations")
     private String[] orientations;
-    @SerializedName("registers")
-    private int[] registers;
+
     //private int count;
     public PushPanel(String isOnBoard, String[] orientations, int[] registers){
-        super("PushPanel", isOnBoard);
+        super("PushPanel", isOnBoard, orientations, registers);
         this.orientations = orientations;
-        this.registers = registers;
     }
 }

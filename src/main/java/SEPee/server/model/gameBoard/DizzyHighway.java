@@ -736,12 +736,20 @@ public class DizzyHighway extends GameBoard {
         List<List<Field>> column = this.getGameBoard().get(x);
         if (y < 0 || y >= column.size()) {
             throw new IllegalArgumentException("Y-coordinate out of bounds");
+
+
         }
 
         List<Field> fieldsAtXY = column.get(y);
         return fieldsAtXY;
     }
 
+    public int getRebootX(){
+        return 7;
+    }
+    public int getRebootY(){
+        return 3;
+    }
 
 
 

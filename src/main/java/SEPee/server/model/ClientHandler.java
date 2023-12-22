@@ -1,5 +1,6 @@
 package SEPee.server.model;
 
+import SEPee.client.viewModel.MapController.MapController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -31,7 +32,7 @@ import static SEPee.server.model.Player.*;
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private int clientId;
-    private List<ClientHandler> clients;
+    private static List<ClientHandler> clients;
     private PrintWriter writer;
     private Player player;
     private Robot robot;
@@ -724,7 +725,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void broadcast(String serializedObjectToSend) {
+    private static void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
             client.writer.println(serializedObjectToSend);
         }
@@ -749,9 +750,9 @@ public class ClientHandler implements Runnable {
             if (canMove) {
                 checkForRobotsAndMove(this.robot, isForward);
 
-                if (isForward && checkForRebootAndTeleport(this.robot)) {
+                if (isForward) {
                     MoveI.makeEffect(this.robot);
-                } else{
+                } else {
                     BackUp.makeEffect(this.robot);
                 }
             } else {
@@ -787,6 +788,7 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+
     private boolean shouldPush(boolean isForward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
         switch (orientation) {
             case "top":
@@ -841,165 +843,6 @@ public class ClientHandler implements Runnable {
         Movement movement = new Movement(player.getId(), x, y);
         String serializedMovement = Serialisierer.serialize(movement);
         broadcast(serializedMovement);
-    }
-
-
-    private boolean checkForRebootAndTeleport(Robot robot) {
-        String orientation = robot.getOrientation();
-        int xCoordinate = robot.getX();
-        int yCoordinate = robot.getY();
-
-        switch (orientation) {
-            case "top":
-                if (yCoordinate - 1 < 0 && xCoordinate < 3) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(player.getRobot().getStartingPointX());
-                            player.getRobot().setY(player.getRobot().getStartingPointY());
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                } else if (yCoordinate - 1 < 0 && xCoordinate >= 3) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(7);
-                            player.getRobot().setY(3);
-                            /*
-                            player.getRobot().setOrientation("right");
-
-                            PlayerTurning playerTurning = new PlayerTurning();
-
-                             */
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            //Reboot direction verschicken
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                }
-                break;
-            case "right":
-                if (xCoordinate + 1 > 12) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(7);
-                            player.getRobot().setY(3);
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                }
-                break;
-            case "bottom":
-                if (yCoordinate + 1 > 10 && xCoordinate < 3) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(player.getRobot().getStartingPointX());
-                            player.getRobot().setY(player.getRobot().getStartingPointY());
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                } else if (yCoordinate + 1 > 10 && xCoordinate > 2) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(7);
-                            player.getRobot().setY(3);
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                }
-
-                break;
-            case "left":
-                if (xCoordinate - 1 < 0) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (robot.equals(player.getRobot())) {
-                            player.getRobot().setX(player.getRobot().getStartingPointX());
-                            player.getRobot().setY(player.getRobot().getStartingPointY());
-
-                            Movement movement = new Movement(player.getId(), player.getRobot().getX(), player.getRobot().getY());
-                            String serializedMovement = Serialisierer.serialize(movement);
-                            broadcast(serializedMovement);
-
-                            Reboot reboot = new Reboot(player.getId());
-                            String serializedReboot = Serialisierer.serialize(reboot);
-                            broadcast(serializedReboot);
-
-                            RebootDirection rebootDirection = new RebootDirection("bottom");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            broadcast(serializedRebootDirection);
-
-                            return false;
-                        }
-                    }
-                }
-
-                break;
-
-        }
-        return true;
     }
 
     public int checkNumReady() {
@@ -1090,10 +933,25 @@ public class ClientHandler implements Runnable {
                 System.out.println("Checkpoint");
                 // Actions for a check point
                 int checkPointNumber = field.getCheckPointNumber();
-                result.append("CheckPoint, [" + checkPointNumber + "], ");
+                result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
                 // Actions for an energy space
                 result.append("EnergySpace, ");
+            } else if (field instanceof Pit) {
+                result.append("Pit");
+                rebootThisRobot(robotX, robotY, "rebootField");
+            } else if (field instanceof PushPanel) {
+                String[] orientations = field.getOrientation();
+                int[] registers = field.getRegisters();
+                result.append("PushPanel " + Arrays.toString(orientations) + " " + Arrays.toString(registers) + ", ");
+
+                // when to push because checkRobotField gets called often
+                // robot could be moving past a pusher with move 2 but panel will still active if we push here
+
+            } else if (field instanceof  Gear) {
+                String[] orientation = field.getOrientation();
+                result.append("Gear " + Arrays.toString(orientation) + ", ");
+                
             } else {
                 // Default case
                 System.out.println("Field nicht gefunden");
@@ -1102,7 +960,6 @@ public class ClientHandler implements Runnable {
         }
 
         // Remove the last comma and space
-
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
@@ -1137,6 +994,12 @@ public class ClientHandler implements Runnable {
             checkGreenConveyorBelts(i);
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            checkPushPanels(i);
+        }
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            checkGears(i);
+        }
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkBoardLaser(i);
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
@@ -1160,7 +1023,24 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i, standingOnBlueConveyor);
+                String secondBlue = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondBlue.contains("ConveyorBelt 2 [top")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
+                checkConveyorBeltAgain(i, secondBlue);
 
 
             } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [right")) {
@@ -1170,7 +1050,24 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i, standingOnBlueConveyor);
+                String secondBlue = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondBlue.contains("ConveyorBelt 2 [right")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
+                checkConveyorBeltAgain(i, secondBlue);
 
             } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [bottom")) {
 
@@ -1180,7 +1077,24 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i, standingOnBlueConveyor);
+                String secondBlue = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
+                checkConveyorBeltAgain(i, secondBlue);
 
             } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [left")) {
 
@@ -1190,7 +1104,24 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                checkConveyorBeltAgain(i, standingOnBlueConveyor);
+                String secondBlue = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondBlue.contains("ConveyorBelt 2 [left")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
+                checkConveyorBeltAgain(i, secondBlue);
 
             }
         }
@@ -1207,12 +1138,46 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
+                String secondGreen = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondGreen.contains("ConveyorBelt 1 [top")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [right")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
+
+                String secondGreen = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondGreen.contains("ConveyorBelt 1 [right")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
 
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [bottom")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() + 1);
@@ -1221,14 +1186,126 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
+                String secondGreen = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
+
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [left")) {
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
+
+                String secondGreen = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+
+                if (!secondGreen.contains("ConveyorBelt 1 [left")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+                }
             }
         }
+    }
+
+    private void checkPushPanels(int i){
+        Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+        int robotId = Server.getGame().getPlayerList().get(i).getId();
+        String standingOnPushPanel = checkRobotField(robot);
+        int currentRegister = Server.getRegisterCounter();
+        boolean shouldActivate = false;
+        int pushPanelRegister = 0;
+
+        if (standingOnPushPanel.contains("[1, 3, 5]")){
+            pushPanelRegister = 1;
+
+        } else if (standingOnPushPanel.contains("[2, 4]")) {
+            pushPanelRegister = 2;
+        }
+        
+        if (standingOnPushPanel.contains("PushPanel")) {
+            
+            if ((currentRegister == 1 || currentRegister == 3 || currentRegister == 5) && (pushPanelRegister == 1)){
+                shouldActivate = true;
+            } else if ((currentRegister == 2 || currentRegister == 4) && (pushPanelRegister == 2)) {
+                shouldActivate = true;
+            }
+            
+            if (shouldActivate) {
+                if (standingOnPushPanel.contains("PushPanel [top")) {
+                    //push down
+                    robot.setY(robot.getY() + 1);
+
+
+                } else if (standingOnPushPanel.contains("PushPanel [left")) {
+                    //push right
+                    robot.setX(robot.getX() + 1);
+
+
+                } else if (standingOnPushPanel.contains("PushPanel [right")) {
+                    //push left
+                    robot.setX(robot.getX() - 1);
+
+                } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
+                    //push top
+                    robot.setY(robot.getY() - 1);
+
+                }
+                Movement movement = new Movement(robotId, robot.getX(), robot.getY());
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+            }
+        }
+    }
+    
+    private void checkGears(int i){
+        String standingOnGear = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+        int robotId = Server.getGame().getPlayerList().get(i).getId();
+        String resultingOrientation = "init";
+        String rotateDirection = "init";
+        
+        if (standingOnGear.contains("Gear")){
+            if (standingOnGear.contains("Gear [counterclockwise]")){
+                rotateDirection = "counterclockwise";
+                resultingOrientation = getResultingOrientation("counterclockwise", robot);
+                robot.setOrientation(resultingOrientation);
+
+
+            } else if (standingOnGear.contains("Gear [clockwise]")) {
+                rotateDirection = "clockwise";
+                resultingOrientation = getResultingOrientation("clockwise", robot);
+                robot.setOrientation(resultingOrientation);
+
+
+            }
+            PlayerTurning playerTurning = new PlayerTurning(robotId, rotateDirection);
+            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+            broadcast(serializedPlayerTurning);
+        }
+        
     }
 
     private void checkBoardLaser(int i) {
@@ -1245,6 +1322,7 @@ public class ClientHandler implements Runnable {
     private void checkRobotLasers(int i) {
         String robotOrientation = Server.getGame().getPlayerList().get(i).getRobot().getOrientation();
         Robot yourRobot = Server.getGame().getPlayerList().get(i).getRobot();
+        boolean safe = false;
 
         switch (robotOrientation) {
             case "top":
@@ -1257,17 +1335,31 @@ public class ClientHandler implements Runnable {
                         targetRobot1 = Server.getGame().getPlayerList().get(j).getRobot();
                     }
                 }
-                if (targetRobot1.getY() != -9999) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (player.getRobot().equals(targetRobot1)) {
-                            if (Server.getGame().getSpam() > 0) {
-                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                player.getPlayerMat().getDiscardPile().add("Spam");
-                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+
+                if(targetRobot1.getY() != -9999) {
+                    int y = yourRobot.getY() - 1;
+                    while (y >= targetRobot1.getY()) {
+                        Robot robot = new Robot(yourRobot.getX(), y, "top");
+                        String checkWall = checkRobotField(robot);
+                        if (checkWall.contains("Wall [bottom")) {
+                            safe = true;
+                            break;
+                        }
+                        y--;
+                    }
+                    if (!safe) {
+                        for (Player player : Server.getGame().getPlayerList()) {
+                            if (player.getRobot().equals(targetRobot1)) {
+                                if (Server.getGame().getSpam() > 0) {
+                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                    player.getPlayerMat().getDiscardPile().add("Spam");
+                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                            }
                         }
                     }
                 }
+
                 break;
             case "right":
                 Robot targetRobot2 = new Robot(9999, yourRobot.getY(), "right");
@@ -1280,13 +1372,25 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 if (targetRobot2.getX() != 9999) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (player.getRobot().equals(targetRobot2)) {
-                            if (Server.getGame().getSpam() > 0) {
-                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                player.getPlayerMat().getDiscardPile().add("Spam");
-                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                    int x = yourRobot.getX() + 1;
+                    while (x <= targetRobot2.getX()) {
+                        Robot robot = new Robot(x, yourRobot.getY(), "right");
+                        String checkWall = checkRobotField(robot);
+                        if (checkWall.contains("Wall [left")) {
+                            safe = true;
+                            break;
+                        }
+                        x++;
+                    }
+                    if (!safe) {
+                        for (Player player : Server.getGame().getPlayerList()) {
+                            if (player.getRobot().equals(targetRobot2)) {
+                                if (Server.getGame().getSpam() > 0) {
+                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                    player.getPlayerMat().getDiscardPile().add("Spam");
+                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                            }
                         }
                     }
                 }
@@ -1302,13 +1406,25 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 if (targetRobot3.getY() != 9999) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (player.getRobot().equals(targetRobot3)) {
-                            if (Server.getGame().getSpam() > 0) {
-                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                player.getPlayerMat().getDiscardPile().add("Spam");
-                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                    int y = yourRobot.getY() + 1;
+                    while (y <= targetRobot3.getY()) {
+                        Robot robot = new Robot(yourRobot.getX(), y, "bottom");
+                        String checkWall = checkRobotField(robot);
+                        if (checkWall.contains("Wall [top")) {
+                            safe = true;
+                            break;
+                        }
+                        y++;
+                    }
+                    if (!safe) {
+                        for (Player player : Server.getGame().getPlayerList()) {
+                            if (player.getRobot().equals(targetRobot3)) {
+                                if (Server.getGame().getSpam() > 0) {
+                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                    player.getPlayerMat().getDiscardPile().add("Spam");
+                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                            }
                         }
                     }
                 }
@@ -1324,13 +1440,25 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 if (targetRobot4.getX() != -9999) {
-                    for (Player player : Server.getGame().getPlayerList()) {
-                        if (player.getRobot().equals(targetRobot4)) {
-                            if (Server.getGame().getSpam() > 0) {
-                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                player.getPlayerMat().getDiscardPile().add("Spam");
-                            } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                    int x = yourRobot.getX() - 1;
+                    while (x >= targetRobot4.getX()) {
+                        Robot robot = new Robot(x, yourRobot.getY(), "left");
+                        String checkWall = checkRobotField(robot);
+                        if (checkWall.contains("Wall [right")) {
+                            safe = true;
+                            break;
+                        }
+                        x--;
+                    }
+                    if (!safe) {
+                        for (Player player : Server.getGame().getPlayerList()) {
+                            if (player.getRobot().equals(targetRobot4)) {
+                                if (Server.getGame().getSpam() > 0) {
+                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                    player.getPlayerMat().getDiscardPile().add("Spam");
+                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                            }
                         }
                     }
                 }
@@ -1341,24 +1469,36 @@ public class ClientHandler implements Runnable {
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
-
-            Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
-            int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
-
-            if (Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount) {
-                GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
-                String serializedGameFinished = Serialisierer.serialize(gameFinished);
-                broadcast(serializedGameFinished);
-            }/*else if(standingOnCheckPoint.contains("CheckPoint [2"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [3"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [4"){
-
-            }else if(standingOnCheckPoint.contains("CheckPoint [5"){
-
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0){ //check whether no checkPoints were reached before
+                checkGameFinished(i);
             }
-            */
+        }else if(standingOnCheckPoint.contains("CheckPoint [2")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1){ //check whether one checkPoint was reached before
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [3")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2){
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [4")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3){
+                checkGameFinished(i);
+            }
+        }else if(standingOnCheckPoint.contains("CheckPoint [5")){
+            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4){
+                checkGameFinished(i);
+            }
+        }
+    }
+
+    private void checkGameFinished(int i){
+        Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
+        int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
+
+        if (Server.getGame().getBoardClass().getCheckpointAmount() == playerTokenAmount) {
+            GameFinished gameFinished = new GameFinished(Server.getGame().getPlayerList().get(i).getId());
+            String serializedGameFinished = Serialisierer.serialize(gameFinished);
+            broadcast(serializedGameFinished);
         }
     }
 
@@ -1366,95 +1506,103 @@ public class ClientHandler implements Runnable {
 
         Thread.sleep(750);
 
-        String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
-        if (stillOnBlue.contains("ConveyorBelt")) {
-            if (stillOnBlue.contains("ConveyorBelt [top")) {
+
+        if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
+            if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [top")) {
                 Server.getGame().getPlayerList().get(j).getRobot().setY(Server.getGame().getPlayerList().get(j).getRobot().getY() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), Server.getGame().getPlayerList().get(j).getRobot().getX(), Server.getGame().getPlayerList().get(j).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
+                String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
-                if (!standingOnBlueConveyorBelt.contains("ConveyorBelt [top")) {
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [right")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
-                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                        broadcast(serializedPlayerTurning);
-                    }
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [left")) {
+                if (!stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
                 }
 
-            } else if (stillOnBlue.contains("ConveyorBelt [right")) {
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [right")) {
                 Server.getGame().getPlayerList().get(j).getRobot().setX(Server.getGame().getPlayerList().get(j).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), Server.getGame().getPlayerList().get(j).getRobot().getX(), Server.getGame().getPlayerList().get(j).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                if (!standingOnBlueConveyorBelt.contains("ConveyorBelt [right")) {
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
-                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                        broadcast(serializedPlayerTurning);
-                    }
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [top")) {
+                String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
                 }
 
-            } else if (stillOnBlue.contains("ConveyorBelt [bottom")) {
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [bottom")) {
                 Server.getGame().getPlayerList().get(j).getRobot().setY(Server.getGame().getPlayerList().get(j).getRobot().getY() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), Server.getGame().getPlayerList().get(j).getRobot().getX(), Server.getGame().getPlayerList().get(j).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                if (!standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")) {
+                String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [left")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
+                if (!stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [right")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
                 }
 
 
-            } else if (stillOnBlue.contains("ConveyorBelt [left")) {
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [left")) {
+
                 Server.getGame().getPlayerList().get(j).getRobot().setX(Server.getGame().getPlayerList().get(j).getRobot().getX() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), Server.getGame().getPlayerList().get(j).getRobot().getX(), Server.getGame().getPlayerList().get(j).getRobot().getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
 
-                if (!standingOnBlueConveyorBelt.contains("ConveyorBelt [left")) {
+                String stillOnBlue = checkRobotField(Server.getGame().getPlayerList().get(j).getRobot());
 
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [top")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
+                if (!stillOnBlue.contains("ConveyorBelt 2 [left")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
-                    if (standingOnBlueConveyorBelt.contains("ConveyorBelt [bottom")) {
-                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(j).getRobot()));
-                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+                        Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
                     }
@@ -1559,4 +1707,42 @@ public class ClientHandler implements Runnable {
         return kartenStapel;
     }
 
+    public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo){
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
+            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
+                Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+
+                if (rebootTo.equals("rebootField")){
+                    robot.setX(Server.getGame().getBoardClass().getRebootX());
+                    robot.setY(Server.getGame().getBoardClass().getRebootY());
+                    robot.setAlreadyRebooted(false);
+
+                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
+                    String serializedMovement = Serialisierer.serialize(movement);
+                    broadcast(serializedMovement);
+
+                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
+                    String serializedReboot = Serialisierer.serialize(reboot);
+                    broadcast(serializedReboot);
+
+                } else if (rebootTo.equals("startingPoint")) {
+                    robot.setX(robot.getStartingPointX());
+                    robot.setY(robot.getStartingPointY());
+                    robot.setAlreadyRebooted(false);
+
+                    Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
+                    String serializedMovement = Serialisierer.serialize(movement);
+                    broadcast(serializedMovement);
+
+                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
+                    String serializedReboot = Serialisierer.serialize(reboot);
+                    broadcast(serializedReboot);
+
+                } else {
+                    System.out.println("Invalid Reboot String");
+                }
+
+            }
+        }
+    }
 }
