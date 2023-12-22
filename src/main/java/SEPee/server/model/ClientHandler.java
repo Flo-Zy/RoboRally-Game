@@ -213,80 +213,87 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
+                            if(Server.getCountPlayerTurns() == 0) {
+                                for (Player player : Server.getGame().getPlayerList()) {
+                                    player.getPlayerMat().getReceivedDamageCards().clear();
+                                }
+                            }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
-                            PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
+                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()-1).isReboot()) {
+                                PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
-                            // Card played für Karten Verständnis an alle clients schicken
-                            String playCardCard = playCard.getMessageBody().getCard();
-                            CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
-                            String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
-                            System.out.println("id: " + clientId + "played: " + playCardCard);
+                                // Card played für Karten Verständnis an alle clients schicken
+                                String playCardCard = playCard.getMessageBody().getCard();
+                                CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
+                                String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
+                                System.out.println("id: " + clientId + "played: " + playCardCard);
 
-                            if (!playCardCard.equals("Again")) {
-                                lastPlayedCard = playCardCard;
+                                if (!playCardCard.equals("Again")) {
+                                    lastPlayedCard = playCardCard;
+                                }
+
+                                //logik für karteneffekte
+                                switch (lastPlayedCard) {
+                                    case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                                        handleRobotMovement(1, false);
+                                        break;
+                                    case "MoveI":
+                                        handleRobotMovement(1, true);
+                                        break;
+                                    case "MoveII":
+                                        handleRobotMovement(2, true);
+                                        break;
+                                    case "MoveIII":
+                                        handleRobotMovement(3, true);
+                                        break;
+                                    case "PowerUp":
+                                        //lastPlayedCard = "PowerUp";
+                                        break;
+                                    case "RightTurn":
+                                        //lastPlayedCard = "RightTurn";
+                                        RightTurn.makeEffect(this.robot);
+                                        int clientIDRightTurn = this.clientId;
+                                        PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
+                                        String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
+                                        Thread.sleep(750);
+                                        broadcast(serializedPlayerTurningRight);
+                                        break;
+                                    case "LeftTurn":
+                                        //lastPlayedCard = "LeftTurn";
+                                        LeftTurn.makeEffect(this.robot);
+                                        int clientIDLeftTurn = this.clientId;
+                                        PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
+                                        String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
+                                        Thread.sleep(750);
+                                        broadcast(serializedPlayerTurningLeft);
+                                        break;
+                                    case "UTurn":
+                                        //lastPlayedCard = "UTurn";
+                                        UTurn.makeEffect(this.robot);
+                                        int clientIDUTurn = this.clientId;
+                                        PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
+                                        String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
+                                        //send twice turn by 90 degrees in order to end up turning 180 degrees
+                                        Thread.sleep(750);
+                                        broadcast(serializedPlayerTurningUTurn);
+                                        broadcast(serializedPlayerTurningUTurn);
+                                        break;
+                                    default:
+                                        System.out.println("unknown card name");
+                                        break;
+
+
+                                }
+
+                                broadcast(serializedCardPlayed);
                             }
-
-                            //logik für karteneffekte
-                            switch (lastPlayedCard) {
-                                case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
-                                    handleRobotMovement(1, false);
-                                    break;
-                                case "MoveI":
-                                    handleRobotMovement(1, true);
-                                    break;
-                                case "MoveII":
-                                    handleRobotMovement(2, true);
-                                    break;
-                                case "MoveIII":
-                                    handleRobotMovement(3, true);
-                                    break;
-                                case "PowerUp":
-                                    //lastPlayedCard = "PowerUp";
-                                    break;
-                                case "RightTurn":
-                                    //lastPlayedCard = "RightTurn";
-                                    RightTurn.makeEffect(this.robot);
-                                    int clientIDRightTurn = this.clientId;
-                                    PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
-                                    String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
-                                    Thread.sleep(750);
-                                    broadcast(serializedPlayerTurningRight);
-                                    break;
-                                case "LeftTurn":
-                                    //lastPlayedCard = "LeftTurn";
-                                    LeftTurn.makeEffect(this.robot);
-                                    int clientIDLeftTurn = this.clientId;
-                                    PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
-                                    String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
-                                    Thread.sleep(750);
-                                    broadcast(serializedPlayerTurningLeft);
-                                    break;
-                                case "UTurn":
-                                    //lastPlayedCard = "UTurn";
-                                    UTurn.makeEffect(this.robot);
-                                    int clientIDUTurn = this.clientId;
-                                    PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
-                                    String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
-                                    //send twice turn by 90 degrees in order to end up turning 180 degrees
-                                    Thread.sleep(750);
-                                    broadcast(serializedPlayerTurningUTurn);
-                                    broadcast(serializedPlayerTurningUTurn);
-                                    break;
-                                default:
-                                    System.out.println("unknown card name");
-                                    break;
-
-
-                            }
-
-                            broadcast(serializedCardPlayed);
 
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
 
-                                for (Player player : Server.getGame().getPlayerList()) {
+                                /*for (Player player : Server.getGame().getPlayerList()) {
                                     player.getPlayerMat().getReceivedDamageCards().clear();
-                                }
+                                }*/
 
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
 
@@ -325,6 +332,9 @@ public class ClientHandler implements Runnable {
                                         System.out.println(activeCard.getCard());
                                     }
                                 } else { // Server.getRegisterCounter() größer 4
+                                    for(Player player : Server.getPlayerList()){
+                                        player.setReboot(false);
+                                    }
                                     Server.setRegisterCounter(0);
                                     Server.setTimerSend(0);
                                     for (Player player : Server.getGame().getPlayerList()) {
@@ -1256,21 +1266,21 @@ public class ClientHandler implements Runnable {
             if (shouldActivate) {
                 if (standingOnPushPanel.contains("PushPanel [top")) {
                     //push down
-                    robot.setY(robot.getY() + 1);
+                    robot.setY(robot.getY() - 1);
 
 
                 } else if (standingOnPushPanel.contains("PushPanel [left")) {
                     //push right
-                    robot.setX(robot.getX() + 1);
+                    robot.setX(robot.getX() - 1);
 
 
                 } else if (standingOnPushPanel.contains("PushPanel [right")) {
                     //push left
-                    robot.setX(robot.getX() - 1);
+                    robot.setX(robot.getX() + 1);
 
                 } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
                     //push top
-                    robot.setY(robot.getY() - 1);
+                    robot.setY(robot.getY() + 1);
 
                 }
                 Movement movement = new Movement(robotId, robot.getX(), robot.getY());
@@ -1709,8 +1719,16 @@ public class ClientHandler implements Runnable {
 
     public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo){
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
-            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
+            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) &&
+                    (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+                Server.getGame().getPlayerList().get(i).setReboot(true);
+
+                //if robot rebooted he receives two spam cards
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
 
                 if (rebootTo.equals("rebootField")){
                     robot.setX(Server.getGame().getBoardClass().getRebootX());

@@ -336,30 +336,32 @@ public class LostBearingsController extends MapController {
                                 // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
-                                Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
-                                registerImageView.setImage(cardImage);
+                                if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                    registerImageView.setImage(cardImage);
 
-                                registerImageView.setVisible(true);
-                                registerImageView.setManaged(true);
+                                    registerImageView.setVisible(true);
+                                    registerImageView.setManaged(true);
 
-                                // gewählte Karte aus Hand unsichtbar machen
-                                handImageView.setVisible(false);
+                                    // gewählte Karte aus Hand unsichtbar machen
+                                    handImageView.setVisible(false);
 
-                                // sende serialisiertes SelectedCard
-                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get()+1);
-                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                Client.getWriter().println(serializedCardSelected);
+                                    // sende serialisiertes SelectedCard
+                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get() + 1);
+                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                    Client.getWriter().println(serializedCardSelected);
 
-                                zahlen.add(new Zahlen(index, counter1.get()));
-                                indexToCounterMap.put(index, counter1.get());
-                                counterRegister.incrementAndGet();
+                                    zahlen.add(new Zahlen(index, counter1.get()));
+                                    indexToCounterMap.put(index, counter1.get());
+                                    counterRegister.incrementAndGet();
 
-                                int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
-                                counter1.set(smallestEmptyRegisterIndex);
-                                if(counterRegister.get() == 5){
-                                    TimerStarted timerStarted = new TimerStarted();
-                                    String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-                                    Client.getWriter().println(serializedTimerStarted);
+                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                    counter1.set(smallestEmptyRegisterIndex);
+                                    if (counterRegister.get() == 5) {
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        Client.getWriter().println(serializedTimerStarted);
+                                    }
                                 }
                             } else {
                                 System.out.println("Register voll");
@@ -484,7 +486,7 @@ public class LostBearingsController extends MapController {
         }
         //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
         Robot robot = playerRobotMap.get(player);
-        
+
         ImageView imageView = robotImageViewMap.get(robot);
 
         if (imageView != null) {

@@ -27,6 +27,9 @@ public class Player {
     private PlayerMat playerMat;
     private int checkpointTokens;
     private static Map<Socket, Integer> socketIdMap = new ConcurrentHashMap<>();
+    @Getter
+    @Setter
+    private boolean reboot = false;
 
     public Player(String name, int id, int figure){
         this.name=name;
