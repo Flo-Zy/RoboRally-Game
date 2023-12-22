@@ -336,22 +336,23 @@ public class LostBearingsController extends MapController {
                                 Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
                                 registerImageView.setImage(cardImage);
 
-                                registerImageView.setVisible(true);
-                                registerImageView.setManaged(true);
+                                    registerImageView.setVisible(true);
+                                    registerImageView.setManaged(true);
 
-                                // gewählte Karte aus Hand unsichtbar machen
-                                handImageView.setVisible(false);
+                                    // gewählte Karte aus Hand unsichtbar machen
+                                    handImageView.setVisible(false);
 
-                                // sende serialisiertes SelectedCard
-                                SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
-                                String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                Client.getWriter().println(serializedCardSelected);
+                                    // sende serialisiertes SelectedCard
+                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get());
+                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                    Client.getWriter().println(serializedCardSelected);
 
-                                zahlen.add(new Zahlen(index, counter1.get()));
-                                indexToCounterMap.put(index, counter1.get());
+                                    zahlen.add(new Zahlen(index, counter1.get()));
+                                    indexToCounterMap.put(index, counter1.get());
 
-                                int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
-                                counter1.set(smallestEmptyRegisterIndex);
+                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                    counter1.set(smallestEmptyRegisterIndex);
+                                }
 
                             } else {
                                 System.out.println("Register voll");
