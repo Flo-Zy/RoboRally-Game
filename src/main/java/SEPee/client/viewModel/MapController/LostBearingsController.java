@@ -333,8 +333,9 @@ public class LostBearingsController extends MapController {
                                 // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
-                                Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
-                                registerImageView.setImage(cardImage);
+                                if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                    registerImageView.setImage(cardImage);
 
                                     registerImageView.setVisible(true);
                                     registerImageView.setManaged(true);
