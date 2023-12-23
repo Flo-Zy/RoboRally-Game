@@ -78,7 +78,6 @@ public class DeathTrapController extends MapController {
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
-    private AtomicInteger counterRegister = new AtomicInteger(0);
 
     public void setCounter1(int counter){
         counter1.set(counter);
@@ -303,7 +302,6 @@ public class DeathTrapController extends MapController {
     public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
         zahlen.clear();
         counter1.set(0);
-        counterRegister.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (playerDrawPileMap.containsKey(clientId)) {
             playerDrawPileMap.remove(clientId);
@@ -354,10 +352,9 @@ public class DeathTrapController extends MapController {
                                     zahlen.add(new Zahlen(index, counter1.get()));
                                     indexToCounterMap.put(index, counter1.get());
 
-                                    counterRegister.incrementAndGet();
                                     int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
                                     counter1.set(smallestEmptyRegisterIndex);
-                                    if (counterRegister.get() == 5) {
+                                    if(counter1.get() == 5){
                                         TimerStarted timerStarted = new TimerStarted();
                                         String serializedTimerStarted = Serialisierer.serialize(timerStarted);
                                         Client.getWriter().println(serializedTimerStarted);
@@ -383,8 +380,7 @@ public class DeathTrapController extends MapController {
                             if (registerImageView.getImage() != null) {
                                 if (counter1.get() < 5) {
                                     int indexNew = mapRegisterIndexToHandIndex(registerIndex);
-                                    //counter1.decrementAndGet();
-                                    counterRegister.decrementAndGet();
+                                    counter1.decrementAndGet();
 
                                     if (indexNew < 9) {
                                         ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);

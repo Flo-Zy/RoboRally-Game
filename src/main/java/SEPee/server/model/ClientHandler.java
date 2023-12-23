@@ -611,94 +611,95 @@ public class ClientHandler implements Runnable {
                                     SelectionFinished selectionFinished = new SelectionFinished(clientId);
                                     String serializedSelectionFinished = Serialisierer.serialize(selectionFinished);
                                     broadcast(serializedSelectionFinished);
-                                    if (Server.getTimerSend() == 0) {
-                                        // sende TimerStarted
-                                        TimerStarted timerStarted = new TimerStarted();
-                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-                                        broadcast(serializedTimerStarted);
-                                        Server.setTimerSend(1);
-                                        // wait 30 sec to send TimerEnded
-                                        Timer timer = new Timer();
-                                        timer.schedule(new TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                // After 30 seconds, send TimerEnded
-                                                ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
-                                                for (Player player : Server.getGame().getPlayerList()) {
-                                                    if (player.getPlayerMat().getNumRegister() < 5) {
-                                                        clientIDsNotReady.add(player.getId());
-                                                    }
-                                                }
-                                                TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
-                                                String serializedTimerEnded = Serialisierer.serialize(timerEnded);
-                                                broadcast(serializedTimerEnded);
-
-                                                // missingClientCards an betreffende Clients versenden
-                                                ArrayList<String> missingClientCards = new ArrayList<>();
-
-                                                for (Player player : Server.getGame().getPlayerList()) {
-                                                    // wie viele Felder auf Register sind leer
-                                                    int i = 0;
-                                                    while (i < (5 - player.getPlayerMat().getNumRegister())) {
-                                                        // karten ziehen
-                                                        Card card = player.getPlayerMat().getProgDeck().get(0);
-                                                        missingClientCards.add(card.getName());
-                                                        player.getPlayerMat().getRegister().add(card.getName());
-                                                        player.getPlayerMat().getProgDeck().remove(0);
-                                                        i++;
-                                                    }
-                                                }
-                                                for (Integer clientID : clientIDsNotReady) {
-                                                    CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
-                                                    String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
-                                                    sendToOneClient(clientID, serializedCardYouGotNow);
-                                                }
-
-                                                discardHand();
-
-                                                discardCurrentRegister();
-
-                                                Server.getGame().setNextPlayersTurn();
-
-                                                ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
-                                                for (Player player : Server.getGame().getPlayerList()) {
-                                                    activeCards.add(new CurrentCards.ActiveCard(player.getId(),
-                                                            player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
-                                                }
-
-                                                Server.setRegisterCounter(Server.getRegisterCounter() + 1);
-
-                                                Server.getGame().nextCurrentPhase();
-
-                                                ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
-                                                String serializedActivePhase = Serialisierer.serialize(activePhase);
-                                                broadcast(serializedActivePhase);
-
-                                                System.out.println(Server.getGame().getCurrentPhase());
-
-                                                // nulltes register wird an alle gesendet
-                                                CurrentCards currentCards = new CurrentCards(activeCards);
-                                                String serializedCurrentCards = Serialisierer.serialize(currentCards);
-                                                broadcast(serializedCurrentCards);
-
-                                                Server.setCountPlayerTurns(0);
-                                                CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
-                                                String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
-                                                broadcast(serializedCurrentPlayer);
-                                                // test
-                                                for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
-                                                    System.out.println(activeCard.getCard());
-                                                }
-
-                                                // Cancel the timer
-                                                timer.cancel();
-                                            }
-                                        }, 30000); // 30,000 milliseconds = 30 seconds
-                                    }
                                 }
                             }
                             break;
+                        case "TimerStarted":
+                            if (Server.getTimerSend() == 0) {
+                                // sende TimerStarted
+                                TimerStarted timerStarted = new TimerStarted();
+                                String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                broadcast(serializedTimerStarted);
+                                Server.setTimerSend(1);
+                                // wait 30 sec to send TimerEnded
+                                Timer timer = new Timer();
+                                timer.schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        // After 30 seconds, send TimerEnded
+                                        ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
+                                        for (Player player : Server.getGame().getPlayerList()) {
+                                            if (player.getPlayerMat().getNumRegister() < 5) {
+                                                clientIDsNotReady.add(player.getId());
+                                            }
+                                        }
+                                        TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
+                                        String serializedTimerEnded = Serialisierer.serialize(timerEnded);
+                                        broadcast(serializedTimerEnded);
 
+                                        // missingClientCards an betreffende Clients versenden
+                                        ArrayList<String> missingClientCards = new ArrayList<>();
+
+                                        for (Player player : Server.getGame().getPlayerList()) {
+                                            // wie viele Felder auf Register sind leer
+                                            int i = 0;
+                                            while (i < (5 - player.getPlayerMat().getNumRegister())) {
+                                                // karten ziehen
+                                                Card card = player.getPlayerMat().getProgDeck().get(0);
+                                                missingClientCards.add(card.getName());
+                                                player.getPlayerMat().getRegister().add(card.getName());
+                                                player.getPlayerMat().getProgDeck().remove(0);
+                                                i++;
+                                            }
+                                        }
+                                        for (Integer clientID : clientIDsNotReady) {
+                                            CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
+                                            String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
+                                            sendToOneClient(clientID, serializedCardYouGotNow);
+                                        }
+
+                                        discardHand();
+
+                                        discardCurrentRegister();
+
+                                        Server.getGame().setNextPlayersTurn();
+
+                                        ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                        for (Player player : Server.getGame().getPlayerList()) {
+                                            activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                    player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
+                                        }
+
+                                        Server.setRegisterCounter(Server.getRegisterCounter() + 1);
+
+                                        Server.getGame().nextCurrentPhase();
+
+                                        ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                        String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                        broadcast(serializedActivePhase);
+
+                                        System.out.println(Server.getGame().getCurrentPhase());
+
+                                        // nulltes register wird an alle gesendet
+                                        CurrentCards currentCards = new CurrentCards(activeCards);
+                                        String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                        broadcast(serializedCurrentCards);
+
+                                        Server.setCountPlayerTurns(0);
+                                        CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                        String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                        broadcast(serializedCurrentPlayer);
+                                        // test
+                                        for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                            System.out.println(activeCard.getCard());
+                                        }
+
+                                        // Cancel the timer
+                                        timer.cancel();
+                                    }
+                                }, 30000); // 30,000 milliseconds = 30 seconds
+                            }
+                            break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
