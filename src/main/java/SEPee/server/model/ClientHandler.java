@@ -471,7 +471,7 @@ public class ClientHandler implements Runnable {
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
-                            if(Server.getGameMap().getBordName().equals("DeathTrap")) {
+                            if(Server.getGameMap().getBordName().equals("Death Trap")) {
                                 this.robot = new Robot(0, 0, "left");
                             } else {
                                 this.robot = new Robot(0, 0, "right");
