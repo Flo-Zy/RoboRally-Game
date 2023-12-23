@@ -597,6 +597,10 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
+                            for(Player player : Server.getGame().getPlayerList()){
+                                System.out.println(player.getPlayerMat().getRegister());
+                            }
+
                             System.out.println(card);
                             CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
                             String serializedCardSelected = Serialisierer.serialize(cardSelected);
