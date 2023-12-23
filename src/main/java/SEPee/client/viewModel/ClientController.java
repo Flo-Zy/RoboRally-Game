@@ -529,7 +529,7 @@ public class ClientController {
                 selectedButton.setDisable(true); // Disable the selected button
             }
 
-            if(Client.getSelectedMap1().equals("DeathTrap")) {
+            if(Client.getSelectedMap1().equals("Death Trap")) {
                 setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
             } else {
                 setStartingPointXY(selectedStartingpoint);
