@@ -8,7 +8,7 @@ import java.util.List;
 public class DeathTrap extends GameBoard {
     public DeathTrap() {
 
-        super("2A", "DeathTrap", 13, 5);
+        super("2A", "Death Trap", 13, 5);
 
         // column 0
         List<List<Field>> column0 = new ArrayList<>(10);

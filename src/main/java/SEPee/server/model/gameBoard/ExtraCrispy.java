@@ -8,7 +8,7 @@ import java.util.List;
 public class ExtraCrispy extends GameBoard {
     public ExtraCrispy() {
 
-        super("4A", "ExtraCrispy", 13, 4);
+        super("4A", "Extra Crispy", 13, 4);
 
         // column 0
         List<List<Field>> column0 = new ArrayList<>(10);

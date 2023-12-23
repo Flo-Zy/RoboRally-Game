@@ -75,7 +75,7 @@ public class ClientHandler implements Runnable {
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                             associateSocketWithId(clientSocket, clientId);
 
-                            this.player = new Player(playerName, clientId, playerFigure);
+                            this.player = new Player(playerName, clientId, playerFigure+1);
                             Server.getPlayerList().add(player);
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -139,19 +139,19 @@ public class ClientHandler implements Runnable {
                                 //speicher die gewählte map (die gameMap)
                                 if (Server.getFirstReady() == player.getId()) {
                                     switch (mapSelected.getMessageBody().getMap()) {
-                                        case "DizzyHighway":
+                                        case "Dizzy Highway":
                                             DizzyHighway dizzyHighway = new DizzyHighway();
                                             Server.setGameMap(dizzyHighway);
                                             break;
-                                        case "ExtraCrispy":
+                                        case "Extra Crispy":
                                             ExtraCrispy extraCrispy = new ExtraCrispy();
                                             Server.setGameMap(extraCrispy);
                                             break;
-                                        case "LostBearings":
+                                        case "Lost Bearings":
                                             LostBearings lostBearings = new LostBearings();
                                             Server.setGameMap(lostBearings);
                                             break;
-                                        case "DeathTrap":
+                                        case "Death Trap":
                                             DeathTrap deathTrap = new DeathTrap();
                                             Server.setGameMap(deathTrap);
                                             break;
@@ -249,7 +249,7 @@ public class ClientHandler implements Runnable {
                                     case "PowerUp":
                                         //lastPlayedCard = "PowerUp";
                                         break;
-                                    case "RightTurn":
+                                    case "TurnRight":
                                         //lastPlayedCard = "RightTurn";
                                         RightTurn.makeEffect(this.robot);
                                         int clientIDRightTurn = this.clientId;
@@ -258,7 +258,7 @@ public class ClientHandler implements Runnable {
                                         Thread.sleep(750);
                                         broadcast(serializedPlayerTurningRight);
                                         break;
-                                    case "LeftTurn":
+                                    case "TurnLeft":
                                         //lastPlayedCard = "LeftTurn";
                                         LeftTurn.makeEffect(this.robot);
                                         int clientIDLeftTurn = this.clientId;
@@ -578,7 +578,7 @@ public class ClientHandler implements Runnable {
                                 // füge in register card hinzu
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId && card != null) {
                                     //gelegte Karte dem Register hinzufügen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister, card);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister-1, card);
                                     //gelegte Karte von der Hand entfernen
                                     for (int j = 0; j < Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().size(); j++) {
                                         if (card.equals(Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().get(j))) {
@@ -591,11 +591,9 @@ public class ClientHandler implements Runnable {
                                 else if (Server.getGame().getPlayerList().get(i).getId() == clientId && card == null) {
                                     //letze Karte vom register in die Hand einfügen
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().add(
-                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().get(
-                                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1));
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().get(cardRegister-1));
                                     //letze Karte vom Register entfernen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(
-                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().size() - 1);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(cardRegister-1);
                                 }
                             }
 
@@ -895,16 +893,16 @@ public class ClientHandler implements Runnable {
 
         List<Field> fields = new ArrayList<>();
 
-        if(Server.getGameMap().getBordName().equals("DizzyHighway")) {
+        if(Server.getGameMap().getBordName().equals("Dizzy Highway")) {
             DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
             fields = highway.getFieldsAt(robotX, robotY);
-        } else if(Server.getGameMap().getBordName().equals("ExtraCrispy")) {
+        } else if(Server.getGameMap().getBordName().equals("Extra Crispy")) {
             ExtraCrispy extraCrispy = new ExtraCrispy();
             fields = extraCrispy.getFieldsAt(robotX, robotY);
-        } else if (Server.getGameMap().getBordName().equals("DeathTrap")) {
+        } else if (Server.getGameMap().getBordName().equals("Death Trap")) {
             DeathTrap deathTrap = new DeathTrap();
             fields = deathTrap.getFieldsAt(robotX, robotY);
-        } else if (Server.getGameMap().getBordName().equals("LostBearings")) {
+        } else if (Server.getGameMap().getBordName().equals("Lost Bearings")) {
             LostBearings lostBearings = new LostBearings();
             fields = lostBearings.getFieldsAt(robotX, robotY);
         }

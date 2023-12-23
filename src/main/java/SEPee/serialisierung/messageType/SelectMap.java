@@ -38,10 +38,10 @@ public class SelectMap extends Message{
         private ArrayList<String> availableMaps = new ArrayList<>();
 
         public SelectMapBody() {
-            availableMaps.add("DizzyHighway");
-            availableMaps.add("ExtraCrispy");
-            availableMaps.add("LostBearings");
-            availableMaps.add("DeathTrap");
+            availableMaps.add("Dizzy Highway");
+            availableMaps.add("Extra Crispy");
+            availableMaps.add("Lost Bearings");
+            availableMaps.add("Death Trap");
         }
 
         public ArrayList<String> getAvailableMaps() {

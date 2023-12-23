@@ -8,7 +8,7 @@ import java.util.List;
 public class LostBearings extends GameBoard {
     public LostBearings() {
 
-        super("1A", "LostBearings", 13, 4);
+        super("1A", "Lost Bearings", 13, 4);
 
         // column 0
         List<List<Field>> column0 = new ArrayList<>(10);

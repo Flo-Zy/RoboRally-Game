@@ -100,9 +100,10 @@ public class Server extends Thread{
                     writer.println(serializedWelcome);
 
                     for(Player player: playerList){
-                        PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure());
+                        PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure()-1);
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                         clientHandler.sendToOneClient(clientID, serializedPlayerAdded);
+                        System.out.println(player.getName()+","+player.getFigure());
                     }
 
                 } else {
