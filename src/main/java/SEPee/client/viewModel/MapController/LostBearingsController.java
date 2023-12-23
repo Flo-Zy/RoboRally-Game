@@ -4,6 +4,7 @@ import SEPee.client.model.AI;
 import SEPee.client.model.Client;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
+import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
@@ -353,6 +354,11 @@ public class LostBearingsController extends MapController {
 
                                     int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
                                     counter1.set(smallestEmptyRegisterIndex);
+                                    if(counter1.get() == 5){
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        Client.getWriter().println(serializedTimerStarted);
+                                    }
                                 }
 
                             } else {
