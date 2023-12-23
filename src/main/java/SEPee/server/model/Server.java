@@ -99,6 +99,12 @@ public class Server extends Thread{
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
 
+                    for(Player player: playerList){
+                        PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure());
+                        String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
+                        clientHandler.sendToOneClient(clientID, serializedPlayerAdded);
+                    }
+
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
