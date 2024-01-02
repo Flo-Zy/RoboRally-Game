@@ -141,7 +141,7 @@ public class ClientAI extends Application {
                                 PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                 String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                 writer.println(serializedPlayerValues);
-                                primaryStage.show();
+                                // primaryStage.show();
                             });
                             break;
                         case "PlayerAdded":

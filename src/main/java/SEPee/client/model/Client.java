@@ -64,7 +64,6 @@ public class Client extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-
             Socket socket = new Socket(SERVER_IP, SERVER_PORT);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/Client.fxml"));
             Parent root = loader.load();

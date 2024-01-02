@@ -1,6 +1,5 @@
 package SEPee.client.viewModel.MapController;
 
-import SEPee.client.model.AI;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.serialisierung.Serialisierer;
