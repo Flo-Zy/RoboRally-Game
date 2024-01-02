@@ -180,7 +180,7 @@ public class ClientAI extends Application {
                             SelectMap selectMap = Deserialisierer.deserialize(serializedReceivedString, SelectMap.class);
                             mapList = selectMap.getMessageBody().getAvailableMaps();
                             // wenn AI auswählt
-                            selectedMap1 = "DizzyHighway";
+                            selectedMap1 = "Dizzy Highway";
                             System.out.println(selectedMap1);
 
                             controller.sendReadyAI();
@@ -200,16 +200,16 @@ public class ClientAI extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "Dizzy Highway":
-                                    selectedMap1 = "DizzyHighway";
+                                    selectedMap1 = "Dizzy Highway";
                                     break;
                                 case "Extra Crispy":
-                                    selectedMap1 = "ExtraCrispy";
+                                    selectedMap1 = "Extra Crispy";
                                     break;
                                 case "Lost Bearings":
-                                    selectedMap1 = "LostBearings";
+                                    selectedMap1 = "Lost Bearings";
                                     break;
                                 case "Death Trap":
-                                    selectedMap1 = "DeathTrap";
+                                    selectedMap1 = "Death Trap";
                                     break;
                                 default:
                                     System.out.println("Invalid Map");
@@ -222,13 +222,13 @@ public class ClientAI extends Application {
                             System.out.println("ClientAI - Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
 
-                            if(selectedMap1.equals("DizzyHighway")) {
+                            if(selectedMap1.equals("Dizzy Highway")) {
                                 controller.loadDizzyHighwayFXMLAI(this, primaryStage);
-                            } else if(selectedMap1.equals("ExtraCrispy")) {
+                            } else if(selectedMap1.equals("Extra Crispy")) {
                                 controller.loadExtraCrispyFXMLAI(this, primaryStage);
-                            } else if(selectedMap1.equals("LostBearings")) {
+                            } else if(selectedMap1.equals("Lost Bearings")) {
                                 controller.loadLostBearingsFXMLAI(this, primaryStage);
-                            } else if(selectedMap1.equals("DeathTrap")) {
+                            } else if(selectedMap1.equals("Death Trap")) {
                                 controller.loadDeathTrapFXMLAI(this, primaryStage);
                             }
                             break;
@@ -286,8 +286,13 @@ public class ClientAI extends Application {
                                     counter++;
                                 }
                                 */
+
                                 controller.setRegisterVisibilityFalse();
+
+                                // AI hat im Controller noch leere clientHand! Client nicht ...
+                                // controller.initRegisterAI();
                                 controller.initRegister();
+
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){

@@ -772,6 +772,10 @@ public class ClientController {
         mapController.initializeRegister(id, clientHand);
     }
 
+    public void initRegisterAI(){
+        mapController.initializeRegisterAI(id, clientHand);
+    }
+
     public void setRegisterVisibilityFalse(){
         mapController.setRegisterVisibilityFalse();
     }

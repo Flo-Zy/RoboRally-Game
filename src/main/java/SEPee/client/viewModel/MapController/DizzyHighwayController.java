@@ -413,6 +413,15 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
+    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand){
+        for (int i = 0; i < 5; i++) {
+            // sende serialisiertes SelectedCard
+            SelectedCard selectedCard = new SelectedCard(clientHand.get(i).getName(), i);
+            String serializedCardSelected = Serialisierer.serialize(selectedCard);
+            Client.getWriter().println(serializedCardSelected);
+        }
+    }
+
     private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
         for (int i = 0; i < 5; i++) {
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
@@ -422,7 +431,6 @@ public class DizzyHighwayController extends MapController {
         }
         return 5;
     }
-
 
     public void setRegisterVisibilityFalse() {
         // Prüfe, ob die HBox totalRegister gefunden wurde

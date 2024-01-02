@@ -38,6 +38,7 @@ public class Client extends Application {
     private static final int SERVER_PORT = 52018;
     // private static final String SERVER_IP = "localhost";
     // private static final int SERVER_PORT = 8886;
+
     @Getter
     @Setter
     private static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
@@ -192,22 +193,22 @@ public class Client extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "Dizzy Highway":
-                                    selectedMap1 = "DizzyHighway";
+                                    selectedMap1 = "Dizzy Highway";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     DizzyHighwayController mapController0 = loader.getController();
                                     break;
                                 case "Extra Crispy":
-                                    selectedMap1 = "ExtraCrispy";
+                                    selectedMap1 = "Extra Crispy";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                                     ExtraCrispyController mapController1 = loader.getController();
                                     break;
                                 case "Lost Bearings":
-                                    selectedMap1 = "LostBearings";
+                                    selectedMap1 = "Lost Bearings";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
                                     LostBearingsController mapController2 = loader.getController();
                                     break;
-                                case "DeathTrap":
-                                    selectedMap1 = "DeathTrap";
+                                case "Death Trap":
+                                    selectedMap1 = "Death Trap";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
                                     DeathTrapController mapController3 = loader.getController();
                                     break;
@@ -223,13 +224,13 @@ public class Client extends Application {
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
                             System.out.println(selectedMap1);
-                            if(selectedMap1.equals("DizzyHighway")) {
+                            if(selectedMap1.equals("Dizzy Highway")) {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("ExtraCrispy")) {
+                            } else if(selectedMap1.equals("Extra Crispy")) {
                                 controller.loadExtraCrispyFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("LostBearings")) {
+                            } else if(selectedMap1.equals("Lost Bearings")) {
                                 controller.loadLostBearingsFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("DeathTrap")) {
+                            } else if(selectedMap1.equals("Death Trap")) {
                                 controller.loadDeathTrapFXML(this, primaryStage);
                             }
 
