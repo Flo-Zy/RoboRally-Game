@@ -260,6 +260,8 @@ public class ClientAI extends Application {
                             // controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
+
+                                /*
                                 // Erstelle eine Liste mit AI ausgewählten Karten
                                 List<Card> selectedCards = new ArrayList<>();
                                 // check, ob erstes Element ein Again
@@ -267,6 +269,7 @@ public class ClientAI extends Application {
                                 int counter = 0;
                                 // verhindern, dass erstes Register-Element "Again" ist
                                 while(true) {
+                                    System.out.println("ClientAI - äääääääää " + controller.getClientHand());
                                     if (controller.getClientHand().get(start).getName().equals("Again")) {
                                         start++;
                                     } else {
@@ -282,6 +285,9 @@ public class ClientAI extends Application {
                                     writer.println(serializedCardSelected);
                                     counter++;
                                 }
+                                */
+                                controller.setRegisterVisibilityFalse();
+                                controller.initRegister();
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){
@@ -409,6 +415,7 @@ public class ClientAI extends Application {
                             // initialisiere die 9 Karten von YourCards in Hand des players
                             // controller.initDrawPile();
                             // controller.initRegister();
+
                             break;
                         case "NotYourCards":
                             System.out.println("ClientAI - NotYourCards");

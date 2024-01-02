@@ -192,22 +192,22 @@ public class Client extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "Dizzy Highway":
-                                    selectedMap1 = "Dizzy Highway";
+                                    selectedMap1 = "DizzyHighway";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                                     DizzyHighwayController mapController0 = loader.getController();
                                     break;
                                 case "Extra Crispy":
-                                    selectedMap1 = "Extra Crispy";
+                                    selectedMap1 = "ExtraCrispy";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                                     ExtraCrispyController mapController1 = loader.getController();
                                     break;
                                 case "Lost Bearings":
-                                    selectedMap1 = "Lost Bearings";
+                                    selectedMap1 = "LostBearings";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
                                     LostBearingsController mapController2 = loader.getController();
                                     break;
-                                case "Death Trap":
-                                    selectedMap1 = "Death Trap";
+                                case "DeathTrap":
+                                    selectedMap1 = "DeathTrap";
                                     loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
                                     DeathTrapController mapController3 = loader.getController();
                                     break;
