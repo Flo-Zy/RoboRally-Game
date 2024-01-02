@@ -200,16 +200,16 @@ public class ClientAI extends Application {
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
 
                                 case "Dizzy Highway":
-                                    selectedMap1 = "Dizzy Highway";
+                                    selectedMap1 = "DizzyHighway";
                                     break;
                                 case "Extra Crispy":
-                                    selectedMap1 = "Extra Crispy";
+                                    selectedMap1 = "ExtraCrispy";
                                     break;
                                 case "Lost Bearings":
-                                    selectedMap1 = "Lost Bearings";
+                                    selectedMap1 = "LostBearings";
                                     break;
                                 case "Death Trap":
-                                    selectedMap1 = "Death Trap";
+                                    selectedMap1 = "DeathTrap";
                                     break;
                                 default:
                                     System.out.println("Invalid Map");

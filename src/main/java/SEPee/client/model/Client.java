@@ -223,13 +223,13 @@ public class Client extends Application {
                             System.out.println("Game Started");
                             GameStarted gameStarted = Deserialisierer.deserialize(serializedReceivedString, GameStarted.class);
                             System.out.println(selectedMap1);
-                            if(selectedMap1.equals("Dizzy Highway")) {
+                            if(selectedMap1.equals("DizzyHighway")) {
                                 controller.loadDizzyHighwayFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("Extra Crispy")) {
+                            } else if(selectedMap1.equals("ExtraCrispy")) {
                                 controller.loadExtraCrispyFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("Lost Bearings")) {
+                            } else if(selectedMap1.equals("LostBearings")) {
                                 controller.loadLostBearingsFXML(this, primaryStage);
-                            } else if(selectedMap1.equals("Death Trap")) {
+                            } else if(selectedMap1.equals("DeathTrap")) {
                                 controller.loadDeathTrapFXML(this, primaryStage);
                             }
 
