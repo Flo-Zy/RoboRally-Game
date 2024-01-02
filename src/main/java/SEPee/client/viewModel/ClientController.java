@@ -7,7 +7,6 @@ import SEPee.serialisierung.messageType.*;
 //Später auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.progCard.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -81,7 +81,6 @@ public class ClientController {
 
 
     public void init(Client Client, Stage stage) {
-
         boolean validUsername = false;
 
         while (!validUsername) {
@@ -89,8 +88,10 @@ public class ClientController {
             dialog.setTitle("Username");
             dialog.setHeaderText("Please enter your username:");
             dialog.setContentText("Username:");
-            Optional<String> result = dialog.showAndWait();
+            Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
 
+            Optional<String> result = dialog.showAndWait();
             if (result.isPresent() && !result.get().trim().isEmpty()) {
                 this.name = result.get().trim();
                 stage.setTitle("Client - " + name);
@@ -274,6 +275,7 @@ public class ClientController {
                 });
             }
         }
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
 
         // Hinzufügen des GridPane zum Dialog
         dialog.getDialogPane().setContent(grid);
