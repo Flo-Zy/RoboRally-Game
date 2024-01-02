@@ -2,6 +2,7 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.AI;
 import SEPee.client.model.Client;
+import SEPee.client.model.ClientAI;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.TimerStarted;
@@ -84,6 +85,14 @@ public class ExtraCrispyController extends MapController {
     }
 
     public void init(Client client, Stage stage) {
+        this.stage = stage;
+        playerRobotMap = new HashMap<>();
+        robotImageViewMap = new HashMap<>();
+        playerDrawPileMap = new HashMap<>();
+        indexToCounterMap = new HashMap<>();
+    }
+
+    public void initAI(ClientAI clientAI, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
