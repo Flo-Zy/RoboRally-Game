@@ -1,6 +1,7 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
+import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
@@ -118,6 +119,10 @@ public class ClientController {
         }
     }
 
+    public void initAI(ClientAI clientAI, Stage stage) {
+        figure = robotSelectionAI(Client.getTakenFigures());
+    }
+
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
@@ -165,6 +170,18 @@ public class ClientController {
         MapSelected mapSelected = new MapSelected("");
         String serializedMapSelected = Serialisierer.serialize(mapSelected);
         Client.getWriter().println(serializedMapSelected);
+    }
+
+    public void sendReadyAI() {
+        ready = true;
+        SetStatus setStatus = new SetStatus(ready);
+        String serializedSetStatus = Serialisierer.serialize(setStatus);
+        ClientAI.getWriter().println(serializedSetStatus);
+
+        //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
+        MapSelected mapSelected1 = new MapSelected("");
+        String serializedMapSelected1 = Serialisierer.serialize(mapSelected1);
+        ClientAI.getWriter().println(serializedMapSelected1);
     }
 
     private int selectedRecipientId = -1; // Initialize with a default value
@@ -283,6 +300,19 @@ public class ClientController {
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
     }
 
+    public int robotSelectionAI(ArrayList<Integer> takenFigures) {
+        Random random = new Random();
+        while(true){
+            int robotNumber = random.nextInt(1, 7);
+            // Überprüfen, ob der Roboter bereits genommen wurde
+            if (!takenFigures.contains(robotNumber)) {
+                return robotNumber;
+            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
+                return -1;
+            }
+        }
+    }
+
     private void initializePlayerNames() {
         playerNames.clear(); // Clear the existing names
         for (Player player : Client.getPlayerListClient()) {
@@ -336,7 +366,34 @@ public class ClientController {
                 e.printStackTrace();
             }
         });
+    }
 
+    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                Node dizzyHighway = loader.load();
+
+                // Get  controller
+                DizzyHighwayController dizzyHighwayController = loader.getController();
+
+                mapController = dizzyHighwayController;
+
+                dizzyHighwayController.initAI(clientAI, primaryStage);
+                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+
+                // set loaded FXML to VBox
+                DizzyHighwayMap.getChildren().setAll(dizzyHighway);
+                DizzyHighwayMap.setVisible(true);
+                DizzyHighwayMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void loadExtraCrispyFXML(Client client, Stage primaryStage) {
@@ -351,6 +408,34 @@ public class ClientController {
                 mapController = extraCrispyController;
 
                 extraCrispyController.init(client, primaryStage);
+                extraCrispyController.setRootVBox(ExtraCrispyMap);
+
+                // set loaded FXML to VBox
+                ExtraCrispyMap.getChildren().setAll(extraCrispy);
+                ExtraCrispyMap.setVisible(true);
+                ExtraCrispyMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadExtraCrispyFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
+                Node extraCrispy = loader.load();
+
+                // Get  controller
+                ExtraCrispyController extraCrispyController = loader.getController();
+
+                mapController = extraCrispyController;
+
+                extraCrispyController.initAI(clientAI, primaryStage);
                 extraCrispyController.setRootVBox(ExtraCrispyMap);
 
                 // set loaded FXML to VBox
@@ -395,6 +480,34 @@ public class ClientController {
         });
     }
 
+    public void loadLostBearingsFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
+                Node lostBearings = loader.load();
+
+                // Get  controller
+                LostBearingsController lostBearingsController = loader.getController();
+
+                mapController = lostBearingsController;
+
+                lostBearingsController.initAI(clientAI, primaryStage);
+                lostBearingsController.setRootVBox(LostBearingsMap);
+
+                // set loaded FXML to VBox
+                LostBearingsMap.getChildren().setAll(lostBearings);
+                LostBearingsMap.setVisible(true);
+                LostBearingsMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public void loadDeathTrapFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
@@ -407,6 +520,34 @@ public class ClientController {
                 mapController = deathTrapController;
 
                 deathTrapController.init(client, primaryStage);
+                deathTrapController.setRootVBox(DeathTrapMap);
+
+                // set loaded FXML to VBox
+                DeathTrapMap.getChildren().setAll(deathTrap);
+                DeathTrapMap.setVisible(true);
+                DeathTrapMap.setManaged(true);
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadDeathTrapFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
+                Node deathTrap = loader.load();
+
+                // Get  controller
+                DeathTrapController deathTrapController = loader.getController();
+
+                mapController = deathTrapController;
+
+                deathTrapController.initAI(clientAI, primaryStage);
                 deathTrapController.setRootVBox(DeathTrapMap);
 
                 // set loaded FXML to VBox
@@ -537,6 +678,30 @@ public class ClientController {
         }
     }
 
+    public void setStartingPointAI() {
+        ArrayList<Integer> availableStartingPoints = new ArrayList<>();
+        for (int i = 1; i <= 6; i++) {
+            if (!takenStartPoints.contains(i)) {
+                availableStartingPoints.add(i);
+            }
+        }
+
+        if (availableStartingPoints.isEmpty()) {
+            // Kein verfügbarer StartingPoint mehr
+            return;
+        }
+
+        // Zufällige Auswahl eines verfügbaren StartingPoints für die AI
+        Random random = new Random();
+        int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
+
+        if(ClientAI.getSelectedMap1().equals("DeathTrap")) {
+            setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
+        } else {
+            setStartingPointXY(selectedStartingPoint);
+        }
+    }
+
     public void setStartingPointXY(int StartingPointNumber){
         switch(StartingPointNumber){
             case 1:
@@ -597,7 +762,6 @@ public class ClientController {
 
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
-
     }
 
     public void initDrawPile(){
