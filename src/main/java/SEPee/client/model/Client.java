@@ -34,10 +34,10 @@ import lombok.Setter;
 @Getter
 public class Client extends Application {
 
-    //private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    //private static final int SERVER_PORT = 52018;
-    private static final String SERVER_IP = "localhost";
-    private static final int SERVER_PORT = 8886;
+    private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    private static final int SERVER_PORT = 52018;
+    // private static final String SERVER_IP = "localhost";
+    // private static final int SERVER_PORT = 8886;
     @Getter
     @Setter
     private static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
