@@ -774,33 +774,41 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
+        Player checkPlayer = new Player("", 9999, 9999);
         for (int i = 0; i < moves; i++) {
-            boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
-
-            if (canMove) {
-                checkForRobotsAndMove(this.robot, isForward);
-
-                if (isForward) {
-                    MoveI.makeEffect(this.robot);
-                } else {
-                    BackUp.makeEffect(this.robot);
-                }
-            } else {
-                if (isForward) {
-                    System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
-                } else {
-                    System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
+            for(Player player : Server.getGame().getPlayerList()){
+                if(player.getId() == clientId){
+                    checkPlayer = player;
                 }
             }
+            if(!checkPlayer.isReboot()){
+                boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
-            int x = this.robot.getX();
-            int y = this.robot.getY();
-            int clientID = this.clientId;
+                if (canMove) {
+                    checkForRobotsAndMove(this.robot, isForward);
 
-            Movement movement = new Movement(clientID, x, y);
-            String serializedMovement = Serialisierer.serialize(movement);
-            Thread.sleep(750);
-            broadcast(serializedMovement);
+                    if (isForward) {
+                        MoveI.makeEffect(this.robot);
+                    } else {
+                        BackUp.makeEffect(this.robot);
+                    }
+                } else {
+                    if (isForward) {
+                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                    } else {
+                        System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
+                    }
+                }
+
+                int x = this.robot.getX();
+                int y = this.robot.getY();
+                int clientID = this.clientId;
+
+                Movement movement = new Movement(clientID, x, y);
+                String serializedMovement = Serialisierer.serialize(movement);
+                Thread.sleep(750);
+                broadcast(serializedMovement);
+            }
         }
     }
 
