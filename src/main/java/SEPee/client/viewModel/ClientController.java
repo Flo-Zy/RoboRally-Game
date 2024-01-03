@@ -345,7 +345,7 @@ public class ClientController {
         }
         return selectedMap;
     }
-    
+
 
     public String showSelectRebootDirectionDialog(Stage stage) {
         VBox root = new VBox(10);

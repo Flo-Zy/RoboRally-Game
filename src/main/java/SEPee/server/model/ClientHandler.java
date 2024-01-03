@@ -216,7 +216,7 @@ public class ClientHandler implements Runnable {
                                 }
                             }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
-                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()-1).isReboot()) {
+                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
                                 PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
                                 // Card played für Karten Verständnis an alle clients schicken
