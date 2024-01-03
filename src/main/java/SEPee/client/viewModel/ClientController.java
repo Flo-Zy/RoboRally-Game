@@ -239,6 +239,7 @@ public class ClientController {
         System.exit(0);
     }
 
+    String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.setTitle("Robot Selection");
@@ -255,7 +256,8 @@ public class ClientController {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
 
-            Label nameLabel = new Label("Robot " + i);
+            //Label nameLabel = new Label("Robot " + i);
+            Label nameLabel = new Label(robotNames[i-1]);
             nameLabel.setAlignment(Pos.CENTER);
 
             // Hinzufügen von ImageView und Label zum GridPane
