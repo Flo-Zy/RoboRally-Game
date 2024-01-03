@@ -579,6 +579,7 @@ public class Client extends Application {
 
                             // direction selection dialog fur rebootingClientId
                             // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
+
                             Platform.runLater(() -> {
                                 String selectedRebootDirection;
                                 selectedRebootDirection = controller.showSelectRebootDirectionDialog();
@@ -587,6 +588,7 @@ public class Client extends Application {
                                 String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
                                 writer.println(serializedRebootDirection2);
                             });
+
                             break;
                         case "Energy":
                             System.out.println("Energy");

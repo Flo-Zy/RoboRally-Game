@@ -1643,7 +1643,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private String getResultingOrientation(String turningDirection, Robot robot) {
+    private static String getResultingOrientation(String turningDirection, Robot robot) {
         if (turningDirection.equals("clockwise")) {
             switch (robot.getOrientation()) {
                 case "top":
@@ -1776,11 +1776,24 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
-                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
-                    String serializedReboot = Serialisierer.serialize(reboot);
-                    broadcast(serializedReboot);
-
-                    Server.getGame().getPlayerList().get(i).getRobot().setOrientation("top");
+                    if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
+                        while(!robot.getOrientation().equals("left")){
+                            String resultingOrientation = getResultingOrientation("clockwise", robot);
+                            robot.setOrientation(resultingOrientation);
+                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                            broadcast(serializedPlayerTurning);
+                        }
+                    } else{
+                        while(!robot.getOrientation().equals("right")){
+                            System.out.println("1794 " + robot.getOrientation());
+                            String resultingOrientation = getResultingOrientation("clockwise", robot);
+                            robot.setOrientation(resultingOrientation);
+                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                            broadcast(serializedPlayerTurning);
+                        }
+                    }
 
 
                 } else {
