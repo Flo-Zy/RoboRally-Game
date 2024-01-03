@@ -33,7 +33,7 @@ public class PlayerMat{
     private ArrayList<String> receivedDamageCards;
 
     public PlayerMat(ArrayList<Card> progDeck) {
-        this.register = new ArrayList<>(5);
+        this.register = new ArrayList<>();
         this.progDeck = progDeck;
         //this.permanentSlot = new UpgradeCard[3];
         //this.temporarySlot = new UpgradeCard[3];

@@ -74,7 +74,7 @@ public class DizzyHighwayController extends MapController {
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<Card>> playerDrawPileMap;
+    private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
@@ -87,7 +87,7 @@ public class DizzyHighwayController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
 
@@ -95,7 +95,7 @@ public class DizzyHighwayController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
 
@@ -256,15 +256,15 @@ public class DizzyHighwayController extends MapController {
     public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
 
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
 
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
 
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -311,13 +311,13 @@ public class DizzyHighwayController extends MapController {
         zahlen.clear();
         counter1.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -413,13 +413,44 @@ public class DizzyHighwayController extends MapController {
         }
     }
 
-    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand){
-        for (int i = 0; i < 5; i++) {
-            // sende serialisiertes SelectedCard
-            SelectedCard selectedCard = new SelectedCard(clientHand.get(i).getName(), i);
-            String serializedCardSelected = Serialisierer.serialize(selectedCard);
-            Client.getWriter().println(serializedCardSelected);
+    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand) {
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> handClient = clientHandMap.get(clientId);
+
+        int handIndex = 0;
+        for (int i = 0; i < 5; i++) {
+            // prüfe, ob erste Karte für Register ein Again
+
+            if (i == 0 && !handClient.get(i).getName().equals("Again")) {
+                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
+                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedCardSelected);
+                handIndex++;
+            } else { // wenn erste Hand-Karte ein Again
+                if (i == 0) {
+                    handIndex++;
+                }
+                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
+                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedCardSelected);
+                handIndex++;
+            }
+
+            // sende serialisiertes SelectedCard
+            SelectedCard selectedCard = new SelectedCard(handClient.get(i).getName(), i + 1);
+            String serializedCardSelected = Serialisierer.serialize(selectedCard);
+            ClientAI.getWriter().println(serializedCardSelected);
+        }
+
+        TimerStarted timerStarted = new TimerStarted();
+        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+        ClientAI.getWriter().println(serializedTimerStarted);
     }
 
     private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
