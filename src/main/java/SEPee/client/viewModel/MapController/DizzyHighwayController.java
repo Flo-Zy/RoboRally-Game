@@ -426,28 +426,23 @@ public class DizzyHighwayController extends MapController {
         int handIndex = 0;
         for (int i = 0; i < 5; i++) {
             // prüfe, ob erste Karte für Register ein Again
-
-            if (i == 0 && !handClient.get(i).getName().equals("Again")) {
-                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
-                String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                ClientAI.getWriter().println(serializedCardSelected);
+            if (i == 0 && handClient.get(i).getName().equals("Again")) { // wenn erste Karte Again ist
                 handIndex++;
-            } else { // wenn erste Hand-Karte ein Again
-                if (i == 0) {
+                if (handClient.get(handIndex).getName().equals("Again")) { // wenn zweite Karte auch Again ist
+                    handIndex++;
+                } else {
+                    SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
+                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                    ClientAI.getWriter().println(serializedCardSelected);
                     handIndex++;
                 }
+            } else {
                 SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                 ClientAI.getWriter().println(serializedCardSelected);
                 handIndex++;
             }
-
-            // sende serialisiertes SelectedCard
-            SelectedCard selectedCard = new SelectedCard(handClient.get(i).getName(), i + 1);
-            String serializedCardSelected = Serialisierer.serialize(selectedCard);
-            ClientAI.getWriter().println(serializedCardSelected);
         }
-
         TimerStarted timerStarted = new TimerStarted();
         String serializedTimerStarted = Serialisierer.serialize(timerStarted);
         ClientAI.getWriter().println(serializedTimerStarted);

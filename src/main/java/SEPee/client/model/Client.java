@@ -539,10 +539,6 @@ public class Client extends Application {
                                     controller.appendToChatArea(player.getName() + " hat diese Karten kassiert: " + damageCardsDrawn + "!");
                                 }
                             }
-
-
-
-
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");

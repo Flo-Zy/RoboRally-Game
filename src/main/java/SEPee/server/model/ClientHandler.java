@@ -648,7 +648,7 @@ public class ClientHandler implements Runnable {
                                             // karten ziehen & check, ob Again an erster position steht
                                             int i = 0;
                                             int cursor = 0;
-                                            if(player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().getRegister().size()) {
+                                            if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().getRegister().size()) {
                                                 System.out.println(player.getPlayerMat().getRegister().size());
                                                 while (i < (5 - player.getPlayerMat().getNumRegister())) {
                                                     if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
@@ -677,23 +677,25 @@ public class ClientHandler implements Runnable {
                                                         i++;
                                                     }
                                                 }
-                                            }else {
+                                            } else {
+                                                // nehme restlichen Karten vom ProgDeck
                                                 int numEmptyRegister = 5 - player.getPlayerMat().getRegister().size();
-                                                System.out.println(player.getPlayerMat().getRegister().size());
                                                 int leftCards = player.getPlayerMat().getProgDeck().size();
                                                 int validCardsCounter = 0;
                                                 int j = 0;
+
                                                 while(j < leftCards){
                                                     Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                    if(j != 0 && !card.getName().equals("Again")) {
+                                                    if(j == 0 && card.getName().equals("Again")) {
+                                                        player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
+                                                        player.getPlayerMat().getProgDeck().remove(cursor);
+                                                        j++;
+
+                                                    } else{
                                                         missingClientCards.add(card.getName()); // card in missingClientCards
                                                         player.getPlayerMat().getRegister().add(card.getName());
                                                         player.getPlayerMat().getProgDeck().remove(cursor);
                                                         validCardsCounter++;
-                                                        j++;
-                                                    } else{
-                                                        player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
                                                         j++;
                                                     }
                                                 }
@@ -705,16 +707,21 @@ public class ClientHandler implements Runnable {
                                                 ArrayList<Card> newDrawPile = stringToCard(player.getPlayerMat().getDiscardPile());
                                                 Collections.shuffle(newDrawPile);
                                                 player.getPlayerMat().setProgDeck(newDrawPile);
-
                                                 player.getPlayerMat().getDiscardPile().clear();
 
                                                 j = 0;
-                                                while (j < numEmptyRegister - validCardsCounter){
+                                                while (j < numEmptyRegister - validCardsCounter) { // restliche fehlende Karten
                                                     Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                    missingClientCards.add(card.getName()); // card in missingClientCards
-                                                    player.getPlayerMat().getRegister().add(card.getName());
-                                                    player.getPlayerMat().getProgDeck().remove(cursor);
-                                                    j++;
+                                                    if (j == 0 && card.getName().equals("Again")) {
+                                                        player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
+                                                        player.getPlayerMat().getProgDeck().remove(cursor);
+                                                    } else{
+                                                        missingClientCards.add(card.getName()); // card in missingClientCards
+                                                        player.getPlayerMat().getRegister().add(card.getName());
+                                                        player.getPlayerMat().getProgDeck().remove(cursor);
+                                                        validCardsCounter++;
+                                                        j++;
+                                                    }
                                                 }
                                             }
                                         }

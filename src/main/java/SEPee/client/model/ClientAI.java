@@ -261,35 +261,7 @@ public class ClientAI extends Application {
                             // controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
-
-                                /*
-                                // Erstelle eine Liste mit AI ausgewählten Karten
-                                List<Card> selectedCards = new ArrayList<>();
-                                // check, ob erstes Element ein Again
-                                int start = 0;
-                                int counter = 0;
-                                // verhindern, dass erstes Register-Element "Again" ist
-                                while(true) {
-                                    System.out.println("ClientAI - äääääääää " + controller.getClientHand());
-                                    if (controller.getClientHand().get(start).getName().equals("Again")) {
-                                        start++;
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                for(int i=start; i<(start+5); i++) {
-                                    // if (!selectedCards.contains(choosenCard)) {
-                                    selectedCards.add(controller.getClientHand().get(i));
-                                    // sende serialisiertes SelectedCard
-                                    SelectedCard selectedCard = new SelectedCard(selectedCards.get(counter).getName(), counter);
-                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                                    writer.println(serializedCardSelected);
-                                    counter++;
-                                }
-                                */
-
                                 controller.setRegisterVisibilityFalse();
-                                // AI hat im Controller noch leere clientHand ! Client nicht ...
                                 controller.initRegisterAI();
                                 // controller.initRegister();
                                 System.out.println(" Programmierungsphase");
