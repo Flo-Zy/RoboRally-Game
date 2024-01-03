@@ -340,6 +340,26 @@ public class ClientController {
         return selectedMap;
     }
 
+    public String showSelectRebootDirectionDialog() {
+
+        String selectedDirection = null;
+        String[] directionList = {"top", "right", "bottom", "left"};
+
+        while (selectedDirection == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
+            dialog.setTitle("Reboot direction selection");
+            dialog.setHeaderText("Please choose a reboot direction:");
+
+            // Map selection or choosing "Cancel"
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                selectedDirection = result.get();
+            }
+        }
+        return selectedDirection;
+    }
+
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
