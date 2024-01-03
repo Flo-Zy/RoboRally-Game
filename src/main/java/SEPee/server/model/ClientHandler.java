@@ -11,10 +11,7 @@ import SEPee.server.model.field.Field;
 import SEPee.server.model.field.*;
 import SEPee.server.model.gameBoard.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
