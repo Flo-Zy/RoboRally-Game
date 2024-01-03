@@ -710,9 +710,17 @@ public class ClientHandler implements Runnable {
                             System.out.println("Reboot Direction");
                             RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
                             String newRobotOrientation = rebootDirection.getMessageBody().getDirection();
+                            String orientationOfRobot = robot.getOrientation();
 
-                            System.out.println("clientId rebootDirection: " + clientId);
-                            Server.getGame().getPlayerList().get(clientId).getRobot().setOrientation(newRobotOrientation);
+                            //entsprechend viele PlayerTurning schicken, bis es passt
+                            while (!orientationOfRobot.equals(newRobotOrientation)) {
+                                PlayerTurning playerTurning = new PlayerTurning(clientId, "clockwise");
+                                String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                                broadcast(serializedPlayerTurning);
+                            }
+
+                            //System.out.println("clientId rebootDirection: " + clientId);
+                            //Server.getGame().getPlayerList().get(clientId).getRobot().setOrientation(newRobotOrientation);
                             break;
                         default:
                             //Error-JSON an Client

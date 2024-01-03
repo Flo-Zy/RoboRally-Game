@@ -557,22 +557,35 @@ public class Client extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
+                            /*
+
                             // set robot direction TOP
                             String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
                             while (!orientationOfRobot.equals("top")) {
                                 controller.playerTurn(rebootingClientId, "clockwise");
                                 orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
                             }
+                             */
+
+                            /*
+                            //RebootDirection erstmal immer mit top verschicken für default, falls nie was anderes ankommt
+                            //wird das genommen und falls was anderes ankommt, wird der halt nochmal gedreht
+
+                            RebootDirection rebootDirection = new RebootDirection("top");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            writer.println(serializedRebootDirection);
+
+                             */
 
                             // direction selection dialog fur rebootingClientId
-                            // DIalog muss schliessen falls neue Phase vor direction auswahl kommt
+                            // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
                             Platform.runLater(() -> {
                                 String selectedRebootDirection;
                                 selectedRebootDirection = controller.showSelectRebootDirectionDialog();
                                 System.out.println(selectedRebootDirection);
-                                RebootDirection rebootDirection = new RebootDirection(selectedRebootDirection);
-                                String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                                writer.println(serializedRebootDirection);
+                                RebootDirection rebootDirection2 = new RebootDirection(selectedRebootDirection);
+                                String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
+                                writer.println(serializedRebootDirection2);
                             });
                             break;
                         case "Energy":
