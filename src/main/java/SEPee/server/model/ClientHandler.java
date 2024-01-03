@@ -706,6 +706,14 @@ public class ClientHandler implements Runnable {
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
                             break;
+                        case "RebootDirection":
+                            System.out.println("Reboot Direction");
+                            RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
+                            String newRobotOrientation = rebootDirection.getMessageBody().getDirection();
+
+                            System.out.println("clientId rebootDirection: " + clientId);
+                            Server.getGame().getPlayerList().get(clientId).getRobot().setOrientation(newRobotOrientation);
+                            break;
                         default:
                             //Error-JSON an Client
                             //System.out.println("Unknown command");
@@ -1746,6 +1754,11 @@ public class ClientHandler implements Runnable {
                     String serializedReboot = Serialisierer.serialize(reboot);
                     broadcast(serializedReboot);
 
+                    Server.getGame().getPlayerList().get(i).getRobot().setOrientation("top");
+
+                    //notify clients
+
+
                 } else if (rebootTo.equals("startingPoint")) {
                     robot.setX(robot.getStartingPointX());
                     robot.setY(robot.getStartingPointY());
@@ -1758,6 +1771,9 @@ public class ClientHandler implements Runnable {
                     Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
                     String serializedReboot = Serialisierer.serialize(reboot);
                     broadcast(serializedReboot);
+
+                    Server.getGame().getPlayerList().get(i).getRobot().setOrientation("top");
+
 
                 } else {
                     System.out.println("Invalid Reboot String");

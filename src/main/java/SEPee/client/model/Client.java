@@ -34,10 +34,10 @@ import lombok.Setter;
 @Getter
 public class Client extends Application {
 
-    private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    private static final int SERVER_PORT = 52018;
-    // private static final String SERVER_IP = "localhost";
-    // private static final int SERVER_PORT = 8886;
+    // private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    // private static final int SERVER_PORT = 52018;
+    private static final String SERVER_IP = "localhost";
+    private static final int SERVER_PORT = 8886;
 
     @Getter
     @Setter
@@ -555,10 +555,25 @@ public class Client extends Application {
                         case "Reboot":
                             System.out.println("Reboot");
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
-                            break;
-                        case "RebootDirection":
-                            System.out.println("Reboot Direction");
-                            RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
+                            int rebootingClientId = reboot.getMessageBody().getClientID();
+
+                            // set robot direction TOP
+                            String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
+                            while (!orientationOfRobot.equals("top")) {
+                                controller.playerTurn(rebootingClientId, "clockwise");
+                                orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
+                            }
+
+                            // direction selection dialog fur rebootingClientId
+                            // DIalog muss schliessen falls neue Phase vor direction auswahl kommt
+                            Platform.runLater(() -> {
+                                String selectedRebootDirection;
+                                selectedRebootDirection = controller.showSelectRebootDirectionDialog();
+                                System.out.println(selectedRebootDirection);
+                                RebootDirection rebootDirection = new RebootDirection(selectedRebootDirection);
+                                String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                                writer.println(serializedRebootDirection);
+                            });
                             break;
                         case "Energy":
                             System.out.println("Energy");
