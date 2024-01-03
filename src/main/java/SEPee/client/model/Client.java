@@ -583,7 +583,10 @@ public class Client extends Application {
                             if (controller.getId() == rebootingClientId) {
                                 Platform.runLater(() -> {
                                     String selectedRebootDirection;
-                                    selectedRebootDirection = controller.showSelectRebootDirectionDialog();
+
+                                    Stage stage = new Stage();
+
+                                    selectedRebootDirection = controller.showSelectRebootDirectionDialog(stage);
                                     System.out.println(selectedRebootDirection);
                                     RebootDirection rebootDirection2 = new RebootDirection(selectedRebootDirection);
                                     String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);

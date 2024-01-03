@@ -14,8 +14,10 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -343,81 +345,45 @@ public class ClientController {
         }
         return selectedMap;
     }
+    
 
-    /*
-    public String showSelectRebootDirectionDialog() {
+    public String showSelectRebootDirectionDialog(Stage stage) {
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
 
-        String selectedDirection = null;
         String[] directionList = {"top", "right", "bottom", "left"};
+        String[] selectedDirection = {null};
 
-        while (selectedDirection == null) {
-            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
-            dialog.setTitle("Reboot direction selection");
-            dialog.setHeaderText("Please choose a reboot direction:");
-
-            // Map selection or choosing "Cancel"
-            Optional<String> result = dialog.showAndWait();
-
-            if (result.isPresent()) {
-                selectedDirection = result.get();
-            }
+        for (String direction : directionList) {
+            Button directionButton = new Button(direction);
+            directionButton.setOnAction(event -> {
+                selectedDirection[0] = direction;
+                stage.close();
+            });
+            root.getChildren().add(directionButton);
         }
-        return selectedDirection;
-    }
-     */
-    /*
-    public String showSelectRebootDirectionDialog() throws InterruptedException {
-        String[] directionList = {"--", "top", "right", "bottom", "left"};
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
-        dialog.setTitle("Reboot direction selection");
-        dialog.setHeaderText("Please choose a reboot direction:");
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Reboot direction selection");
+        stage.show();
 
-        // Display the dialog
-        Optional<String> result = dialog.showAndWait();
-        Thread.sleep(5000);
-
-        String resultCheck = result.get();
-        if (resultCheck.equals("--")) {
-            dialog.close();
-            return "top";
-        } else {
-            dialog.close();
-            return result.get();
-        }
-    }
-
-     */
-    public String showSelectRebootDirectionDialog() {
-        String[] directionList = {"top", "right", "bottom", "left"};
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
-        dialog.setTitle("Reboot direction selection");
-        dialog.setHeaderText("Please choose a reboot direction:");
-
-        AtomicBoolean topperReturnerFlag = new AtomicBoolean(false);
-        Platform.runLater(() -> {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        Duration duration = Duration.seconds(10);
+        Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
+            if (stage.isShowing()) {
+                stage.close();
+                selectedDirection[0] = "top";
             }
-            if (dialog.isShowing()) {
-                dialog.close();
-                topperReturnerFlag.set(true);
-            }
-        });
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
 
-        Optional<String> result = dialog.showAndWait();
+        stage.setOnHiding(event -> timeline.stop());
 
+        stage.showAndWait();
 
-
-        if (topperReturnerFlag.get()){
-            return "top";
-        } else{
-            return result.get();
-
-        }
+        return selectedDirection[0];
     }
 
 
