@@ -710,7 +710,11 @@ public class ClientHandler implements Runnable {
                             String orientationOfRobot = robot.getOrientation();
 
                             //entsprechend viele PlayerTurning schicken, bis es passt
-                            while (!orientationOfRobot.equals(newRobotOrientation)) {
+                            while(!orientationOfRobot.equals(newRobotOrientation)){
+                                System.out.println("714 " + robot.getOrientation());
+                                String resultingOrientation = getResultingOrientation("clockwise", robot);
+                                robot.setOrientation(resultingOrientation);
+                                orientationOfRobot = resultingOrientation;
                                 PlayerTurning playerTurning = new PlayerTurning(clientId, "clockwise");
                                 String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                                 broadcast(serializedPlayerTurning);
@@ -1755,13 +1759,19 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
+
+                    //turn the robot to face top no matter what and if something in the dialog is chosen he gets turned again
+                    while(!robot.getOrientation().equals("top")) {
+                        String resultingOrientation = getResultingOrientation("top", robot);
+                        robot.setOrientation(resultingOrientation);
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+
                     Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
                     String serializedReboot = Serialisierer.serialize(reboot);
                     broadcast(serializedReboot);
-
-                    Server.getGame().getPlayerList().get(i).getRobot().setOrientation("top");
-
-                    //notify clients
 
 
                 } else if (rebootTo.equals("startingPoint")) {

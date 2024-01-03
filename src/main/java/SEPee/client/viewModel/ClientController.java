@@ -9,6 +9,8 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -340,6 +343,7 @@ public class ClientController {
         return selectedMap;
     }
 
+    /*
     public String showSelectRebootDirectionDialog() {
 
         String selectedDirection = null;
@@ -359,6 +363,64 @@ public class ClientController {
         }
         return selectedDirection;
     }
+     */
+    /*
+    public String showSelectRebootDirectionDialog() throws InterruptedException {
+        String[] directionList = {"--", "top", "right", "bottom", "left"};
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
+        dialog.setTitle("Reboot direction selection");
+        dialog.setHeaderText("Please choose a reboot direction:");
+
+        // Display the dialog
+        Optional<String> result = dialog.showAndWait();
+        Thread.sleep(5000);
+
+        String resultCheck = result.get();
+        if (resultCheck.equals("--")) {
+            dialog.close();
+            return "top";
+        } else {
+            dialog.close();
+            return result.get();
+        }
+    }
+
+     */
+    public String showSelectRebootDirectionDialog() {
+        String[] directionList = {"top", "right", "bottom", "left"};
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, directionList);
+        dialog.setTitle("Reboot direction selection");
+        dialog.setHeaderText("Please choose a reboot direction:");
+
+        AtomicBoolean topperReturnerFlag = new AtomicBoolean(false);
+        Platform.runLater(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (dialog.isShowing()) {
+                dialog.close();
+                topperReturnerFlag.set(true);
+            }
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+
+
+        if (topperReturnerFlag.get()){
+            return "top";
+        } else{
+            return result.get();
+
+        }
+    }
+
+
+
 
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
