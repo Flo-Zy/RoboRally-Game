@@ -486,7 +486,16 @@ public class Client extends Application {
                                         break;
                                 }
                             }
+                            // test nextCards
+                            System.out.println("Client NextCards: " + nextCards);
+                            // test cardsYouGotNow (1)
+                            System.out.println("Client CardsYouGotNow (1): " + cardsYouGotNow.getMessageBody().getCards());
+
                             controller.fillEmptyRegister(nextCards);
+
+                            // test cardsYouGotNow (2)
+                            System.out.println("Client CardsYouGotNow (2): " + cardsYouGotNow.getMessageBody().getCards());
+
                             break;
                         case "CurrentCards":
                             System.out.println("Current Cards");

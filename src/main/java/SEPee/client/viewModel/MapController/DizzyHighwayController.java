@@ -431,13 +431,13 @@ public class DizzyHighwayController extends MapController {
                 if (handClient.get(handIndex).getName().equals("Again")) { // wenn zweite Karte auch Again ist
                     handIndex++;
                 } else {
-                    SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
+                    SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
                     String serializedCardSelected = Serialisierer.serialize(selectedCard);
                     ClientAI.getWriter().println(serializedCardSelected);
                     handIndex++;
                 }
             } else {
-                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), handIndex + 1);
+                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
                 String serializedCardSelected = Serialisierer.serialize(selectedCard);
                 ClientAI.getWriter().println(serializedCardSelected);
                 handIndex++;

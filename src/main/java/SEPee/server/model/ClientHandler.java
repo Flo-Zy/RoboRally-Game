@@ -640,49 +640,50 @@ public class ClientHandler implements Runnable {
                                         String serializedTimerEnded = Serialisierer.serialize(timerEnded);
                                         broadcast(serializedTimerEnded);
 
-                                        // missingClientCards an betreffende Clients versenden
-                                        ArrayList<String> missingClientCards = new ArrayList<>();
 
                                         for (Player player : Server.getGame().getPlayerList()) {
-                                            // wie viele Felder auf Register sind leer
-                                            // karten ziehen & check, ob Again an erster position steht
-                                            int i = 0;
-                                            int cursor = 0;
-                                            if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().getRegister().size()) {
-                                                System.out.println(player.getPlayerMat().getRegister().size());
-                                                while (i < (5 - player.getPlayerMat().getNumRegister())) {
-                                                    if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
-                                                        cursor++;
-                                                        if (!player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // nächste Karte auf ProgDeck nicht Again
-                                                            Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                            missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().getRegister().add(card.getName());
-                                                            player.getPlayerMat().getProgDeck().remove(cursor);
-                                                            i++;
-                                                            cursor = 0;
-                                                        } else {
+                                            if (player.getPlayerMat().getNumRegister() < 5) {
+                                                // missingClientCards an betreffende Clients versenden
+                                                ArrayList<String> missingClientCards = new ArrayList<>();
+                                                // wie viele Felder auf Register sind leer
+                                                // karten ziehen & check, ob Again an erster position steht
+                                                int i = 0;
+                                                int cursor = 0;
+                                                if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().getRegister().size()) {
+                                                    System.out.println(player.getPlayerMat().getRegister().size());
+                                                    while (i < (5 - player.getPlayerMat().getNumRegister())) {
+                                                        if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
                                                             cursor++;
+                                                            if (!player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // nächste Karte auf ProgDeck nicht Again
+                                                                Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                                missingClientCards.add(card.getName()); // card in missingClientCards
+                                                                player.getPlayerMat().getRegister().add(card.getName());
+                                                                player.getPlayerMat().getProgDeck().remove(cursor);
+                                                                i++;
+                                                                cursor = 0;
+                                                            } else {
+                                                                cursor++;
+                                                                Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                                missingClientCards.add(card.getName()); // card in missingClientCards
+                                                                player.getPlayerMat().getRegister().add(card.getName());
+                                                                player.getPlayerMat().getProgDeck().remove(cursor);
+                                                                i++;
+                                                                cursor = 0;
+                                                            }
+                                                        } else { //  wenn nicht erstes Register bzw. oberste Karte auf ProgDeck nicht Again
                                                             Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
                                                             missingClientCards.add(card.getName()); // card in missingClientCards
                                                             player.getPlayerMat().getRegister().add(card.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             i++;
-                                                            cursor = 0;
                                                         }
-                                                    } else { //  wenn nicht erstes Register bzw. oberste Karte auf ProgDeck nicht Again
-                                                        Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                        missingClientCards.add(card.getName()); // card in missingClientCards
-                                                        player.getPlayerMat().getRegister().add(card.getName());
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
-                                                        i++;
                                                     }
-                                                }
-                                            } else {
-                                                // nehme restlichen Karten vom ProgDeck
-                                                int numEmptyRegister = 5 - player.getPlayerMat().getRegister().size();
-                                                int leftCards = player.getPlayerMat().getProgDeck().size();
-                                                int validCardsCounter = 0;
-                                                int j = 0;
+                                                } else {
+                                                    // nehme restlichen Karten vom ProgDeck
+                                                    int numEmptyRegister = 5 - player.getPlayerMat().getRegister().size();
+                                                    int leftCards = player.getPlayerMat().getProgDeck().size();
+                                                    int validCardsCounter = 0;
+                                                    int j = 0;
 
                                                 while(j < leftCards){
                                                     Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
@@ -691,48 +692,43 @@ public class ClientHandler implements Runnable {
                                                         player.getPlayerMat().getProgDeck().remove(cursor);
                                                         j++;
 
-                                                    } else{
-                                                        missingClientCards.add(card.getName()); // card in missingClientCards
-                                                        player.getPlayerMat().getRegister().add(card.getName());
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
-                                                        validCardsCounter++;
-                                                        j++;
+                                                        } else {
+                                                            missingClientCards.add(card.getName()); // card in missingClientCards
+                                                            player.getPlayerMat().getRegister().add(card.getName());
+                                                            player.getPlayerMat().getProgDeck().remove(cursor);
+                                                            validCardsCounter++;
+                                                            j++;
+                                                        }
                                                     }
-                                                }
 
-                                                ShuffleCoding shuffleCoding = new ShuffleCoding(player.getId());
-                                                String serializedShuffleCoding = Serialisierer.serialize(shuffleCoding);
-                                                sendToOneClient(player.getId(), serializedShuffleCoding);
+                                                    ShuffleCoding shuffleCoding = new ShuffleCoding(player.getId());
+                                                    String serializedShuffleCoding = Serialisierer.serialize(shuffleCoding);
+                                                    sendToOneClient(player.getId(), serializedShuffleCoding);
 
-                                                ArrayList<Card> newDrawPile = stringToCard(player.getPlayerMat().getDiscardPile());
-                                                Collections.shuffle(newDrawPile);
-                                                player.getPlayerMat().setProgDeck(newDrawPile);
-                                                player.getPlayerMat().getDiscardPile().clear();
+                                                    ArrayList<Card> newDrawPile = stringToCard(player.getPlayerMat().getDiscardPile());
+                                                    Collections.shuffle(newDrawPile);
+                                                    player.getPlayerMat().setProgDeck(newDrawPile);
+                                                    player.getPlayerMat().getDiscardPile().clear();
 
-                                                j = 0;
-                                                while (j < numEmptyRegister - validCardsCounter) { // restliche fehlende Karten
-                                                    Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                    if (j == 0 && card.getName().equals("Again")) {
-                                                        player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
-                                                    } else{
-                                                        missingClientCards.add(card.getName()); // card in missingClientCards
-                                                        player.getPlayerMat().getRegister().add(card.getName());
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
-                                                        validCardsCounter++;
-                                                        j++;
+                                                    j = 0;
+                                                    while (j < numEmptyRegister - validCardsCounter) { // restliche fehlende Karten
+                                                        Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                        if (j == 0 && card.getName().equals("Again")) {
+                                                            player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
+                                                            player.getPlayerMat().getProgDeck().remove(cursor);
+                                                        } else {
+                                                            missingClientCards.add(card.getName()); // card in missingClientCards
+                                                            player.getPlayerMat().getRegister().add(card.getName());
+                                                            player.getPlayerMat().getProgDeck().remove(cursor);
+                                                            j++;
+                                                        }
                                                     }
+                                                    System.out.println("This is Player " + player.getId() + "'s missing Cards: " + missingClientCards);
                                                 }
+                                                CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
+                                                String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
+                                                sendToOneClient(player.getId(), serializedCardYouGotNow);
                                             }
-                                        }
-
-                                        for (Integer clientID : clientIDsNotReady) {
-                                            // Test
-                                            System.out.println("This is Player " + clientID + "'s missing Cards: " + missingClientCards);
-
-                                            CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
-                                            String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
-                                            sendToOneClient(clientID, serializedCardYouGotNow);
                                         }
 
                                         discardHand();
