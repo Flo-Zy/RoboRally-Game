@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController" stylesheets="/CSSFiles/client.css">
+<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
-    <HBox spacing="10" prefHeight="900.0" prefWidth="920.0">
+    <HBox prefHeight="900.0" prefWidth="920.0" spacing="10">
         <!-- Linke HBox -->
-        <HBox prefHeight="645.0" prefWidth="830.0" HBox.hgrow="ALWAYS" />
+        <HBox prefHeight="900.0" prefWidth="671.0" HBox.hgrow="ALWAYS" />
         <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
-            <fx:include source="DizzyHighway.fxml"/>
+            <fx:include source="DizzyHighway.fxml" />
         </VBox>
         <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
-            <fx:include source="ExtraCrispy.fxml"/>
+            <fx:include source="ExtraCrispy.fxml" />
         </VBox>
         <VBox fx:id="LostBearingsMap" managed="false" visible="false">
-            <fx:include source="LostBearings.fxml"/>
+            <fx:include source="LostBearings.fxml" />
         </VBox>
         <VBox fx:id="DeathTrapMap" managed="false" visible="false">
-            <fx:include source="DeathTrap.fxml"/>
+            <fx:include source="DeathTrap.fxml" />
         </VBox>
 
         <!-- Rechte HBox (Chatarea VBox) -->
@@ -41,26 +45,43 @@
                 <VBox spacing="10" VBox.vgrow="NEVER">
                     <!-- HBox für Textfield und VisibilityButton -->
                     <HBox spacing="10">
-                        <TextField fx:id="messageField" promptText="Tippe deine Nachricht..." HBox.hgrow="ALWAYS">
-                            <HBox.margin>
-                                <Insets left="7.0" />
-                            </HBox.margin></TextField>
-                        <Button fx:id="visibilityButton" text="Visibility" HBox.hgrow="NEVER">
-                            <HBox.margin>
-                                <Insets right="7.0" />
-                            </HBox.margin></Button>
+                  <AnchorPane>
+                     <children>
+                        <HBox layoutX="7.0" prefHeight="26.0" prefWidth="249.0">
+                           <children>
+                                    <TextField fx:id="messageField" prefHeight="26.0" prefWidth="168.0" promptText="Tippe deine Nachricht..." HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="visibilityButton" prefHeight="26.0" prefWidth="66.0" text="Visibility" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="16.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
                     </HBox>
                     <!-- HBox für SendButton -->
                     <HBox prefHeight="51.0" prefWidth="287.0" spacing="10">
                         <AnchorPane prefHeight="0.0" prefWidth="287.0">
                             <children>
-                                <Button fx:id="sendButton" layoutX="217.0" layoutY="13.0" onAction="#sendMessage" prefHeight="26.0" prefWidth="63.0" text="Senden" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="217.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0" />
-                                <!-- Ready Button -->
-                                <Button fx:id="readyButton" layoutX="47.0" layoutY="13.0" onAction="#sendReady" prefHeight="25.0" prefWidth="128.0" text="BEREIT">
-                                    <opaqueInsets>
-                                        <Insets />
-                                    </opaqueInsets>
-                                </Button>
+                        <HBox prefHeight="100.0" prefWidth="263.0">
+                           <children>
+                                      <!-- Ready Button -->
+                                      <Button fx:id="readyButton" onAction="#sendReady" prefHeight="26.0" prefWidth="114.0" text="BEREIT" HBox.hgrow="ALWAYS">
+                                          <opaqueInsets>
+                                              <Insets />
+                                          </opaqueInsets>
+                                 <HBox.margin>
+                                    <Insets left="7.0" />
+                                 </HBox.margin>
+                                      </Button>
+                                      <Button fx:id="sendButton" onAction="#sendMessage" prefHeight="26.0" prefWidth="66.0" text="Senden" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="70.0" right="7.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
                             </children>
                         </AnchorPane>
                     </HBox>

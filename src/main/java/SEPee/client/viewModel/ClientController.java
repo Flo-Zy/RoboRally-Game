@@ -111,9 +111,6 @@ public class ClientController {
                 sendButton.setOnAction(event -> sendMessage());
                 visibilityButton.setText("Alle");
                 visibilityButton.setOnAction(event -> toggleVisibility());
-                //stage.setOnCloseRequest(event -> shutdown());
-
-                //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
             } else {
                 // If Username is empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -270,16 +267,9 @@ public class ClientController {
 
         dialog.setTitle("Robot Selection");
 
-        // Custom Header
         Label headerLabel = new Label("Please select a robot:");
-        //headerLabel.getStyleClass().add("custom-header-label");
-        //headerLabel.setMaxWidth(Double.MAX_VALUE); // Ensures label can expand
-        //headerLabel.setAlignment(Pos.CENTER); // Center alignment
         headerLabel.setFont(new Font("Arial", 56));
-        // Custom styles
-        //StackPane headerPane = new StackPane(headerLabel); // Wraps the label in a StackPane for better alignment
-        //headerPane.getStyleClass().add("custom-header-panel"); // Transparent background
-        dialog.getDialogPane().setHeader(headerLabel); // Set the custom header
+        dialog.getDialogPane().setHeader(headerLabel);
         headerLabel.getStyleClass().add("header-label");
 
         // GridPane für die Anordnung der Bilder und Namen
