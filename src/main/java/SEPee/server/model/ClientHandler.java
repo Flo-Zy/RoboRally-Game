@@ -685,12 +685,12 @@ public class ClientHandler implements Runnable {
                                                     int validCardsCounter = 0;
                                                     int j = 0;
 
-                                                while(j < leftCards){
-                                                    Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                    if(j == 0 && card.getName().equals("Again")) {
-                                                        player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
-                                                        player.getPlayerMat().getProgDeck().remove(cursor);
-                                                        j++;
+                                                    while (j < leftCards) {
+                                                        Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                        if (j == 0 && card.getName().equals("Again")) {
+                                                            player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
+                                                            player.getPlayerMat().getProgDeck().remove(cursor);
+                                                            leftCards = player.getPlayerMat().getProgDeck().size();
 
                                                         } else {
                                                             missingClientCards.add(card.getName()); // card in missingClientCards
