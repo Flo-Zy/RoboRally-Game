@@ -966,16 +966,37 @@ public class ClientHandler implements Runnable {
 
         player.getRobot().setX(x);
         player.getRobot().setY(y);
+        if(Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
+            if ((y < 0 && x <= 9 ) || (x < 0) || (y > 9 && x <= 9)) {
+                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+            } else if (y < 0 || x > 12 || y > 9) {
+                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+            }else{
 
-        int updatedX = player.getRobot().getX();
-        int updatedY = player.getRobot().getY();
+                int updatedX = player.getRobot().getX();
+                int updatedY = player.getRobot().getY();
 
+                System.out.println(player.getName() + " wird geschoben");
 
-        System.out.println(player.getName() + " wird geschoben");
+                Movement movement = new Movement(player.getId(), updatedX, updatedY);
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+            }
+        }else if((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))){
+            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+        }else if(y < 0 || x > 12 || y > 9) {
+            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+        }else{
 
-        Movement movement = new Movement(player.getId(), updatedX, updatedY);
-        String serializedMovement = Serialisierer.serialize(movement);
-        broadcast(serializedMovement);
+            int updatedX = player.getRobot().getX();
+            int updatedY = player.getRobot().getY();
+
+            System.out.println(player.getName() + " wird geschoben");
+
+            Movement movement = new Movement(player.getId(), updatedX, updatedY);
+            String serializedMovement = Serialisierer.serialize(movement);
+            broadcast(serializedMovement);
+        }
     }
 
     public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
@@ -1881,6 +1902,7 @@ public class ClientHandler implements Runnable {
                     robot.setX(robot.getStartingPointX());
                     robot.setY(robot.getStartingPointY());
                     robot.setAlreadyRebooted(false);
+
 
                     Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
                     String serializedMovement = Serialisierer.serialize(movement);
