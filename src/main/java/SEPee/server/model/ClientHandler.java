@@ -967,9 +967,13 @@ public class ClientHandler implements Runnable {
         player.getRobot().setX(x);
         player.getRobot().setY(y);
 
+        int updatedX = player.getRobot().getX();
+        int updatedY = player.getRobot().getY();
+
+
         System.out.println(player.getName() + " wird geschoben");
 
-        Movement movement = new Movement(player.getId(), x, y);
+        Movement movement = new Movement(player.getId(), updatedX, updatedY);
         String serializedMovement = Serialisierer.serialize(movement);
         broadcast(serializedMovement);
     }
@@ -987,44 +991,6 @@ public class ClientHandler implements Runnable {
             canMove = false;
         }
         return canMove;
-    }
-
-    private void checkAndPushAdjacentRobots(Player player, int moves, boolean isForward) throws InterruptedException {
-        int x = player.getRobot().getX();
-        int y = player.getRobot().getY();
-        String orientation = player.getRobot().getOrientation();
-
-        for (int i = 0; i < moves; i++) {
-            // Calculate the coordinates of the next position based on orientation
-            switch (orientation) {
-                case "top":
-                    y = isForward ? y - 1 : y + 1;
-                    break;
-                case "right":
-                    x = isForward ? x + 1 : x - 1;
-                    break;
-                case "left":
-                    x = isForward ? x - 1 : x + 1;
-                    break;
-                case "bottom":
-                    y = isForward ? y + 1 : y - 1;
-                    break;
-            }
-
-            // Check for other players' robots at the next position
-            for (Player otherPlayer : Server.getGame().getPlayerList()) {
-                if (otherPlayer.getId() != player.getId()) { // Exclude the current player
-                    int xOtherRobot = otherPlayer.getRobot().getX();
-                    int yOtherRobot = otherPlayer.getRobot().getY();
-
-                    // If the other player's robot is at the next position, push it
-                    if (x == xOtherRobot && y == yOtherRobot) {
-                        movePlayerRobot(otherPlayer, isForward, orientation);
-                        checkAndPushAdjacentRobots(otherPlayer, 1, isForward); // Recursively check if the pushed robot can push others
-                    }
-                }
-            }
-        }
     }
 
     public int checkNumReady() {
