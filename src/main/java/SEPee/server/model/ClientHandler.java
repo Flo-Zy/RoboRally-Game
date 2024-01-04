@@ -11,10 +11,7 @@ import SEPee.server.model.field.Field;
 import SEPee.server.model.field.*;
 import SEPee.server.model.gameBoard.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.Error;
 import java.net.Socket;
 import java.net.SocketException;
@@ -218,7 +215,7 @@ public class ClientHandler implements Runnable {
                                 }
                             }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
-                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()-1).isReboot()) {
+                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
                                 PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
                                 // Card played für Karten Verständnis an alle clients schicken
@@ -777,6 +774,26 @@ public class ClientHandler implements Runnable {
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
                             break;
+                        case "RebootDirection":
+                            System.out.println("Reboot Direction");
+                            RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
+                            String newRobotOrientation = rebootDirection.getMessageBody().getDirection();
+                            String orientationOfRobot = robot.getOrientation();
+
+                            //entsprechend viele PlayerTurning schicken, bis es passt
+                            while(!orientationOfRobot.equals(newRobotOrientation)){
+                                System.out.println("714 " + robot.getOrientation());
+                                String resultingOrientation = getResultingOrientation("clockwise", robot);
+                                robot.setOrientation(resultingOrientation);
+                                orientationOfRobot = resultingOrientation;
+                                PlayerTurning playerTurning = new PlayerTurning(clientId, "clockwise");
+                                String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                                broadcast(serializedPlayerTurning);
+                            }
+
+                            //System.out.println("clientId rebootDirection: " + clientId);
+                            //Server.getGame().getPlayerList().get(clientId).getRobot().setOrientation(newRobotOrientation);
+                            break;
                         default:
                             //Error-JSON an Client
                             //System.out.println("Unknown command");
@@ -828,37 +845,45 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
+        Player checkPlayer = new Player("", 9999, 9999);
         for (int i = 0; i < moves; i++) {
-            boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
-
-            if (canMove) {
-                checkForRobotsAndMove(this.robot, isForward);
-
-                if (isForward) {
-                    MoveI.makeEffect(this.robot);
-                } else {
-                    BackUp.makeEffect(this.robot);
-                }
-            } else {
-                if (isForward) {
-                    System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
-                } else {
-                    System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
+            for(Player player : Server.getGame().getPlayerList()){
+                if(player.getId() == clientId){
+                    checkPlayer = player;
                 }
             }
+            if(!checkPlayer.isReboot()){
+                boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
-            int x = this.robot.getX();
-            int y = this.robot.getY();
-            int clientID = this.clientId;
+                if (canMove) {
+                    checkForRobotsAndMove(this.robot, isForward); //alte push methode
 
-            Movement movement = new Movement(clientID, x, y);
-            String serializedMovement = Serialisierer.serialize(movement);
-            Thread.sleep(750);
-            broadcast(serializedMovement);
+                    if (isForward) {
+                        MoveI.makeEffect(this.robot);
+                    } else {
+                        BackUp.makeEffect(this.robot);
+                    }
+                } else {
+                    if (isForward) {
+                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                    } else {
+                        System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
+                    }
+                }
+
+                int x = this.robot.getX();
+                int y = this.robot.getY();
+                int clientID = this.clientId;
+
+                Movement movement = new Movement(clientID, x, y);
+                String serializedMovement = Serialisierer.serialize(movement);
+                Thread.sleep(750);
+                broadcast(serializedMovement);
+            }
         }
     }
 
-    private void checkForRobotsAndMove(Robot robot, boolean isForward) {
+    private void checkForRobotsAndMove(Robot robot, boolean isForward) throws InterruptedException {
         String orientation = robot.getOrientation();
         int xCoordinatePushingRobot = robot.getX();
         int yCoordinatePushingRobot = robot.getY();
@@ -900,7 +925,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void movePlayerRobot(Player player, boolean isForward, String orientation) {
+    private void movePlayerRobot(Player player, boolean isForward, String orientation) throws InterruptedException {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
@@ -919,6 +944,26 @@ public class ClientHandler implements Runnable {
                 break;
         }
 
+        // handle robot movement recursively for fleeingrobot for potential new robots
+
+        // orientation of push haben wir
+        // player/ roboter der gepushed werden soll
+
+
+
+        int xCoordinateNEWPushingRobot = player.getRobot().getX();
+        int yCoordinateNEWPushingRobot = player.getRobot().getY();
+
+        for (Player newFleeingPlayer : Server.getGame().getPlayerList()) {
+            int xPlayerFleeingRobot = newFleeingPlayer.getRobot().getX();
+            int yPlayerFleeingRobot = newFleeingPlayer.getRobot().getY();
+
+            if (shouldPush(isForward, orientation, xCoordinateNEWPushingRobot, yCoordinateNEWPushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                movePlayerRobot(newFleeingPlayer, isForward, orientation);
+            }
+        }
+
+
         player.getRobot().setX(x);
         player.getRobot().setY(y);
 
@@ -927,6 +972,59 @@ public class ClientHandler implements Runnable {
         Movement movement = new Movement(player.getId(), x, y);
         String serializedMovement = Serialisierer.serialize(movement);
         broadcast(serializedMovement);
+    }
+
+    public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
+        boolean canMove = true;
+
+        if (fieldCheck.contains("Wall [bottom") && (robot.getOrientation().equals("bottom") && isForward || robot.getOrientation().equals("top") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [top") && (robot.getOrientation().equals("top") && isForward || robot.getOrientation().equals("bottom") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [right") && (robot.getOrientation().equals("right") && isForward || robot.getOrientation().equals("left") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [left") && (robot.getOrientation().equals("left") && isForward || robot.getOrientation().equals("right") && !isForward)) {
+            canMove = false;
+        }
+        return canMove;
+    }
+
+    private void checkAndPushAdjacentRobots(Player player, int moves, boolean isForward) throws InterruptedException {
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+        String orientation = player.getRobot().getOrientation();
+
+        for (int i = 0; i < moves; i++) {
+            // Calculate the coordinates of the next position based on orientation
+            switch (orientation) {
+                case "top":
+                    y = isForward ? y - 1 : y + 1;
+                    break;
+                case "right":
+                    x = isForward ? x + 1 : x - 1;
+                    break;
+                case "left":
+                    x = isForward ? x - 1 : x + 1;
+                    break;
+                case "bottom":
+                    y = isForward ? y + 1 : y - 1;
+                    break;
+            }
+
+            // Check for other players' robots at the next position
+            for (Player otherPlayer : Server.getGame().getPlayerList()) {
+                if (otherPlayer.getId() != player.getId()) { // Exclude the current player
+                    int xOtherRobot = otherPlayer.getRobot().getX();
+                    int yOtherRobot = otherPlayer.getRobot().getY();
+
+                    // If the other player's robot is at the next position, push it
+                    if (x == xOtherRobot && y == yOtherRobot) {
+                        movePlayerRobot(otherPlayer, isForward, orientation);
+                        checkAndPushAdjacentRobots(otherPlayer, 1, isForward); // Recursively check if the pushed robot can push others
+                    }
+                }
+            }
+        }
     }
 
     public int checkNumReady() {
@@ -1052,21 +1150,6 @@ public class ClientHandler implements Runnable {
 
         return result.toString();
 
-    }
-
-    public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
-        boolean canMove = true;
-
-        if (fieldCheck.contains("Wall [bottom") && (robot.getOrientation().equals("bottom") && isForward || robot.getOrientation().equals("top") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [top") && (robot.getOrientation().equals("top") && isForward || robot.getOrientation().equals("bottom") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [right") && (robot.getOrientation().equals("right") && isForward || robot.getOrientation().equals("left") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [left") && (robot.getOrientation().equals("left") && isForward || robot.getOrientation().equals("right") && !isForward)) {
-            canMove = false;
-        }
-        return canMove;
     }
 
     public void fieldActivation() throws InterruptedException {
@@ -1698,7 +1781,7 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private String getResultingOrientation(String turningDirection, Robot robot) {
+    private static String getResultingOrientation(String turningDirection, Robot robot) {
         if (turningDirection.equals("clockwise")) {
             switch (robot.getOrientation()) {
                 case "top":
@@ -1813,9 +1896,20 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
+
+                    //turn the robot to face top no matter what and if something in the dialog is chosen he gets turned again
+                    while(!robot.getOrientation().equals("top")) {
+                        String resultingOrientation = getResultingOrientation("top", robot);
+                        robot.setOrientation(resultingOrientation);
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
+                    }
+
                     Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
                     String serializedReboot = Serialisierer.serialize(reboot);
                     broadcast(serializedReboot);
+
 
                 } else if (rebootTo.equals("startingPoint")) {
                     robot.setX(robot.getStartingPointX());
@@ -1826,9 +1920,25 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
-                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
-                    String serializedReboot = Serialisierer.serialize(reboot);
-                    broadcast(serializedReboot);
+                    if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
+                        while(!robot.getOrientation().equals("left")){
+                            String resultingOrientation = getResultingOrientation("clockwise", robot);
+                            robot.setOrientation(resultingOrientation);
+                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                            broadcast(serializedPlayerTurning);
+                        }
+                    } else{
+                        while(!robot.getOrientation().equals("right")){
+                            System.out.println("1794 " + robot.getOrientation());
+                            String resultingOrientation = getResultingOrientation("clockwise", robot);
+                            robot.setOrientation(resultingOrientation);
+                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                            broadcast(serializedPlayerTurning);
+                        }
+                    }
+
 
                 } else {
                     System.out.println("Invalid Reboot String");

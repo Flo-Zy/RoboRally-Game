@@ -9,11 +9,15 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -23,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +36,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientController {
     @FXML
@@ -339,6 +345,49 @@ public class ClientController {
         }
         return selectedMap;
     }
+
+
+    public String showSelectRebootDirectionDialog(Stage stage) {
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
+
+        String[] directionList = {"top", "right", "bottom", "left"};
+        String[] selectedDirection = {null};
+
+        for (String direction : directionList) {
+            Button directionButton = new Button(direction);
+            directionButton.setOnAction(event -> {
+                selectedDirection[0] = direction;
+                stage.close();
+            });
+            root.getChildren().add(directionButton);
+        }
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Reboot direction selection");
+        stage.show();
+
+        Duration duration = Duration.seconds(10);
+        Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
+            if (stage.isShowing()) {
+                stage.close();
+                selectedDirection[0] = "top";
+            }
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
+
+        stage.setOnHiding(event -> timeline.stop());
+
+        stage.showAndWait();
+
+        return selectedDirection[0];
+    }
+
+
+
 
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -791,4 +840,6 @@ public class ClientController {
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
     }
+
+
 }
