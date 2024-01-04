@@ -20,9 +20,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -88,7 +90,6 @@ public class ClientController {
 
 
     public void init(Client Client, Stage stage) {
-
         boolean validUsername = false;
 
         while (!validUsername) {
@@ -96,8 +97,9 @@ public class ClientController {
             dialog.setTitle("Username");
             dialog.setHeaderText("Please enter your username:");
             dialog.setContentText("Username:");
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+            dialog.getDialogPane().setGraphic(null);
             Optional<String> result = dialog.showAndWait();
-
             if (result.isPresent() && !result.get().trim().isEmpty()) {
                 this.name = result.get().trim();
                 stage.setTitle("Client - " + name);
@@ -113,7 +115,7 @@ public class ClientController {
 
                 //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
             } else {
-                //falls Username empty
+                // If Username is empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -261,10 +263,24 @@ public class ClientController {
         System.exit(0);
     }
 
+    String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
+
         dialog.setTitle("Robot Selection");
-        dialog.setHeaderText("Please select a robot:");
+
+        // Custom Header
+        Label headerLabel = new Label("Please select a robot:");
+        //headerLabel.getStyleClass().add("custom-header-label");
+        //headerLabel.setMaxWidth(Double.MAX_VALUE); // Ensures label can expand
+        //headerLabel.setAlignment(Pos.CENTER); // Center alignment
+        headerLabel.setFont(new Font("Arial", 56));
+        // Custom styles
+        //StackPane headerPane = new StackPane(headerLabel); // Wraps the label in a StackPane for better alignment
+        //headerPane.getStyleClass().add("custom-header-panel"); // Transparent background
+        dialog.getDialogPane().setHeader(headerLabel); // Set the custom header
+        headerLabel.getStyleClass().add("header-label");
 
         // GridPane für die Anordnung der Bilder und Namen
         GridPane grid = new GridPane();
@@ -277,8 +293,11 @@ public class ClientController {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
 
-            Label nameLabel = new Label("Robot " + i);
+            //Label nameLabel = new Label("Robot " + i);
+            Label nameLabel = new Label(robotNames[i-1]);
             nameLabel.setAlignment(Pos.CENTER);
+            nameLabel.getStyleClass().add("grid-label");
+
 
             // Hinzufügen von ImageView und Label zum GridPane
             grid.add(imageView, i - 1, 0);
@@ -840,6 +859,4 @@ public class ClientController {
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
     }
-
-
 }
