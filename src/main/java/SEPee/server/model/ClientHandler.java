@@ -785,7 +785,7 @@ public class ClientHandler implements Runnable {
                 boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
                 if (canMove) {
-                    checkForRobotsAndMove(this.robot, isForward);
+                    checkForRobotsAndMove(this.robot, isForward); //alte push methode
 
                     if (isForward) {
                         MoveI.makeEffect(this.robot);
@@ -812,7 +812,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkForRobotsAndMove(Robot robot, boolean isForward) {
+    private void checkForRobotsAndMove(Robot robot, boolean isForward) throws InterruptedException {
         String orientation = robot.getOrientation();
         int xCoordinatePushingRobot = robot.getX();
         int yCoordinatePushingRobot = robot.getY();
@@ -854,7 +854,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void movePlayerRobot(Player player, boolean isForward, String orientation) {
+    private void movePlayerRobot(Player player, boolean isForward, String orientation) throws InterruptedException {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
@@ -873,6 +873,26 @@ public class ClientHandler implements Runnable {
                 break;
         }
 
+        // handle robot movement recursively for fleeingrobot for potential new robots
+
+        // orientation of push haben wir
+        // player/ roboter der gepushed werden soll
+
+
+
+        int xCoordinateNEWPushingRobot = player.getRobot().getX();
+        int yCoordinateNEWPushingRobot = player.getRobot().getY();
+
+        for (Player newFleeingPlayer : Server.getGame().getPlayerList()) {
+            int xPlayerFleeingRobot = newFleeingPlayer.getRobot().getX();
+            int yPlayerFleeingRobot = newFleeingPlayer.getRobot().getY();
+
+            if (shouldPush(isForward, orientation, xCoordinateNEWPushingRobot, yCoordinateNEWPushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                movePlayerRobot(newFleeingPlayer, isForward, orientation);
+            }
+        }
+
+
         player.getRobot().setX(x);
         player.getRobot().setY(y);
 
@@ -881,6 +901,59 @@ public class ClientHandler implements Runnable {
         Movement movement = new Movement(player.getId(), x, y);
         String serializedMovement = Serialisierer.serialize(movement);
         broadcast(serializedMovement);
+    }
+
+    public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
+        boolean canMove = true;
+
+        if (fieldCheck.contains("Wall [bottom") && (robot.getOrientation().equals("bottom") && isForward || robot.getOrientation().equals("top") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [top") && (robot.getOrientation().equals("top") && isForward || robot.getOrientation().equals("bottom") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [right") && (robot.getOrientation().equals("right") && isForward || robot.getOrientation().equals("left") && !isForward)) {
+            canMove = false;
+        } else if (fieldCheck.contains("Wall [left") && (robot.getOrientation().equals("left") && isForward || robot.getOrientation().equals("right") && !isForward)) {
+            canMove = false;
+        }
+        return canMove;
+    }
+
+    private void checkAndPushAdjacentRobots(Player player, int moves, boolean isForward) throws InterruptedException {
+        int x = player.getRobot().getX();
+        int y = player.getRobot().getY();
+        String orientation = player.getRobot().getOrientation();
+
+        for (int i = 0; i < moves; i++) {
+            // Calculate the coordinates of the next position based on orientation
+            switch (orientation) {
+                case "top":
+                    y = isForward ? y - 1 : y + 1;
+                    break;
+                case "right":
+                    x = isForward ? x + 1 : x - 1;
+                    break;
+                case "left":
+                    x = isForward ? x - 1 : x + 1;
+                    break;
+                case "bottom":
+                    y = isForward ? y + 1 : y - 1;
+                    break;
+            }
+
+            // Check for other players' robots at the next position
+            for (Player otherPlayer : Server.getGame().getPlayerList()) {
+                if (otherPlayer.getId() != player.getId()) { // Exclude the current player
+                    int xOtherRobot = otherPlayer.getRobot().getX();
+                    int yOtherRobot = otherPlayer.getRobot().getY();
+
+                    // If the other player's robot is at the next position, push it
+                    if (x == xOtherRobot && y == yOtherRobot) {
+                        movePlayerRobot(otherPlayer, isForward, orientation);
+                        checkAndPushAdjacentRobots(otherPlayer, 1, isForward); // Recursively check if the pushed robot can push others
+                    }
+                }
+            }
+        }
     }
 
     public int checkNumReady() {
@@ -1006,21 +1079,6 @@ public class ClientHandler implements Runnable {
 
         return result.toString();
 
-    }
-
-    public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
-        boolean canMove = true;
-
-        if (fieldCheck.contains("Wall [bottom") && (robot.getOrientation().equals("bottom") && isForward || robot.getOrientation().equals("top") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [top") && (robot.getOrientation().equals("top") && isForward || robot.getOrientation().equals("bottom") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [right") && (robot.getOrientation().equals("right") && isForward || robot.getOrientation().equals("left") && !isForward)) {
-            canMove = false;
-        } else if (fieldCheck.contains("Wall [left") && (robot.getOrientation().equals("left") && isForward || robot.getOrientation().equals("right") && !isForward)) {
-            canMove = false;
-        }
-        return canMove;
     }
 
     public void fieldActivation() throws InterruptedException {
