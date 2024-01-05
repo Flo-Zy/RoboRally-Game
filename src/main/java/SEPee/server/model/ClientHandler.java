@@ -788,7 +788,7 @@ public class ClientHandler implements Runnable {
 
                             //entsprechend viele PlayerTurning schicken, bis es passt
                             while (!orientationOfRobot.equals(newRobotOrientation)) {
-                                System.out.println("714 " + robot.getOrientation());
+                                System.out.println("791 " + robot.getOrientation());
                                 String resultingOrientation = getResultingOrientation("clockwise", robot);
                                 robot.setOrientation(resultingOrientation);
                                 orientationOfRobot = resultingOrientation;
@@ -1893,11 +1893,12 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
-
-                    //turn the robot to face top no matter what and if something in the dialog is chosen he gets turned again
-                    while (!robot.getOrientation().equals("top")) {
-                        String resultingOrientation = getResultingOrientation("top", robot);
+                    //entsprechend viele PlayerTurning schicken, bis es passt
+                    String orientationOfRobot = robot.getOrientation();
+                    while (!orientationOfRobot.equals("top")) {
+                        String resultingOrientation = getResultingOrientation("clockwise", robot);
                         robot.setOrientation(resultingOrientation);
+                        orientationOfRobot = resultingOrientation;
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
@@ -1935,25 +1936,20 @@ public class ClientHandler implements Runnable {
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
-                    if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
-                        while (!robot.getOrientation().equals("left")) {
-                            String resultingOrientation = getResultingOrientation("clockwise", robot);
-                            robot.setOrientation(resultingOrientation);
-                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
-                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                            broadcast(serializedPlayerTurning);
-                        }
-                    } else {
-                        while (!robot.getOrientation().equals("right")) {
-                            System.out.println("1794 " + robot.getOrientation());
-                            String resultingOrientation = getResultingOrientation("clockwise", robot);
-                            robot.setOrientation(resultingOrientation);
-                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
-                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
-                            broadcast(serializedPlayerTurning);
-                        }
+                    //entsprechend viele PlayerTurning schicken, bis es passt
+                    String orientationOfRobot = robot.getOrientation();
+                    while (!orientationOfRobot.equals("top")) {
+                        String resultingOrientation = getResultingOrientation("clockwise", robot);
+                        robot.setOrientation(resultingOrientation);
+                        orientationOfRobot = resultingOrientation;
+                        PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                        String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                        broadcast(serializedPlayerTurning);
                     }
 
+                    Reboot reboot = new Reboot(Server.getGame().getPlayerList().get(i).getId());
+                    String serializedReboot = Serialisierer.serialize(reboot);
+                    broadcast(serializedReboot);
 
                 } else {
                     System.out.println("Invalid Reboot String");
