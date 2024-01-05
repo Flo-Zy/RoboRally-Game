@@ -1463,7 +1463,24 @@ public class ClientHandler implements Runnable {
 
             if (shouldActivate) {
                 if (standingOnPushPanel.contains("PushPanel [top")) {
-                    //push down
+
+                    String orientation = "top";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = robot.getX();
+                        int yPlayerFleeingRobot = robot.getY() - 1;
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
                     robot.setY(robot.getY() - 1);
 
                 } else if (standingOnPushPanel.contains("PushPanel [left")) {
@@ -1990,9 +2007,6 @@ public class ClientHandler implements Runnable {
 
 
                     if(robotOnThisField(Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY())){
-
-                        // check (max 5 fields) until field without robot is found
-
 
                         // push found robos in direction of reboot field
 

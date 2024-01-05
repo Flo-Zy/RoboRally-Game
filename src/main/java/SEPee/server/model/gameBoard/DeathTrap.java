@@ -256,7 +256,7 @@ public class DeathTrap extends GameBoard {
         field4_4.add(new CheckPoint("2A", 2));
 
         List<Field> field4_5 = new ArrayList<>();
-        field4_3.add(new Wall("2A", orientations44Wall));
+        field4_5.add(new Wall("2A", orientations44Wall));
         String[] orientations45 = {"bottom"};
         int[] register45 = {2, 4};
         field4_5.add(new PushPanel("2A", orientations45, register45));
