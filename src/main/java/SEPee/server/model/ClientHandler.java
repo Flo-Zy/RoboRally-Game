@@ -1485,145 +1485,149 @@ public class ClientHandler implements Runnable {
         Robot yourRobot = Server.getGame().getPlayerList().get(i).getRobot();
         boolean safe = false;
 
-        switch (robotOrientation) {
-            case "top":
-                Robot targetRobot1 = new Robot(yourRobot.getX(), -9999, "top");
-                for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                    if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() < yourRobot.getY() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() > targetRobot1.getY()) {
-                        targetRobot1 = Server.getGame().getPlayerList().get(j).getRobot();
-                    }
-                }
+        // if player is rebooting, dont shoot lasers
+        if (!Server.getGame().getPlayerList().get(i).isReboot()) {
 
-                if (targetRobot1.getY() != -9999) {
-                    int y = yourRobot.getY() - 1;
-                    while (y >= targetRobot1.getY()) {
-                        Robot robot = new Robot(yourRobot.getX(), y, "top");
-                        String checkWall = checkRobotField(robot);
-                        if (checkWall.contains("Wall [bottom")) {
-                            safe = true;
-                            break;
-                        }
-                        y--;
-                    }
-                    if (!safe) {
-                        for (Player player : Server.getGame().getPlayerList()) {
-                            if (player.getRobot().equals(targetRobot1)) {
-                                if (Server.getGame().getSpam() > 0) {
-                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                    player.getPlayerMat().getDiscardPile().add("Spam");
-                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
-                            }
+            switch (robotOrientation) {
+                case "top":
+                    Robot targetRobot1 = new Robot(yourRobot.getX(), -9999, "top");
+                    for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                        if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() < yourRobot.getY() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() > targetRobot1.getY()) {
+                            targetRobot1 = Server.getGame().getPlayerList().get(j).getRobot();
                         }
                     }
-                }
 
-                break;
-            case "right":
-                Robot targetRobot2 = new Robot(9999, yourRobot.getY(), "right");
-                for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                    if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() > yourRobot.getX() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() < targetRobot2.getX()) {
-                        targetRobot2 = Server.getGame().getPlayerList().get(j).getRobot();
-                    }
-                }
-                if (targetRobot2.getX() != 9999) {
-                    int x = yourRobot.getX() + 1;
-                    while (x <= targetRobot2.getX()) {
-                        Robot robot = new Robot(x, yourRobot.getY(), "right");
-                        String checkWall = checkRobotField(robot);
-                        if (checkWall.contains("Wall [left")) {
-                            safe = true;
-                            break;
+                    if (targetRobot1.getY() != -9999) {
+                        int y = yourRobot.getY() - 1;
+                        while (y >= targetRobot1.getY()) {
+                            Robot robot = new Robot(yourRobot.getX(), y, "top");
+                            String checkWall = checkRobotField(robot);
+                            if (checkWall.contains("Wall [bottom")) {
+                                safe = true;
+                                break;
+                            }
+                            y--;
                         }
-                        x++;
-                    }
-                    if (!safe) {
-                        for (Player player : Server.getGame().getPlayerList()) {
-                            if (player.getRobot().equals(targetRobot2)) {
-                                if (Server.getGame().getSpam() > 0) {
-                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                    player.getPlayerMat().getDiscardPile().add("Spam");
-                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                        if (!safe) {
+                            for (Player player : Server.getGame().getPlayerList()) {
+                                if (player.getRobot().equals(targetRobot1)) {
+                                    if (Server.getGame().getSpam() > 0) {
+                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                        player.getPlayerMat().getDiscardPile().add("Spam");
+                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                }
                             }
                         }
                     }
-                }
-                break;
-            case "bottom":
-                Robot targetRobot3 = new Robot(yourRobot.getX(), 9999, "bottom");
-                for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                    if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() > yourRobot.getY() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() < targetRobot3.getY()) {
-                        targetRobot3 = Server.getGame().getPlayerList().get(j).getRobot();
-                    }
-                }
-                if (targetRobot3.getY() != 9999) {
-                    int y = yourRobot.getY() + 1;
-                    while (y <= targetRobot3.getY()) {
-                        Robot robot = new Robot(yourRobot.getX(), y, "bottom");
-                        String checkWall = checkRobotField(robot);
-                        if (checkWall.contains("Wall [top")) {
-                            safe = true;
-                            break;
+
+                    break;
+                case "right":
+                    Robot targetRobot2 = new Robot(9999, yourRobot.getY(), "right");
+                    for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                        if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() > yourRobot.getX() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() < targetRobot2.getX()) {
+                            targetRobot2 = Server.getGame().getPlayerList().get(j).getRobot();
                         }
-                        y++;
                     }
-                    if (!safe) {
-                        for (Player player : Server.getGame().getPlayerList()) {
-                            if (player.getRobot().equals(targetRobot3)) {
-                                if (Server.getGame().getSpam() > 0) {
-                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                    player.getPlayerMat().getDiscardPile().add("Spam");
-                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                    if (targetRobot2.getX() != 9999) {
+                        int x = yourRobot.getX() + 1;
+                        while (x <= targetRobot2.getX()) {
+                            Robot robot = new Robot(x, yourRobot.getY(), "right");
+                            String checkWall = checkRobotField(robot);
+                            if (checkWall.contains("Wall [left")) {
+                                safe = true;
+                                break;
+                            }
+                            x++;
+                        }
+                        if (!safe) {
+                            for (Player player : Server.getGame().getPlayerList()) {
+                                if (player.getRobot().equals(targetRobot2)) {
+                                    if (Server.getGame().getSpam() > 0) {
+                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                        player.getPlayerMat().getDiscardPile().add("Spam");
+                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                }
                             }
                         }
                     }
-                }
-                break;
-            case "left":
-                Robot targetRobot4 = new Robot(-9999, yourRobot.getY(), "left");
-                for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
-                    if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() < yourRobot.getX() &&
-                            Server.getGame().getPlayerList().get(j).getRobot().getX() > targetRobot4.getX()) {
-                        targetRobot4 = Server.getGame().getPlayerList().get(j).getRobot();
-                    }
-                }
-                if (targetRobot4.getX() != -9999) {
-                    int x = yourRobot.getX() - 1;
-                    while (x >= targetRobot4.getX()) {
-                        Robot robot = new Robot(x, yourRobot.getY(), "left");
-                        String checkWall = checkRobotField(robot);
-                        if (checkWall.contains("Wall [right")) {
-                            safe = true;
-                            break;
+                    break;
+                case "bottom":
+                    Robot targetRobot3 = new Robot(yourRobot.getX(), 9999, "bottom");
+                    for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                        if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() == yourRobot.getX() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() > yourRobot.getY() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() < targetRobot3.getY()) {
+                            targetRobot3 = Server.getGame().getPlayerList().get(j).getRobot();
                         }
-                        x--;
                     }
-                    if (!safe) {
-                        for (Player player : Server.getGame().getPlayerList()) {
-                            if (player.getRobot().equals(targetRobot4)) {
-                                if (Server.getGame().getSpam() > 0) {
-                                    Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
-                                    player.getPlayerMat().getDiscardPile().add("Spam");
-                                } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                    if (targetRobot3.getY() != 9999) {
+                        int y = yourRobot.getY() + 1;
+                        while (y <= targetRobot3.getY()) {
+                            Robot robot = new Robot(yourRobot.getX(), y, "bottom");
+                            String checkWall = checkRobotField(robot);
+                            if (checkWall.contains("Wall [top")) {
+                                safe = true;
+                                break;
+                            }
+                            y++;
+                        }
+                        if (!safe) {
+                            for (Player player : Server.getGame().getPlayerList()) {
+                                if (player.getRobot().equals(targetRobot3)) {
+                                    if (Server.getGame().getSpam() > 0) {
+                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                        player.getPlayerMat().getDiscardPile().add("Spam");
+                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                }
                             }
                         }
                     }
-                }
-                break;
+                    break;
+                case "left":
+                    Robot targetRobot4 = new Robot(-9999, yourRobot.getY(), "left");
+                    for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                        if (!yourRobot.equals(Server.getGame().getPlayerList().get(j).getRobot()) &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getY() == yourRobot.getY() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() < yourRobot.getX() &&
+                                Server.getGame().getPlayerList().get(j).getRobot().getX() > targetRobot4.getX()) {
+                            targetRobot4 = Server.getGame().getPlayerList().get(j).getRobot();
+                        }
+                    }
+                    if (targetRobot4.getX() != -9999) {
+                        int x = yourRobot.getX() - 1;
+                        while (x >= targetRobot4.getX()) {
+                            Robot robot = new Robot(x, yourRobot.getY(), "left");
+                            String checkWall = checkRobotField(robot);
+                            if (checkWall.contains("Wall [right")) {
+                                safe = true;
+                                break;
+                            }
+                            x--;
+                        }
+                        if (!safe) {
+                            for (Player player : Server.getGame().getPlayerList()) {
+                                if (player.getRobot().equals(targetRobot4)) {
+                                    if (Server.getGame().getSpam() > 0) {
+                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                        player.getPlayerMat().getDiscardPile().add("Spam");
+                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
         }
     }
 
