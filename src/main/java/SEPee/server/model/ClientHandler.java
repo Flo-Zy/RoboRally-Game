@@ -72,7 +72,7 @@ public class ClientHandler implements Runnable {
                             PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                             associateSocketWithId(clientSocket, clientId);
 
-                            this.player = new Player(playerName, clientId, playerFigure+1);
+                            this.player = new Player(playerName, clientId, playerFigure + 1);
                             Server.getPlayerList().add(player);
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
@@ -209,13 +209,13 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
-                            if(Server.getCountPlayerTurns() == 0) {
+                            if (Server.getCountPlayerTurns() == 0) {
                                 for (Player player : Server.getGame().getPlayerList()) {
                                     player.getPlayerMat().getReceivedDamageCards().clear();
                                 }
                             }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
-                            if(!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
+                            if (!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
                                 PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
                                 // Card played für Karten Verständnis an alle clients schicken
@@ -328,7 +328,7 @@ public class ClientHandler implements Runnable {
                                         System.out.println(activeCard.getCard());
                                     }
                                 } else { // Server.getRegisterCounter() größer 4
-                                    for(Player player : Server.getPlayerList()){
+                                    for (Player player : Server.getPlayerList()) {
                                         player.setReboot(false);
                                     }
                                     Server.setRegisterCounter(0);
@@ -342,8 +342,8 @@ public class ClientHandler implements Runnable {
                                         System.out.println("Player " + player.getId() + " discardPile: " + player.getPlayerMat().getDiscardPile());
                                     }
 
-                                    for(Player player : Server.getGame().getPlayerList()){
-                                        for(int i = 0; i < 5; i++) {
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        for (int i = 0; i < 5; i++) {
                                             System.out.println(player.getPlayerMat().getRegisterIndex(i));
                                         }
                                     }
@@ -354,8 +354,8 @@ public class ClientHandler implements Runnable {
                                     }
 
                                     // teste ob alle register leer
-                                    for(Player player : Server.getGame().getPlayerList()){
-                                        for(int i = 0; i < 5; i++) {
+                                    for (Player player : Server.getGame().getPlayerList()) {
+                                        for (int i = 0; i < 5; i++) {
                                             System.out.println(player.getPlayerMat().getRegisterIndex(i));
                                         }
                                     }
@@ -472,7 +472,7 @@ public class ClientHandler implements Runnable {
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
                             System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
 
-                            if(Server.getGameMap().getBordName().equals("Death Trap")) {
+                            if (Server.getGameMap().getBordName().equals("Death Trap")) {
                                 this.robot = new Robot(0, 0, "left");
                             } else {
                                 this.robot = new Robot(0, 0, "right");
@@ -580,7 +580,7 @@ public class ClientHandler implements Runnable {
                                 // füge in register card hinzu
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId && card != null) {
                                     //gelegte Karte dem Register hinzufügen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister-1, card);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister - 1, card);
                                     //gelegte Karte von der Hand entfernen
                                     for (int j = 0; j < Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().size(); j++) {
                                         if (card.equals(Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().get(j))) {
@@ -593,14 +593,14 @@ public class ClientHandler implements Runnable {
                                 else if (Server.getGame().getPlayerList().get(i).getId() == clientId && card == null) {
                                     //letze Karte vom register in die Hand einfügen
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().add(
-                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegisterIndex(cardRegister-1));
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegisterIndex(cardRegister - 1));
                                     //letze Karte vom Register entfernen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister-1, null);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister - 1, null);
                                 }
                             }
 
-                            for(Player player : Server.getGame().getPlayerList()){
-                                for(int i = 0; i < 5; i++) {
+                            for (Player player : Server.getGame().getPlayerList()) {
+                                for (int i = 0; i < 5; i++) {
                                     System.out.println(player.getPlayerMat().getRegisterIndex(i));
                                 }
                             }
@@ -787,7 +787,7 @@ public class ClientHandler implements Runnable {
                             String orientationOfRobot = robot.getOrientation();
 
                             //entsprechend viele PlayerTurning schicken, bis es passt
-                            while(!orientationOfRobot.equals(newRobotOrientation)){
+                            while (!orientationOfRobot.equals(newRobotOrientation)) {
                                 System.out.println("714 " + robot.getOrientation());
                                 String resultingOrientation = getResultingOrientation("clockwise", robot);
                                 robot.setOrientation(resultingOrientation);
@@ -853,12 +853,12 @@ public class ClientHandler implements Runnable {
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
         Player checkPlayer = new Player("", 9999, 9999);
         for (int i = 0; i < moves; i++) {
-            for(Player player : Server.getGame().getPlayerList()){
-                if(player.getId() == clientId){
+            for (Player player : Server.getGame().getPlayerList()) {
+                if (player.getId() == clientId) {
                     checkPlayer = player;
                 }
             }
-            if(!checkPlayer.isReboot()){
+            if (!checkPlayer.isReboot()) {
                 boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
                 if (canMove) {
@@ -956,7 +956,6 @@ public class ClientHandler implements Runnable {
         // player/ roboter der gepushed werden soll
 
 
-
         int xCoordinateNEWPushingRobot = player.getRobot().getX();
         int yCoordinateNEWPushingRobot = player.getRobot().getY();
 
@@ -970,13 +969,12 @@ public class ClientHandler implements Runnable {
         }
 
 
-
-        if(Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
-            if ((y < 0 && x <= 9 ) || (x < 0) || (y > 9 && x <= 9)) {
+        if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
+            if ((y < 0 && x <= 9) || (x < 0) || (y > 9 && x <= 9)) {
                 rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
             } else if (y < 0 || x > 12 || y > 9) {
                 rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
-            }else{
+            } else {
                 player.getRobot().setX(x);
                 player.getRobot().setY(y);
 
@@ -989,11 +987,11 @@ public class ClientHandler implements Runnable {
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
             }
-        }else if((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))){
+        } else if ((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))) {
             rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
-        }else if(y < 0 || x > 12 || y > 9) {
+        } else if (y < 0 || x > 12 || y > 9) {
             rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
-        }else{
+        } else {
             player.getRobot().setX(x);
             player.getRobot().setY(y);
 
@@ -1062,10 +1060,10 @@ public class ClientHandler implements Runnable {
 
         List<Field> fields = new ArrayList<>();
 
-        if(Server.getGameMap().getBordName().equals("Dizzy Highway")) {
+        if (Server.getGameMap().getBordName().equals("Dizzy Highway")) {
             DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
             fields = highway.getFieldsAt(robotX, robotY);
-        } else if(Server.getGameMap().getBordName().equals("Extra Crispy")) {
+        } else if (Server.getGameMap().getBordName().equals("Extra Crispy")) {
             ExtraCrispy extraCrispy = new ExtraCrispy();
             fields = extraCrispy.getFieldsAt(robotX, robotY);
         } else if (Server.getGameMap().getBordName().equals("Death Trap")) {
@@ -1126,10 +1124,10 @@ public class ClientHandler implements Runnable {
                 // when to push because checkRobotField gets called often
                 // robot could be moving past a pusher with move 2 but panel will still active if we push here
 
-            } else if (field instanceof  Gear) {
+            } else if (field instanceof Gear) {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
-                
+
             } else {
                 // Default case
                 System.out.println("Field nicht gefunden");
@@ -1173,7 +1171,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkBlueConveyorBelts (int i) throws InterruptedException {
+    private void checkBlueConveyorBelts(int i) throws InterruptedException {
         //blue conveyor
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
@@ -1290,7 +1288,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkGreenConveyorBelts (int i){
+    private void checkGreenConveyorBelts(int i) {
         //blue conveyor
         String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
@@ -1393,7 +1391,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void checkPushPanels(int i){
+    private void checkPushPanels(int i) {
         Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
         int robotId = Server.getGame().getPlayerList().get(i).getId();
         String standingOnPushPanel = checkRobotField(robot);
@@ -1401,21 +1399,21 @@ public class ClientHandler implements Runnable {
         boolean shouldActivate = false;
         int pushPanelRegister = 0;
 
-        if (standingOnPushPanel.contains("[1, 3, 5]")){
+        if (standingOnPushPanel.contains("[1, 3, 5]")) {
             pushPanelRegister = 1;
 
         } else if (standingOnPushPanel.contains("[2, 4]")) {
             pushPanelRegister = 2;
         }
-        
+
         if (standingOnPushPanel.contains("PushPanel")) {
-            
-            if ((currentRegister == 1 || currentRegister == 3 || currentRegister == 5) && (pushPanelRegister == 1)){
+
+            if ((currentRegister == 1 || currentRegister == 3 || currentRegister == 5) && (pushPanelRegister == 1)) {
                 shouldActivate = true;
             } else if ((currentRegister == 2 || currentRegister == 4) && (pushPanelRegister == 2)) {
                 shouldActivate = true;
             }
-            
+
             if (shouldActivate) {
                 if (standingOnPushPanel.contains("PushPanel [top")) {
                     //push down
@@ -1442,16 +1440,16 @@ public class ClientHandler implements Runnable {
             }
         }
     }
-    
-    private void checkGears(int i){
+
+    private void checkGears(int i) {
         String standingOnGear = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
         int robotId = Server.getGame().getPlayerList().get(i).getId();
         String resultingOrientation = "init";
         String rotateDirection = "init";
-        
-        if (standingOnGear.contains("Gear")){
-            if (standingOnGear.contains("Gear [counterclockwise]")){
+
+        if (standingOnGear.contains("Gear")) {
+            if (standingOnGear.contains("Gear [counterclockwise]")) {
                 rotateDirection = "counterclockwise";
                 resultingOrientation = getResultingOrientation("counterclockwise", robot);
                 robot.setOrientation(resultingOrientation);
@@ -1468,7 +1466,7 @@ public class ClientHandler implements Runnable {
             String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
             broadcast(serializedPlayerTurning);
         }
-        
+
     }
 
     private void checkBoardLaser(int i) {
@@ -1499,7 +1497,7 @@ public class ClientHandler implements Runnable {
                     }
                 }
 
-                if(targetRobot1.getY() != -9999) {
+                if (targetRobot1.getY() != -9999) {
                     int y = yourRobot.getY() - 1;
                     while (y >= targetRobot1.getY()) {
                         Robot robot = new Robot(yourRobot.getX(), y, "top");
@@ -1632,29 +1630,29 @@ public class ClientHandler implements Runnable {
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
-            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0){ //check whether no checkPoints were reached before
+            if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0) { //check whether no checkPoints were reached before
                 checkGameFinished(i);
             }
-        }else if(standingOnCheckPoint.contains("CheckPoint [2")){
-            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1){ //check whether one checkPoint was reached before
+        } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
+            if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1) { //check whether one checkPoint was reached before
                 checkGameFinished(i);
             }
-        }else if(standingOnCheckPoint.contains("CheckPoint [3")){
-            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2){
+        } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
+            if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2) {
                 checkGameFinished(i);
             }
-        }else if(standingOnCheckPoint.contains("CheckPoint [4")){
-            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3){
+        } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
+            if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3) {
                 checkGameFinished(i);
             }
-        }else if(standingOnCheckPoint.contains("CheckPoint [5")){
-            if(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4){
+        } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
+            if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4) {
                 checkGameFinished(i);
             }
         }
     }
 
-    private void checkGameFinished(int i){
+    private void checkGameFinished(int i) {
         Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
         int playerTokenAmount = Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount();
 
@@ -1668,7 +1666,6 @@ public class ClientHandler implements Runnable {
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
 
         Thread.sleep(750);
-
 
 
         if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
@@ -1870,10 +1867,10 @@ public class ClientHandler implements Runnable {
         return kartenStapel;
     }
 
-    public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo){
-        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++){
-            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate ) &&
-                    (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)){
+    public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo) {
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xCoordinate) &&
+                    (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)) {
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
                 Server.getGame().getPlayerList().get(i).setReboot(true);
 
@@ -1883,7 +1880,7 @@ public class ClientHandler implements Runnable {
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
 
-                if (rebootTo.equals("rebootField")){
+                if (rebootTo.equals("rebootField")) {
                     robot.setX(Server.getGame().getBoardClass().getRebootX());
                     robot.setY(Server.getGame().getBoardClass().getRebootY());
                     robot.setAlreadyRebooted(false);
@@ -1894,7 +1891,7 @@ public class ClientHandler implements Runnable {
 
 
                     //turn the robot to face top no matter what and if something in the dialog is chosen he gets turned again
-                    while(!robot.getOrientation().equals("top")) {
+                    while (!robot.getOrientation().equals("top")) {
                         String resultingOrientation = getResultingOrientation("top", robot);
                         robot.setOrientation(resultingOrientation);
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
@@ -1908,25 +1905,42 @@ public class ClientHandler implements Runnable {
 
 
                 } else if (rebootTo.equals("startingPoint")) {
-                    robot.setX(robot.getStartingPointX());
-                    robot.setY(robot.getStartingPointY());
-                    robot.setAlreadyRebooted(false);
 
+                    // loop through taken startpoints until a free one is found, set there || set straightaway
+                    if (robotOnThisField(robot.getStartingPointX(), robot.getStartingPointY())){
+                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                            int xCheckForStartPoint = Server.getGame().getPlayerList().get(j).getRobot().getStartingPointX();
+                            int yCheckForStartPoint = Server.getGame().getPlayerList().get(j).getRobot().getStartingPointY();
+
+                            if (!robotOnThisField(xCheckForStartPoint, yCheckForStartPoint)){
+                                robot.setX(xCheckForStartPoint);
+                                robot.setY(yCheckForStartPoint);
+                                robot.setAlreadyRebooted(false);
+
+                                System.out.println("rebooting to other free starting point");
+                                break;
+                            }
+                        }
+                    } else {
+                        robot.setX(robot.getStartingPointX());
+                        robot.setY(robot.getStartingPointY());
+                        robot.setAlreadyRebooted(false);
+                    }
 
                     Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
                     String serializedMovement = Serialisierer.serialize(movement);
                     broadcast(serializedMovement);
 
-                    if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
-                        while(!robot.getOrientation().equals("left")){
+                    if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
+                        while (!robot.getOrientation().equals("left")) {
                             String resultingOrientation = getResultingOrientation("clockwise", robot);
                             robot.setOrientation(resultingOrientation);
                             PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                             String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                             broadcast(serializedPlayerTurning);
                         }
-                    } else{
-                        while(!robot.getOrientation().equals("right")){
+                    } else {
+                        while (!robot.getOrientation().equals("right")) {
                             System.out.println("1794 " + robot.getOrientation());
                             String resultingOrientation = getResultingOrientation("clockwise", robot);
                             robot.setOrientation(resultingOrientation);
@@ -1943,5 +1957,14 @@ public class ClientHandler implements Runnable {
 
             }
         }
+    }
+
+    public static boolean robotOnThisField(int xField, int yField) {
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            if ((Server.getGame().getPlayerList().get(i).getRobot().getX() == xField) && (Server.getGame().getPlayerList().get(i).getRobot().getY() == yField)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
