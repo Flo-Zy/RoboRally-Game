@@ -747,6 +747,10 @@ public class DeathTrap extends GameBoard {
         return 9;
     }
 
+    public String getOrientationOfReboot(){
+        return "left";
+    }
+
 
 
 }
