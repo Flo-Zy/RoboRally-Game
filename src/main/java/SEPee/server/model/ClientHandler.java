@@ -892,6 +892,8 @@ public class ClientHandler implements Runnable {
                 int y = this.robot.getY();
                 int clientID = this.clientId;
 
+                wallFlagMovePush = false;
+
                 Movement movement = new Movement(clientID, x, y);
                 String serializedMovement = Serialisierer.serialize(movement);
                 Thread.sleep(750);
@@ -979,10 +981,10 @@ public class ClientHandler implements Runnable {
                     break;
             }
 
-        // handle robot movement recursively for fleeingrobot for potential new robots
+            // handle robot movement recursively for fleeingrobot for potential new robots
 
-        // orientation of push haben wir
-        // player/ roboter der gepushed werden soll
+            // orientation of push haben wir
+            // player/ roboter der gepushed werden soll
 
 
 
