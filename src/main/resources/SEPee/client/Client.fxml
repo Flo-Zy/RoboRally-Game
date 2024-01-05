@@ -11,9 +11,10 @@
 <VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
-    <HBox prefHeight="900.0" prefWidth="920.0" spacing="10">
+    <HBox prefHeight="800.0" prefWidth="900.0" VBox.vgrow="NEVER">
         <!-- Linke HBox -->
-        <HBox prefHeight="900.0" prefWidth="671.0" HBox.hgrow="ALWAYS" />
+        <HBox prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="ALWAYS" />
+
         <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
             <fx:include source="DizzyHighway.fxml" />
         </VBox>
@@ -26,67 +27,89 @@
         <VBox fx:id="DeathTrapMap" managed="false" visible="false">
             <fx:include source="DeathTrap.fxml" />
         </VBox>
-
-        <!-- Rechte HBox (Chatarea VBox) -->
-        <VBox prefHeight="645.0" prefWidth="287.0" spacing="10" HBox.hgrow="NEVER" VBox.vgrow="ALWAYS">
-            <!-- Verankerte TextArea auf der rechten Seite -->
-            <VBox spacing="10" VBox.vgrow="ALWAYS">
-                <HBox HBox.hgrow="ALWAYS">
-                    <!-- Platzhalter für die linke Seite -->
-                    <HBox HBox.hgrow="ALWAYS" />
-                    <VBox alignment="CENTER_RIGHT" VBox.vgrow="NEVER">
-                        <TextArea fx:id="chatArea" editable="false" prefHeight="535.0" prefWidth="355.0" VBox.vgrow="ALWAYS">
-                            <VBox.margin>
-                                <Insets left="7.0" right="7.0" top="7.0" />
-                            </VBox.margin></TextArea>
-                    </VBox>
-                </HBox>
-                <!-- Innerste VBox für Textfield, VisibilityButton und SendButton -->
-                <VBox spacing="10" VBox.vgrow="NEVER">
-                    <!-- HBox für Textfield und VisibilityButton -->
-                    <HBox spacing="10">
-                  <AnchorPane>
-                     <children>
-                        <HBox layoutX="7.0" prefHeight="26.0" prefWidth="249.0">
+      <AnchorPane HBox.hgrow="NEVER">
+         <children>
+              <!-- Rechte HBox (Chatarea VBox) -->
+              <VBox prefHeight="800.0" prefWidth="220.0">
+                  <!-- Verankerte rechte TextArea -->
+                  <VBox VBox.vgrow="ALWAYS">
+                      <HBox HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                          <VBox alignment="CENTER_LEFT" prefHeight="520.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                              <TextArea fx:id="chatArea" editable="false" prefHeight="520.0" prefWidth="190.0">
+                                  <VBox.margin>
+                                      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                  </VBox.margin>
+                              </TextArea>
+                          </VBox>
+                      </HBox>
+                      <!-- Innerste VBox für Textfield, VisibilityButton und SendButton -->
+                      <VBox prefWidth="220.0" VBox.vgrow="ALWAYS">
+                          <!-- HBox für Textfield und VisibilityButton -->
+                          <HBox VBox.vgrow="NEVER">
+                        <AnchorPane>
                            <children>
-                                    <TextField fx:id="messageField" prefHeight="26.0" prefWidth="168.0" promptText="Tippe deine Nachricht..." HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="visibilityButton" prefHeight="26.0" prefWidth="66.0" text="Visibility" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="16.0" />
-                                 </HBox.margin>
-                              </Button>
+                              <HBox prefHeight="41.0" prefWidth="220.0">
+                                 <children>
+                                          <Button fx:id="visibilityButton" minHeight="26.0" minWidth="62.5" prefHeight="26.0" prefWidth="62.5" text="Alle" HBox.hgrow="NEVER">
+                                       <HBox.margin>
+                                          <Insets bottom="15.0" left="142.0" right="15.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
-                    </HBox>
-                    <!-- HBox für SendButton -->
-                    <HBox prefHeight="51.0" prefWidth="287.0" spacing="10">
-                        <AnchorPane prefHeight="0.0" prefWidth="287.0">
-                            <children>
-                        <HBox prefHeight="100.0" prefWidth="263.0">
-                           <children>
-                                      <!-- Ready Button -->
-                                      <Button fx:id="readyButton" onAction="#sendReady" prefHeight="26.0" prefWidth="114.0" text="BEREIT" HBox.hgrow="ALWAYS">
-                                          <opaqueInsets>
-                                              <Insets />
-                                          </opaqueInsets>
-                                 <HBox.margin>
-                                    <Insets left="7.0" />
-                                 </HBox.margin>
-                                      </Button>
-                                      <Button fx:id="sendButton" onAction="#sendMessage" prefHeight="26.0" prefWidth="66.0" text="Senden" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets left="70.0" right="7.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                        </HBox>
-                            </children>
                         </AnchorPane>
-                    </HBox>
-                </VBox>
-            </VBox>
-        </VBox>
+                          </HBox>
+                          <!-- HBox für SendButton -->
+                          <HBox VBox.vgrow="NEVER">
+                        <children>
+                           <AnchorPane prefWidth="220.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                 <HBox prefWidth="220.0">
+                                    <children>
+                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="190.0" prefHeight="26.0" prefWidth="115.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
+                                          <HBox.margin>
+                                             <Insets bottom="15.0" left="15.0" right="15.0" />
+                                          </HBox.margin>
+                                       </TextField>
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                          </HBox>
+                     <HBox VBox.vgrow="NEVER">
+                        <children>
+                           <AnchorPane HBox.hgrow="NEVER">
+                              <children>
+                                 <HBox prefHeight="41.0" prefWidth="220.0">
+                                    <children>
+                                       <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
+                                          <opaqueInsets>
+                                             <Insets />
+                                          </opaqueInsets>
+                                          <HBox.margin>
+                                             <Insets bottom="15.0" left="15.0" right="15.5" />
+                                          </HBox.margin>
+                                       </Button>
+                                       <Button fx:id="sendButton" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
+                                          <HBox.margin>
+                                             <Insets bottom="15.0" left="15.0" right="15.0" />
+                                          </HBox.margin>
+                                       </Button>
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
+                     </HBox>
+                      </VBox>
+                  </VBox>
+              </VBox>
+         </children>
+      </AnchorPane>
     </HBox>
 </VBox>

@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
     <children>
-        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="900.0" prefWidth="650.0">
+        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="800.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1455,7 +1454,7 @@
                     </ImageView>
 
 
-                    <ImageView fx:id="Avatar1" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar1" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar1.png" />
                         </image>
@@ -1464,7 +1463,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar2" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar2" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
                         </image>
@@ -1473,7 +1472,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar3" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar3" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar3.png" />
                         </image>
@@ -1482,7 +1481,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar4" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar4" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar4.png" />
                         </image>
@@ -1491,7 +1490,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar5" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar5" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
                         </image>
@@ -1500,7 +1499,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar6" fitHeight="51.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true" managed="false" visible="false" >
+                    <ImageView fx:id="Avatar6" fitHeight="51.0" fitWidth="51.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
                         </image>
@@ -1510,8 +1509,11 @@
                     </ImageView>
 
                 </children>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
             </GridPane>
-            <VBox prefHeight="400.0" prefWidth="650.0">
+            <VBox prefHeight="300.0" prefWidth="650.0">
                 <children>
                     <!-- Hand of 10 Card Spaces -->
                     <HBox fx:id="totalHand" prefHeight="100.0" prefWidth="650.0">
@@ -1556,9 +1558,12 @@
 
                                     </ImageView>
                         </children>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
                     </HBox>
                     <!-- Installed Upgrades -->
-                    <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="650.0">
+                    <HBox prefHeight="100.0" prefWidth="650.0">
                         <children>
                             <!-- Installed permanent Upgrades -->
                             <HBox fx:id="totalPermanentUpdate" prefHeight="100.0" prefWidth="195.0">
@@ -1624,7 +1629,7 @@
                         </children>
                     </HBox>
                     <!-- Discard Pile, Programming Pile -->
-                    <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
+                    <HBox prefHeight="100.0" prefWidth="650.0">
                         <children>
                             <HBox prefHeight="100.0" prefWidth="60.0">
                                 <HBox.margin>
@@ -1675,6 +1680,9 @@
                         </children>
                     </HBox>
                 </children>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
             </VBox>
         </VBox>
     </children>

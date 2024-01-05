@@ -97,9 +97,16 @@ public class ClientController {
             dialog.setTitle("Username");
             dialog.setHeaderText("Please enter your username:");
             dialog.setContentText("Username:");
+
             dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
             dialog.getDialogPane().setGraphic(null);
+
+            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Background1.png');" +
+                    "-fx-background-repeat: repeat;" +
+                    "-fx-background-size: cover;");
+
             Optional<String> result = dialog.showAndWait();
+
             if (result.isPresent() && !result.get().trim().isEmpty()) {
                 this.name = result.get().trim();
                 stage.setTitle("Client - " + name);
@@ -337,13 +344,17 @@ public class ClientController {
     }
 
     public String showSelectMapDialog() {
-
         String selectedMap = null;
 
         while (selectedMap == null) {
             ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showSelectMapDialog.css").toExternalForm());
             dialog.setTitle("Map auswählen");
-            dialog.setHeaderText("Bitte wählen Sie eine Map:");
+
+            Label headerLabel = new Label("Bitte wählen Sie eine Map:");
+            headerLabel.setFont(new Font("Arial", 35));
+            dialog.getDialogPane().setHeader(headerLabel);
+            headerLabel.getStyleClass().add("header-label");
 
             // Map selection or choosing "Cancel"
             Optional<String> result = dialog.showAndWait();
@@ -354,7 +365,6 @@ public class ClientController {
         }
         return selectedMap;
     }
-
 
     public String showSelectRebootDirectionDialog(Stage stage) {
         VBox root = new VBox(10);
@@ -394,9 +404,6 @@ public class ClientController {
 
         return selectedDirection[0];
     }
-
-
-
 
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -672,8 +679,13 @@ public class ClientController {
 
     public void setStartingPoint() {
         Dialog<Integer> dialog = new Dialog<>();
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/setStartingPoint.css").toExternalForm());
         dialog.setTitle("Startingpoint Selection");
-        dialog.setHeaderText("Please select a Startingpoint:");
+
+        Label headerLabel = new Label("Please select a Startingpoint:");
+        headerLabel.setFont(new Font("Arial", 56));
+        dialog.getDialogPane().setHeader(headerLabel);
+        headerLabel.getStyleClass().add("header-label");
 
         // Create buttons for each robot
         ButtonType button1 = new ButtonType("Start 1", ButtonBar.ButtonData.OK_DONE);

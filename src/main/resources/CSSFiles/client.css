@@ -1,9 +1,5 @@
 /* VBox */
 #SEPee.client.viewModel.ClientController {
-    -fx-background-image: url('boardElementsPNGs/Checkpoint5.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-    -fx-background-position: center;
 }
 
 /* HBox */
