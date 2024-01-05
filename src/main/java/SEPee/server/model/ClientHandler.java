@@ -35,7 +35,7 @@ public class ClientHandler implements Runnable {
     private Robot robot;
     private String lastPlayedCard = null;
     private ArrayList<String> clientHand;
-    private boolean wallFlagMovePush = false;
+    private static boolean wallFlagMovePush = false;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -917,7 +917,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private boolean shouldPush(boolean isForward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
+    private static boolean shouldPush(boolean isForward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
         switch (orientation) {
             case "top":
                 boolean topCondition = (isForward && yFleeing == yPushing - 1 && xFleeing == xPushing) ||
@@ -946,7 +946,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void movePlayerRobot(Player player, boolean isForward, String orientation) throws InterruptedException {
+    private static void movePlayerRobot(Player player, boolean isForward, String orientation) throws InterruptedException {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
@@ -1100,7 +1100,7 @@ public class ClientHandler implements Runnable {
         writer.println(serializedAlive);
     }
 
-    private String checkRobotField(Robot robot) {
+    private static String checkRobotField(Robot robot) {
         // Obtain the robot's current position
         int robotX = robot.getX();
         int robotY = robot.getY();
@@ -1932,6 +1932,68 @@ public class ClientHandler implements Runnable {
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
 
                 if (rebootTo.equals("rebootField")) {
+
+
+                    if(robotOnThisField(Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY())){
+
+                        // check (max 5 fields) until field without robot is found
+
+
+                        // push found robos in direction of reboot field
+
+                        String orientation = Server.getGame().getBoardClass().getOrientationOfReboot();
+                        int xCoordinatePushingRobot = Server.getGame().getBoardClass().getRebootX();
+                        int yCoordinatePushingRobot = Server.getGame().getBoardClass().getRebootY();
+
+                        for (Player player : Server.getGame().getPlayerList()) {
+                            int xPlayerFleeingRobot = player.getRobot().getX();
+                            int yPlayerFleeingRobot = player.getRobot().getY();
+
+                            if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                                try {
+                                    movePlayerRobot(player, true, orientation);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        //robot on field push in direction of reboot
+
+                        for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
+                            if ((Server.getGame().getPlayerList().get(j).getRobot().getX() == xCoordinatePushingRobot) &&
+                                    (Server.getGame().getPlayerList().get(j).getRobot().getY() == yCoordinatePushingRobot)) {
+                                Robot robotToMoveFromReboot = Server.getGame().getPlayerList().get(j).getRobot();
+
+                                int x = xCoordinatePushingRobot;
+                                int y = yCoordinatePushingRobot;
+
+                                switch (orientation) {
+                                    case "top":
+                                        y = y - 1;
+                                        break;
+                                    case "right":
+                                        x = x + 1;
+                                        break;
+                                    case "left":
+                                        x = x - 1;
+                                        break;
+                                    case "bottom":
+                                        y =  y + 1;
+                                        break;
+                                }
+
+                                robotToMoveFromReboot.setX(x);
+                                robotToMoveFromReboot.setY(y);
+
+                                Movement movement = new Movement(Server.getGame().getPlayerList().get(j).getId(), robotToMoveFromReboot.getX(), robotToMoveFromReboot.getY());
+                                String serializedMovement = Serialisierer.serialize(movement);
+                                broadcast(serializedMovement);
+
+                            }
+                        }
+                    }
+
                     robot.setX(Server.getGame().getBoardClass().getRebootX());
                     robot.setY(Server.getGame().getBoardClass().getRebootY());
                     robot.setAlreadyRebooted(false);
