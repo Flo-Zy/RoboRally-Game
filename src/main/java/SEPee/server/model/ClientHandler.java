@@ -35,6 +35,7 @@ public class ClientHandler implements Runnable {
     private Robot robot;
     private String lastPlayedCard = null;
     private ArrayList<String> clientHand;
+    private boolean wallFlagMovePush = false;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -850,6 +851,8 @@ public class ClientHandler implements Runnable {
         System.out.println("Client with ID " + clientId + " not found.");
     }
 
+
+
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
         Player checkPlayer = new Player("", 9999, 9999);
         for (int i = 0; i < moves; i++) {
@@ -862,12 +865,20 @@ public class ClientHandler implements Runnable {
                 boolean canMove = movePossibleWall(checkRobotField(this.robot), this.robot, isForward);
 
                 if (canMove) {
-                    checkForRobotsAndMove(this.robot, isForward); //alte push methode
 
-                    if (isForward) {
-                        MoveI.makeEffect(this.robot);
-                    } else {
-                        BackUp.makeEffect(this.robot);
+                    checkForRobotsAndMove(this.robot, isForward);
+
+                    // FLAG ANFANG
+
+                    if (!wallFlagMovePush){
+
+                        if (isForward) {
+                            MoveI.makeEffect(this.robot);
+                        } else {
+                            BackUp.makeEffect(this.robot);
+                        }
+
+                        //FLAG ende
                     }
                 } else {
                     if (isForward) {
@@ -919,6 +930,8 @@ public class ClientHandler implements Runnable {
             case "left":
                 boolean leftCondition = (isForward && xFleeing == xPushing - 1 && yFleeing == yPushing) ||
                         (!isForward && xFleeing == xPushing + 1 && yFleeing == yPushing);
+                System.out.println("932 fleeing x, y: " + xFleeing + yFleeing + " , orientation: " + orientation + " is forward: " + isForward);
+                System.out.println("934 pushing x, y: " + xPushing + yPushing );
                 System.out.println("Left condition: " + leftCondition);
                 return leftCondition;
             case "bottom":
@@ -935,20 +948,36 @@ public class ClientHandler implements Runnable {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-        switch (orientation) {
-            case "top":
-                y = isForward ? y - 1 : y + 1;
-                break;
-            case "right":
-                x = isForward ? x + 1 : x - 1;
-                break;
-            case "left":
-                x = isForward ? x - 1 : x + 1;
-                break;
-            case "bottom":
-                y = isForward ? y + 1 : y - 1;
-                break;
+
+        //check current x y
+
+        String standingOn = checkRobotField(player.getRobot());
+
+        if (standingOn.contains("Wall [bottom") && (orientation.equals("bottom") && isForward || orientation.equals("top") && !isForward)) {
+            wallFlagMovePush = true;
+        } else if (standingOn.contains("Wall [top") && (orientation.equals("top") && isForward || orientation.equals("bottom") && !isForward)) {
+            wallFlagMovePush = true;
+        } else if (standingOn.contains("Wall [right") && (orientation.equals("right") && isForward || orientation.equals("left") && !isForward)) {
+            wallFlagMovePush = true;
+        } else if (standingOn.contains("Wall [left") && (orientation.equals("left") && isForward || orientation.equals("right") && !isForward)) {
+            wallFlagMovePush = true;
         }
+
+        if(!wallFlagMovePush) {
+            switch (orientation) {
+                case "top":
+                    y = isForward ? y - 1 : y + 1;
+                    break;
+                case "right":
+                    x = isForward ? x + 1 : x - 1;
+                    break;
+                case "left":
+                    x = isForward ? x - 1 : x + 1;
+                    break;
+                case "bottom":
+                    y = isForward ? y + 1 : y - 1;
+                    break;
+            }
 
         // handle robot movement recursively for fleeingrobot for potential new robots
 
@@ -956,53 +985,69 @@ public class ClientHandler implements Runnable {
         // player/ roboter der gepushed werden soll
 
 
-        int xCoordinateNEWPushingRobot = player.getRobot().getX();
-        int yCoordinateNEWPushingRobot = player.getRobot().getY();
 
-        for (Player newFleeingPlayer : Server.getGame().getPlayerList()) {
-            int xPlayerFleeingRobot = newFleeingPlayer.getRobot().getX();
-            int yPlayerFleeingRobot = newFleeingPlayer.getRobot().getY();
 
-            if (shouldPush(isForward, orientation, xCoordinateNEWPushingRobot, yCoordinateNEWPushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
-                movePlayerRobot(newFleeingPlayer, isForward, orientation);
+            int xCoordinateNEWPushingRobot = player.getRobot().getX();
+            int yCoordinateNEWPushingRobot = player.getRobot().getY();
+
+            //FLAGPOINT PFEIL
+
+
+
+
+            // wall check
+
+
+            for (Player newFleeingPlayer : Server.getGame().getPlayerList()) {
+                int xPlayerFleeingRobot = newFleeingPlayer.getRobot().getX();
+                int yPlayerFleeingRobot = newFleeingPlayer.getRobot().getY();
+
+                if (shouldPush(isForward, orientation, xCoordinateNEWPushingRobot, yCoordinateNEWPushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                    movePlayerRobot(newFleeingPlayer, isForward, orientation);
+                }
+
             }
-        }
 
 
-        if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
-            if ((y < 0 && x <= 9) || (x < 0) || (y > 9 && x <= 9)) {
-                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
-            } else if (y < 0 || x > 12 || y > 9) {
-                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
-            } else {
-                player.getRobot().setX(x);
-                player.getRobot().setY(y);
+            // IF abfrage FLAG
 
-                int updatedX = player.getRobot().getX();
-                int updatedY = player.getRobot().getY();
+            if(!wallFlagMovePush) {
+                if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
+                    if ((y < 0 && x <= 9) || (x < 0) || (y > 9 && x <= 9)) {
+                        rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                    } else if (y < 0 || x > 12 || y > 9) {
+                        rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                    } else {
+                        player.getRobot().setX(x);
+                        player.getRobot().setY(y);
 
-                System.out.println(player.getName() + " wird geschoben");
+                        int updatedX = player.getRobot().getX();
+                        int updatedY = player.getRobot().getY();
 
-                Movement movement = new Movement(player.getId(), updatedX, updatedY);
-                String serializedMovement = Serialisierer.serialize(movement);
-                broadcast(serializedMovement);
+                        System.out.println(player.getName() + " wird geschoben");
+
+                        Movement movement = new Movement(player.getId(), updatedX, updatedY);
+                        String serializedMovement = Serialisierer.serialize(movement);
+                        broadcast(serializedMovement);
+                    }
+                } else if ((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))) {
+                    rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                } else if (y < 0 || x > 12 || y > 9) {
+                    rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                } else {
+                    player.getRobot().setX(x);
+                    player.getRobot().setY(y);
+
+                    int updatedX = player.getRobot().getX();
+                    int updatedY = player.getRobot().getY();
+
+                    System.out.println(player.getName() + " wird geschoben");
+
+                    Movement movement = new Movement(player.getId(), updatedX, updatedY);
+                    String serializedMovement = Serialisierer.serialize(movement);
+                    broadcast(serializedMovement);
+                }
             }
-        } else if ((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))) {
-            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
-        } else if (y < 0 || x > 12 || y > 9) {
-            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
-        } else {
-            player.getRobot().setX(x);
-            player.getRobot().setY(y);
-
-            int updatedX = player.getRobot().getX();
-            int updatedY = player.getRobot().getY();
-
-            System.out.println(player.getName() + " wird geschoben");
-
-            Movement movement = new Movement(player.getId(), updatedX, updatedY);
-            String serializedMovement = Serialisierer.serialize(movement);
-            broadcast(serializedMovement);
         }
     }
 
