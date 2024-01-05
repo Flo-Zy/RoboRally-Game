@@ -970,14 +970,15 @@ public class ClientHandler implements Runnable {
         }
 
 
-        player.getRobot().setX(x);
-        player.getRobot().setY(y);
+
         if(Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
             if ((y < 0 && x <= 9 ) || (x < 0) || (y > 9 && x <= 9)) {
                 rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
             } else if (y < 0 || x > 12 || y > 9) {
                 rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
             }else{
+                player.getRobot().setX(x);
+                player.getRobot().setY(y);
 
                 int updatedX = player.getRobot().getX();
                 int updatedY = player.getRobot().getY();
@@ -993,6 +994,8 @@ public class ClientHandler implements Runnable {
         }else if(y < 0 || x > 12 || y > 9) {
             rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
         }else{
+            player.getRobot().setX(x);
+            player.getRobot().setY(y);
 
             int updatedX = player.getRobot().getX();
             int updatedY = player.getRobot().getY();
