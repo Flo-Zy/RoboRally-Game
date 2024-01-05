@@ -50,6 +50,7 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        System.out.println(clientId);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;
@@ -73,7 +74,12 @@ public class ClientHandler implements Runnable {
                             associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure+1);
-                            Server.getPlayerList().add(player);
+                            for(Player newPlayer : Server.getPlayerList()){
+                                if(newPlayer.getId() == player.getId()){
+                                    newPlayer.setName(player.getName());
+                                    newPlayer.setFigure(player.getFigure());
+                                }
+                            }
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
