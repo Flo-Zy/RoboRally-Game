@@ -1466,19 +1466,74 @@ public class ClientHandler implements Runnable {
                     //push down
                     robot.setY(robot.getY() - 1);
 
-
                 } else if (standingOnPushPanel.contains("PushPanel [left")) {
-                    //push right
+
+                    String orientation = "left";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = robot.getX() - 1;
+                        int yPlayerFleeingRobot = robot.getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
                     robot.setX(robot.getX() - 1);
 
-
                 } else if (standingOnPushPanel.contains("PushPanel [right")) {
-                    //push left
+
+                    String orientation = "right";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = robot.getX() + 1;
+                        int yPlayerFleeingRobot = robot.getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
                     robot.setX(robot.getX() + 1);
 
                 } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
-                    //push top
+
+                    /*
+                    String orientation = "bottom";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = robot.getX();
+                        int yPlayerFleeingRobot = robot.getY() + 1;
+                        System.out.println("1536 robot on field: " + robotOnThisField(xCoordinatePushingRobot, yCoordinatePushingRobot));
+                        System.out.println("1537 robot on field: " + robotOnThisField(xPlayerFleeingRobot, yPlayerFleeingRobot));
+
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+
+                     */
                     robot.setY(robot.getY() + 1);
+                    System.out.println("1548 " + robotId + " set y to " + robot.getY());
 
                 }
                 Movement movement = new Movement(robotId, robot.getX(), robot.getY());
