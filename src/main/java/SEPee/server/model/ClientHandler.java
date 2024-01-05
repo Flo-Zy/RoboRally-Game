@@ -50,6 +50,7 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        System.out.println(clientId);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;
@@ -73,7 +74,12 @@ public class ClientHandler implements Runnable {
                             associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure+1);
-                            Server.getPlayerList().add(player);
+                            for(Player newPlayer : Server.getPlayerList()){
+                                if(newPlayer.getId() == player.getId()){
+                                    newPlayer.setName(player.getName());
+                                    newPlayer.setFigure(player.getFigure());
+                                }
+                            }
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
@@ -307,7 +313,7 @@ public class ClientHandler implements Runnable {
                                     // n. register wird an alle gesendet
                                     ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
                                     for (Player player : Server.getGame().getPlayerList()) {
-                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(), player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // n. element aus register von jedem Player
+                                        activeCards.add(new CurrentCards.ActiveCard(player.getId(), player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()))); // n. element aus register von jedem Player
                                     }
 
                                     discardCurrentRegister();
@@ -342,18 +348,22 @@ public class ClientHandler implements Runnable {
                                         System.out.println("Player " + player.getId() + " discardPile: " + player.getPlayerMat().getDiscardPile());
                                     }
 
-                                    for (Player player : Server.getGame().getPlayerList()) {
-                                        System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        for(int i = 0; i < 5; i++) {
+                                            System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                        }
                                     }
 
                                     // entferne nachdem alle register in Phase 2 abgearbeitet wurden von jedem player das gesamte register
                                     for (Player player : Server.getGame().getPlayerList()) {
-                                        player.getPlayerMat().getRegister().clear();
+                                        player.getPlayerMat().clearRegister();
                                     }
 
                                     // teste ob alle register leer
-                                    for (Player player : Server.getGame().getPlayerList()) {
-                                        System.out.println("Player " + player.getId() + " register: " + player.getPlayerMat().getRegister());
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        for(int i = 0; i < 5; i++) {
+                                            System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                        }
                                     }
 
                                     // YourCards an Client senden wenn ActivePhase = 2
@@ -576,7 +586,7 @@ public class ClientHandler implements Runnable {
                                 // füge in register card hinzu
                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId && card != null) {
                                     //gelegte Karte dem Register hinzufügen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().add(cardRegister-1, card);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister-1, card);
                                     //gelegte Karte von der Hand entfernen
                                     for (int j = 0; j < Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().size(); j++) {
                                         if (card.equals(Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().get(j))) {
@@ -589,14 +599,16 @@ public class ClientHandler implements Runnable {
                                 else if (Server.getGame().getPlayerList().get(i).getId() == clientId && card == null) {
                                     //letze Karte vom register in die Hand einfügen
                                     Server.getGame().getPlayerList().get(i).getPlayerMat().getClientHand().add(
-                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().get(cardRegister-1));
+                                            Server.getGame().getPlayerList().get(i).getPlayerMat().getRegisterIndex(cardRegister-1));
                                     //letze Karte vom Register entfernen
-                                    Server.getGame().getPlayerList().get(i).getPlayerMat().getRegister().remove(cardRegister-1);
+                                    Server.getGame().getPlayerList().get(i).getPlayerMat().setRegisterIndex(cardRegister-1, null);
                                 }
                             }
 
                             for(Player player : Server.getGame().getPlayerList()){
-                                System.out.println(player.getPlayerMat().getRegister());
+                                for(int i = 0; i < 5; i++) {
+                                    System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                }
                             }
 
                             System.out.println(card);
@@ -646,15 +658,15 @@ public class ClientHandler implements Runnable {
                                                 // karten ziehen & check, ob Again an erster position steht
                                                 int i = 0;
                                                 int cursor = 0;
-                                                if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().getRegister().size()) {
-                                                    System.out.println(player.getPlayerMat().getRegister().size());
+                                                if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().registerSize()) {
+                                                    System.out.println(player.getPlayerMat().registerSize());
                                                     while (i < (5 - player.getPlayerMat().getNumRegister())) {
                                                         if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
                                                             cursor++;
                                                             if (!player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // nächste Karte auf ProgDeck nicht Again
                                                                 Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
                                                                 missingClientCards.add(card.getName()); // card in missingClientCards
-                                                                player.getPlayerMat().getRegister().add(card.getName());
+                                                                player.getPlayerMat().fillEmptyRegister(card.getName());
                                                                 player.getPlayerMat().getProgDeck().remove(cursor);
                                                                 i++;
                                                                 cursor = 0;
@@ -662,7 +674,7 @@ public class ClientHandler implements Runnable {
                                                                 cursor++;
                                                                 Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
                                                                 missingClientCards.add(card.getName()); // card in missingClientCards
-                                                                player.getPlayerMat().getRegister().add(card.getName());
+                                                                player.getPlayerMat().fillEmptyRegister(card.getName());
                                                                 player.getPlayerMat().getProgDeck().remove(cursor);
                                                                 i++;
                                                                 cursor = 0;
@@ -670,14 +682,14 @@ public class ClientHandler implements Runnable {
                                                         } else { //  wenn nicht erstes Register bzw. oberste Karte auf ProgDeck nicht Again
                                                             Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
                                                             missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().getRegister().add(card.getName());
+                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             i++;
                                                         }
                                                     }
                                                 } else {
                                                     // nehme restlichen Karten vom ProgDeck
-                                                    int numEmptyRegister = 5 - player.getPlayerMat().getRegister().size();
+                                                    int numEmptyRegister = 5 - player.getPlayerMat().registerSize();
                                                     int leftCards = player.getPlayerMat().getProgDeck().size();
                                                     int validCardsCounter = 0;
                                                     int j = 0;
@@ -691,7 +703,7 @@ public class ClientHandler implements Runnable {
 
                                                         } else {
                                                             missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().getRegister().add(card.getName());
+                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             validCardsCounter++;
                                                             j++;
@@ -715,7 +727,7 @@ public class ClientHandler implements Runnable {
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                         } else {
                                                             missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().getRegister().add(card.getName());
+                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             j++;
                                                         }
@@ -737,7 +749,7 @@ public class ClientHandler implements Runnable {
                                         ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
                                         for (Player player : Server.getGame().getPlayerList()) {
                                             activeCards.add(new CurrentCards.ActiveCard(player.getId(),
-                                                    player.getPlayerMat().getRegister().get(Server.getRegisterCounter()))); // 0. element aus register von jedem Player
+                                                    player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter())));
                                         }
 
                                         Server.setRegisterCounter(Server.getRegisterCounter() + 1);
@@ -964,18 +976,42 @@ public class ClientHandler implements Runnable {
         }
 
 
-        player.getRobot().setX(x);
-        player.getRobot().setY(y);
 
-        int updatedX = player.getRobot().getX();
-        int updatedY = player.getRobot().getY();
+        if(Server.getGame().getBoardClass().getBordName().equals("Death Trap")){
+            if ((y < 0 && x <= 9 ) || (x < 0) || (y > 9 && x <= 9)) {
+                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+            } else if (y < 0 || x > 12 || y > 9) {
+                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+            }else{
+                player.getRobot().setX(x);
+                player.getRobot().setY(y);
 
+                int updatedX = player.getRobot().getX();
+                int updatedY = player.getRobot().getY();
 
-        System.out.println(player.getName() + " wird geschoben");
+                System.out.println(player.getName() + " wird geschoben");
 
-        Movement movement = new Movement(player.getId(), updatedX, updatedY);
-        String serializedMovement = Serialisierer.serialize(movement);
-        broadcast(serializedMovement);
+                Movement movement = new Movement(player.getId(), updatedX, updatedY);
+                String serializedMovement = Serialisierer.serialize(movement);
+                broadcast(serializedMovement);
+            }
+        }else if((y < 0 && x < 3 || (x < 0) || (y > 9 && x < 3))){
+            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+        }else if(y < 0 || x > 12 || y > 9) {
+            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+        }else{
+            player.getRobot().setX(x);
+            player.getRobot().setY(y);
+
+            int updatedX = player.getRobot().getX();
+            int updatedY = player.getRobot().getY();
+
+            System.out.println(player.getName() + " wird geschoben");
+
+            Movement movement = new Movement(player.getId(), updatedX, updatedY);
+            String serializedMovement = Serialisierer.serialize(movement);
+            broadcast(serializedMovement);
+        }
     }
 
     public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
@@ -1777,17 +1813,17 @@ public class ClientHandler implements Runnable {
 
     public void discardCurrentRegister() {
         for (Player player : Server.getGame().getPlayerList()) {
-            if (player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Spam")) {
+            if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Spam")) {
                 Server.getGame().setSpam(Server.getGame().getSpam() + 1);
-            } else if (player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("TrojanHorse")) {
+            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("TrojanHorse")) {
                 Server.getGame().setSpam(Server.getGame().getTrojanHorse() + 1);
-            } else if (player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Virus")) {
+            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Virus")) {
                 Server.getGame().setSpam(Server.getGame().getVirus() + 1);
-            } else if (player.getPlayerMat().getRegister().get(Server.getRegisterCounter()).equals("Wurm")) {
+            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Wurm")) {
                 Server.getGame().setSpam(Server.getGame().getWurm() + 1);
             } else {
                 // füge sonst dem player in playerMat in den discardPile das n. Register
-                player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegister().get(Server.getRegisterCounter()));
+                player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()));
             }
         }
     }
@@ -1881,6 +1917,7 @@ public class ClientHandler implements Runnable {
                     robot.setX(robot.getStartingPointX());
                     robot.setY(robot.getStartingPointY());
                     robot.setAlreadyRebooted(false);
+
 
                     Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), robot.getX(), robot.getY());
                     String serializedMovement = Serialisierer.serialize(movement);

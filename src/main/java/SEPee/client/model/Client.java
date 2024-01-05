@@ -588,6 +588,8 @@ public class Client extends Application {
                             if (controller.getId() == rebootingClientId) {
                                 Platform.runLater(() -> {
                                     String selectedRebootDirection;
+                                    System.out.println("controllerID " + controller.getId());
+                                    System.out.println("rebootingID " + rebootingClientId);
 
                                     Stage stage = new Stage();
 

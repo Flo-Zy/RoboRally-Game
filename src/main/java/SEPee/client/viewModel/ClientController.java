@@ -386,7 +386,7 @@ public class ClientController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Reboot direction selection");
-        stage.show();
+        // stage.show();
 
         Duration duration = Duration.seconds(10);
         Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
