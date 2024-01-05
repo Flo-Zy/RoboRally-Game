@@ -74,7 +74,7 @@ public class LostBearingsController extends MapController {
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<Card>> playerDrawPileMap;
+    private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
@@ -87,7 +87,7 @@ public class LostBearingsController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
 
@@ -95,7 +95,7 @@ public class LostBearingsController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
 
@@ -256,15 +256,15 @@ public class LostBearingsController extends MapController {
     public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
 
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
 
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
 
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -311,13 +311,13 @@ public class LostBearingsController extends MapController {
         zahlen.clear();
         counter1.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -412,6 +412,41 @@ public class LostBearingsController extends MapController {
                 }
             }
         }
+    }
+
+    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand) {
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
+        }
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> handClient = clientHandMap.get(clientId);
+
+        int handIndex = 0;
+        for (int i = 0; i < 5; i++) {
+            // prüfe, ob erste Karte für Register ein Again
+            if (i == 0 && handClient.get(i).getName().equals("Again")) { // wenn erste Karte Again ist
+                handIndex++;
+                if (handClient.get(handIndex).getName().equals("Again")) { // wenn zweite Karte auch Again ist
+                    handIndex++;
+                } else {
+                    SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
+                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                    ClientAI.getWriter().println(serializedCardSelected);
+                    handIndex++;
+                }
+            } else {
+                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
+                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedCardSelected);
+                handIndex++;
+            }
+        }
+        TimerStarted timerStarted = new TimerStarted();
+        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+        ClientAI.getWriter().println(serializedTimerStarted);
     }
 
     private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
