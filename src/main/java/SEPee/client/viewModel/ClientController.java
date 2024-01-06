@@ -10,6 +10,7 @@ import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

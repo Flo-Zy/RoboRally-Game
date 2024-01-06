@@ -1469,8 +1469,8 @@ public class ClientHandler implements Runnable {
                     int yCoordinatePushingRobot = robot.getY();
 
                     for (Player player : Server.getGame().getPlayerList()) {
-                        int xPlayerFleeingRobot = robot.getX();
-                        int yPlayerFleeingRobot = robot.getY() - 1;
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
 
                         if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
                             try {
@@ -1490,8 +1490,8 @@ public class ClientHandler implements Runnable {
                     int yCoordinatePushingRobot = robot.getY();
 
                     for (Player player : Server.getGame().getPlayerList()) {
-                        int xPlayerFleeingRobot = robot.getX() - 1;
-                        int yPlayerFleeingRobot = robot.getY();
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
 
                         if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
                             try {
@@ -1511,8 +1511,8 @@ public class ClientHandler implements Runnable {
                     int yCoordinatePushingRobot = robot.getY();
 
                     for (Player player : Server.getGame().getPlayerList()) {
-                        int xPlayerFleeingRobot = robot.getX() + 1;
-                        int yPlayerFleeingRobot = robot.getY();
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
 
                         if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
                             try {
@@ -1527,14 +1527,16 @@ public class ClientHandler implements Runnable {
 
                 } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
 
-                    /*
+
                     String orientation = "bottom";
                     int xCoordinatePushingRobot = robot.getX();
                     int yCoordinatePushingRobot = robot.getY();
 
                     for (Player player : Server.getGame().getPlayerList()) {
-                        int xPlayerFleeingRobot = robot.getX();
-                        int yPlayerFleeingRobot = robot.getY() + 1;
+                        //int xPlayerFleeingRobot = robot.getX();
+                        //int yPlayerFleeingRobot = robot.getY() + 1;
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
                         System.out.println("1536 robot on field: " + robotOnThisField(xCoordinatePushingRobot, yCoordinatePushingRobot));
                         System.out.println("1537 robot on field: " + robotOnThisField(xPlayerFleeingRobot, yPlayerFleeingRobot));
 
@@ -1548,7 +1550,7 @@ public class ClientHandler implements Runnable {
                         }
                     }
 
-                     */
+
                     robot.setY(robot.getY() + 1);
                     System.out.println("1548 " + robotId + " set y to " + robot.getY());
 
