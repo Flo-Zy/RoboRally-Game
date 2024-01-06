@@ -35,6 +35,8 @@ public class GameBoard {
         return 0;
     }
 
+    public String getOrientationOfReboot(){ return ""; }
+
     public String checkRebootConditions(int xCoordinate, int yCoordinate) {
         String rebootTo = "continue";
 

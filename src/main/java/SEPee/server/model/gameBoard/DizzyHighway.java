@@ -751,7 +751,8 @@ public class DizzyHighway extends GameBoard {
         return 3;
     }
 
-
-
+    public String getOrientationOfReboot(){
+        return "bottom";
+    }
 
 }
