@@ -15,7 +15,17 @@
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="900.0" VBox.vgrow="NEVER">
         <!-- Linke HBox -->
-        <HBox prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="ALWAYS" />
+        <HBox alignment="CENTER" prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="ALWAYS">
+         <children>
+            <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="190.0" />
+               </HBox.margin>
+            </Button>
+         </children></HBox>
 
         <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
             <fx:include source="DizzyHighway.fxml" />
@@ -35,8 +45,8 @@
               <VBox prefHeight="800.0" prefWidth="220.0">
                   <!-- Verankerte rechte TextArea -->
                   <VBox VBox.vgrow="ALWAYS">
-                      <HBox HBox.hgrow="NEVER" VBox.vgrow="NEVER">
-                          <VBox alignment="CENTER_LEFT" prefHeight="520.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                      <HBox prefHeight="515.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                          <VBox alignment="TOP_CENTER" prefHeight="511.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                         <HBox>
                            <children>
       
@@ -57,7 +67,7 @@
                            </VBox.margin>
                         </HBox>
 
-                              <TextArea fx:id="chatArea" editable="false" prefHeight="405.0" prefWidth="190.0">
+                              <TextArea fx:id="chatArea" editable="false" prefHeight="414.0" prefWidth="190.0">
                                   <VBox.margin>
                                       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                   </VBox.margin>
@@ -76,7 +86,7 @@
 
                                               <Button fx:id="visibilityButton" minHeight="26.0" minWidth="62.5" prefHeight="26.0" prefWidth="62.5" text="Alle" HBox.hgrow="NEVER">
                                                   <HBox.margin>
-                                                      <Insets bottom="15.0" left="142.0" right="15.0" />
+                                                      <Insets bottom="15.0" left="15.0" right="15.0" />
                                                   </HBox.margin>
                                               </Button>
 
@@ -103,28 +113,15 @@
                            </AnchorPane>
                         </children>
                           </HBox>
-                     <HBox VBox.vgrow="NEVER">
+                     <HBox alignment="TOP_RIGHT" VBox.vgrow="NEVER">
                         <children>
                            <AnchorPane HBox.hgrow="NEVER">
                               <children>
-                                 <HBox prefHeight="41.0" prefWidth="220.0">
-                                    <children>
-                                       <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
-                                          <opaqueInsets>
-                                             <Insets />
-                                          </opaqueInsets>
-                                          <HBox.margin>
-                                             <Insets bottom="15.0" left="15.0" right="15.5" />
-                                          </HBox.margin>
-                                       </Button>
-                                       <Button fx:id="sendButton" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
-                                          <HBox.margin>
-                                             <Insets bottom="15.0" left="15.0" right="15.0" />
-                                          </HBox.margin>
-                                       </Button>
-                                    </children>
-                                 </HBox>
+                                 <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" />
                               </children>
+                              <HBox.margin>
+                                 <Insets left="15.0" right="15.0" />
+                              </HBox.margin>
                            </AnchorPane>
                         </children>
                         <VBox.margin>

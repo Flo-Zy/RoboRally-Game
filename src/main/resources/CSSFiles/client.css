@@ -1,3 +1,11 @@
+.root {
+    -fx-font-family: "MyCustomFont";
+}
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("/CSSFiles/Digital-Bold.ttf");
+}
+
 #SEPee.client.viewModel.ClientController HBox {
     -fx-spacing: 10;
 }
@@ -20,9 +28,9 @@
 
 #avatarNameLabel {
     -fx-font-size: 24px;
-    -fx-font-weight: 800;
+    -fx-font-weight: 900;
     -fx-font-family: "MyCustomFont";
-    -fx-text-fill: #ac7d02;
+    -fx-text-fill: #000000;
 }
 
 #messageField {
