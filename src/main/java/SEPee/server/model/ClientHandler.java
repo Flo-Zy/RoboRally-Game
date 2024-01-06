@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.application.Platform;
 import lombok.Getter;
@@ -225,6 +226,7 @@ public class ClientHandler implements Runnable {
                                 }
                             }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
+
                             if (!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
                                 PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
@@ -308,7 +310,7 @@ public class ClientHandler implements Runnable {
                                         DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
                                         String serializedDrawDamage = Serialisierer.serialize(drawDamage);
                                         broadcast(serializedDrawDamage);
-                                    }else if(damageCounter > 0){
+                                    }else if(damageCounter > 0 && player.getId() == clientId){
                                         ArrayList<String> avaiableDamage = new ArrayList<>();
                                         if(Server.getGame().getVirus() > 0){
                                             avaiableDamage.add("Virus");
@@ -320,12 +322,39 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Worm");
                                         }
                                         if(!avaiableDamage.isEmpty()) {
+                                            Server.setWaitForDamage(true);
                                             PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
                                             String serializedPickDamage = Serialisierer.serialize(pickDamage);
                                             sendToOneClient(clientId, serializedPickDamage);
                                         }
                                     }
                                 }
+
+                                AtomicBoolean warte = new AtomicBoolean();
+                                warte.set(true);
+                                Timer timer2 = new Timer();
+                                TimerTask task1 = new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        while(warte.get()) {
+                                            if (!Server.isWaitForDamage()) {
+                                                warte.set(false);
+                                                timer2.cancel();
+                                            }else {
+
+                                            }
+                                        }
+                                    }
+                                };
+
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                                timer2.scheduleAtFixedRate(task1, 0, 1000);
+
 
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
@@ -867,10 +896,62 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
-                            SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
-                            int i = 0;
-                            //ArrayList<String> selectedDamageList = selectedDamage.getMessageBody().getCards();
-                            //while( )
+                            for(Player player : Server.getGame().getPlayerList()) {
+                                if(player.getId() == clientId) {
+                                    SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
+                                    int i = 0;
+                                    ArrayList<String> selectedDamageList = selectedDamage.getMessageBody().getCards();
+                                    int damageListSize = selectedDamageList.size();
+                                    while (i < damageListSize) {
+                                        String damage = selectedDamageList.get(0);
+                                        switch (damage) {
+                                            case "Virus":
+                                                if (Server.getGame().getVirus() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    Server.getGame().setVirus(Server.getGame().getVirus()-1);
+                                                    damageCounter--;
+                                                }
+                                                break;
+                                            case "Trojan":
+                                                if (Server.getGame().getTrojanHorse() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse()-1);
+                                                    damageCounter--;
+                                                }
+                                                break;
+                                            case "Worm":
+                                                if (Server.getGame().getWurm() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    Server.getGame().setWurm(Server.getGame().getWurm()-1);
+                                                    damageCounter--;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    if(damageCounter > 0){
+                                        ArrayList<String> avaiableDamage = new ArrayList<>();
+                                        if(Server.getGame().getVirus() > 0){
+                                            avaiableDamage.add("Virus");
+                                        }
+                                        if(Server.getGame().getTrojanHorse() > 0){
+                                            avaiableDamage.add("Trojan");
+                                        }
+                                        if(Server.getGame().getWurm() > 0){
+                                            avaiableDamage.add("Worm");
+                                        }
+                                        if(!avaiableDamage.isEmpty()) {
+                                            PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                            String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                            sendToOneClient(clientId, serializedPickDamage);
+                                        }
+                                    }else{
+                                        DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
+                                        String serializedDrawDamage = Serialisierer.serialize(drawDamage);
+                                        broadcast(serializedDrawDamage);
+                                        Server.setWaitForDamage(false);
+                                    }
+                                }
+                            }
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");

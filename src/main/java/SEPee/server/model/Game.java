@@ -40,10 +40,14 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.playerIndex = 0;
         this.currentPhase = 0;
         this.currentPlayer = playerList.get(playerIndex);
-        this.spam = 38;
+        //this.spam = 38;
+        //Tester
+        this.spam = 3;
         this.virus = 18;
         this.trojanHorse = 12;
-        this.wurm = 6;
+        //this.wurm = 6;
+        //Tester
+        this.wurm = 1;
         this.boardClass = boardClass;
 
     }

@@ -28,6 +28,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -552,6 +554,20 @@ public class Client extends Application {
                         case "PickDamage":
                             System.out.println("Pick Damage");
                             PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
+                            ArrayList<String> avaiableList = pickDamage.getMessageBody().getAvailablePiles();
+                            AtomicInteger numDamageCards = new AtomicInteger();
+                            numDamageCards.set(pickDamage.getMessageBody().getCount());
+                            ArrayList<String> selectedDamageList = new ArrayList<>();
+                            Platform.runLater(() -> {
+                                String damageCard;
+                                damageCard = controller.showSelectDamageDialog(avaiableList);
+                                selectedDamageList.add(damageCard);
+                                numDamageCards.decrementAndGet();
+
+                                SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
+                                String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
+                                writer.println(serializedSelectedDamage);
+                            });
                             break;
                         case "Animation":
                             System.out.println("Animation");
