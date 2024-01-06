@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -380,26 +381,56 @@ public class ClientController {
     }
 
     public String showSelectRebootDirectionDialog(Stage stage) {
-        VBox root = new VBox(10);
+        GridPane root = new GridPane();
+        root.setHgap(10);
+        root.setVgap(10);
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.CENTER);
 
-        String[] directionList = {"top", "right", "bottom", "left"};
         String[] selectedDirection = {null};
 
-        for (String direction : directionList) {
-            Button directionButton = new Button(direction);
-            directionButton.setOnAction(event -> {
-                selectedDirection[0] = direction;
-                stage.close();
-            });
-            root.getChildren().add(directionButton);
-        }
+        // Top Button in der ersten Reihe mittig
+        Button topButton = new Button("top");
+        topButton.setOnAction(event -> {
+            selectedDirection[0] = "top";
+            stage.close();
+        });
+        root.add(topButton, 1, 0, 1, 1);
+
+        // Left Button in der zweiten Reihe links
+        Button leftButton = new Button("left");
+        leftButton.setOnAction(event -> {
+            selectedDirection[0] = "left";
+            stage.close();
+        });
+        root.add(leftButton, 0, 1, 1, 1);
+
+        // Right Button in der zweiten Reihe rechts
+        Button rightButton = new Button("right");
+        rightButton.setOnAction(event -> {
+            selectedDirection[0] = "right";
+            stage.close();
+        });
+        root.add(rightButton, 2, 1, 1, 1);
+
+        // Bottom Button in der dritten Reihe mittig
+        Button bottomButton = new Button("bottom");
+        bottomButton.setOnAction(event -> {
+            selectedDirection[0] = "bottom";
+            stage.close();
+        });
+        root.add(bottomButton, 1, 2, 1, 1);
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
+
         stage.setScene(scene);
         stage.setTitle("Reboot direction selection");
-        // stage.show();
+
+        Text text = new Text("Reboot direction selection");
+        text.getStyleClass().add("header-label");
+        double titleWidth = text.getBoundsInLocal().getWidth();
+        stage.setWidth(titleWidth + 40);
 
         Duration duration = Duration.seconds(10);
         Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
