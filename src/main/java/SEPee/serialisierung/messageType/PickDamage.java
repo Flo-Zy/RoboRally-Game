@@ -1,9 +1,11 @@
 package SEPee.serialisierung.messageType;
 
+import java.util.ArrayList;
+
 public class PickDamage extends Message{
     private PickDamage.PickDamageBody messageBody;
 
-    public PickDamage(int count, String[] availablePiles) {
+    public PickDamage(int count, ArrayList<String> availablePiles) {
         super("PickDamage");
         this.messageBody = new PickDamage.PickDamageBody(count, availablePiles);
     }
@@ -19,9 +21,9 @@ public class PickDamage extends Message{
     public static class PickDamageBody {
 
         private int count;
-        private String[] availablePiles;
+        private ArrayList<String> availablePiles;
 
-        public PickDamageBody(int count, String[] availablePiles) {
+        public PickDamageBody(int count, ArrayList<String> availablePiles) {
             this.count = count;
             this.availablePiles = availablePiles;
         }
@@ -34,11 +36,11 @@ public class PickDamage extends Message{
             this.count = count;
         }
 
-        public String[] getAvailablePiles() {
+        public ArrayList<String> getAvailablePiles() {
             return availablePiles;
         }
 
-        public void setAvailablePiles(String[] availablePiles) {
+        public void setAvailablePiles(ArrayList<String> availablePiles) {
             this.availablePiles = availablePiles;
         }
     }

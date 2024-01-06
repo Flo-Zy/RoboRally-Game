@@ -39,6 +39,7 @@ public class ClientHandler implements Runnable {
     @Getter
     @Setter
     private boolean playerFertig = true;
+    private static int damageCounter = 0;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -303,10 +304,26 @@ public class ClientHandler implements Runnable {
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
 
                                 for (Player player : Server.getGame().getPlayerList()) {
-                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty()) {
+                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty() && damageCounter == 0) {
                                         DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
                                         String serializedDrawDamage = Serialisierer.serialize(drawDamage);
                                         broadcast(serializedDrawDamage);
+                                    }else if(damageCounter > 0){
+                                        ArrayList<String> avaiableDamage = new ArrayList<>();
+                                        if(Server.getGame().getVirus() > 0){
+                                            avaiableDamage.add("Virus");
+                                        }
+                                        if(Server.getGame().getTrojanHorse() > 0){
+                                            avaiableDamage.add("Trojan");
+                                        }
+                                        if(Server.getGame().getWurm() > 0){
+                                            avaiableDamage.add("Worm");
+                                        }
+                                        if(!avaiableDamage.isEmpty()) {
+                                            PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                            String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                            sendToOneClient(clientId, serializedPickDamage);
+                                        }
                                     }
                                 }
 
@@ -851,6 +868,9 @@ public class ClientHandler implements Runnable {
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
                             SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
+                            int i = 0;
+                            //ArrayList<String> selectedDamageList = selectedDamage.getMessageBody().getCards();
+                            //while( )
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");
@@ -1666,6 +1686,8 @@ public class ClientHandler implements Runnable {
                 Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+            }else{
+                damageCounter++;
             }
         }
     }
@@ -1743,7 +1765,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        damageCounter++;
+                                    }
                                 }
                             }
                         }
@@ -1777,7 +1801,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        damageCounter++;
+                                    }
                                 }
                             }
                         }
@@ -1811,7 +1837,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        damageCounter++;
+                                    }
                                 }
                             }
                         }
@@ -2069,10 +2097,15 @@ public class ClientHandler implements Runnable {
                 Server.getGame().getPlayerList().get(i).setReboot(true);
 
                 //if robot rebooted he receives two spam cards
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                for(int j = 0; j < 2; j++) {
+                    if(Server.getGame().getSpam() > 0) {
+                        Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                        Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                    }else{
+                        damageCounter++;
+                    }
+                }
 
                 if (rebootTo.equals("rebootField")) {
 
