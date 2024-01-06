@@ -72,6 +72,8 @@ public class ClientController {
     @FXML
     private TextField messageField;
     @FXML
+    private ImageView avatarImageView;
+    @FXML
     private VBox DizzyHighwayMap;
     @FXML
     private VBox ExtraCrispyMap;
@@ -308,17 +310,19 @@ public class ClientController {
                 // Event Handler für Klicks auf das ImageView
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
+                    avatarImageView.setImage(image);
+                    avatarImageView.setVisible(true);
                     dialog.setResult(robotNumber);
                     dialog.close();
                 });
             }
         }
-
         // Hinzufügen des GridPane zum Dialog
         dialog.getDialogPane().setContent(grid);
 
         // Anzeigen des Dialogs und Warten auf das Ergebnis
         Optional<Integer> result = dialog.showAndWait();
+
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
     }
 

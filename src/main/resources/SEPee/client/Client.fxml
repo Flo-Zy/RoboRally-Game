@@ -7,8 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
 
-<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="900.0" VBox.vgrow="NEVER">
@@ -42,23 +43,31 @@
                               </TextArea>
                           </VBox>
                       </HBox>
-                      <!-- Innerste VBox für Textfield, VisibilityButton und SendButton -->
+                      <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
                       <VBox prefWidth="220.0" VBox.vgrow="ALWAYS">
                           <!-- HBox für Textfield und VisibilityButton -->
                           <HBox VBox.vgrow="NEVER">
-                        <AnchorPane>
-                           <children>
-                              <HBox prefHeight="41.0" prefWidth="220.0">
-                                 <children>
-                                          <Button fx:id="visibilityButton" minHeight="26.0" minWidth="62.5" prefHeight="26.0" prefWidth="62.5" text="Alle" HBox.hgrow="NEVER">
-                                       <HBox.margin>
-                                          <Insets bottom="15.0" left="142.0" right="15.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </AnchorPane>
+                              <AnchorPane>
+                                  <children>
+                                      <HBox prefHeight="41.0" prefWidth="220.0">
+                                          <children>
+
+                                              <Button fx:id="visibilityButton" minHeight="26.0" minWidth="62.5" prefHeight="26.0" prefWidth="62.5" text="Alle" HBox.hgrow="NEVER">
+                                                  <HBox.margin>
+                                                      <Insets bottom="15.0" left="142.0" right="15.0" />
+                                                  </HBox.margin>
+                                              </Button>
+
+                                              <ImageView fx:id="avatarImageView" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                                  <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                  </VBox.margin>
+                                              </ImageView>
+
+                                          </children>
+                                      </HBox>
+                                  </children>
+                              </AnchorPane>
                           </HBox>
                           <!-- HBox für SendButton -->
                           <HBox VBox.vgrow="NEVER">
