@@ -1916,7 +1916,7 @@ public class ClientHandler implements Runnable {
                 case "BackUp":
                     kartenStapel.add(new BackUp());
                     break;
-                case "LeftTurn":
+                case "TurnLeft":
                     kartenStapel.add(new LeftTurn());
                     break;
                 case "MoveI":
@@ -1931,7 +1931,7 @@ public class ClientHandler implements Runnable {
                 case "PowerUp":
                     kartenStapel.add(new PowerUp());
                     break;
-                case "RightTurn":
+                case "TurnRight":
                     kartenStapel.add(new RightTurn());
                     break;
                 case "UTurn":
