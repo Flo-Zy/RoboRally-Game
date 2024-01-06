@@ -1825,24 +1825,51 @@ public class ClientHandler implements Runnable {
 
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        int clientIdOfCheckpointReacher = Server.getGame().getPlayerList().get(i).getId();
+
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0) { //check whether no checkPoints were reached before
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 1);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1) { //check whether one checkPoint was reached before
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 2);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 3);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 4);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 5);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         }

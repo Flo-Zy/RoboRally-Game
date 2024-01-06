@@ -608,6 +608,15 @@ public class Client extends Application {
                         case "CheckPointReached":
                             System.out.println("Check Point Reached");
                             CheckPointReached checkPointReached = Deserialisierer.deserialize(serializedReceivedString, CheckPointReached.class);
+
+                            int checkPointReacherId = checkPointReached.getMessageBody().getClientID();
+
+                            for(Player player : playerListClient) {
+                                if (player.getId() == checkPointReacherId) {
+                                    controller.appendToChatArea(player.getName() + " has reached checkpoint " + checkPointReached.getMessageBody().getNumber());
+                                }
+                            }
+
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");
