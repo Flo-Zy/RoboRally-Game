@@ -212,6 +212,10 @@ public class ClientHandler implements Runnable {
                                                 if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
                                                     Server.getGame().getPlayerList().get(i).getRobot().setX(xCoordinate);
                                                     Server.getGame().getPlayerList().get(i).getRobot().setY(yCoordinate);
+
+                                                    Movement movement = new Movement(clientId, Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
+                                                    String serializedMovement = Serialisierer.serialize(movement);
+                                                    broadcast(serializedMovement);
                                                 }
                                             }
                                         } catch (NumberFormatException e) {
@@ -224,7 +228,7 @@ public class ClientHandler implements Runnable {
                             }else {
 
                                 boolean receivedChatisPrivate;
-                                if (receivedSendChatTo == -1) {
+                                if (receivedSendChatTo == - 1) {
                                     receivedChatisPrivate = false;
                                     ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
                                     String serializedReceivedChat = Serialisierer.serialize(receivedChat);
