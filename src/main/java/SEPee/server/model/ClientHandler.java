@@ -842,6 +842,7 @@ public class ClientHandler implements Runnable {
                                         for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
                                             System.out.println(activeCard.getCard());
                                         }
+                                        timer.cancel();
                                         timer1.cancel();
                                     }
                                 }, 30000);
