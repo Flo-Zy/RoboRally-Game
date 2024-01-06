@@ -36,6 +36,9 @@ public class ClientHandler implements Runnable {
     private String lastPlayedCard = null;
     private ArrayList<String> clientHand;
     private static boolean wallFlagMovePush = false;
+    @Getter
+    @Setter
+    private boolean playerFertig = true;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -74,7 +77,12 @@ public class ClientHandler implements Runnable {
                             associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure + 1);
-                            Server.getPlayerList().add(player);
+                            for (Player newPlayer : Server.getPlayerList()) {
+                                if (newPlayer.getId() == player.getId()) {
+                                    newPlayer.setName(player.getName());
+                                    newPlayer.setFigure(player.getFigure());
+                                }
+                            }
 
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
 
@@ -334,6 +342,7 @@ public class ClientHandler implements Runnable {
                                     }
                                     Server.setRegisterCounter(0);
                                     Server.setTimerSend(0);
+                                    setPlayerFertig(true);
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         player.getPlayerMat().setNumRegister(0);
                                     }
@@ -622,17 +631,80 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "TimerStarted":
-                            if (Server.getTimerSend() == 0) {
+                            Server.setTimerSend(Server.getTimerSend() + 1);
+                            if (Server.getTimerSend() == 1) {
                                 // sende TimerStarted
                                 TimerStarted timerStarted = new TimerStarted();
                                 String serializedTimerStarted = Serialisierer.serialize(timerStarted);
                                 broadcast(serializedTimerStarted);
-                                Server.setTimerSend(1);
+
                                 // wait 30 sec to send TimerEnded
                                 Timer timer = new Timer();
-                                timer.schedule(new TimerTask() {
+                                Timer timer1 = new Timer();
+                                TimerTask task = new TimerTask() {
                                     @Override
                                     public void run() {
+                                        if (Server.getTimerSend() == Server.getGame().getPlayerList().size()) {
+                                            System.out.println("Alle fertig");
+                                            setPlayerFertig(false);
+                                            Server.setTimerSend(0);
+                                            // After 30 seconds, send TimerEnded
+                                            ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
+                                            for (Player player : Server.getGame().getPlayerList()) {
+                                                if (player.getPlayerMat().getNumRegister() < 5) {
+                                                    clientIDsNotReady.add(player.getId());
+                                                }
+                                            }
+                                            TimerEnded timerEnded = new TimerEnded(clientIDsNotReady);
+                                            String serializedTimerEnded = Serialisierer.serialize(timerEnded);
+                                            broadcast(serializedTimerEnded);
+
+                                            discardHand();
+
+                                            discardCurrentRegister();
+
+                                            Server.getGame().setNextPlayersTurn();
+
+                                            ArrayList<CurrentCards.ActiveCard> activeCards = new ArrayList<>();
+                                            for (Player player : Server.getGame().getPlayerList()) {
+                                                activeCards.add(new CurrentCards.ActiveCard(player.getId(),
+                                                        player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter())));
+                                            }
+
+                                            Server.setRegisterCounter(Server.getRegisterCounter() + 1);
+
+                                            Server.getGame().nextCurrentPhase();
+
+                                            ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
+                                            String serializedActivePhase = Serialisierer.serialize(activePhase);
+                                            broadcast(serializedActivePhase);
+
+                                            System.out.println(Server.getGame().getCurrentPhase());
+
+                                            // nulltes register wird an alle gesendet
+                                            CurrentCards currentCards = new CurrentCards(activeCards);
+                                            String serializedCurrentCards = Serialisierer.serialize(currentCards);
+                                            broadcast(serializedCurrentCards);
+
+                                            Server.setCountPlayerTurns(0);
+                                            CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                            String serializedCurrentPlayer1 = Serialisierer.serialize(currentPlayer);
+                                            broadcast(serializedCurrentPlayer1);
+                                            // test
+                                            for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
+                                                System.out.println(activeCard.getCard());
+                                            }
+                                            Thread.currentThread().interrupt();
+                                            // Cancel the timer
+                                            timer1.cancel();
+                                            timer.cancel();
+                                        }
+                                    }
+                                };
+                                timer.scheduleAtFixedRate(task, 1000, 1000);
+                                timer1.schedule(new TimerTask() {
+                                    @Override
+                                    public void run(){
                                         // After 30 seconds, send TimerEnded
                                         ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
                                         for (Player player : Server.getGame().getPlayerList()) {
@@ -659,25 +731,25 @@ public class ClientHandler implements Runnable {
                                                         if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
                                                             cursor++;
                                                             if (!player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // nächste Karte auf ProgDeck nicht Again
-                                                                Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                                missingClientCards.add(card.getName()); // card in missingClientCards
-                                                                player.getPlayerMat().fillEmptyRegister(card.getName());
+                                                                Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                                missingClientCards.add(card1.getName()); // card in missingClientCards
+                                                                player.getPlayerMat().fillEmptyRegister(card1.getName());
                                                                 player.getPlayerMat().getProgDeck().remove(cursor);
                                                                 i++;
                                                                 cursor = 0;
                                                             } else {
                                                                 cursor++;
-                                                                Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                                missingClientCards.add(card.getName()); // card in missingClientCards
-                                                                player.getPlayerMat().fillEmptyRegister(card.getName());
+                                                                Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                                missingClientCards.add(card1.getName()); // card in missingClientCards
+                                                                player.getPlayerMat().fillEmptyRegister(card1.getName());
                                                                 player.getPlayerMat().getProgDeck().remove(cursor);
                                                                 i++;
                                                                 cursor = 0;
                                                             }
                                                         } else { //  wenn nicht erstes Register bzw. oberste Karte auf ProgDeck nicht Again
-                                                            Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                            missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
+                                                            Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                            missingClientCards.add(card1.getName()); // card in missingClientCards
+                                                            player.getPlayerMat().fillEmptyRegister(card1.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             i++;
                                                         }
@@ -690,15 +762,15 @@ public class ClientHandler implements Runnable {
                                                     int j = 0;
 
                                                     while (j < leftCards) {
-                                                        Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                        if (j == 0 && card.getName().equals("Again")) {
+                                                        Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                        if (j == 0 && card1.getName().equals("Again")) {
                                                             player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             leftCards = player.getPlayerMat().getProgDeck().size();
 
                                                         } else {
-                                                            missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
+                                                            missingClientCards.add(card1.getName()); // card in missingClientCards
+                                                            player.getPlayerMat().fillEmptyRegister(card1.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             validCardsCounter++;
                                                             j++;
@@ -716,13 +788,13 @@ public class ClientHandler implements Runnable {
 
                                                     j = 0;
                                                     while (j < numEmptyRegister - validCardsCounter) { // restliche fehlende Karten
-                                                        Card card = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
-                                                        if (j == 0 && card.getName().equals("Again")) {
+                                                        Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
+                                                        if (j == 0 && card1.getName().equals("Again")) {
                                                             player.getPlayerMat().getDiscardPile().add("Again"); // sonst gehen Agains aus ProgDeck verloren
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                         } else {
-                                                            missingClientCards.add(card.getName()); // card in missingClientCards
-                                                            player.getPlayerMat().fillEmptyRegister(card.getName());
+                                                            missingClientCards.add(card1.getName()); // card in missingClientCards
+                                                            player.getPlayerMat().fillEmptyRegister(card1.getName());
                                                             player.getPlayerMat().getProgDeck().remove(cursor);
                                                             j++;
                                                         }
@@ -764,17 +836,16 @@ public class ClientHandler implements Runnable {
 
                                         Server.setCountPlayerTurns(0);
                                         CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
-                                        String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
-                                        broadcast(serializedCurrentPlayer);
+                                        String serializedCurrentPlayer1 = Serialisierer.serialize(currentPlayer);
+                                        broadcast(serializedCurrentPlayer1);
                                         // test
                                         for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
                                             System.out.println(activeCard.getCard());
                                         }
-
-                                        // Cancel the timer
                                         timer.cancel();
+                                        timer1.cancel();
                                     }
-                                }, 30000); // 30,000 milliseconds = 30 seconds
+                                }, 30000);
                             }
                             break;
                         case "SelectedDamage":
@@ -850,8 +921,6 @@ public class ClientHandler implements Runnable {
         // If the loop completes and the target client is not found, you may handle it accordingly.
         System.out.println("Client with ID " + clientId + " not found.");
     }
-
-
 
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
         Player checkPlayer = new Player("", 9999, 9999);
