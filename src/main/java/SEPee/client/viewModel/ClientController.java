@@ -75,6 +75,8 @@ public class ClientController {
     @FXML
     private ImageView avatarImageView;
     @FXML
+    private Label avatarNameLabel;
+    @FXML
     private VBox DizzyHighwayMap;
     @FXML
     private VBox ExtraCrispyMap;
@@ -313,6 +315,7 @@ public class ClientController {
                 imageView.setOnMouseClicked(event -> {
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
+                    avatarNameLabel.setText(robotNames[robotNumber-1]);
                     dialog.setResult(robotNumber);
                     dialog.close();
                 });

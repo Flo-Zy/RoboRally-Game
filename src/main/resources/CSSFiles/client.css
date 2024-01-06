@@ -1,33 +1,8 @@
-/* VBox */
-#SEPee.client.viewModel.ClientController {
-}
-
-/* HBox */
 #SEPee.client.viewModel.ClientController HBox {
     -fx-spacing: 10;
 }
 
-/* VBox mit ID DizzyHighwayMap */
-#DizzyHighwayMap {
-    /* Hier können Sie spezifische Stile für dieses VBox definieren */
-}
-
-/* VBox mit ID ExtraCrispyMap */
-#ExtraCrispyMap {
-    /* Hier können Sie spezifische Stile für dieses VBox definieren */
-}
-
-/* VBox mit ID LostBearingsMap */
-#LostBearingsMap {
-    /* Hier können Sie spezifische Stile für dieses VBox definieren */
-}
-
-/* VBox mit ID DeathTrapMap */
-#DeathTrapMap {
-    /* Hier können Sie spezifische Stile für dieses VBox definieren */
-}
-
-/* VBox in der rechten HBox (Chatarea VBox) */
+/* ChatArea VBox */
 #SEPee.client.viewModel.ClientController HBox > VBox {
     -fx-spacing: 10;
     -fx-pref-height: 645.0;
@@ -35,7 +10,6 @@
     -fx-background-color: #2e2e2e;
 }
 
-/* TextArea mit ID chatArea */
 #chatArea {
     -fx-editable: false;
     -fx-pref-height: 535.0;
@@ -44,25 +18,28 @@
     -fx-padding: 7.0;
 }
 
-/* TextField mit ID messageField */
+#avatarNameLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+    -fx-font-family: "MyCustomFont";
+    -fx-text-fill: #ac7d02;
+}
+
 #messageField {
     -fx-prompt-text-fill: #999999;
     -fx-pref-width: 100%;
 }
 
-/* Button mit ID visibilityButton */
 #visibilityButton {
     -fx-pref-width: 100px;
 }
 
-/* Button mit ID sendButton */
 #sendButton {
     -fx-pref-width: 63px;
     -fx-background-color: #007bff;
     -fx-text-fill: #ffffff;
 }
 
-/* Button mit ID readyButton */
 #readyButton {
     -fx-pref-width: 128px;
     -fx-background-color: #28a745;

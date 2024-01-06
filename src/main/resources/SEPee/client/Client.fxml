@@ -2,14 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.ImageView?>
 
-<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="900.0" VBox.vgrow="NEVER">
@@ -36,11 +37,32 @@
                   <VBox VBox.vgrow="ALWAYS">
                       <HBox HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                           <VBox alignment="CENTER_LEFT" prefHeight="520.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
-                              <TextArea fx:id="chatArea" editable="false" prefHeight="520.0" prefWidth="190.0">
+                        <HBox>
+                           <children>
+      
+                                    <ImageView fx:id="avatarImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <HBox.margin>
+                                    <Insets left="15.0" />
+                                 </HBox.margin>
+                                    </ImageView>
+      
+                                    <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="15.0" />
+                                 </HBox.margin>
+                                    </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </HBox>
+
+                              <TextArea fx:id="chatArea" editable="false" prefHeight="405.0" prefWidth="190.0">
                                   <VBox.margin>
                                       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                   </VBox.margin>
                               </TextArea>
+
                           </VBox>
                       </HBox>
                       <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
@@ -57,12 +79,6 @@
                                                       <Insets bottom="15.0" left="142.0" right="15.0" />
                                                   </HBox.margin>
                                               </Button>
-
-                                              <ImageView fx:id="avatarImageView" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                                                  <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                  </VBox.margin>
-                                              </ImageView>
 
                                           </children>
                                       </HBox>
