@@ -699,6 +699,10 @@ public class LostBearings extends GameBoard {
         return 0;
     }
 
+    public String getOrientationOfReboot(){
+        return "right";
+    }
+
 
 
 }

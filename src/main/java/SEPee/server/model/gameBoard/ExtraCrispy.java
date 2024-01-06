@@ -768,4 +768,7 @@ public class ExtraCrispy extends GameBoard {
     }
 
 
+    public String getOrientationOfReboot(){
+        return "right";
+    }
 }
