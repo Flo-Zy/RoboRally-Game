@@ -1500,6 +1500,31 @@ public class ClientHandler implements Runnable {
         String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
             if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
+                int yCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getY() - 1;
+                int xCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getX();
+
+                String nextFieldType = checkRobotFieldForXY(xCoordinateNewField, yCoordinateNewField);
+
+                if(!nextFieldType.contains("ConveyorBelt 1")){
+                    String orientation = "top";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+
+
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
