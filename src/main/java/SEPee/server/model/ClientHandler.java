@@ -197,23 +197,51 @@ public class ClientHandler implements Runnable {
                             int receivedSendChatFrom = clientId;
                             int receivedSendChatTo = receivedSendChat.getMessageBody().getTo();
 
-                            boolean receivedChatisPrivate;
-                            if (receivedSendChatTo == -1) {
-                                receivedChatisPrivate = false;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-                                String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                            if (receivedSendChatMessage.startsWith("/")) {
+                                if (receivedSendChatMessage.contains("/teleport")) {
+                                    // Split the message by spaces to get individual parts
+                                    String[] parts = receivedSendChatMessage.split(" ");
 
-                                broadcast(serializedReceivedChat);
-                            } else {
-                                receivedChatisPrivate = true;
-                                ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
-                                String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+                                    // Check if the message has at least three parts (command, x, y)
+                                    if (parts.length >= 3 && parts[0].equalsIgnoreCase("/teleport")) {
+                                        try {
+                                            int xCoordinate = Integer.parseInt(parts[1]);
+                                            int yCoordinate = Integer.parseInt(parts[2]);
 
-                                sendToOneClient(receivedSendChatTo, serializedReceivedChat);
+                                            for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                                if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
+                                                    Server.getGame().getPlayerList().get(i).getRobot().setX(xCoordinate);
+                                                    Server.getGame().getPlayerList().get(i).getRobot().setY(yCoordinate);
+                                                }
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            System.err.println("Invalid coordinates format");
+                                        }
+                                    } else {
+                                        System.err.println("Invalid /teleport command format");
+                                    }
+                                }
+                            }else {
 
-                                // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
-                                if (!(receivedSendChatTo == receivedSendChatFrom)) {
-                                    sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
+                                boolean receivedChatisPrivate;
+                                if (receivedSendChatTo == -1) {
+                                    receivedChatisPrivate = false;
+                                    ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+                                    String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+
+
+                                    broadcast(serializedReceivedChat);
+                                } else {
+                                    receivedChatisPrivate = true;
+                                    ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
+                                    String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+
+                                    sendToOneClient(receivedSendChatTo, serializedReceivedChat);
+
+                                    // verhindert doppeltes ausgeben, falls privatnachricht an sich selbst geschickt wird
+                                    if (!(receivedSendChatTo == receivedSendChatFrom)) {
+                                        sendToOneClient(receivedSendChatFrom, serializedReceivedChat);
+                                    }
                                 }
                             }
                             break;
