@@ -58,6 +58,9 @@ public class Server extends Thread{
     private static int timerSend = 0;
     @Getter
     @Setter
+    private static boolean waitForDamage = false;
+    @Getter
+    @Setter
     private static int registerCounter = 0;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
