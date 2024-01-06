@@ -14,18 +14,18 @@
 /* Stil für den Header-Bereich des Dialogs */
 .dialog-pane .header-panel {
     -fx-background-color: #2E2E2E;
-    -fx-text-fill: #ac7d02;
+    -fx-text-fill: #dde400;
 }
 
 /* Stil für den Inhalt des Dialogs */
 .dialog-pane .content {
     -fx-font-size: 16px;
-    -fx-text-fill: #ac7d02;
+    -fx-text-fill: #dde400;
 }
 
 /* Stil für Buttons im Dialog */
 .button {
-    -fx-background-color: #ac7d02;
+    -fx-background-color: #dde400;
     -fx-text-fill: #2E2E2E;
     -fx-font-weight: bold;
 }
@@ -35,7 +35,7 @@
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-font-family: "MyCustomFont";
-    -fx-text-fill: #ac7d02;
+    -fx-text-fill: #dde400;
 }
 
 /* Stil für den Textfeld-Bereich */

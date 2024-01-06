@@ -150,9 +150,18 @@ public class Client extends Application {
 
                             // Create a new Player object
                             Player newPlayer = new Player(name, id, figure+1);
+                            boolean exists = false;
+                            for(Player player : playerListClient){
+                                if(player.getId() == id){
+                                    player.setName(name);
+                                    player.setFigure(figure+1);
+                                    exists = true;
+                                }
+                            }
+                            if(!exists){
+                                playerListClient.add(newPlayer);
+                            }
 
-                            // Add the new player to the client-side playerList
-                            playerListClient.add(newPlayer);
                             for(Player player : playerListClient){
                                 getTakenFigures().add(player.getFigure());
                             }
@@ -608,6 +617,15 @@ public class Client extends Application {
                         case "CheckPointReached":
                             System.out.println("Check Point Reached");
                             CheckPointReached checkPointReached = Deserialisierer.deserialize(serializedReceivedString, CheckPointReached.class);
+                            int number = checkPointReached.getMessageBody().getNumber();
+                            int clientID = checkPointReached.getMessageBody().getClientID();
+
+                            for(Player player : playerListClient) {
+                                if (player.getId() == clientID) {
+                                    controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
+                                }
+                            }
+
                             break;
                         case "GameFinished":
                             System.out.println("GameFinished");

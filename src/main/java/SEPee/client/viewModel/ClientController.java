@@ -213,20 +213,24 @@ public class ClientController {
     }
 
     private void showPlayerListDialog() {
-
-        // Initialize the playerNames array with player names from playerListClient
         initializePlayerNames();
 
-        // Erstellen Sie einen ChoiceDialog mit der Liste der Spieler
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playerNames);
         dialog.setTitle("Spieler auswählen");
-        dialog.setHeaderText("Bitte wählen Sie einen Spieler:");
 
-        // Create a "Send to All" button
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showPlayerListDialog.css").toExternalForm());
+        dialog.getDialogPane().setGraphic(null);
+
+        Label headerLabel = new Label("Bitte wählen Sie einen Spieler:");
+        headerLabel.setFont(new Font("Arial", 56));
+        dialog.getDialogPane().setHeader(headerLabel);
+        headerLabel.getStyleClass().add("header-label");
+
+        // "An Alle senden" button
         ButtonType sendToAllButton = new ButtonType("An Alle senden", ButtonBar.ButtonData.LEFT);
         dialog.getDialogPane().getButtonTypes().add(sendToAllButton);
 
-        //"Send to All" button from the dialog
+        //"Send to All" button vom dialog
         Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
         ((Button) sendToAllNode).setOnAction(event -> {
             // Handle the action when "Send to All" is clicked
@@ -242,7 +246,7 @@ public class ClientController {
         if (result.isPresent()) {
             String selectedPlayerName = result.get();
             // Id über Namen finden
-            int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt weil clientIds mit 1 anfangen
+            int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt, weil clientIds mit 1 anfangen
             if (index != -1) {
                 // Update selectedRecipientId based on the index
                 selectedRecipientId = index;
@@ -344,7 +348,8 @@ public class ClientController {
     }
 
     private void initializePlayerNames() {
-        playerNames.clear(); // Clear the existing names
+        playerNames.clear();
+        System.out.println("initializePlayerNames (Client.getPlayerListClient()): " + Client.getPlayerListClient());
         for (Player player : Client.getPlayerListClient()) {
             String playerName = player.getName();
             playerNames.add(playerName);
@@ -421,7 +426,6 @@ public class ClientController {
 
                 // Get  controller
                 DizzyHighwayController dizzyHighwayController = loader.getController();
-
                 mapController = dizzyHighwayController;
 
                 dizzyHighwayController.init(client, primaryStage);
@@ -431,6 +435,8 @@ public class ClientController {
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
+
+                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -460,6 +466,8 @@ public class ClientController {
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
+                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -487,6 +495,8 @@ public class ClientController {
                 ExtraCrispyMap.getChildren().setAll(extraCrispy);
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
+
+                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -516,6 +526,8 @@ public class ClientController {
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
 
+                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -543,6 +555,8 @@ public class ClientController {
                 LostBearingsMap.getChildren().setAll(lostBearings);
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
+
+                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -572,6 +586,8 @@ public class ClientController {
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
 
+                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -600,6 +616,8 @@ public class ClientController {
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
 
+                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -627,6 +645,8 @@ public class ClientController {
                 DeathTrapMap.getChildren().setAll(deathTrap);
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
+
+                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -868,5 +888,9 @@ public class ClientController {
 
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
+    }
+
+    public void setCheckPointImage(String imageUrl) {
+        mapController.setCheckPointImage(imageUrl);
     }
 }

@@ -95,17 +95,16 @@ public class Server extends Thread{
                     // new Thread(new AliveMessageSender()).start();
 
                     System.out.println(clientID);
-                    Server.getPlayerList().add(new Player("", clientID, -9999));
+                    playerList.add(new Player("", clientID, -9999));
                     Welcome welcome = new Welcome(clientID);
                     String serializedWelcome = Serialisierer.serialize(welcome);
                     writer.println(serializedWelcome);
 
-                    for(Player player: playerList){
+                    for(Player player : playerList){
                         PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure()-1);
                         String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                         clientHandler.sendToOneClient(clientID, serializedPlayerAdded);
                     }
-
                 } else {
                     System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
@@ -113,7 +112,6 @@ public class Server extends Thread{
                     //FEHLERMELDUNG BEHEBEN socket muss richtig geschlossen werden
                 }
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,5 +149,4 @@ public class Server extends Thread{
     public static void addReady(int id){
         readyList.add(id);
     }
-
 }

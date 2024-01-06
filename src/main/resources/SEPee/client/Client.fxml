@@ -13,9 +13,9 @@
 <VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
-    <HBox prefHeight="800.0" prefWidth="900.0" VBox.vgrow="NEVER">
+    <HBox prefHeight="800.0" prefWidth="935.0" VBox.vgrow="NEVER">
         <!-- Linke HBox -->
-        <HBox alignment="CENTER" prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER" prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="NEVER">
          <children>
             <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
                <opaqueInsets>
@@ -39,14 +39,14 @@
         <VBox fx:id="DeathTrapMap" managed="false" visible="false">
             <fx:include source="DeathTrap.fxml" />
         </VBox>
-      <AnchorPane HBox.hgrow="NEVER">
+      <AnchorPane prefHeight="800.0" prefWidth="272.0" HBox.hgrow="NEVER">
          <children>
               <!-- Rechte HBox (Chatarea VBox) -->
-              <VBox prefHeight="800.0" prefWidth="220.0">
+              <VBox prefHeight="800.0" prefWidth="271.0">
                   <!-- Verankerte rechte TextArea -->
                   <VBox VBox.vgrow="ALWAYS">
                       <HBox prefHeight="515.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
-                          <VBox alignment="TOP_CENTER" prefHeight="511.0" prefWidth="220.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                          <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="272.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                         <HBox>
                            <children>
       
@@ -58,7 +58,7 @@
       
                                     <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
-                                    <Insets right="15.0" />
+                                    <Insets left="10.0" right="15.0" />
                                  </HBox.margin>
                                     </Label>
                            </children>
@@ -79,20 +79,13 @@
                       <VBox prefWidth="220.0" VBox.vgrow="ALWAYS">
                           <!-- HBox für Textfield und VisibilityButton -->
                           <HBox VBox.vgrow="NEVER">
-                              <AnchorPane>
+                              <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="ALWAYS">
                                   <children>
-                                      <HBox prefHeight="41.0" prefWidth="220.0">
-                                          <children>
-
-                                              <Button fx:id="visibilityButton" minHeight="26.0" minWidth="62.5" prefHeight="26.0" prefWidth="62.5" text="Alle" HBox.hgrow="NEVER">
-                                                  <HBox.margin>
-                                                      <Insets bottom="15.0" left="15.0" right="15.0" />
-                                                  </HBox.margin>
-                                              </Button>
-
-                                          </children>
-                                      </HBox>
+                                        <Button fx:id="visibilityButton" layoutX="15.0" minHeight="26.0" minWidth="37.5" prefHeight="26.0" prefWidth="37.5" text="Alle" />
                                   </children>
+                                  <HBox.margin>
+                                      <Insets bottom="5.0" />
+                                  </HBox.margin>
                               </AnchorPane>
                           </HBox>
                           <!-- HBox für SendButton -->
@@ -100,34 +93,24 @@
                         <children>
                            <AnchorPane prefWidth="220.0" HBox.hgrow="ALWAYS">
                               <children>
-                                 <HBox prefWidth="220.0">
+                                 <HBox prefHeight="41.0" prefWidth="271.0">
                                     <children>
-                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="190.0" prefHeight="26.0" prefWidth="115.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
+                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="164.0" prefHeight="26.0" prefWidth="165.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
                                           <HBox.margin>
-                                             <Insets bottom="15.0" left="15.0" right="15.0" />
+                                             <Insets bottom="15.0" left="15.0" />
                                           </HBox.margin>
                                        </TextField>
+                                       <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
+                                          <HBox.margin>
+                                             <Insets left="15.0" />
+                                          </HBox.margin>
+                                       </Button>
                                     </children>
                                  </HBox>
                               </children>
                            </AnchorPane>
                         </children>
                           </HBox>
-                     <HBox alignment="TOP_RIGHT" VBox.vgrow="NEVER">
-                        <children>
-                           <AnchorPane HBox.hgrow="NEVER">
-                              <children>
-                                 <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" />
-                              </children>
-                              <HBox.margin>
-                                 <Insets left="15.0" right="15.0" />
-                              </HBox.margin>
-                           </AnchorPane>
-                        </children>
-                        <VBox.margin>
-                           <Insets />
-                        </VBox.margin>
-                     </HBox>
                       </VBox>
                   </VBox>
               </VBox>
