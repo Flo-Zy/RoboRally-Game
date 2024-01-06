@@ -1262,6 +1262,97 @@ public class ClientHandler implements Runnable {
 
     }
 
+
+    private static String checkRobotFieldForXY(int robotX, int robotY) {
+
+        List<Field> fields = new ArrayList<>();
+
+        if (Server.getGameMap().getBordName().equals("Dizzy Highway")) {
+            DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
+            fields = highway.getFieldsAt(robotX, robotY);
+        } else if (Server.getGameMap().getBordName().equals("Extra Crispy")) {
+            ExtraCrispy extraCrispy = new ExtraCrispy();
+            fields = extraCrispy.getFieldsAt(robotX, robotY);
+        } else if (Server.getGameMap().getBordName().equals("Death Trap")) {
+            DeathTrap deathTrap = new DeathTrap();
+            fields = deathTrap.getFieldsAt(robotX, robotY);
+        } else if (Server.getGameMap().getBordName().equals("Lost Bearings")) {
+            LostBearings lostBearings = new LostBearings();
+            fields = lostBearings.getFieldsAt(robotX, robotY);
+        }
+
+        //tester string
+        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+
+        StringBuilder result = new StringBuilder();
+
+        for (Field field : fields) {
+            if (field instanceof ConveyorBelt) {
+                // Additional checks or actions for conveyor belt
+                System.out.println("ConveyorBelt");
+                String[] orientations = field.getOrientation();
+                int speed = field.getSpeed();
+
+                result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
+
+            } else if (field instanceof Laser) {
+                System.out.println("Laser");
+                // Additional checks or actions for laser
+                result.append("Laser, ");
+            } else if (field instanceof Wall) {
+                System.out.println("Wall");
+                // Actions for wall
+                String[] orientations = field.getOrientation();
+                result.append("Wall " + Arrays.toString(orientations) + ", ");
+            } else if (field instanceof Empty) {
+                // Actions for an empty field
+                System.out.println("Empty field");
+                result.append("Empty, ");
+            } else if (field instanceof StartPoint) {
+                System.out.println("Start point");
+                // Actions for a start point
+                result.append("StartPoint, ");
+            } else if (field instanceof CheckPoint) {
+                System.out.println("Checkpoint");
+                // Actions for a check point
+                int checkPointNumber = field.getCheckPointNumber();
+                result.append("CheckPoint [" + checkPointNumber + "], ");
+            } else if (field instanceof EnergySpace) {
+                // Actions for an energy space
+                result.append("EnergySpace, ");
+            } else if (field instanceof Pit) {
+                result.append("Pit");
+                rebootThisRobot(robotX, robotY, "rebootField");
+            } else if (field instanceof PushPanel) {
+                String[] orientations = field.getOrientation();
+                int[] registers = field.getRegisters();
+                result.append("PushPanel " + Arrays.toString(orientations) + " " + Arrays.toString(registers) + ", ");
+
+                // when to push because checkRobotField gets called often
+                // robot could be moving past a pusher with move 2 but panel will still active if we push here
+
+            } else if (field instanceof Gear) {
+                String[] orientation = field.getOrientation();
+                result.append("Gear " + Arrays.toString(orientation) + ", ");
+
+            } else {
+                // Default case
+                System.out.println("Field nicht gefunden");
+                result.append("UnknownField, ");
+            }
+        }
+
+        // Remove the last comma and space
+        if (result.length() > 0) {
+            result.setLength(result.length() - 2);
+        }
+
+        System.out.println(result);
+
+        return result.toString();
+
+    }
+
     public void fieldActivation() throws InterruptedException {
         // Conveyor Belts
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
@@ -1433,6 +1524,31 @@ public class ClientHandler implements Runnable {
                 }
 
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [right")) {
+
+                int yCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getY();
+                int xCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getX() + 1;
+
+                String nextFieldType = checkRobotFieldForXY(xCoordinateNewField, yCoordinateNewField);
+
+                if(!nextFieldType.contains("ConveyorBelt 1")){
+                    String orientation = "right";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
@@ -1457,6 +1573,32 @@ public class ClientHandler implements Runnable {
                 }
 
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [bottom")) {
+
+                int yCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getY() + 1;
+                int xCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getX();
+
+                String nextFieldType = checkRobotFieldForXY(xCoordinateNewField, yCoordinateNewField);
+
+                if(!nextFieldType.contains("ConveyorBelt 1")){
+                    String orientation = "bottom";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+
+
                 Server.getGame().getPlayerList().get(i).getRobot().setY(Server.getGame().getPlayerList().get(i).getRobot().getY() + 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());
@@ -1481,6 +1623,32 @@ public class ClientHandler implements Runnable {
                 }
 
             } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [left")) {
+
+                int yCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getY();
+                int xCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getX() - 1;
+
+                String nextFieldType = checkRobotFieldForXY(xCoordinateNewField, yCoordinateNewField);
+
+                if(!nextFieldType.contains("ConveyorBelt 1")){
+                    String orientation = "left";
+                    int xCoordinatePushingRobot = robot.getX();
+                    int yCoordinatePushingRobot = robot.getY();
+
+                    for (Player player : Server.getGame().getPlayerList()) {
+                        int xPlayerFleeingRobot = player.getRobot().getX();
+                        int yPlayerFleeingRobot = player.getRobot().getY();
+
+                        if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
+                            try {
+                                movePlayerRobot(player, true, orientation);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+
+
                 Server.getGame().getPlayerList().get(i).getRobot().setX(Server.getGame().getPlayerList().get(i).getRobot().getX() - 1);
 
                 Movement movement = new Movement(Server.getGame().getPlayerList().get(i).getId(), Server.getGame().getPlayerList().get(i).getRobot().getX(), Server.getGame().getPlayerList().get(i).getRobot().getY());

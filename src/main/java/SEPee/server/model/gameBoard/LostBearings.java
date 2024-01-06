@@ -279,7 +279,7 @@ public class LostBearings extends GameBoard {
 
         List<Field> field5_3 = new ArrayList<>();
         String[] orientations53 = {"bottom", "top"};
-        field5_3.add(new ConveyorBelt("1A", 2, orientations53));
+        field5_3.add(new ConveyorBelt("1A", 1, orientations53));
         String[] orientations53Wall = {"right"};
         field5_3.add(new Wall("1A", orientations53Wall));
 
@@ -539,7 +539,7 @@ public class LostBearings extends GameBoard {
 
         List<Field> field10_3 = new ArrayList<>();
         String[] orientation103Belt = {"bottom, top"};
-        field10_3.add(new ConveyorBelt("1A", 2, orientation103Belt));
+        field10_3.add(new ConveyorBelt("1A", 1, orientation103Belt));
 
         List<Field> field10_4 = new ArrayList<>();
         String[] orientation104Gear = {"clockwise"};
