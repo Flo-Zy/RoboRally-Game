@@ -225,6 +225,40 @@ public class ClientHandler implements Runnable {
                                         System.err.println("Invalid /teleport command format");
                                     }
                                 }
+                                if (receivedSendChatMessage.contains("/inactive")){
+                                    for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                        if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
+                                            Server.getGame().getPlayerList().get(i).setReboot(true);
+
+                                        }
+                                    }
+                                }
+                                if (receivedSendChatMessage.contains("/turnLeft")){
+                                    for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                        if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
+                                            Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+                                            String newOrientation = getResultingOrientation("counterclockwise", robot);
+                                            robot.setOrientation(newOrientation);
+
+                                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
+                                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                                            broadcast(serializedPlayerTurning);
+                                        }
+                                    }
+                                }
+                                if (receivedSendChatMessage.contains("/turnRight")){
+                                    for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                        if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
+                                            Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+                                            String newOrientation = getResultingOrientation("clockwise", robot);
+                                            robot.setOrientation(newOrientation);
+
+                                            PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
+                                            String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
+                                            broadcast(serializedPlayerTurning);
+                                        }
+                                    }
+                                }
                             }else {
 
                                 boolean receivedChatisPrivate;
