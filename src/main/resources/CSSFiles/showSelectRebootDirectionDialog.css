@@ -1,0 +1,26 @@
+.root {
+    -fx-font-family: "MyCustomFont";
+    -fx-background-color: #2E2E2E;
+}
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("/CSSFiles/Digital-Bold.ttf");
+}
+
+.header-label {
+    -fx-font-size: 35px; /* font size for the labels */
+    -fx-text-fill: #dde400;
+    -fx-font-weight: bold; /* bold font weight */
+    -fx-alignment: center;
+    -fx-wrap-text: true; /* Enable text wrapping */
+    -fx-max-width: 100px;
+    -fx-padding: 30; /* Padding around labels */
+    -fx-font-family: "MyCustomFont";
+    -fx-background-color: #2E2E2E;
+}
+
+.button {
+    -fx-background-color: #dde400;
+    -fx-text-fill: #2E2E2E;
+    -fx-font-weight: bold;
+}
