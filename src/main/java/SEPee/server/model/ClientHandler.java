@@ -943,8 +943,10 @@ public class ClientHandler implements Runnable {
 
                         if (isForward) {
                             MoveI.makeEffect(this.robot);
+                            checkRobotField(this.robot);
                         } else {
                             BackUp.makeEffect(this.robot);
+                            checkRobotField(this.robot);
                         }
 
                         //FLAG ende
@@ -1230,7 +1232,7 @@ public class ClientHandler implements Runnable {
                 // Actions for an energy space
                 result.append("EnergySpace, ");
             } else if (field instanceof Pit) {
-                result.append("Pit");
+                result.append("Pit, ");
                 rebootThisRobot(robotX, robotY, "rebootField");
             } else if (field instanceof PushPanel) {
                 String[] orientations = field.getOrientation();
@@ -2067,6 +2069,10 @@ public class ClientHandler implements Runnable {
                     (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)) {
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
                 Server.getGame().getPlayerList().get(i).setReboot(true);
+
+                ReceivedChat joinedPlayerMessage = new ReceivedChat(Server.getGame().getPlayerList().get(i).getName() + " is rebooting", 999, false);
+                String serializedJoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
+                broadcast(serializedJoinedPlayerMessage);
 
                 //if robot rebooted he receives two spam cards
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
