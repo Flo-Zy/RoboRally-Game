@@ -330,7 +330,7 @@ public class ClientHandler implements Runnable {
                                     }
                                 }
 
-                                AtomicBoolean warte = new AtomicBoolean();
+                                /*AtomicBoolean warte = new AtomicBoolean();
                                 warte.set(true);
                                 Timer timer2 = new Timer();
                                 TimerTask task1 = new TimerTask() {
@@ -353,7 +353,7 @@ public class ClientHandler implements Runnable {
                                     e.printStackTrace();
                                 }
 
-                                timer2.scheduleAtFixedRate(task1, 0, 1000);
+                                timer2.scheduleAtFixedRate(task1, 0, 1000);*/
 
 
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
@@ -896,7 +896,7 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
-                            for(Player player : Server.getGame().getPlayerList()) {
+                            /*for(Player player : Server.getGame().getPlayerList()) {
                                 if(player.getId() == clientId) {
                                     SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
                                     int i = 0;
@@ -951,7 +951,7 @@ public class ClientHandler implements Runnable {
                                         Server.setWaitForDamage(false);
                                     }
                                 }
-                            }
+                            }*/
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");

@@ -11,6 +11,7 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.Server;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
@@ -28,6 +29,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.Getter;
@@ -59,6 +62,7 @@ public class Client extends Application {
     private int registerCounter = 1;
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    private boolean wait = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -318,9 +322,28 @@ public class Client extends Application {
                                     if(currentPlayer.getMessageBody().getClientID() == controller.getId()) {
                                         for (CurrentCards.ActiveCard activeCard : activeRegister) {
                                             if (activeCard.getClientID() == controller.getId()) {
-                                                PlayCard playCard = new PlayCard(activeCard.getCard());
-                                                String serializedPlayCard = Serialisierer.serialize(playCard);
-                                                writer.println(serializedPlayCard);
+                                                if(wait) {
+                                                    Timer timer = new Timer();
+                                                    TimerTask task = new TimerTask() {
+                                                        @Override
+                                                        public void run() {
+                                                            System.out.println("run");
+                                                            if (!wait) {
+                                                                PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                                writer.println(serializedPlayCard);
+                                                                System.out.println("playCard gesendet");
+                                                                timer.cancel();
+                                                            }
+                                                        }
+                                                    };
+                                                    timer.scheduleAtFixedRate(task, 0, 2000);
+                                                }else{
+                                                    PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                    String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                    writer.println(serializedPlayCard);
+                                                }
+
                                             }
                                         }
                                     }
@@ -553,6 +576,8 @@ public class Client extends Application {
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");
+                            wait = true;
+                            System.out.println("wait auf true: " + wait);
                             PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
                             ArrayList<String> avaiableList = pickDamage.getMessageBody().getAvailablePiles();
                             AtomicInteger numDamageCards = new AtomicInteger();
@@ -567,6 +592,8 @@ public class Client extends Application {
                                 SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
                                 String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
                                 writer.println(serializedSelectedDamage);
+                                wait = false;
+                                System.out.println("wait auf false: " + wait);
                             });
                             break;
                         case "Animation":
