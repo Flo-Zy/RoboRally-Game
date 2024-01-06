@@ -15,6 +15,7 @@ import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.ExtraCrispy;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,14 +29,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 public class Client extends Application {
 
-    // private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    // private static final int SERVER_PORT = 52018;
+    //private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    //private static final int SERVER_PORT = 52018;
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
 
@@ -570,29 +573,6 @@ public class Client extends Application {
                             System.out.println("Reboot");
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
-
-                            /*
-
-                            // set robot direction TOP
-                            String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
-                            while (!orientationOfRobot.equals("top")) {
-                                controller.playerTurn(rebootingClientId, "clockwise");
-                                orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
-                            }
-                             */
-
-                            /*
-                            //RebootDirection erstmal immer mit top verschicken für default, falls nie was anderes ankommt
-                            //wird das genommen und falls was anderes ankommt, wird der halt nochmal gedreht
-
-                            RebootDirection rebootDirection = new RebootDirection("top");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            writer.println(serializedRebootDirection);
-
-                             */
-
-                            // direction selection dialog fur rebootingClientId
-                            // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
 
                             if (controller.getId() == rebootingClientId) {
                                 Platform.runLater(() -> {

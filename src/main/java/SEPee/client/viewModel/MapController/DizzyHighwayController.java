@@ -8,6 +8,8 @@ import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -503,21 +506,46 @@ public class DizzyHighwayController extends MapController {
             index++;
         }
     }
-
     public void movementPlayed(int clientId, int newX, int newY) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientId){
-                player = player2;
+        Player player = null;
+        for (Player p : Client.getPlayerListClient()) {
+            if (p.getId() == clientId) {
+                player = p;
+                break;
             }
         }
-        //Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
-        Robot robot = playerRobotMap.get(player);
 
+        if (player == null) return; // Player not found
+
+        Robot robot = playerRobotMap.get(player);
         ImageView imageView = robotImageViewMap.get(robot);
-        GridPane.setColumnIndex(imageView, newX);
-        GridPane.setRowIndex(imageView, newY);
+
+        if (imageView == null) return; // ImageView not found
+
+        int numColumns = 13; // number of columns in the GridPane
+        int numRows = 10; // number of rows in the GridPane
+
+        double cellWidth = gridPane.getWidth() / numColumns;
+        double cellHeight = gridPane.getHeight() / numRows;
+
+        double targetX = newX * cellWidth - imageView.getBoundsInParent().getWidth() / 2;
+        double targetY = newY * cellHeight - imageView.getBoundsInParent().getHeight() / 2;
+
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), imageView);
+        transition.setToX(targetX - imageView.getTranslateX()); // Calculate relative X movement
+        transition.setToY(targetY - imageView.getTranslateY()); // Calculate relative Y movement
+        transition.setInterpolator(Interpolator.LINEAR); // Smoother animation
+
+        transition.setOnFinished(event -> {
+            GridPane.setColumnIndex(imageView, newX);
+            GridPane.setRowIndex(imageView, newY);
+        });
+
+        transition.play();
     }
+
+
+
 
     public void playerTurn(int clientIdToTurn, String rotation) {
         Player player = new Player("", -999, -999);
