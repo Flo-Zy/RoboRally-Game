@@ -943,8 +943,10 @@ public class ClientHandler implements Runnable {
 
                         if (isForward) {
                             MoveI.makeEffect(this.robot);
+                            checkRobotField(this.robot);
                         } else {
                             BackUp.makeEffect(this.robot);
+                            checkRobotField(this.robot);
                         }
 
                         //FLAG ende
@@ -1230,7 +1232,7 @@ public class ClientHandler implements Runnable {
                 // Actions for an energy space
                 result.append("EnergySpace, ");
             } else if (field instanceof Pit) {
-                result.append("Pit");
+                result.append("Pit, ");
                 rebootThisRobot(robotX, robotY, "rebootField");
             } else if (field instanceof PushPanel) {
                 String[] orientations = field.getOrientation();
@@ -1823,24 +1825,51 @@ public class ClientHandler implements Runnable {
 
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
+        int clientIdOfCheckpointReacher = Server.getGame().getPlayerList().get(i).getId();
+
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 0) { //check whether no checkPoints were reached before
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 1);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 1) { //check whether one checkPoint was reached before
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 2);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 2) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 3);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 3) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 4);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
             if (Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() == 4) {
+
+                CheckPointReached checkPointReached = new CheckPointReached(clientIdOfCheckpointReacher, 5);
+                String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
+                broadcast(serialisedCheckPointReached);
+
                 checkGameFinished(i);
             }
         }
@@ -2067,6 +2096,10 @@ public class ClientHandler implements Runnable {
                     (Server.getGame().getPlayerList().get(i).getRobot().getY() == yCoordinate)) {
                 Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
                 Server.getGame().getPlayerList().get(i).setReboot(true);
+
+                ReceivedChat joinedPlayerMessage = new ReceivedChat(Server.getGame().getPlayerList().get(i).getName() + " is rebooting", 999, false);
+                String serializedJoinedPlayerMessage = Serialisierer.serialize(joinedPlayerMessage);
+                broadcast(serializedJoinedPlayerMessage);
 
                 //if robot rebooted he receives two spam cards
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");

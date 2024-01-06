@@ -623,6 +623,8 @@ public class Client extends Application {
                             for(Player player : playerListClient) {
                                 if (player.getId() == clientID) {
                                     controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
+                                    controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
+
                                 }
                             }
 
