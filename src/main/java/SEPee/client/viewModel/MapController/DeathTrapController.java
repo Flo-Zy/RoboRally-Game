@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -565,9 +566,19 @@ public class DeathTrapController extends MapController {
             double rotationAmount = 90.0;
 
             if (rotation.equals("clockwise")) {
-                imageView.setRotate(currentRotation + rotationAmount);
+                // imageView.setRotate(currentRotation + rotationAmount);
+
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+                rotateTransition.setToAngle(currentRotation + rotationAmount);
+                rotateTransition.play();
+
             } else if (rotation.equals("counterclockwise")) {
-                imageView.setRotate(currentRotation - rotationAmount);
+                //imageView.setRotate(currentRotation - rotationAmount);
+
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+                rotateTransition.setToAngle(currentRotation - rotationAmount);
+                rotateTransition.play();
+
             }
         }
     }

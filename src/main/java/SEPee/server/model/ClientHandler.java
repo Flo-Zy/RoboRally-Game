@@ -345,8 +345,8 @@ public class ClientHandler implements Runnable {
                                         PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
                                         String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
                                         //send twice turn by 90 degrees in order to end up turning 180 degrees
-                                        Thread.sleep(750);
                                         broadcast(serializedPlayerTurningUTurn);
+                                        Thread.sleep(750);
                                         broadcast(serializedPlayerTurningUTurn);
                                         break;
                                     default:
