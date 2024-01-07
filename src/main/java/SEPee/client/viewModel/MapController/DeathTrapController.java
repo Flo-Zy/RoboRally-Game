@@ -85,6 +85,9 @@ public class DeathTrapController extends MapController {
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
+    @Getter
+    private final Queue<MoveInstruction> movementQueue = new LinkedList<MoveInstruction>();
+    private boolean isTransitioning = false;
 
     public void setCounter1(int counter){
         counter1.set(counter);
@@ -200,64 +203,6 @@ public class DeathTrapController extends MapController {
         GridPane.setRowIndex(imageView, robot.getY());
 
         // send messagetype move
-    }
-
-    //tester fur spätere kartenimplementierung:
-    public void moveRobotTester(Robot robot) {
-        if (robot != null) {
-            // Move 1 field
-            int currentX = robot.getX();
-            int currentY = robot.getY();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            // Move in the x-axis (for example)
-            robot.setX(currentX + 1);
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Move 2 fields
-            robot.setX(currentX + 2); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //rotateAvatar(2, "clockwise");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            robot.setX(currentX + 3); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Repeat this process for the y-axis or any other required movements
-        }
     }
 
     public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
@@ -509,79 +454,100 @@ public class DeathTrapController extends MapController {
         }
     }
 
-    public void movementPlayed(int clientId, int newX, int newY) {
-        Player player = null;
-        for (Player player2 : Client.getPlayerListClient()) {
-            if (player2.getId() == clientId) {
-                player = player2;
-                break;
-            }
-        }
 
-        if (player != null) {
-            Robot robot = playerRobotMap.get(player);
-            ImageView imageView = robotImageViewMap.get(robot);
+    public synchronized void playerTurn(int clientIdToTurn, String rotation) {
+        movementQueue.offer(new MoveInstruction(clientIdToTurn, rotation));
 
-            // Get the current position of the imageView
-            int currentX = GridPane.getColumnIndex(imageView);
-            int currentY = GridPane.getRowIndex(imageView);
-
-            // Calculate the translation needed for the animation
-            double translationX = (newX - currentX) * imageView.getBoundsInParent().getWidth();
-            double translationY = (newY - currentY) * imageView.getBoundsInParent().getHeight();
-
-            // Create a new animation for the movement
-            TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
-            transition.setByX(translationX);
-            transition.setByY(translationY);
-
-            // Update GridPane after the animation finishes
-            transition.setOnFinished(event -> {
-                GridPane.setColumnIndex(imageView, newX);
-                GridPane.setRowIndex(imageView, newY);
-                imageView.setTranslateX(0);
-                imageView.setTranslateY(0);
-            });
-
-
-            transition.play();
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
         }
     }
 
+    public synchronized void movementPlayed(int clientId, int newX, int newY) {
+        movementQueue.offer(new MoveInstruction(clientId, newX, newY));
 
-    public void playerTurn(int clientIdToTurn, String rotation) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientIdToTurn){
-                player = player2;
-            }
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
         }
-        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
-        Robot robot = playerRobotMap.get(player);
+    }
 
+    private void processQueue() {
+        if (movementQueue.isEmpty() || isTransitioning) {
+            return;
+        }
+
+        isTransitioning = true;
+
+        MoveInstruction instruction = movementQueue.peek();
+
+        if (instruction.rotation != null) {
+            processPlayerTurn(instruction);
+        } else {
+            processMovement(instruction);
+        }
+    }
+
+    private void processPlayerTurn(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
+
+        Robot robot = playerRobotMap.get(player);
         ImageView imageView = robotImageViewMap.get(robot);
 
-        if (imageView != null) {
-            double currentRotation = imageView.getRotate();
-            double rotationAmount = 90.0;
+        double currentRotation = imageView.getRotate();
+        double rotationAmount = 90.0;
 
-            if (rotation.equals("clockwise")) {
-                // imageView.setRotate(currentRotation + rotationAmount);
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+        rotateTransition.setToAngle(instruction.rotation.equals("clockwise") ?
+                currentRotation + rotationAmount : currentRotation - rotationAmount);
 
-                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
-                rotateTransition.setToAngle(currentRotation + rotationAmount);
-                rotateTransition.play();
+        rotateTransition.setOnFinished(event -> {
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
 
-            } else if (rotation.equals("counterclockwise")) {
-                //imageView.setRotate(currentRotation - rotationAmount);
+        rotateTransition.play();
+    }
 
-                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
-                rotateTransition.setToAngle(currentRotation - rotationAmount);
-                rotateTransition.play();
+    private void processMovement(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
 
+        Robot robot = playerRobotMap.get(player);
+        ImageView imageView = robotImageViewMap.get(robot);
+
+        int currentX = GridPane.getColumnIndex(imageView);
+        int currentY = GridPane.getRowIndex(imageView);
+
+        double translationX = (instruction.newX - currentX) * imageView.getBoundsInParent().getWidth();
+        double translationY = (instruction.newY - currentY) * imageView.getBoundsInParent().getHeight();
+
+        TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
+        transition.setByX(translationX);
+        transition.setByY(translationY);
+
+        transition.setOnFinished(event -> {
+            GridPane.setColumnIndex(imageView, instruction.newX);
+            GridPane.setRowIndex(imageView, instruction.newY);
+            imageView.setTranslateX(0);
+            imageView.setTranslateY(0);
+
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
+
+        transition.play();
+    }
+
+    private Player getPlayerById(int clientId) {
+        for (Player player : Client.getPlayerListClient()) {
+            if (player.getId() == clientId) {
+                return player;
             }
         }
+        return null;
     }
+
 
     public void setCheckPointImage(String imageUrl) {
         Image image = new Image(imageUrl);

@@ -87,10 +87,9 @@ public class DizzyHighwayController extends MapController {
     @Setter
     @Getter
     private Map<ImageView, Point> avatarInitialPositions = new HashMap<>();
+    @Getter
     private final Queue<MoveInstruction> movementQueue = new LinkedList<>();
-
-
-
+    private boolean isTransitioning = false;
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private int gridSize = 0;
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
@@ -217,116 +216,97 @@ public class DizzyHighwayController extends MapController {
 
     }
 
+    public synchronized void playerTurn(int clientIdToTurn, String rotation) {
+        movementQueue.offer(new MoveInstruction(clientIdToTurn, rotation));
+
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
+        }
+    }
+
     public synchronized void movementPlayed(int clientId, int newX, int newY) {
-        // Enqueue the movement instruction
         movementQueue.offer(new MoveInstruction(clientId, newX, newY));
 
-        // If the queue only has this single instruction, start processing
-        if (movementQueue.size() == 1) {
-            processMovementQueue();
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
         }
     }
 
-    class MoveInstruction {
-        int clientId;
-        int newX;
-        int newY;
-
-        MoveInstruction(int clientId, int newX, int newY) {
-            this.clientId = clientId;
-            this.newX = newX;
-            this.newY = newY;
-        }
-    }
-
-    private void processMovementQueue() {
-        // If the queue is empty, return
-        if (movementQueue.isEmpty()) {
+    private void processQueue() {
+        if (movementQueue.isEmpty() || isTransitioning) {
             return;
         }
 
-        // Dequeue the movement instruction
-        MoveInstruction instruction = movementQueue.poll();
+        isTransitioning = true;
 
-        // Process the movement
-        Player player = null;
-        for (Player player2 : Client.getPlayerListClient()) {
-            if (player2.getId() == instruction.clientId) {
-                player = player2;
-                break;
-            }
-        }
+        MoveInstruction instruction = movementQueue.peek();
 
-        if (player != null) {
-            Robot robot = playerRobotMap.get(player);
-            ImageView imageView = robotImageViewMap.get(robot);
-
-            // Get the current position of the imageView
-            int currentX = GridPane.getColumnIndex(imageView);
-            int currentY = GridPane.getRowIndex(imageView);
-
-            // Calculate the translation needed for the animation
-            double translationX = (instruction.newX - currentX) * imageView.getBoundsInParent().getWidth();
-            double translationY = (instruction.newY - currentY) * imageView.getBoundsInParent().getHeight();
-
-            // Create a new animation for the movement
-            TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
-            transition.setByX(translationX);
-            transition.setByY(translationY);
-
-            // Update GridPane after the animation finishes
-            transition.setOnFinished(event -> {
-                GridPane.setColumnIndex(imageView, instruction.newX);
-                GridPane.setRowIndex(imageView, instruction.newY);
-                imageView.setTranslateX(0);
-                imageView.setTranslateY(0);
-
-                // When this animation finishes, process the next movement in the queue
-                processMovementQueue();
-            });
-
-            transition.play();
+        if (instruction.rotation != null) {
+            processPlayerTurn(instruction);
+        } else {
+            processMovement(instruction);
         }
     }
 
-    public void playerTurn(int clientIdToTurn, String rotation) {
-        try {
-            Thread.sleep(750);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    private void processPlayerTurn(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
 
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientIdToTurn){
-                player = player2;
-            }
-        }
-        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
         Robot robot = playerRobotMap.get(player);
-
         ImageView imageView = robotImageViewMap.get(robot);
 
-        if (imageView != null) {
-            double currentRotation = imageView.getRotate();
-            double rotationAmount = 90.0;
+        double currentRotation = imageView.getRotate();
+        double rotationAmount = 90.0;
 
-            if (rotation.equals("clockwise")) {
-               // imageView.setRotate(currentRotation + rotationAmount);
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+        rotateTransition.setToAngle(instruction.rotation.equals("clockwise") ?
+                currentRotation + rotationAmount : currentRotation - rotationAmount);
 
-                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
-                rotateTransition.setToAngle(currentRotation + rotationAmount);
-                rotateTransition.play();
+        rotateTransition.setOnFinished(event -> {
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
 
-            } else if (rotation.equals("counterclockwise")) {
-                //imageView.setRotate(currentRotation - rotationAmount);
+        rotateTransition.play();
+    }
 
-                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
-                rotateTransition.setToAngle(currentRotation - rotationAmount);
-                rotateTransition.play();
+    private void processMovement(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
 
+        Robot robot = playerRobotMap.get(player);
+        ImageView imageView = robotImageViewMap.get(robot);
+
+        int currentX = GridPane.getColumnIndex(imageView);
+        int currentY = GridPane.getRowIndex(imageView);
+
+        double translationX = (instruction.newX - currentX) * imageView.getBoundsInParent().getWidth();
+        double translationY = (instruction.newY - currentY) * imageView.getBoundsInParent().getHeight();
+
+        TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
+        transition.setByX(translationX);
+        transition.setByY(translationY);
+
+        transition.setOnFinished(event -> {
+            GridPane.setColumnIndex(imageView, instruction.newX);
+            GridPane.setRowIndex(imageView, instruction.newY);
+            imageView.setTranslateX(0);
+            imageView.setTranslateY(0);
+
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
+
+        transition.play();
+    }
+
+    private Player getPlayerById(int clientId) {
+        for (Player player : Client.getPlayerListClient()) {
+            if (player.getId() == clientId) {
+                return player;
             }
         }
+        return null;
     }
 
     public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
