@@ -363,9 +363,9 @@ public class ClientController {
         while (selectedMap == null) {
             ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
             dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showSelectMapDialog.css").toExternalForm());
-            dialog.setTitle("Map auswählen");
+            dialog.setTitle("Map Selection");
 
-            Label headerLabel = new Label("Bitte wählen Sie eine Map:");
+            Label headerLabel = new Label("Please select a map:");
             headerLabel.setFont(new Font("Arial", 35));
             dialog.getDialogPane().setHeader(headerLabel);
             headerLabel.getStyleClass().add("header-label");
@@ -447,6 +447,28 @@ public class ClientController {
         stage.showAndWait();
 
         return selectedDirection[0];
+    }
+
+    public String showSelectDamageDialog(ArrayList<String> availableList){
+        String selectedDamage = null;
+
+        while (selectedDamage == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, availableList);
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showSelectMapDialog.css").toExternalForm());
+            dialog.setTitle("Damage Selection");
+
+            Label headerLabel = new Label("Please select your damage:");
+            headerLabel.setFont(new Font("Arial", 35));
+            dialog.getDialogPane().setHeader(headerLabel);
+            headerLabel.getStyleClass().add("header-label");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                selectedDamage = result.get();
+            }
+        }
+        return selectedDamage;
     }
 
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {

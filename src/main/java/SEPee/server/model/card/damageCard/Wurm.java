@@ -6,7 +6,7 @@ import lombok.Setter;
 @Setter
 public class Wurm extends DamageCard{
     public Wurm() {
-        super("Wurm", "/boardElementsPNGs/DamageCards/Worm.png");
+        super("Worm", "/boardElementsPNGs/DamageCards/Worm.png");
     }
     @Override
     public String getImageUrl() {

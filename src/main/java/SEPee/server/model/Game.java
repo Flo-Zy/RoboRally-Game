@@ -40,10 +40,14 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.playerIndex = 0;
         this.currentPhase = 0;
         this.currentPlayer = playerList.get(playerIndex);
-        this.spam = 38;
+        //this.spam = 38;
+        //Tester
+        this.spam = 1;
         this.virus = 18;
         this.trojanHorse = 12;
-        this.wurm = 6;
+        //this.wurm = 6;
+        //Tester
+        this.wurm = 1;
         this.boardClass = boardClass;
 
     }
@@ -85,8 +89,15 @@ public class Game implements Robot.RobotPositionChangeListener {
     }
 
     public void checkPriorities() {
-        int antennaX = 0;
-        int antennaY = 4;
+        int antennaX;
+        int antennaY;
+        if(boardClass.getBordName().equals("Death Trap")) {
+            antennaX = 12;
+            antennaY = 5;
+        }else{
+            antennaX = 0;
+            antennaY = 4;
+        }
 
         // TreeMap, die automatisch alles Player anhand Distanz und Winkel von der Antenne aus sortiert
         TreeMap<Double, Player> sortedPlayers = new TreeMap<>();

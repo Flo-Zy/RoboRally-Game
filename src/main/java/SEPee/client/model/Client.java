@@ -28,6 +28,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import java.util.Iterator;
 
 import lombok.Getter;
@@ -59,6 +63,7 @@ public class Client extends Application {
     private int registerCounter = 1;
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    private boolean wait = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -183,6 +188,9 @@ public class Client extends Application {
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
                             PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
+                            if(playerStatus.getMessageBody().getClientID() == -9999){
+                                wait = playerStatus.getMessageBody().isReady();
+                            }
                             synchronized (playerListClient) {
                                 for (int i = 0; i < playerListClient.size(); i++) {
                                     if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
@@ -285,6 +293,13 @@ public class Client extends Application {
                         case "ConnectionUpdate":
                             System.out.println("Connection Update");
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
+                            //remove Player from playerList if he lost his connection
+                            int clientIdToRemove = connectionUpdate.getMessageBody().getClientID();
+                            for (Player player : playerListClient){
+                                if(player.getId() == clientIdToRemove){
+                                    playerListClient.remove(player);
+                                }
+                            }
                             break;
                         case "CardPlayed":
                             System.out.println("Card Played");
@@ -338,9 +353,28 @@ public class Client extends Application {
                                     if(currentPlayer.getMessageBody().getClientID() == controller.getId()) {
                                         for (CurrentCards.ActiveCard activeCard : activeRegister) {
                                             if (activeCard.getClientID() == controller.getId()) {
-                                                PlayCard playCard = new PlayCard(activeCard.getCard());
-                                                String serializedPlayCard = Serialisierer.serialize(playCard);
-                                                writer.println(serializedPlayCard);
+                                                if(wait) {
+                                                    Timer timer = new Timer();
+                                                    TimerTask task = new TimerTask() {
+                                                        @Override
+                                                        public void run() {
+                                                            System.out.println("run");
+                                                            if (!wait) {
+                                                                PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                                writer.println(serializedPlayCard);
+                                                                System.out.println("playCard gesendet");
+                                                                timer.cancel();
+                                                            }
+                                                        }
+                                                    };
+                                                    timer.scheduleAtFixedRate(task, 0, 2000);
+                                                }else{
+                                                    PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                    String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                    writer.println(serializedPlayCard);
+                                                }
+
                                             }
                                         }
                                     }
@@ -578,6 +612,25 @@ public class Client extends Application {
                         case "PickDamage":
                             System.out.println("Pick Damage");
                             PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
+
+                            ArrayList<String> avaiableList = pickDamage.getMessageBody().getAvailablePiles();
+                            AtomicInteger numDamageCards = new AtomicInteger();
+                            numDamageCards.set(pickDamage.getMessageBody().getCount());
+
+                            ArrayList<String> selectedDamageList = new ArrayList<>();
+                            Platform.runLater(() -> {
+                                int i = 0;
+                                while(i < numDamageCards.get()) {
+                                    String damageCard;
+                                    damageCard = controller.showSelectDamageDialog(avaiableList);
+                                    selectedDamageList.add(damageCard);
+                                    i++;
+                                }
+
+                                SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
+                                String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
+                                writer.println(serializedSelectedDamage);
+                            });
                             break;
                         case "Animation":
                             System.out.println("Animation");
