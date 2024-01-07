@@ -43,6 +43,9 @@ public class ClientHandler implements Runnable {
     @Getter
     @Setter
     private boolean playerFertig = true;
+    private boolean gotAlive = true;
+    private ScheduledExecutorService disconnectScheduler = Executors.newSingleThreadScheduledExecutor();
+    private Timer alive = new Timer();
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -58,6 +61,24 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        TimerTask taskAlive = new TimerTask() {
+            @Override
+            public void run() {
+                if(gotAlive) {
+                    gotAlive = false;
+                    Alive alive1 = new Alive();
+                    String serializedAlive1 = Serialisierer.serialize(alive1);
+                    sendToOneClient(clientId, serializedAlive1);
+                    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                    disconnectScheduler = scheduler;
+                    disconnectTimer(disconnectScheduler);
+                }else{
+                    alive.cancel();
+                }
+
+            }
+        };
+        alive.scheduleAtFixedRate(taskAlive, 0, 5000);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;
@@ -69,6 +90,13 @@ public class ClientHandler implements Runnable {
                         //HelloServer wird oben behandelt beim Verbindungsaufbau
                         case "Alive":
                             System.out.println("Alive zurück bekommen");
+                            gotAlive = true;
+                            disconnectScheduler.shutdownNow();
+                            synchronized (Server.getPlayerList()) {
+                                for (Player player : Server.getPlayerList()) {
+                                    System.out.println(player.getName());
+                                }
+                            }
                             //fehlt noch, dass wenn man kein alive zurückbekommt innerhalb 5 Sekunden, dann messageType connectionUpdate schicken
 
                             /*
@@ -598,9 +626,15 @@ public class ClientHandler implements Runnable {
                             this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
                             this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
 
+                            Player associatedPlayer = new Player("", -9999, -9999);
                             //finds the associated Player and set the robot for that player
-                            Player associatedPlayer = Server.getGame().getPlayerList().get(clientId - 1);
-                            associatedPlayer.setRobot(this.robot);
+                            for (Player player: Server.getPlayerList()){
+                                if(player.getId() == clientId){
+                                    associatedPlayer = player;
+                                    associatedPlayer.setRobot(this.robot);
+                                }
+                            }
+
 
                             // Adds the game class(which implements RobotPositionChangeListener)as a listener to the robot
                             this.robot.addPositionChangeListener(Server.getGame());
@@ -2633,5 +2667,32 @@ public class ClientHandler implements Runnable {
             }
         }
         return false;
+    }
+
+    public void disconnectTimer(ScheduledExecutorService disconnectScheduler){
+        disconnectScheduler.schedule(() -> {
+            System.out.println("Disconnect");
+
+            Player disconnectPLayer = new Player("", -9999, -9999);
+            for(Player player : Server.getPlayerList()){
+                if(player.getId() == clientId){
+                    disconnectPLayer = player;
+                }
+            }
+
+            Server.getPlayerList().remove(disconnectPLayer);
+            if(Server.isGameStarted()) {
+                for (Player player : Server.getPlayerList()) {
+                    if (player.getId() == clientId) {
+                        disconnectPLayer = player;
+                    }
+                }
+                Server.getGame().getPlayerList().remove(disconnectPLayer);
+            }
+            alive.cancel();
+            ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+            String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+            broadcast(serializedConnectionUpdate);
+        }, 5, TimeUnit.SECONDS);
     }
 }
