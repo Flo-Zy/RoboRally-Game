@@ -281,6 +281,13 @@ public class Client extends Application {
                         case "ConnectionUpdate":
                             System.out.println("Connection Update");
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
+                            //remove Player from playerList if he lost his connection
+                            int clientIdToRemove = connectionUpdate.getMessageBody().getClientID();
+                            for (Player player : playerListClient){
+                                if(player.getId() == clientIdToRemove){
+                                    playerListClient.remove(player);
+                                }
+                            }
                             break;
                         case "CardPlayed":
                             System.out.println("Card Played");
