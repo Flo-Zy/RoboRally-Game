@@ -210,7 +210,6 @@ public class DizzyHighwayController extends MapController {
 
     }
 
-
     public void movementPlayed(int clientId, int newX, int newY) {
         Player player = null;
         for (Player player2 : Client.getPlayerListClient()) {
@@ -224,35 +223,31 @@ public class DizzyHighwayController extends MapController {
             Robot robot = playerRobotMap.get(player);
             ImageView imageView = robotImageViewMap.get(robot);
 
-            double fieldWidth = field00.getBoundsInParent().getWidth();
-            double fieldHeight = field00.getBoundsInParent().getHeight();
-            System.out.println("fieldwidth is : " + fieldWidth);
-            System.out.println("fieldHeight is : " + fieldHeight);
+            // Get the current position of the imageView
+            int currentX = GridPane.getColumnIndex(imageView);
+            int currentY = GridPane.getRowIndex(imageView);
 
-            // Calculate the grid size based on field width or height
-            double gridSizeDouble = Math.min(fieldWidth, fieldHeight);
+            // Calculate the translation needed for the animation
+            double translationX = (newX - currentX) * imageView.getBoundsInParent().getWidth();
+            double translationY = (newY - currentY) * imageView.getBoundsInParent().getHeight();
 
-            gridSize = (int) gridSizeDouble;
-
-            Point initialPosition = avatarInitialPositions.get(imageView); // Starting point
-            int initialX = (int) initialPosition.getX() * gridSize; // Adjusting for gridSize
-            int initialY = (int) initialPosition.getY() * gridSize; // Adjusting for gridSize
-
-            int targetX = newX * gridSize;
-            int targetY = newY * gridSize;
-
-            int deltaX = targetX - initialX;
-            int deltaY = targetY - initialY;
-
+            // Create a new animation for the movement
             TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
-            transition.setByX(deltaX);
-            transition.setByY(deltaY);
+            transition.setByX(translationX);
+            transition.setByY(translationY);
+
+            // Update GridPane after the animation finishes
+            transition.setOnFinished(event -> {
+                GridPane.setColumnIndex(imageView, newX);
+                GridPane.setRowIndex(imageView, newY);
+                imageView.setTranslateX(0);
+                imageView.setTranslateY(0);
+            });
+
+
             transition.play();
         }
     }
-
-
-
 
     public void playerTurn(int clientIdToTurn, String rotation) {
         Player player = new Player("", -999, -999);

@@ -8,6 +8,7 @@ import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -507,19 +509,44 @@ public class LostBearingsController extends MapController {
     }
 
     public void movementPlayed(int clientId, int newX, int newY) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientId){
+        Player player = null;
+        for (Player player2 : Client.getPlayerListClient()) {
+            if (player2.getId() == clientId) {
                 player = player2;
+                break;
             }
         }
-        //Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
-        Robot robot = playerRobotMap.get(player);
 
-        ImageView imageView = robotImageViewMap.get(robot);
-        GridPane.setColumnIndex(imageView, newX);
-        GridPane.setRowIndex(imageView, newY);
+        if (player != null) {
+            Robot robot = playerRobotMap.get(player);
+            ImageView imageView = robotImageViewMap.get(robot);
+
+            // Get the current position of the imageView
+            int currentX = GridPane.getColumnIndex(imageView);
+            int currentY = GridPane.getRowIndex(imageView);
+
+            // Calculate the translation needed for the animation
+            double translationX = (newX - currentX) * imageView.getBoundsInParent().getWidth();
+            double translationY = (newY - currentY) * imageView.getBoundsInParent().getHeight();
+
+            // Create a new animation for the movement
+            TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
+            transition.setByX(translationX);
+            transition.setByY(translationY);
+
+            // Update GridPane after the animation finishes
+            transition.setOnFinished(event -> {
+                GridPane.setColumnIndex(imageView, newX);
+                GridPane.setRowIndex(imageView, newY);
+                imageView.setTranslateX(0);
+                imageView.setTranslateY(0);
+            });
+
+
+            transition.play();
+        }
     }
+
 
     public void playerTurn(int clientIdToTurn, String rotation) {
         Player player = new Player("", -999, -999);
