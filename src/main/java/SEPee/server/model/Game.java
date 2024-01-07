@@ -85,8 +85,15 @@ public class Game implements Robot.RobotPositionChangeListener {
     }
 
     public void checkPriorities() {
-        int antennaX = 0;
-        int antennaY = 4;
+        int antennaX;
+        int antennaY;
+        if(boardClass.getBordName().equals("Death Trap")) {
+            antennaX = 12;
+            antennaY = 5;
+        }else{
+            antennaX = 0;
+            antennaY = 4;
+        }
 
         // TreeMap, die automatisch alles Player anhand Distanz und Winkel von der Antenne aus sortiert
         TreeMap<Double, Player> sortedPlayers = new TreeMap<>();
