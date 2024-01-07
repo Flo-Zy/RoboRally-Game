@@ -34,7 +34,7 @@
 }
 
 #visibilityButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #dde400;
     -fx-text-fill: #2E2E2E;
     -fx-font-weight: bold;
 }
@@ -46,16 +46,21 @@
 
 #visibilityButton {
     -fx-pref-width: 100px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 36, 0.2, 0, 7);
 }
 
 #sendButton {
     -fx-pref-width: 63px;
-    -fx-background-color: #007bff;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #dde400;
+    -fx-text-fill: #2e2e2e;
 }
 
 #readyButton {
     -fx-pref-width: 128px;
-    -fx-background-color: #28a745;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #dde400;
+    -fx-text-fill: #2e2e2e;
+}
+
+.button {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 36, 0.2, 0, 7);
 }

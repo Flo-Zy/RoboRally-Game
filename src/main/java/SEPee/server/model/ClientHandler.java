@@ -390,7 +390,7 @@ public class ClientHandler implements Runnable {
                                         int clientIDRightTurn = this.clientId;
                                         PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
                                         String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
-                                        Thread.sleep(750);
+
                                         broadcast(serializedPlayerTurningRight);
                                         break;
                                     case "TurnLeft":
@@ -399,7 +399,7 @@ public class ClientHandler implements Runnable {
                                         int clientIDLeftTurn = this.clientId;
                                         PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
                                         String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
-                                        Thread.sleep(750);
+
                                         broadcast(serializedPlayerTurningLeft);
                                         break;
                                     case "UTurn":
@@ -409,7 +409,6 @@ public class ClientHandler implements Runnable {
                                         PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
                                         String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
                                         //send twice turn by 90 degrees in order to end up turning 180 degrees
-                                        Thread.sleep(750);
                                         broadcast(serializedPlayerTurningUTurn);
                                         broadcast(serializedPlayerTurningUTurn);
                                         break;
@@ -1201,7 +1200,7 @@ public class ClientHandler implements Runnable {
 
                 Movement movement = new Movement(clientID, x, y);
                 String serializedMovement = Serialisierer.serialize(movement);
-                Thread.sleep(750);
+
                 broadcast(serializedMovement);
             }
         }
@@ -2323,7 +2322,7 @@ public class ClientHandler implements Runnable {
 
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
 
-        Thread.sleep(750);
+
 
 
         if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {

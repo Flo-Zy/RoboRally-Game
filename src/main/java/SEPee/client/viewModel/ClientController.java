@@ -20,11 +20,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -107,7 +109,7 @@ public class ClientController {
             dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
             dialog.getDialogPane().setGraphic(null);
 
-            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Background1.png');" +
+            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
                     "-fx-background-repeat: repeat;" +
                     "-fx-background-size: cover;");
 
@@ -321,6 +323,18 @@ public class ClientController {
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
                     avatarNameLabel.setText(robotNames[robotNumber-1]);
+                    avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
+                            "-fx-font-size: 40px; " +
+                            "-fx-font-family: 'Impact'");
+
+                    DropShadow dropShadow = new DropShadow();
+                    dropShadow.setRadius(10.0);
+                    dropShadow.setOffsetX(3.0);
+                    dropShadow.setOffsetY(3.0);
+                    dropShadow.setColor(Color.BLACK);
+
+                    avatarNameLabel.setEffect(dropShadow);
+                    avatarImageView.setEffect(dropShadow);
                     dialog.setResult(robotNumber);
                     dialog.close();
                 });
@@ -379,8 +393,8 @@ public class ClientController {
         }
         return selectedMap;
     }
-
-    public String showSelectRebootDirectionDialog(Stage stage) {
+    //erste version
+    /*public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
         root.setHgap(10);
         root.setVgap(10);
@@ -415,6 +429,86 @@ public class ClientController {
 
         // Bottom Button in der dritten Reihe mittig
         Button bottomButton = new Button("bottom");
+        bottomButton.setOnAction(event -> {
+            selectedDirection[0] = "bottom";
+            stage.close();
+        });
+        root.add(bottomButton, 1, 2, 1, 1);
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
+
+        stage.setScene(scene);
+        stage.setTitle("Reboot direction selection");
+
+        Text text = new Text("Reboot direction selection");
+        text.getStyleClass().add("header-label");
+        double titleWidth = text.getBoundsInLocal().getWidth();
+        stage.setWidth(titleWidth + 40);
+
+        Duration duration = Duration.seconds(10);
+        Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
+            if (stage.isShowing()) {
+                stage.close();
+                selectedDirection[0] = "top";
+            }
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
+
+        stage.setOnHiding(event -> timeline.stop());
+
+        stage.showAndWait();
+
+        return selectedDirection[0];
+    }
+    */
+
+    //zweite Version
+    public String showSelectRebootDirectionDialog(Stage stage) {
+        GridPane root = new GridPane();
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
+
+        String[] selectedDirection = {null};
+
+        // Berechnen der Mindestbreite für die Buttons
+        double minWidth = new Text("bottom").getBoundsInLocal().getWidth() + 20; // 20 für etwas zusätzlichen Platz
+
+        // Top Button in der ersten Reihe mittig
+        Button topButton = new Button("top");
+        topButton.setMinWidth(minWidth);
+        topButton.setOnAction(event -> {
+            selectedDirection[0] = "top";
+            stage.close();
+        });
+        root.add(topButton, 1, 0, 1, 1);
+
+        // Left Button in der zweiten Reihe links
+        Button leftButton = new Button("left");
+        leftButton.setMinWidth(minWidth);
+        leftButton.setOnAction(event -> {
+            selectedDirection[0] = "left";
+            stage.close();
+        });
+        GridPane.setMargin(leftButton, new Insets(0, 0, 0, 20));
+        root.add(leftButton, 0, 1, 1, 1);
+
+        // Right Button in der zweiten Reihe rechts
+        Button rightButton = new Button("right");
+        rightButton.setMinWidth(minWidth);
+        rightButton.setOnAction(event -> {
+            selectedDirection[0] = "right";
+            stage.close();
+        });
+        GridPane.setMargin(rightButton, new Insets(0, 20, 0, 0));
+        root.add(rightButton, 2, 1, 1, 1);
+
+        // Bottom Button in der dritten Reihe mittig
+        Button bottomButton = new Button("bottom");
+        bottomButton.setMinWidth(minWidth);
         bottomButton.setOnAction(event -> {
             selectedDirection[0] = "bottom";
             stage.close();

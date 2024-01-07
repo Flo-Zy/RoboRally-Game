@@ -8,6 +8,8 @@ import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,10 +17,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +33,7 @@ public class ExtraCrispyController extends MapController {
     @FXML
     private GridPane gridPane;
     @FXML
-    private ImageView field00;
+    private ImageView field00a;
     @FXML
     private ImageView field01;
     @FXML
@@ -75,13 +77,16 @@ public class ExtraCrispyController extends MapController {
     public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
-
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
+    private int gridSize = 0;
+    @Getter
+    private final Queue<MoveInstruction> movementQueue = new LinkedList<MoveInstruction>();
+    private boolean isTransitioning = false;
 
     public void setCounter1(int counter){
         counter1.set(counter);
@@ -464,7 +469,6 @@ public class ExtraCrispyController extends MapController {
         return 5;
     }
 
-
     public void setRegisterVisibilityFalse(){
         // Prüfe, ob die HBox totalRegister gefunden wurde
         HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
@@ -507,43 +511,98 @@ public class ExtraCrispyController extends MapController {
         }
     }
 
-    public void movementPlayed(int clientId, int newX, int newY) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientId){
-                player = player2;
-            }
-        }
-        //Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
-        Robot robot = playerRobotMap.get(player);
 
-        ImageView imageView = robotImageViewMap.get(robot);
-        GridPane.setColumnIndex(imageView, newX);
-        GridPane.setRowIndex(imageView, newY);
+    public synchronized void playerTurn(int clientIdToTurn, String rotation) {
+        movementQueue.offer(new MoveInstruction(clientIdToTurn, rotation));
+
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
+        }
     }
 
-    public void playerTurn(int clientIdToTurn, String rotation) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientIdToTurn){
-                player = player2;
-            }
-        }
-        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
-        Robot robot = playerRobotMap.get(player);
+    public synchronized void movementPlayed(int clientId, int newX, int newY) {
+        movementQueue.offer(new MoveInstruction(clientId, newX, newY));
 
+        if (!isTransitioning && movementQueue.size() == 1) {
+            processQueue();
+        }
+    }
+
+    private void processQueue() {
+        if (movementQueue.isEmpty() || isTransitioning) {
+            return;
+        }
+
+        isTransitioning = true;
+
+        MoveInstruction instruction = movementQueue.peek();
+
+        if (instruction.rotation != null) {
+            processPlayerTurn(instruction);
+        } else {
+            processMovement(instruction);
+        }
+    }
+
+    private void processPlayerTurn(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
+
+        Robot robot = playerRobotMap.get(player);
         ImageView imageView = robotImageViewMap.get(robot);
 
-        if (imageView != null) {
-            double currentRotation = imageView.getRotate();
-            double rotationAmount = 90.0;
+        double currentRotation = imageView.getRotate();
+        double rotationAmount = 90.0;
 
-            if (rotation.equals("clockwise")) {
-                imageView.setRotate(currentRotation + rotationAmount);
-            } else if (rotation.equals("counterclockwise")) {
-                imageView.setRotate(currentRotation - rotationAmount);
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+        rotateTransition.setToAngle(instruction.rotation.equals("clockwise") ?
+                currentRotation + rotationAmount : currentRotation - rotationAmount);
+
+        rotateTransition.setOnFinished(event -> {
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
+
+        rotateTransition.play();
+    }
+
+    private void processMovement(MoveInstruction instruction) {
+        Player player = getPlayerById(instruction.clientId);
+
+        Robot robot = playerRobotMap.get(player);
+        ImageView imageView = robotImageViewMap.get(robot);
+
+        int currentX = GridPane.getColumnIndex(imageView);
+        int currentY = GridPane.getRowIndex(imageView);
+
+        double translationX = (instruction.newX - currentX) * imageView.getBoundsInParent().getWidth();
+        double translationY = (instruction.newY - currentY) * imageView.getBoundsInParent().getHeight();
+
+        TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
+        transition.setByX(translationX);
+        transition.setByY(translationY);
+
+        transition.setOnFinished(event -> {
+            GridPane.setColumnIndex(imageView, instruction.newX);
+            GridPane.setRowIndex(imageView, instruction.newY);
+            imageView.setTranslateX(0);
+            imageView.setTranslateY(0);
+
+            movementQueue.poll();
+            isTransitioning = false;
+            processQueue();
+        });
+
+        transition.play();
+    }
+
+    private Player getPlayerById(int clientId) {
+        for (Player player : Client.getPlayerListClient()) {
+            if (player.getId() == clientId) {
+                return player;
             }
         }
+        return null;
     }
 
     public void setCheckPointImage(String imageUrl) {
