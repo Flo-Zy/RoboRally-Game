@@ -26,6 +26,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.LinkedList;
+import java.util.Queue;
+
+
+
 
 public class DizzyHighwayController extends MapController {
 
@@ -82,6 +87,8 @@ public class DizzyHighwayController extends MapController {
     @Setter
     @Getter
     private Map<ImageView, Point> avatarInitialPositions = new HashMap<>();
+    private final Queue<MoveInstruction> movementQueue = new LinkedList<>();
+
 
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
@@ -210,10 +217,41 @@ public class DizzyHighwayController extends MapController {
 
     }
 
-    public void movementPlayed(int clientId, int newX, int newY) {
+    public synchronized void movementPlayed(int clientId, int newX, int newY) {
+        // Enqueue the movement instruction
+        movementQueue.offer(new MoveInstruction(clientId, newX, newY));
+
+        // If the queue only has this single instruction, start processing
+        if (movementQueue.size() == 1) {
+            processMovementQueue();
+        }
+    }
+
+    class MoveInstruction {
+        int clientId;
+        int newX;
+        int newY;
+
+        MoveInstruction(int clientId, int newX, int newY) {
+            this.clientId = clientId;
+            this.newX = newX;
+            this.newY = newY;
+        }
+    }
+
+    private void processMovementQueue() {
+        // If the queue is empty, return
+        if (movementQueue.isEmpty()) {
+            return;
+        }
+
+        // Dequeue the movement instruction
+        MoveInstruction instruction = movementQueue.poll();
+
+        // Process the movement
         Player player = null;
         for (Player player2 : Client.getPlayerListClient()) {
-            if (player2.getId() == clientId) {
+            if (player2.getId() == instruction.clientId) {
                 player = player2;
                 break;
             }
@@ -228,8 +266,8 @@ public class DizzyHighwayController extends MapController {
             int currentY = GridPane.getRowIndex(imageView);
 
             // Calculate the translation needed for the animation
-            double translationX = (newX - currentX) * imageView.getBoundsInParent().getWidth();
-            double translationY = (newY - currentY) * imageView.getBoundsInParent().getHeight();
+            double translationX = (instruction.newX - currentX) * imageView.getBoundsInParent().getWidth();
+            double translationY = (instruction.newY - currentY) * imageView.getBoundsInParent().getHeight();
 
             // Create a new animation for the movement
             TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
@@ -238,18 +276,26 @@ public class DizzyHighwayController extends MapController {
 
             // Update GridPane after the animation finishes
             transition.setOnFinished(event -> {
-                GridPane.setColumnIndex(imageView, newX);
-                GridPane.setRowIndex(imageView, newY);
+                GridPane.setColumnIndex(imageView, instruction.newX);
+                GridPane.setRowIndex(imageView, instruction.newY);
                 imageView.setTranslateX(0);
                 imageView.setTranslateY(0);
-            });
 
+                // When this animation finishes, process the next movement in the queue
+                processMovementQueue();
+            });
 
             transition.play();
         }
     }
 
     public void playerTurn(int clientIdToTurn, String rotation) {
+        try {
+            Thread.sleep(750);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         Player player = new Player("", -999, -999);
         for(Player player2 : Client.getPlayerListClient()){
             if(player2.getId() == clientIdToTurn){
