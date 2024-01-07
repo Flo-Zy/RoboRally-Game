@@ -49,7 +49,6 @@ public class Game implements Robot.RobotPositionChangeListener {
         //Tester
         this.wurm = 1;
         this.boardClass = boardClass;
-
     }
 
     public void nextCurrentPhase(){

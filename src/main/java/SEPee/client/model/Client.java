@@ -295,9 +295,13 @@ public class Client extends Application {
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
                             //remove Player from playerList if he lost his connection
                             int clientIdToRemove = connectionUpdate.getMessageBody().getClientID();
-                            for (Player player : playerListClient){
-                                if(player.getId() == clientIdToRemove){
-                                    playerListClient.remove(player);
+                            synchronized (playerListClient) {
+                                Iterator<Player> iterator = playerListClient.iterator();
+                                while (iterator.hasNext()) {
+                                    Player player = iterator.next();
+                                    if (clientIdToRemove == player.getId()) {
+                                        iterator.remove();
+                                    }
                                 }
                             }
                             break;
