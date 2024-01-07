@@ -30,7 +30,9 @@ public class Player {
     @Getter
     @Setter
     private boolean reboot = false;
-
+    @Getter
+    @Setter
+    private int damageCounter = 0;
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;

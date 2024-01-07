@@ -62,6 +62,13 @@ public class Server extends Thread{
     @Getter
     @Setter
     private static int registerCounter = 0;
+    @Getter
+    @Setter
+    private static int selectedDamageCounter = 0;
+    @Getter
+    @Setter
+    private static int numPickDamage = 0;
+
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server wurde gestartet. Warte auf Verbindungen...");

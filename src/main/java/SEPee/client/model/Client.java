@@ -171,6 +171,9 @@ public class Client extends Application {
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
                             PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
+                            if(playerStatus.getMessageBody().getClientID() == -9999){
+                                wait = playerStatus.getMessageBody().isReady();
+                            }
                             for (int i = 0; i < playerListClient.size(); i++) {
                                 if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
                                     playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
@@ -576,24 +579,25 @@ public class Client extends Application {
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");
-                            wait = true;
-                            System.out.println("wait auf true: " + wait);
                             PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
+
                             ArrayList<String> avaiableList = pickDamage.getMessageBody().getAvailablePiles();
                             AtomicInteger numDamageCards = new AtomicInteger();
                             numDamageCards.set(pickDamage.getMessageBody().getCount());
+
                             ArrayList<String> selectedDamageList = new ArrayList<>();
                             Platform.runLater(() -> {
-                                String damageCard;
-                                damageCard = controller.showSelectDamageDialog(avaiableList);
-                                selectedDamageList.add(damageCard);
-                                numDamageCards.decrementAndGet();
+                                int i = 0;
+                                while(i < numDamageCards.get()) {
+                                    String damageCard;
+                                    damageCard = controller.showSelectDamageDialog(avaiableList);
+                                    selectedDamageList.add(damageCard);
+                                    i++;
+                                }
 
                                 SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
                                 String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
                                 writer.println(serializedSelectedDamage);
-                                wait = false;
-                                System.out.println("wait auf false: " + wait);
                             });
                             break;
                         case "Animation":

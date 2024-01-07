@@ -40,7 +40,6 @@ public class ClientHandler implements Runnable {
     @Getter
     @Setter
     private boolean playerFertig = true;
-    private static int damageCounter = 0;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -220,11 +219,6 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
-                            if (Server.getCountPlayerTurns() == 0) {
-                                for (Player player : Server.getGame().getPlayerList()) {
-                                    player.getPlayerMat().getReceivedDamageCards().clear();
-                                }
-                            }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
 
                             if (!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
@@ -306,11 +300,12 @@ public class ClientHandler implements Runnable {
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
 
                                 for (Player player : Server.getGame().getPlayerList()) {
-                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty() && damageCounter == 0) {
+                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty() && player.getDamageCounter() == 0) {
                                         DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
                                         String serializedDrawDamage = Serialisierer.serialize(drawDamage);
                                         broadcast(serializedDrawDamage);
-                                    }else if(damageCounter > 0 && player.getId() == clientId){
+                                        player.getPlayerMat().getReceivedDamageCards().clear();
+                                    }else if(player.getDamageCounter() > 0){
                                         ArrayList<String> avaiableDamage = new ArrayList<>();
                                         if(Server.getGame().getVirus() > 0){
                                             avaiableDamage.add("Virus");
@@ -322,39 +317,18 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Worm");
                                         }
                                         if(!avaiableDamage.isEmpty()) {
-                                            Server.setWaitForDamage(true);
-                                            PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                            Server.setNumPickDamage(Server.getNumPickDamage()+1);
+
+                                            PlayerStatus allWait = new PlayerStatus(-9999, true);
+                                            String serializedAllWait = Serialisierer.serialize(allWait);
+                                            broadcast(serializedAllWait);
+
+                                            PickDamage pickDamage = new PickDamage(player.getDamageCounter(), avaiableDamage);
                                             String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                            sendToOneClient(clientId, serializedPickDamage);
+                                            sendToOneClient(player.getId(), serializedPickDamage);
                                         }
                                     }
                                 }
-
-                                /*AtomicBoolean warte = new AtomicBoolean();
-                                warte.set(true);
-                                Timer timer2 = new Timer();
-                                TimerTask task1 = new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        while(warte.get()) {
-                                            if (!Server.isWaitForDamage()) {
-                                                warte.set(false);
-                                                timer2.cancel();
-                                            }else {
-
-                                            }
-                                        }
-                                    }
-                                };
-
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                timer2.scheduleAtFixedRate(task1, 0, 1000);*/
-
 
                                 Server.getGame().setNextPlayersTurn(); // setze playerIndex = 0, PlayerList mit neuen Priorities, currentPlayer = playerList.get(playerIndex), playerIndex++
 
@@ -896,7 +870,7 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
-                            /*for(Player player : Server.getGame().getPlayerList()) {
+                            for(Player player : Server.getGame().getPlayerList()) {
                                 if(player.getId() == clientId) {
                                     SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
                                     int i = 0;
@@ -908,27 +882,31 @@ public class ClientHandler implements Runnable {
                                             case "Virus":
                                                 if (Server.getGame().getVirus() > 0) {
                                                     player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
                                                     Server.getGame().setVirus(Server.getGame().getVirus()-1);
-                                                    damageCounter--;
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
                                                 }
                                                 break;
                                             case "Trojan":
                                                 if (Server.getGame().getTrojanHorse() > 0) {
                                                     player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
                                                     Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse()-1);
-                                                    damageCounter--;
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
                                                 }
                                                 break;
                                             case "Worm":
                                                 if (Server.getGame().getWurm() > 0) {
                                                     player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
                                                     Server.getGame().setWurm(Server.getGame().getWurm()-1);
-                                                    damageCounter--;
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
                                                 }
                                                 break;
                                         }
+                                        i++;
                                     }
-                                    if(damageCounter > 0){
+                                    if(player.getDamageCounter() > 0){
                                         ArrayList<String> avaiableDamage = new ArrayList<>();
                                         if(Server.getGame().getVirus() > 0){
                                             avaiableDamage.add("Virus");
@@ -940,18 +918,34 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Worm");
                                         }
                                         if(!avaiableDamage.isEmpty()) {
-                                            PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                            PickDamage pickDamage = new PickDamage(player.getDamageCounter(), avaiableDamage);
                                             String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                            sendToOneClient(clientId, serializedPickDamage);
+                                            sendToOneClient(player.getId(), serializedPickDamage);
                                         }
                                     }else{
+                                        Server.setSelectedDamageCounter(Server.getSelectedDamageCounter()+1);
+                                    }
+                                }
+                            }
+                            if(Server.getSelectedDamageCounter() == Server.getNumPickDamage()){
+                                Server.setSelectedDamageCounter(0);
+                                Server.setNumPickDamage(0);
+
+                                for(Player player: Server.getGame().getPlayerList()) {
+                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty()) {
                                         DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
                                         String serializedDrawDamage = Serialisierer.serialize(drawDamage);
                                         broadcast(serializedDrawDamage);
-                                        Server.setWaitForDamage(false);
+
+                                        player.getPlayerMat().getReceivedDamageCards().clear();
                                     }
                                 }
-                            }*/
+
+                                PlayerStatus allGo = new PlayerStatus(-9999, false);
+                                String serializedAllGo = Serialisierer.serialize(allGo);
+                                broadcast(serializedAllGo);
+                            }
+                            System.out.println("Selected Damage ende");
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");
@@ -1768,7 +1762,7 @@ public class ClientHandler implements Runnable {
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
             }else{
-                damageCounter++;
+                Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
             }
         }
     }
@@ -1847,7 +1841,7 @@ public class ClientHandler implements Runnable {
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
                                     }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
-                                        damageCounter++;
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
                             }
@@ -1883,7 +1877,7 @@ public class ClientHandler implements Runnable {
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
                                     }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
-                                        damageCounter++;
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
                             }
@@ -1919,7 +1913,7 @@ public class ClientHandler implements Runnable {
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
                                     }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
-                                        damageCounter++;
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
                             }
@@ -2184,7 +2178,7 @@ public class ClientHandler implements Runnable {
                         Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                     }else{
-                        damageCounter++;
+                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                     }
                 }
 
