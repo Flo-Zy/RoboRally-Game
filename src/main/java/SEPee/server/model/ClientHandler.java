@@ -71,7 +71,7 @@ public class ClientHandler implements Runnable {
                     sendToOneClient(clientId, serializedAlive1);
                     ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
                     disconnectScheduler = scheduler;
-                    disconnectTimer(disconnectScheduler);
+                    //disconnectTimer(disconnectScheduler);
                 }else{
                     alive.cancel();
                 }
@@ -626,7 +626,7 @@ public class ClientHandler implements Runnable {
                             this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
                             this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
 
-                            Player associatedPlayer = new Player("", -9999, -9999);
+                            Player associatedPlayer;
                             //finds the associated Player and set the robot for that player
                             for (Player player: Server.getPlayerList()){
                                 if(player.getId() == clientId){
