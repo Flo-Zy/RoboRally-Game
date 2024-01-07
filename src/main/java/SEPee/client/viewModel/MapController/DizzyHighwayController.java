@@ -9,6 +9,7 @@ import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -78,8 +79,13 @@ public class DizzyHighwayController extends MapController {
     public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
+    @Setter
+    @Getter
+    private Map<ImageView, Point> avatarInitialPositions = new HashMap<>();
+
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
+    private int gridSize = 0;
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
@@ -199,64 +205,86 @@ public class DizzyHighwayController extends MapController {
         GridPane.setColumnIndex(imageView, robot.getX());
         GridPane.setRowIndex(imageView, robot.getY());
 
-        // send messagetype move
+        Point initialPosition = new Point(robot.getX(), robot.getY());
+        avatarInitialPositions.put(imageView, initialPosition);
+
     }
 
-    //tester fur spätere kartenimplementierung:
-    public void moveRobotTester(Robot robot) {
-        if (robot != null) {
-            // Move 1 field
-            int currentX = robot.getX();
-            int currentY = robot.getY();
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void movementPlayed(int clientId, int newX, int newY) {
+        Player player = null;
+        for (Player player2 : Client.getPlayerListClient()) {
+            if (player2.getId() == clientId) {
+                player = player2;
+                break;
             }
+        }
+
+        if (player != null) {
+            Robot robot = playerRobotMap.get(player);
+            ImageView imageView = robotImageViewMap.get(robot);
+
+            double fieldWidth = field00.getBoundsInParent().getWidth();
+            double fieldHeight = field00.getBoundsInParent().getHeight();
+            System.out.println("fieldwidth is : " + fieldWidth);
+            System.out.println("fieldHeight is : " + fieldHeight);
+
+            // Calculate the grid size based on field width or height
+            double gridSizeDouble = Math.min(fieldWidth, fieldHeight);
+
+            gridSize = (int) gridSizeDouble;
+
+            Point initialPosition = avatarInitialPositions.get(imageView); // Starting point
+            int initialX = (int) initialPosition.getX() * gridSize; // Adjusting for gridSize
+            int initialY = (int) initialPosition.getY() * gridSize; // Adjusting for gridSize
+
+            int targetX = newX * gridSize;
+            int targetY = newY * gridSize;
+
+            int deltaX = targetX - initialX;
+            int deltaY = targetY - initialY;
+
+            TranslateTransition transition = new TranslateTransition(Duration.millis(750), imageView);
+            transition.setByX(deltaX);
+            transition.setByY(deltaY);
+            transition.play();
+        }
+    }
 
 
-            // Move in the x-axis (for example)
-            robot.setX(currentX + 1);
-            updateAvatarPosition(robot); // Update the robot's position on the grid
 
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+    public void playerTurn(int clientIdToTurn, String rotation) {
+        Player player = new Player("", -999, -999);
+        for(Player player2 : Client.getPlayerListClient()){
+            if(player2.getId() == clientIdToTurn){
+                player = player2;
             }
+        }
+        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+        Robot robot = playerRobotMap.get(player);
 
-            // Move 2 fields
-            robot.setX(currentX + 2); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
+        ImageView imageView = robotImageViewMap.get(robot);
 
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (imageView != null) {
+            double currentRotation = imageView.getRotate();
+            double rotationAmount = 90.0;
+
+            if (rotation.equals("clockwise")) {
+               // imageView.setRotate(currentRotation + rotationAmount);
+
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+                rotateTransition.setToAngle(currentRotation + rotationAmount);
+                rotateTransition.play();
+
+            } else if (rotation.equals("counterclockwise")) {
+                //imageView.setRotate(currentRotation - rotationAmount);
+
+                RotateTransition rotateTransition = new RotateTransition(Duration.millis(750), imageView);
+                rotateTransition.setToAngle(currentRotation - rotationAmount);
+                rotateTransition.play();
+
             }
-
-            //rotateAvatar(2, "clockwise");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            robot.setX(currentX + 3); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Repeat this process for the y-axis or any other required movements
         }
     }
 
@@ -504,70 +532,6 @@ public class DizzyHighwayController extends MapController {
             registerImageView.setVisible(true);
             registerImageView.setManaged(true);
             index++;
-        }
-    }
-    public void movementPlayed(int clientId, int newX, int newY) {
-        Player player = null;
-        for (Player p : Client.getPlayerListClient()) {
-            if (p.getId() == clientId) {
-                player = p;
-                break;
-            }
-        }
-
-        if (player == null) return; // Player not found
-
-        Robot robot = playerRobotMap.get(player);
-        ImageView imageView = robotImageViewMap.get(robot);
-
-        if (imageView == null) return; // ImageView not found
-
-        int numColumns = 13; // number of columns in the GridPane
-        int numRows = 10; // number of rows in the GridPane
-
-        double cellWidth = gridPane.getWidth() / numColumns;
-        double cellHeight = gridPane.getHeight() / numRows;
-
-        double targetX = newX * cellWidth - imageView.getBoundsInParent().getWidth() / 2;
-        double targetY = newY * cellHeight - imageView.getBoundsInParent().getHeight() / 2;
-
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), imageView);
-        transition.setToX(targetX - imageView.getTranslateX()); // Calculate relative X movement
-        transition.setToY(targetY - imageView.getTranslateY()); // Calculate relative Y movement
-        transition.setInterpolator(Interpolator.LINEAR); // Smoother animation
-
-        transition.setOnFinished(event -> {
-            GridPane.setColumnIndex(imageView, newX);
-            GridPane.setRowIndex(imageView, newY);
-        });
-
-        transition.play();
-    }
-
-
-
-
-    public void playerTurn(int clientIdToTurn, String rotation) {
-        Player player = new Player("", -999, -999);
-        for(Player player2 : Client.getPlayerListClient()){
-            if(player2.getId() == clientIdToTurn){
-                player = player2;
-            }
-        }
-        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
-        Robot robot = playerRobotMap.get(player);
-
-        ImageView imageView = robotImageViewMap.get(robot);
-
-        if (imageView != null) {
-            double currentRotation = imageView.getRotate();
-            double rotationAmount = 90.0;
-
-            if (rotation.equals("clockwise")) {
-                imageView.setRotate(currentRotation + rotationAmount);
-            } else if (rotation.equals("counterclockwise")) {
-                imageView.setRotate(currentRotation - rotationAmount);
-            }
         }
     }
 
