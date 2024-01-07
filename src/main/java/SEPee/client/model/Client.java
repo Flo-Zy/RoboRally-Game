@@ -29,6 +29,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import java.util.Iterator;
+
 
 import javafx.util.Duration;
 import lombok.Getter;
@@ -60,6 +66,7 @@ public class Client extends Application {
     private int registerCounter = 1;
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
+    private boolean wait = false;
 
     public static void main(String[] args) {
         launch(args);
@@ -154,32 +161,44 @@ public class Client extends Application {
                             // Create a new Player object
                             Player newPlayer = new Player(name, id, figure+1);
                             boolean exists = false;
-                            for(Player player : playerListClient){
-                                if(player.getId() == id){
-                                    player.setName(name);
-                                    player.setFigure(figure+1);
-                                    exists = true;
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    if (player.getId() == id) {
+                                        player.setName(name);
+                                        player.setFigure(figure + 1);
+                                        exists = true;
+                                    }
                                 }
                             }
                             if(!exists){
-                                playerListClient.add(newPlayer);
+                                synchronized (playerListClient) {
+                                    playerListClient.add(newPlayer);
+                                }
                             }
-
-                            for(Player player : playerListClient){
-                                getTakenFigures().add(player.getFigure());
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    getTakenFigures().add(player.getFigure());
+                                }
                             }
 
                             System.out.println("Player added");
-                            for (int i = 0; i < playerListClient.size(); i++) {
-                                System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
+                            synchronized (playerListClient) {
+                                for (int i = 0; i < playerListClient.size(); i++) {
+                                    System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
+                                }
                             }
                             break;
                         case "PlayerStatus":
                             System.out.println("PlayerStatus");
                             PlayerStatus playerStatus = Deserialisierer.deserialize(serializedReceivedString, PlayerStatus.class);
-                            for (int i = 0; i < playerListClient.size(); i++) {
-                                if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
-                                    playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
+                            if(playerStatus.getMessageBody().getClientID() == -9999){
+                                wait = playerStatus.getMessageBody().isReady();
+                            }
+                            synchronized (playerListClient) {
+                                for (int i = 0; i < playerListClient.size(); i++) {
+                                    if (playerStatus.getMessageBody().getClientID() == playerListClient.get(i).getId()) {
+                                        playerListClient.get(i).setReady(playerStatus.getMessageBody().isReady());
+                                    }
                                 }
                             }
                             break;
@@ -254,9 +273,11 @@ public class Client extends Application {
                             ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
 
                             String fromName = null;
-                            for (int i = 0; i < playerListClient.size(); i++) {
-                                if (deserializedReceivedChat.getMessageBody().getFrom() == playerListClient.get(i).getId()) {
-                                    fromName = playerListClient.get(i).getName();
+                            synchronized (playerListClient) {
+                                for (int i = 0; i < playerListClient.size(); i++) {
+                                    if (deserializedReceivedChat.getMessageBody().getFrom() == playerListClient.get(i).getId()) {
+                                        fromName = playerListClient.get(i).getName();
+                                    }
                                 }
                             }
                             if (fromName != null) {
@@ -275,6 +296,17 @@ public class Client extends Application {
                         case "ConnectionUpdate":
                             System.out.println("Connection Update");
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
+                            //remove Player from playerList if he lost his connection
+                            int clientIdToRemove = connectionUpdate.getMessageBody().getClientID();
+                            synchronized (playerListClient) {
+                                Iterator<Player> iterator = playerListClient.iterator();
+                                while (iterator.hasNext()) {
+                                    Player player = iterator.next();
+                                    if (clientIdToRemove == player.getId()) {
+                                        iterator.remove();
+                                    }
+                                }
+                            }
                             break;
                         case "CardPlayed":
                             System.out.println("Card Played");
@@ -328,9 +360,28 @@ public class Client extends Application {
                                     if(currentPlayer.getMessageBody().getClientID() == controller.getId()) {
                                         for (CurrentCards.ActiveCard activeCard : activeRegister) {
                                             if (activeCard.getClientID() == controller.getId()) {
-                                                PlayCard playCard = new PlayCard(activeCard.getCard());
-                                                String serializedPlayCard = Serialisierer.serialize(playCard);
-                                                writer.println(serializedPlayCard);
+                                                if(wait) {
+                                                    Timer timer = new Timer();
+                                                    TimerTask task = new TimerTask() {
+                                                        @Override
+                                                        public void run() {
+                                                            System.out.println("run");
+                                                            if (!wait) {
+                                                                PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                                String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                                writer.println(serializedPlayCard);
+                                                                System.out.println("playCard gesendet");
+                                                                timer.cancel();
+                                                            }
+                                                        }
+                                                    };
+                                                    timer.scheduleAtFixedRate(task, 0, 2000);
+                                                }else{
+                                                    PlayCard playCard = new PlayCard(activeCard.getCard());
+                                                    String serializedPlayCard = Serialisierer.serialize(playCard);
+                                                    writer.println(serializedPlayCard);
+                                                }
+
                                             }
                                         }
                                     }
@@ -350,9 +401,11 @@ public class Client extends Application {
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
                             Player avatarPlayer = new Player("", -999,-999);
-                            for(Player player : playerListClient){
-                                if(player.getId() == startingPointTaken.getMessageBody().getClientID()){
-                                    avatarPlayer = player;
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    if (player.getId() == startingPointTaken.getMessageBody().getClientID()) {
+                                        avatarPlayer = player;
+                                    }
                                 }
                             }
                             //Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
@@ -555,15 +608,36 @@ public class Client extends Application {
 
                             ArrayList<String> damageCardsDrawn = drawDamage.getMessageBody().getCards();
 
-                            for(Player player : playerListClient) {
-                                if (player.getId() == damagedID) {
-                                    controller.appendToChatArea(player.getName() + " hat diese Karten kassiert: " + damageCardsDrawn + "!");
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    if (player.getId() == damagedID) {
+                                        controller.appendToChatArea(player.getName() + " hat diese Karten kassiert: " + damageCardsDrawn + "!");
+                                    }
                                 }
                             }
                             break;
                         case "PickDamage":
                             System.out.println("Pick Damage");
                             PickDamage pickDamage = Deserialisierer.deserialize(serializedReceivedString, PickDamage.class);
+
+                            ArrayList<String> avaiableList = pickDamage.getMessageBody().getAvailablePiles();
+                            AtomicInteger numDamageCards = new AtomicInteger();
+                            numDamageCards.set(pickDamage.getMessageBody().getCount());
+
+                            ArrayList<String> selectedDamageList = new ArrayList<>();
+                            Platform.runLater(() -> {
+                                int i = 0;
+                                while(i < numDamageCards.get()) {
+                                    String damageCard;
+                                    damageCard = controller.showSelectDamageDialog(avaiableList);
+                                    selectedDamageList.add(damageCard);
+                                    i++;
+                                }
+
+                                SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
+                                String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
+                                writer.println(serializedSelectedDamage);
+                            });
                             break;
                         case "Animation":
                             System.out.println("Animation");
@@ -573,6 +647,29 @@ public class Client extends Application {
                             System.out.println("Reboot");
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
+
+                            /*
+
+                            // set robot direction TOP
+                            String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
+                            while (!orientationOfRobot.equals("top")) {
+                                controller.playerTurn(rebootingClientId, "clockwise");
+                                orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
+                            }
+                             */
+
+                            /*
+                            //RebootDirection erstmal immer mit top verschicken für default, falls nie was anderes ankommt
+                            //wird das genommen und falls was anderes ankommt, wird der halt nochmal gedreht
+
+                            RebootDirection rebootDirection = new RebootDirection("top");
+                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
+                            writer.println(serializedRebootDirection);
+
+                             */
+
+                            // direction selection dialog fur rebootingClientId
+                            // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
 
                             if (controller.getId() == rebootingClientId) {
                                 Platform.runLater(() -> {
@@ -600,11 +697,13 @@ public class Client extends Application {
                             int number = checkPointReached.getMessageBody().getNumber();
                             int clientID = checkPointReached.getMessageBody().getClientID();
 
-                            for(Player player : playerListClient) {
-                                if (player.getId() == clientID) {
-                                    controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
-                                    controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    if (player.getId() == clientID) {
+                                        controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
+                                        controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
 
+                                    }
                                 }
                             }
 
@@ -615,11 +714,13 @@ public class Client extends Application {
                             //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
                             int winnerId = gameFinished.getMessageBody().getClientID();
 
-                            for(Player player : playerListClient) {
-                                if (player.getId() == winnerId) {
-                                    System.out.println("winner id ist " + winnerId);
-                                    controller.appendToChatArea(player.getName() + " has won this game!!");
-                                    System.out.println("ausgabe hier");
+                            synchronized (playerListClient) {
+                                for (Player player : playerListClient) {
+                                    if (player.getId() == winnerId) {
+                                        System.out.println("winner id ist " + winnerId);
+                                        controller.appendToChatArea(player.getName() + " has won this game!!");
+                                        System.out.println("ausgabe hier");
+                                    }
                                 }
                             }
                             Thread.sleep(10000);

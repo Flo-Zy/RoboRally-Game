@@ -17,6 +17,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.application.Platform;
 import lombok.Getter;
@@ -39,6 +43,9 @@ public class ClientHandler implements Runnable {
     @Getter
     @Setter
     private boolean playerFertig = true;
+    private boolean gotAlive = true;
+    private ScheduledExecutorService disconnectScheduler = Executors.newSingleThreadScheduledExecutor();
+    private Timer alive = new Timer();
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
         this.clientSocket = clientSocket;
@@ -54,6 +61,45 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        TimerTask taskAlive = new TimerTask() {
+            @Override
+            public void run() {
+                if(gotAlive) {
+                    gotAlive = false;
+                    Alive alive1 = new Alive();
+                    String serializedAlive1 = Serialisierer.serialize(alive1);
+                    sendToOneClient(clientId, serializedAlive1);
+                    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                    disconnectScheduler = scheduler;
+                    //disconnectTimer(disconnectScheduler);
+                }else{
+                    System.out.println("Disconnect");
+
+                    Player disconnectPLayer = new Player("", -9999, -9999);
+                    for(Player player : Server.getPlayerList()){
+                        if(player.getId() == clientId){
+                            disconnectPLayer = player;
+                        }
+                    }
+                    Server.getPlayerList().remove(disconnectPLayer);
+
+                    if(Server.isGameStarted()) {
+                        for (Player player : Server.getPlayerList()) {
+                            if (player.getId() == clientId) {
+                                disconnectPLayer = player;
+                            }
+                        }
+                        Server.getGame().getPlayerList().remove(disconnectPLayer);
+                    }
+                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                    broadcast(serializedConnectionUpdate);
+                    alive.cancel();
+                }
+
+            }
+        };
+        alive.scheduleAtFixedRate(taskAlive, 0, 5000);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;
@@ -65,7 +111,29 @@ public class ClientHandler implements Runnable {
                         //HelloServer wird oben behandelt beim Verbindungsaufbau
                         case "Alive":
                             System.out.println("Alive zurück bekommen");
+                            gotAlive = true;
+                            disconnectScheduler.shutdownNow();
+                            synchronized (Server.getPlayerList()) {
+                                for (Player player : Server.getPlayerList()) {
+                                    System.out.println(player.getName());
+                                }
+                            }
                             //fehlt noch, dass wenn man kein alive zurückbekommt innerhalb 5 Sekunden, dann messageType connectionUpdate schicken
+
+                            /*
+                            // mus noch in if-Schleife, die abfrägt ob nach 5 Sekunden nix kam
+                            for (Player player : Server.getPlayerList()) {
+                                if(player.getId() == clientId){
+                                    //player löschen
+                                    Server.getPlayerList().remove(player);
+
+                                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "Ignore");
+                                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                                    broadcast(serializedConnectionUpdate);
+                                }
+                            }
+                             */
+
                             break;
                         case "PlayerValues":
                             System.out.println("Player Values erhalten");
@@ -284,12 +352,8 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "PlayCard":
-                            if (Server.getCountPlayerTurns() == 0) {
-                                for (Player player : Server.getGame().getPlayerList()) {
-                                    player.getPlayerMat().getReceivedDamageCards().clear();
-                                }
-                            }
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
+
                             if (!Server.getGame().getPlayerList().get(Server.getCountPlayerTurns() - 1).isReboot()) {
                                 PlayCard playCard = Deserialisierer.deserialize(serializedReceivedString, PlayCard.class);
 
@@ -368,10 +432,33 @@ public class ClientHandler implements Runnable {
                                 fieldActivation(); // Belts, lasers, checkpoints.. etc.
 
                                 for (Player player : Server.getGame().getPlayerList()) {
-                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty()) {
+                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty() && player.getDamageCounter() == 0) {
                                         DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
                                         String serializedDrawDamage = Serialisierer.serialize(drawDamage);
                                         broadcast(serializedDrawDamage);
+                                        player.getPlayerMat().getReceivedDamageCards().clear();
+                                    }else if(player.getDamageCounter() > 0){
+                                        ArrayList<String> avaiableDamage = new ArrayList<>();
+                                        if(Server.getGame().getVirus() > 0){
+                                            avaiableDamage.add("Virus");
+                                        }
+                                        if(Server.getGame().getTrojanHorse() > 0){
+                                            avaiableDamage.add("Trojan");
+                                        }
+                                        if(Server.getGame().getWurm() > 0){
+                                            avaiableDamage.add("Worm");
+                                        }
+                                        if(!avaiableDamage.isEmpty()) {
+                                            Server.setNumPickDamage(Server.getNumPickDamage()+1);
+
+                                            PlayerStatus allWait = new PlayerStatus(-9999, true);
+                                            String serializedAllWait = Serialisierer.serialize(allWait);
+                                            broadcast(serializedAllWait);
+
+                                            PickDamage pickDamage = new PickDamage(player.getDamageCounter(), avaiableDamage);
+                                            String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                            sendToOneClient(player.getId(), serializedPickDamage);
+                                        }
                                     }
                                 }
 
@@ -559,9 +646,15 @@ public class ClientHandler implements Runnable {
                             this.robot.setStartingPointX(setStartingPoint.getMessageBody().getX());
                             this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
 
+                            Player associatedPlayer;
                             //finds the associated Player and set the robot for that player
-                            Player associatedPlayer = Server.getGame().getPlayerList().get(clientId - 1);
-                            associatedPlayer.setRobot(this.robot);
+                            for (Player player: Server.getPlayerList()){
+                                if(player.getId() == clientId){
+                                    associatedPlayer = player;
+                                    associatedPlayer.setRobot(this.robot);
+                                }
+                            }
+
 
                             // Adds the game class(which implements RobotPositionChangeListener)as a listener to the robot
                             this.robot.addPositionChangeListener(Server.getGame());
@@ -915,7 +1008,82 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SelectedDamage":
                             System.out.println("Selected Damage");
-                            SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
+                            for(Player player : Server.getGame().getPlayerList()) {
+                                if(player.getId() == clientId) {
+                                    SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
+                                    int i = 0;
+                                    ArrayList<String> selectedDamageList = selectedDamage.getMessageBody().getCards();
+                                    int damageListSize = selectedDamageList.size();
+                                    while (i < damageListSize) {
+                                        String damage = selectedDamageList.get(0);
+                                        switch (damage) {
+                                            case "Virus":
+                                                if (Server.getGame().getVirus() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
+                                                    Server.getGame().setVirus(Server.getGame().getVirus()-1);
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
+                                                }
+                                                break;
+                                            case "Trojan":
+                                                if (Server.getGame().getTrojanHorse() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
+                                                    Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse()-1);
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
+                                                }
+                                                break;
+                                            case "Worm":
+                                                if (Server.getGame().getWurm() > 0) {
+                                                    player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
+                                                    player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
+                                                    Server.getGame().setWurm(Server.getGame().getWurm()-1);
+                                                    player.setDamageCounter(player.getDamageCounter()-1);
+                                                }
+                                                break;
+                                        }
+                                        i++;
+                                    }
+                                    if(player.getDamageCounter() > 0){
+                                        ArrayList<String> avaiableDamage = new ArrayList<>();
+                                        if(Server.getGame().getVirus() > 0){
+                                            avaiableDamage.add("Virus");
+                                        }
+                                        if(Server.getGame().getTrojanHorse() > 0){
+                                            avaiableDamage.add("Trojan");
+                                        }
+                                        if(Server.getGame().getWurm() > 0){
+                                            avaiableDamage.add("Worm");
+                                        }
+                                        if(!avaiableDamage.isEmpty()) {
+                                            PickDamage pickDamage = new PickDamage(player.getDamageCounter(), avaiableDamage);
+                                            String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                            sendToOneClient(player.getId(), serializedPickDamage);
+                                        }
+                                    }else{
+                                        Server.setSelectedDamageCounter(Server.getSelectedDamageCounter()+1);
+                                    }
+                                }
+                            }
+                            if(Server.getSelectedDamageCounter() == Server.getNumPickDamage()){
+                                Server.setSelectedDamageCounter(0);
+                                Server.setNumPickDamage(0);
+
+                                for(Player player: Server.getGame().getPlayerList()) {
+                                    if (!player.getPlayerMat().getReceivedDamageCards().isEmpty()) {
+                                        DrawDamage drawDamage = new DrawDamage(player.getId(), player.getPlayerMat().getReceivedDamageCards());
+                                        String serializedDrawDamage = Serialisierer.serialize(drawDamage);
+                                        broadcast(serializedDrawDamage);
+
+                                        player.getPlayerMat().getReceivedDamageCards().clear();
+                                    }
+                                }
+
+                                PlayerStatus allGo = new PlayerStatus(-9999, false);
+                                String serializedAllGo = Serialisierer.serialize(allGo);
+                                broadcast(serializedAllGo);
+                            }
+                            System.out.println("Selected Damage ende");
                             break;
                         case "RebootDirection":
                             System.out.println("Reboot Direction");
@@ -1926,6 +2094,8 @@ public class ClientHandler implements Runnable {
                 Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+            }else{
+                Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
             }
         }
     }
@@ -2003,7 +2173,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                                    }
                                 }
                             }
                         }
@@ -2037,7 +2209,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                                    }
                                 }
                             }
                         }
@@ -2071,7 +2245,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                                    }
                                 }
                             }
                         }
@@ -2360,10 +2536,15 @@ public class ClientHandler implements Runnable {
                 broadcast(serializedJoinedPlayerMessage);
 
                 //if robot rebooted he receives two spam cards
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
-                Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                for(int j = 0; j < 2; j++) {
+                    if(Server.getGame().getSpam() > 0) {
+                        Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
+                        Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
+                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                    }else{
+                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                    }
+                }
 
                 if (rebootTo.equals("rebootField")) {
 
@@ -2506,5 +2687,32 @@ public class ClientHandler implements Runnable {
             }
         }
         return false;
+    }
+
+    public void disconnectTimer(ScheduledExecutorService disconnectScheduler){
+        disconnectScheduler.schedule(() -> {
+            System.out.println("Disconnect");
+
+            Player disconnectPLayer = new Player("", -9999, -9999);
+            for(Player player : Server.getPlayerList()){
+                if(player.getId() == clientId){
+                    disconnectPLayer = player;
+                }
+            }
+
+            Server.getPlayerList().remove(disconnectPLayer);
+            if(Server.isGameStarted()) {
+                for (Player player : Server.getPlayerList()) {
+                    if (player.getId() == clientId) {
+                        disconnectPLayer = player;
+                    }
+                }
+                Server.getGame().getPlayerList().remove(disconnectPLayer);
+            }
+            alive.cancel();
+            ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+            String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+            broadcast(serializedConnectionUpdate);
+        }, 5, TimeUnit.SECONDS);
     }
 }
