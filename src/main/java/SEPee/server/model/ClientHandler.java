@@ -73,6 +73,27 @@ public class ClientHandler implements Runnable {
                     disconnectScheduler = scheduler;
                     //disconnectTimer(disconnectScheduler);
                 }else{
+                    System.out.println("Disconnect");
+
+                    Player disconnectPLayer = new Player("", -9999, -9999);
+                    for(Player player : Server.getPlayerList()){
+                        if(player.getId() == clientId){
+                            disconnectPLayer = player;
+                        }
+                    }
+                    Server.getPlayerList().remove(disconnectPLayer);
+
+                    if(Server.isGameStarted()) {
+                        for (Player player : Server.getPlayerList()) {
+                            if (player.getId() == clientId) {
+                                disconnectPLayer = player;
+                            }
+                        }
+                        Server.getGame().getPlayerList().remove(disconnectPLayer);
+                    }
+                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                    broadcast(serializedConnectionUpdate);
                     alive.cancel();
                 }
 
