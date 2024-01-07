@@ -1603,9 +1603,6 @@
                     </ImageView>
 
                 </children>
-            <VBox.margin>
-               <Insets top="15.0" />
-            </VBox.margin>
             </GridPane>
             <VBox prefHeight="300.0" prefWidth="650.0">
                 <children>
