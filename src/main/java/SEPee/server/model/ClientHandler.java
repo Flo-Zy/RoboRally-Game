@@ -66,6 +66,21 @@ public class ClientHandler implements Runnable {
                         case "Alive":
                             System.out.println("Alive zurück bekommen");
                             //fehlt noch, dass wenn man kein alive zurückbekommt innerhalb 5 Sekunden, dann messageType connectionUpdate schicken
+
+                            /*
+                            // mus noch in if-Schleife, die abfrägt ob nach 5 Sekunden nix kam
+                            for (Player player : Server.getPlayerList()) {
+                                if(player.getId() == clientId){
+                                    //player löschen
+                                    Server.getPlayerList().remove(player);
+
+                                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "Ignore");
+                                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                                    broadcast(serializedConnectionUpdate);
+                                }
+                            }
+                             */
+
                             break;
                         case "PlayerValues":
                             System.out.println("Player Values erhalten");
