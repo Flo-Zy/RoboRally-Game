@@ -1,0 +1,57 @@
+.root {
+    -fx-font-family: "MyCustomFont";
+}
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("/CSSFiles/Digital-Bold.ttf");
+}
+
+/* Style for the dialog pane */
+.dialog-pane {
+    -fx-background-color: #2E2E2E; /* grauer Hintergrund */
+}
+
+/* Style for the header of the dialog */
+.header-label {
+    -fx-font-size: 35px; /* font size for the labels */
+    -fx-text-fill: #dde400;
+    -fx-font-weight: bold; /* bold font weight */
+    -fx-alignment: center;
+    -fx-wrap-text: true; /* Enable text wrapping */
+    -fx-max-width: 100px;
+    -fx-padding: 40; /* Padding around labels */
+    -fx-font-family: "MyCustomFont";
+}
+
+/* Style for images representing robots */
+.image-view {
+    -fx-cursor: hand; /* cursor changes to hand when hovered over image */
+    -fx-effect: dropshadow(three-pass-box, rgba(10,10,10,12), 10, 0, 0, 10); /* Shadow effect for images */
+}
+
+/* Style for disabled images (already selected robots) */
+.image-view:disabled {
+    -fx-effect: none;
+    -fx-cursor: default; /* normal cursor for disabled images */
+    -fx-opacity: 0.2; /* semi-transparent for disabled images */
+}
+
+/* Style for labels under each robot image */
+.grid-label {
+    -fx-font-size: 16px; /* font size for the labels */
+    -fx-text-fill: #dde400; /* dark gray text color */
+    -fx-font-weight: bold; /* bold font weight */
+    -fx-alignment: center;
+    -fx-background-color: #2E2E2E;
+    -fx-wrap-text: true; /* Enable text wrapping */
+    -fx-max-width: 100px; /* Maximum width for labels */
+    -fx-padding: 5 0 5 0; /* Padding around labels */
+}
+
+/* Style for the grid layout */
+.grid-pane {
+    -fx-hgap: 10px; /* horizontal gap between grid cells */
+    -fx-vgap: 10px; /* vertical gap between grid cells */
+    -fx-alignment: center; /* align content to the center */
+}
+

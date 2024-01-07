@@ -1,0 +1,50 @@
+.root {
+    -fx-font-family: "MyCustomFont";
+}
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("/CSSFiles/Digital-Bold.ttf");
+}
+/* Stil für den Hauptbereich des Dialogs */
+.dialog-pane {
+    -fx-background-color: #2E2E2E;
+    -fx-padding: 10px;
+}
+
+/* Stil für den Header-Bereich des Dialogs */
+.dialog-pane .header-panel {
+    -fx-background-color: #2E2E2E;
+    -fx-text-fill: #dde400;
+}
+
+/* Stil für den Inhalt des Dialogs */
+.dialog-pane .content {
+    -fx-font-size: 16px;
+    -fx-text-fill: #dde400;
+}
+
+/* Stil für Buttons im Dialog */
+.button {
+    -fx-background-color: #dde400;
+    -fx-text-fill: #2E2E2E;
+    -fx-font-weight: bold;
+}
+
+/* Stil für den Titeltext im Header des Dialogs */
+.dialog-pane .header-panel .label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-family: "MyCustomFont";
+    -fx-text-fill: #dde400;
+}
+
+/* Stil für den Textfeld-Bereich */
+.text-input-dialog .text-field {
+    -fx-pref-width: 200px;
+}
+
+/* Stil für Fehlermeldungen (Alerts) */
+.alert .content {
+    -fx-font-size: 12px;
+    -fx-text-fill: #d8000c;
+}

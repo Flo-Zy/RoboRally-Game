@@ -1,9 +1,10 @@
 package SEPee.client.viewModel.MapController;
 
-import SEPee.client.model.AI;
 import SEPee.client.model.Client;
+import SEPee.client.model.ClientAI;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
+import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
@@ -17,10 +18,12 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DizzyHighwayControllerAI extends MapController {
+public class ExtraCrispyController extends MapController {
 
     @Setter
     @FXML
@@ -67,26 +70,36 @@ public class DizzyHighwayControllerAI extends MapController {
     @FXML
     public HBox totalHand;
     @FXML
+    public ImageView checkPointImageView;
+    @FXML
     public HBox totalRegister;
     @Getter
-    private ArrayList<Card> register = DizzyHighwayController.getRegister();
+    static ArrayList<Card> register;
 
     private Map<Player, Robot> playerRobotMap; //store player and robot
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<Card>> playerDrawPileMap;
+    private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
 
-    public void setCounter1(int counter) {
+    public void setCounter1(int counter){
         counter1.set(counter);
     }
 
-    public void init(AI ai, Stage stage) {
+    public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        playerDrawPileMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
+        indexToCounterMap = new HashMap<>();
+    }
+
+    public void initAI(ClientAI clientAI, Stage stage) {
+        this.stage = stage;
+        playerRobotMap = new HashMap<>();
+        robotImageViewMap = new HashMap<>();
+        clientHandMap = new HashMap<>();
         indexToCounterMap = new HashMap<>();
     }
 
@@ -181,7 +194,6 @@ public class DizzyHighwayControllerAI extends MapController {
     private void updateAvatarPosition(Robot robot) {
         ImageView imageView = robotImageViewMap.get(robot);
         GridPane.setColumnIndex(imageView, robot.getX());
-
         GridPane.setRowIndex(imageView, robot.getY());
 
         // send messagetype move
@@ -248,15 +260,15 @@ public class DizzyHighwayControllerAI extends MapController {
     public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
 
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
 
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
 
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -302,17 +314,14 @@ public class DizzyHighwayControllerAI extends MapController {
     public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
         zahlen.clear();
         counter1.set(0);
-
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
-        if (playerDrawPileMap.containsKey(clientId)) {
-            playerDrawPileMap.remove(clientId);
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
         }
-
         // Erstelle eine Kopie der drawPile-Liste für diesen Client
-        playerDrawPileMap.put(clientId, new ArrayList<>(clientHand));
-
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
         // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
-        List<Card> drawPileClient = playerDrawPileMap.get(clientId);
+        List<Card> drawPileClient = clientHandMap.get(clientId);
 
         // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
@@ -322,45 +331,141 @@ public class DizzyHighwayControllerAI extends MapController {
             HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
             if (totalHand != null && totalRegister != null) {
-                // Erstelle eine Liste mit zufällig ausgewählten Karten aus totalHand
-                List<Card> selectedCards = new ArrayList<>();
-                Random random = new Random();
-                while (selectedCards.size() < 5) {
-                    int randomIndex = random.nextInt(9);
-                    Card selectedCard = drawPileClient.get(randomIndex);
-                    if (!selectedCards.contains(selectedCard)) {
-                        selectedCards.add(selectedCard);
+
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 9; i++) {
+                    ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+
+                    if (handImageView != null) {
+                        final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                        // Füge den Event-Handler für das ImageView hinzu
+                        //if(counter1.get() <= 4 ) {
+                        handImageView.setOnMouseClicked(mouseEvent -> {
+
+                            if (counter1.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
+
+                                if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                    registerImageView.setImage(cardImage);
+
+                                    registerImageView.setVisible(true);
+                                    registerImageView.setManaged(true);
+
+                                    // gewählte Karte aus Hand unsichtbar machen
+                                    handImageView.setVisible(false);
+
+                                    // sende serialisiertes SelectedCard
+                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get() + 1);
+                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                    Client.getWriter().println(serializedCardSelected);
+
+                                    zahlen.add(new Zahlen(index, counter1.get()));
+                                    indexToCounterMap.put(index, counter1.get());
+
+                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                    counter1.set(smallestEmptyRegisterIndex);
+                                    if(counter1.get() == 5){
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        Client.getWriter().println(serializedTimerStarted);
+                                    }
+                                }
+
+                            } else {
+                                System.out.println("Register voll");
+
+                            }
+                        });
+                        //}
                     }
                 }
-
-                // Mache die ausgewählten Karten in totalHand unsichtbar und füge sie in totalRegister ein
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
                 for (int i = 0; i < 5; i++) {
-                    ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
                     ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
 
-                    Image cardImage = new Image(selectedCards.get(i).getImageUrl());
-                    registerImageView.setImage(cardImage);
+                    if (registerImageView != null) {
+                        final int registerIndex = i;
 
-                    registerImageView.setVisible(true);
-                    registerImageView.setManaged(true);
+                        registerImageView.setOnMouseClicked(mouseEvent -> {
+                            if (registerImageView.getImage() != null) {
+                                if (counter1.get() < 5) {
+                                    int indexNew = mapRegisterIndexToHandIndex(registerIndex);
+                                    counter1.decrementAndGet();
 
-                    handImageView.setVisible(false);
+                                    if (indexNew < 9) {
+                                        ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
+                                        handImageView.setVisible(true);
 
-                    // sende serialisiertes SelectedCard
-                    SelectedCard selectedCard = new SelectedCard(selectedCards.get(i).getName(), i);
-                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
-                    AI.getWriter().println(serializedCardSelected);
+                                        registerImageView.setImage(null);
 
-                    zahlen.add(new Zahlen(i, i));
-                    indexToCounterMap.put(i, i);
+                                        int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                        counter1.set(smallestEmptyRegisterIndex);
 
-                    counter1.incrementAndGet();
+                                        // sende serialisiertes SelectedCard
+                                        SelectedCard selectedCard = new SelectedCard(null, registerIndex+1);
+                                        String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                        Client.getWriter().println(serializedCardSelected);
+                                    } else {
+                                        System.out.println("Hand voll");
+                                    }
+                                }
+                            }
+                        });
+                    }
                 }
             }
         }
     }
 
-    public void setRegisterVisibilityFalse() {
+    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand) {
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (clientHandMap.containsKey(clientId)) {
+            clientHandMap.remove(clientId);
+        }
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        clientHandMap.put(clientId, new ArrayList<>(clientHand));
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> handClient = clientHandMap.get(clientId);
+
+        int handIndex = 0;
+        for (int i = 0; i < 5; i++) {
+            // prüfe, ob erste Karte für Register ein Again
+            if (i == 0 && handClient.get(i).getName().equals("Again")) { // wenn erste Karte Again ist
+                handIndex++;
+                if (handClient.get(handIndex).getName().equals("Again")) { // wenn zweite Karte auch Again ist
+                    handIndex++;
+                } else {
+                    SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
+                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                    ClientAI.getWriter().println(serializedCardSelected);
+                    handIndex++;
+                }
+            } else {
+                SelectedCard selectedCard = new SelectedCard(handClient.get(handIndex).getName(), i + 1);
+                String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedCardSelected);
+                handIndex++;
+            }
+        }
+        TimerStarted timerStarted = new TimerStarted();
+        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+        ClientAI.getWriter().println(serializedTimerStarted);
+    }
+
+    private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
+        for (int i = 0; i < 5; i++) {
+            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+            if (registerImageView.getImage() == null) {
+                return i;
+            }
+        }
+        return 5;
+    }
+
+
+    public void setRegisterVisibilityFalse(){
         // Prüfe, ob die HBox totalRegister gefunden wurde
         HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
@@ -377,7 +482,7 @@ public class DizzyHighwayControllerAI extends MapController {
     private int mapRegisterIndexToHandIndex(int registerIndex) {
         int storedInt;
         for (int i = 0; i < zahlen.size(); i++) {
-            if (zahlen.get(i).register == registerIndex) {
+            if(zahlen.get(i).register == registerIndex){
                 storedInt = zahlen.get(i).hand;
                 zahlen.remove(i); // entferne handIndex mit entsprechendem registerIndex
                 return storedInt;
@@ -386,10 +491,11 @@ public class DizzyHighwayControllerAI extends MapController {
         return -1;
     }
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards) {
-        int emptyIndex = 5 - nextCards.size();
+    public void fillEmptyRegister(ArrayList<Card> nextCards){
+        int emptyIndex;
         int index = 0;
-        while (emptyIndex < 5) {
+        while(index < nextCards.size()){
+            emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
             Image cardImage = new Image(nextCards.get(index).getImageUrl());
@@ -398,13 +504,17 @@ public class DizzyHighwayControllerAI extends MapController {
             registerImageView.setVisible(true);
             registerImageView.setManaged(true);
             index++;
-            emptyIndex++;
         }
     }
 
     public void movementPlayed(int clientId, int newX, int newY) {
-
-        Player player = AI.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
+        Player player = new Player("", -999, -999);
+        for(Player player2 : Client.getPlayerListClient()){
+            if(player2.getId() == clientId){
+                player = player2;
+            }
+        }
+        //Player player = Client.getPlayerListClient().get(clientId - 1); // array bei 0 beginnend, Ids bei 1
         Robot robot = playerRobotMap.get(player);
 
         ImageView imageView = robotImageViewMap.get(robot);
@@ -413,7 +523,14 @@ public class DizzyHighwayControllerAI extends MapController {
     }
 
     public void playerTurn(int clientIdToTurn, String rotation) {
-        Robot robot = playerRobotMap.get(AI.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+        Player player = new Player("", -999, -999);
+        for(Player player2 : Client.getPlayerListClient()){
+            if(player2.getId() == clientIdToTurn){
+                player = player2;
+            }
+        }
+        //Robot robot = playerRobotMap.get(Client.getPlayerListClient().get(clientIdToTurn - 1)); // Array starts at 0, IDs start at 1
+        Robot robot = playerRobotMap.get(player);
 
         ImageView imageView = robotImageViewMap.get(robot);
 
@@ -427,6 +544,11 @@ public class DizzyHighwayControllerAI extends MapController {
                 imageView.setRotate(currentRotation - rotationAmount);
             }
         }
+    }
+
+    public void setCheckPointImage(String imageUrl) {
+        Image image = new Image(imageUrl);
+        checkPointImageView.setImage(image);
     }
 }
 

@@ -1,0 +1,61 @@
+.root {
+    -fx-font-family: "MyCustomFont";
+}
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("/CSSFiles/Digital-Bold.ttf");
+}
+
+#SEPee.client.viewModel.ClientController HBox {
+    -fx-spacing: 10;
+}
+
+/* ChatArea VBox */
+#SEPee.client.viewModel.ClientController HBox > VBox {
+    -fx-spacing: 10;
+    -fx-pref-height: 645.0;
+    -fx-pref-width: 287.0;
+    -fx-background-color: #2e2e2e;
+}
+
+#chatArea {
+    -fx-editable: false;
+    -fx-pref-height: 535.0;
+    -fx-pref-width: 355.0;
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 7.0;
+}
+
+#avatarNameLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-font-family: "MyCustomFont";
+    -fx-text-fill: #000000;
+}
+
+#visibilityButton {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2E2E2E;
+    -fx-font-weight: bold;
+}
+
+#messageField {
+    -fx-prompt-text-fill: #999999;
+    -fx-pref-width: 100%;
+}
+
+#visibilityButton {
+    -fx-pref-width: 100px;
+}
+
+#sendButton {
+    -fx-pref-width: 63px;
+    -fx-background-color: #007bff;
+    -fx-text-fill: #ffffff;
+}
+
+#readyButton {
+    -fx-pref-width: 128px;
+    -fx-background-color: #28a745;
+    -fx-text-fill: #ffffff;
+}

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RightTurn extends ProgCard {
     public RightTurn() {
-        super("RightTurn", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_04.png");
+        super("TurnRight", "/boardElementsPNGs/Custom/ProgrammierKarten/Blau/Untitled-6_04.png");
     }
 
     public static void makeEffect(Robot robot){

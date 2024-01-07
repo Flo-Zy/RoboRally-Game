@@ -10,7 +10,7 @@ public class CheckPoint extends Field{
     //private String[] orientations;
     //private int[] registers;
     //private int count;
-    public CheckPoint(String isOnBoard){
-        super("CheckPoint", isOnBoard);
+    public CheckPoint(String isOnBoard, int checkPointNumber){
+        super("CheckPoint", isOnBoard, checkPointNumber);
     }
 }

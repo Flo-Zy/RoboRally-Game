@@ -8,7 +8,7 @@ import java.util.List;
 public class DizzyHighway extends GameBoard {
     public DizzyHighway() {
 
-        super("5B", "DizzyHighway", 13, 1);
+        super("5B", "Dizzy Highway", 13, 1);
 
         // column 0
         List<List<Field>> column0 = new ArrayList<>(10);
@@ -671,7 +671,7 @@ public class DizzyHighway extends GameBoard {
         field12_2.add(new ConveyorBelt("5B", 2, orientations122));
 
         List<Field> field12_3 = new ArrayList<>();
-        field12_3.add(new CheckPoint("5B"));
+        field12_3.add(new CheckPoint("5B", 1));
 
         List<Field> field12_4 = new ArrayList<>();
         field12_4.add(new Empty("5B"));
@@ -736,14 +736,23 @@ public class DizzyHighway extends GameBoard {
         List<List<Field>> column = this.getGameBoard().get(x);
         if (y < 0 || y >= column.size()) {
             throw new IllegalArgumentException("Y-coordinate out of bounds");
+
+
         }
 
         List<Field> fieldsAtXY = column.get(y);
         return fieldsAtXY;
     }
 
+    public int getRebootX(){
+        return 7;
+    }
+    public int getRebootY(){
+        return 3;
+    }
 
-
-
+    public String getOrientationOfReboot(){
+        return "bottom";
+    }
 
 }

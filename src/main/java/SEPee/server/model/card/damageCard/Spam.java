@@ -6,10 +6,10 @@ import lombok.Setter;
 @Setter
 public class Spam extends DamageCard{
     public Spam() {
-        super("Spam", " ");
+        super("Spam", "boardElementsPNGs/DamageCards/Spam.png");
     }
     @Override
     public String getImageUrl() {
-        return " ";
+        return "/boardElementsPNGs/DamageCards/Spam.png";
     }
 }

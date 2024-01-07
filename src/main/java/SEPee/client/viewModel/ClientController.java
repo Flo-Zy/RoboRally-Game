@@ -1,28 +1,37 @@
 package SEPee.client.viewModel;
 
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
-import SEPee.client.viewModel.MapController.MapController;
+import SEPee.client.model.ClientAI;
+import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 //Später auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.progCard.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,6 +40,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientController {
     @FXML
@@ -64,7 +74,17 @@ public class ClientController {
     @FXML
     private TextField messageField;
     @FXML
+    private ImageView avatarImageView;
+    @FXML
+    private Label avatarNameLabel;
+    @FXML
     private VBox DizzyHighwayMap;
+    @FXML
+    private VBox ExtraCrispyMap;
+    @FXML
+    private VBox LostBearingsMap;
+    @FXML
+    private VBox DeathTrapMap;
     @Getter
     @Setter
     private static int currentPhase;
@@ -76,7 +96,6 @@ public class ClientController {
 
 
     public void init(Client Client, Stage stage) {
-
         boolean validUsername = false;
 
         while (!validUsername) {
@@ -84,6 +103,14 @@ public class ClientController {
             dialog.setTitle("Username");
             dialog.setHeaderText("Please enter your username:");
             dialog.setContentText("Username:");
+
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+            dialog.getDialogPane().setGraphic(null);
+
+            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Background1.png');" +
+                    "-fx-background-repeat: repeat;" +
+                    "-fx-background-size: cover;");
+
             Optional<String> result = dialog.showAndWait();
 
             if (result.isPresent() && !result.get().trim().isEmpty()) {
@@ -97,11 +124,8 @@ public class ClientController {
                 sendButton.setOnAction(event -> sendMessage());
                 visibilityButton.setText("Alle");
                 visibilityButton.setOnAction(event -> toggleVisibility());
-                //stage.setOnCloseRequest(event -> shutdown());
-
-                //Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
             } else {
-                //falls Username empty
+                // If Username is empty
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
@@ -111,6 +135,10 @@ public class ClientController {
                 Platform.exit();
             }
         }
+    }
+
+    public void initAI(ClientAI clientAI, Stage stage) {
+        figure = robotSelectionAI(Client.getTakenFigures());
     }
 
     @FXML
@@ -162,6 +190,18 @@ public class ClientController {
         Client.getWriter().println(serializedMapSelected);
     }
 
+    public void sendReadyAI() {
+        ready = true;
+        SetStatus setStatus = new SetStatus(ready);
+        String serializedSetStatus = Serialisierer.serialize(setStatus);
+        ClientAI.getWriter().println(serializedSetStatus);
+
+        //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
+        MapSelected mapSelected1 = new MapSelected("");
+        String serializedMapSelected1 = Serialisierer.serialize(mapSelected1);
+        ClientAI.getWriter().println(serializedMapSelected1);
+    }
+
     private int selectedRecipientId = -1; // Initialize with a default value
 
     @FXML
@@ -174,20 +214,24 @@ public class ClientController {
     }
 
     private void showPlayerListDialog() {
-
-        // Initialize the playerNames array with player names from playerListClient
         initializePlayerNames();
 
-        // Erstellen Sie einen ChoiceDialog mit der Liste der Spieler
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playerNames);
         dialog.setTitle("Spieler auswählen");
-        dialog.setHeaderText("Bitte wählen Sie einen Spieler:");
 
-        // Create a "Send to All" button
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showPlayerListDialog.css").toExternalForm());
+        dialog.getDialogPane().setGraphic(null);
+
+        Label headerLabel = new Label("Bitte wählen Sie einen Spieler:");
+        headerLabel.setFont(new Font("Arial", 56));
+        dialog.getDialogPane().setHeader(headerLabel);
+        headerLabel.getStyleClass().add("header-label");
+
+        // "An Alle senden" button
         ButtonType sendToAllButton = new ButtonType("An Alle senden", ButtonBar.ButtonData.LEFT);
         dialog.getDialogPane().getButtonTypes().add(sendToAllButton);
 
-        //"Send to All" button from the dialog
+        //"Send to All" button vom dialog
         Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
         ((Button) sendToAllNode).setOnAction(event -> {
             // Handle the action when "Send to All" is clicked
@@ -203,7 +247,7 @@ public class ClientController {
         if (result.isPresent()) {
             String selectedPlayerName = result.get();
             // Id über Namen finden
-            int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt weil clientIds mit 1 anfangen
+            int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt, weil clientIds mit 1 anfangen
             if (index != -1) {
                 // Update selectedRecipientId based on the index
                 selectedRecipientId = index;
@@ -233,10 +277,17 @@ public class ClientController {
         System.exit(0);
     }
 
+    String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
+
         dialog.setTitle("Robot Selection");
-        dialog.setHeaderText("Please select a robot:");
+
+        Label headerLabel = new Label("Please select a robot:");
+        headerLabel.setFont(new Font("Arial", 56));
+        dialog.getDialogPane().setHeader(headerLabel);
+        headerLabel.getStyleClass().add("header-label");
 
         // GridPane für die Anordnung der Bilder und Namen
         GridPane grid = new GridPane();
@@ -249,8 +300,11 @@ public class ClientController {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
 
-            Label nameLabel = new Label("Robot " + i);
+            //Label nameLabel = new Label("Robot " + i);
+            Label nameLabel = new Label(robotNames[i-1]);
             nameLabel.setAlignment(Pos.CENTER);
+            nameLabel.getStyleClass().add("grid-label");
+
 
             // Hinzufügen von ImageView und Label zum GridPane
             grid.add(imageView, i - 1, 0);
@@ -264,22 +318,39 @@ public class ClientController {
                 // Event Handler für Klicks auf das ImageView
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
+                    avatarImageView.setImage(image);
+                    avatarImageView.setVisible(true);
+                    avatarNameLabel.setText(robotNames[robotNumber-1]);
                     dialog.setResult(robotNumber);
                     dialog.close();
                 });
             }
         }
-
         // Hinzufügen des GridPane zum Dialog
         dialog.getDialogPane().setContent(grid);
 
         // Anzeigen des Dialogs und Warten auf das Ergebnis
         Optional<Integer> result = dialog.showAndWait();
+
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
     }
 
+    public int robotSelectionAI(ArrayList<Integer> takenFigures) {
+        Random random = new Random();
+        while(true){
+            int robotNumber = random.nextInt(1, 7);
+            // Überprüfen, ob der Roboter bereits genommen wurde
+            if (!takenFigures.contains(robotNumber)) {
+                return robotNumber;
+            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
+                return -1;
+            }
+        }
+    }
+
     private void initializePlayerNames() {
-        playerNames.clear(); // Clear the existing names
+        playerNames.clear();
+        System.out.println("initializePlayerNames (Client.getPlayerListClient()): " + Client.getPlayerListClient());
         for (Player player : Client.getPlayerListClient()) {
             String playerName = player.getName();
             playerNames.add(playerName);
@@ -287,13 +358,17 @@ public class ClientController {
     }
 
     public String showSelectMapDialog() {
-
         String selectedMap = null;
 
         while (selectedMap == null) {
             ChoiceDialog<String> dialog = new ChoiceDialog<>(null, Client.getMapList());
-            dialog.setTitle("Map auswählen");
-            dialog.setHeaderText("Bitte wählen Sie eine Map:");
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showSelectMapDialog.css").toExternalForm());
+            dialog.setTitle("Map Selection");
+
+            Label headerLabel = new Label("Please select a map:");
+            headerLabel.setFont(new Font("Arial", 35));
+            dialog.getDialogPane().setHeader(headerLabel);
+            headerLabel.getStyleClass().add("header-label");
 
             // Map selection or choosing "Cancel"
             Optional<String> result = dialog.showAndWait();
@@ -305,6 +380,97 @@ public class ClientController {
         return selectedMap;
     }
 
+    public String showSelectRebootDirectionDialog(Stage stage) {
+        GridPane root = new GridPane();
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
+
+        String[] selectedDirection = {null};
+
+        // Top Button in der ersten Reihe mittig
+        Button topButton = new Button("top");
+        topButton.setOnAction(event -> {
+            selectedDirection[0] = "top";
+            stage.close();
+        });
+        root.add(topButton, 1, 0, 1, 1);
+
+        // Left Button in der zweiten Reihe links
+        Button leftButton = new Button("left");
+        leftButton.setOnAction(event -> {
+            selectedDirection[0] = "left";
+            stage.close();
+        });
+        root.add(leftButton, 0, 1, 1, 1);
+
+        // Right Button in der zweiten Reihe rechts
+        Button rightButton = new Button("right");
+        rightButton.setOnAction(event -> {
+            selectedDirection[0] = "right";
+            stage.close();
+        });
+        root.add(rightButton, 2, 1, 1, 1);
+
+        // Bottom Button in der dritten Reihe mittig
+        Button bottomButton = new Button("bottom");
+        bottomButton.setOnAction(event -> {
+            selectedDirection[0] = "bottom";
+            stage.close();
+        });
+        root.add(bottomButton, 1, 2, 1, 1);
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
+
+        stage.setScene(scene);
+        stage.setTitle("Reboot direction selection");
+
+        Text text = new Text("Reboot direction selection");
+        text.getStyleClass().add("header-label");
+        double titleWidth = text.getBoundsInLocal().getWidth();
+        stage.setWidth(titleWidth + 40);
+
+        Duration duration = Duration.seconds(10);
+        Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
+            if (stage.isShowing()) {
+                stage.close();
+                selectedDirection[0] = "top";
+            }
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
+
+        stage.setOnHiding(event -> timeline.stop());
+
+        stage.showAndWait();
+
+        return selectedDirection[0];
+    }
+
+    public String showSelectDamageDialog(ArrayList<String> availableList){
+        String selectedDamage = null;
+
+        while (selectedDamage == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, availableList);
+            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showSelectMapDialog.css").toExternalForm());
+            dialog.setTitle("Damage Selection");
+
+            Label headerLabel = new Label("Please select your damage:");
+            headerLabel.setFont(new Font("Arial", 35));
+            dialog.getDialogPane().setHeader(headerLabel);
+            headerLabel.getStyleClass().add("header-label");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                selectedDamage = result.get();
+            }
+        }
+        return selectedDamage;
+    }
+
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
@@ -313,7 +479,6 @@ public class ClientController {
 
                 // Get  controller
                 DizzyHighwayController dizzyHighwayController = loader.getController();
-
                 mapController = dizzyHighwayController;
 
                 dizzyHighwayController.init(client, primaryStage);
@@ -324,6 +489,8 @@ public class ClientController {
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
+                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -331,11 +498,220 @@ public class ClientController {
                 e.printStackTrace();
             }
         });
+    }
 
+    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
+                Node dizzyHighway = loader.load();
+
+                // Get  controller
+                DizzyHighwayController dizzyHighwayController = loader.getController();
+
+                mapController = dizzyHighwayController;
+
+                dizzyHighwayController.initAI(clientAI, primaryStage);
+                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+
+                // set loaded FXML to VBox
+                DizzyHighwayMap.getChildren().setAll(dizzyHighway);
+                DizzyHighwayMap.setVisible(true);
+                DizzyHighwayMap.setManaged(true);
+
+                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadExtraCrispyFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
+                Node extraCrispy = loader.load();
+
+                // Get  controller
+                ExtraCrispyController extraCrispyController = loader.getController();
+
+                mapController = extraCrispyController;
+
+                extraCrispyController.init(client, primaryStage);
+                extraCrispyController.setRootVBox(ExtraCrispyMap);
+
+                // set loaded FXML to VBox
+                ExtraCrispyMap.getChildren().setAll(extraCrispy);
+                ExtraCrispyMap.setVisible(true);
+                ExtraCrispyMap.setManaged(true);
+
+                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadExtraCrispyFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
+                Node extraCrispy = loader.load();
+
+                // Get  controller
+                ExtraCrispyController extraCrispyController = loader.getController();
+
+                mapController = extraCrispyController;
+
+                extraCrispyController.initAI(clientAI, primaryStage);
+                extraCrispyController.setRootVBox(ExtraCrispyMap);
+
+                // set loaded FXML to VBox
+                ExtraCrispyMap.getChildren().setAll(extraCrispy);
+                ExtraCrispyMap.setVisible(true);
+                ExtraCrispyMap.setManaged(true);
+
+                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadLostBearingsFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
+                Node lostBearings = loader.load();
+
+                // Get  controller
+                LostBearingsController lostBearingsController = loader.getController();
+
+                mapController = lostBearingsController;
+
+                lostBearingsController.init(client, primaryStage);
+                lostBearingsController.setRootVBox(LostBearingsMap);
+
+                // set loaded FXML to VBox
+                LostBearingsMap.getChildren().setAll(lostBearings);
+                LostBearingsMap.setVisible(true);
+                LostBearingsMap.setManaged(true);
+
+                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadLostBearingsFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
+                Node lostBearings = loader.load();
+
+                // Get  controller
+                LostBearingsController lostBearingsController = loader.getController();
+
+                mapController = lostBearingsController;
+
+                lostBearingsController.initAI(clientAI, primaryStage);
+                lostBearingsController.setRootVBox(LostBearingsMap);
+
+                // set loaded FXML to VBox
+                LostBearingsMap.getChildren().setAll(lostBearings);
+                LostBearingsMap.setVisible(true);
+                LostBearingsMap.setManaged(true);
+
+                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadDeathTrapFXML(Client client, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
+                Node deathTrap = loader.load();
+
+                // Get  controller
+                DeathTrapController deathTrapController = loader.getController();
+
+                mapController = deathTrapController;
+
+                deathTrapController.init(client, primaryStage);
+                deathTrapController.setRootVBox(DeathTrapMap);
+
+                // set loaded FXML to VBox
+                DeathTrapMap.getChildren().setAll(deathTrap);
+                DeathTrapMap.setVisible(true);
+                DeathTrapMap.setManaged(true);
+
+                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void loadDeathTrapFXMLAI(ClientAI clientAI, Stage primaryStage) {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
+                Node deathTrap = loader.load();
+
+                // Get  controller
+                DeathTrapController deathTrapController = loader.getController();
+
+                mapController = deathTrapController;
+
+                deathTrapController.initAI(clientAI, primaryStage);
+                deathTrapController.setRootVBox(DeathTrapMap);
+
+                // set loaded FXML to VBox
+                DeathTrapMap.getChildren().setAll(deathTrap);
+                DeathTrapMap.setVisible(true);
+                DeathTrapMap.setManaged(true);
+
+                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+
+                //Hide Bereit nicht bereit button
+                readyButton.setVisible(false);
+                readyButton.setManaged(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void addTakenStartingPoints(int x, int y){
-        int combinedValue = x*10 + y;
+        int combinedValue = x * 10 + y;
         switch(combinedValue){
             case 11:
                 takenStartPoints.add(1);
@@ -358,10 +734,39 @@ public class ClientController {
         }
     }
 
+    public void addTakenStartingPointsDeathTrap(int x, int y){
+        int combinedValue = x * 10 + y;
+        switch(combinedValue){
+            case 111:
+                takenStartPoints.add(1);
+                break;
+            case 123:
+                takenStartPoints.add(2);
+                break;
+            case 114:
+                takenStartPoints.add(3);
+                break;
+            case 115:
+                takenStartPoints.add(4);
+                break;
+            case 126:
+                takenStartPoints.add(5);
+                break;
+            case 118:
+                takenStartPoints.add(6);
+                break;
+        }
+    }
+
     public void setStartingPoint() {
         Dialog<Integer> dialog = new Dialog<>();
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/setStartingPoint.css").toExternalForm());
         dialog.setTitle("Startingpoint Selection");
-        dialog.setHeaderText("Please select a Startingpoint:");
+
+        Label headerLabel = new Label("Please select a Startingpoint:");
+        headerLabel.setFont(new Font("Arial", 56));
+        dialog.getDialogPane().setHeader(headerLabel);
+        headerLabel.getStyleClass().add("header-label");
 
         // Create buttons for each robot
         ButtonType button1 = new ButtonType("Start 1", ButtonBar.ButtonData.OK_DONE);
@@ -415,7 +820,36 @@ public class ClientController {
                 Button selectedButton = (Button) dialog.getDialogPane().lookupButton(selectedButtonType);
                 selectedButton.setDisable(true); // Disable the selected button
             }
-            setStartingPointXY(selectedStartingpoint);
+
+            if(Client.getSelectedMap1().equals("Death Trap")) {
+                setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
+            } else {
+                setStartingPointXY(selectedStartingpoint);
+            }
+        }
+    }
+
+    public void setStartingPointAI() {
+        ArrayList<Integer> availableStartingPoints = new ArrayList<>();
+        for (int i = 1; i <= 6; i++) {
+            if (!takenStartPoints.contains(i)) {
+                availableStartingPoints.add(i);
+            }
+        }
+
+        if (availableStartingPoints.isEmpty()) {
+            // Kein verfügbarer StartingPoint mehr
+            return;
+        }
+
+        // Zufällige Auswahl eines verfügbaren StartingPoints für die AI
+        Random random = new Random();
+        int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
+
+        if(ClientAI.getSelectedMap1().equals("DeathTrap")) {
+            setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
+        } else {
+            setStartingPointXY(selectedStartingPoint);
         }
     }
 
@@ -448,9 +882,37 @@ public class ClientController {
         }
     }
 
+    public void setStartingPointXYDeathTrap(int StartingPointNumber){
+        switch(StartingPointNumber){
+            case 1:
+                startPointX = 11;
+                startPointY = 1;
+                break;
+            case 2:
+                startPointX = 12;
+                startPointY = 3;
+                break;
+            case 3:
+                startPointX = 11;
+                startPointY = 4;
+                break;
+            case 4:
+                startPointX = 11;
+                startPointY = 5;
+                break;
+            case 5:
+                startPointX = 12;
+                startPointY = 6;
+                break;
+            case 6:
+                startPointX = 11;
+                startPointY = 8;
+                break;
+        }
+    }
+
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
-
     }
 
     public void initDrawPile(){
@@ -459,6 +921,10 @@ public class ClientController {
 
     public void initRegister(){
         mapController.initializeRegister(id, clientHand);
+    }
+
+    public void initRegisterAI(){
+        mapController.initializeRegisterAI(id, clientHand);
     }
 
     public void setRegisterVisibilityFalse(){
@@ -475,5 +941,9 @@ public class ClientController {
 
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
+    }
+
+    public void setCheckPointImage(String imageUrl) {
+        mapController.setCheckPointImage(imageUrl);
     }
 }
