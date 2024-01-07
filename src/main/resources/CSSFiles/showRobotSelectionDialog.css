@@ -14,7 +14,7 @@
 /* Style for the header of the dialog */
 .header-label {
     -fx-font-size: 35px; /* font size for the labels */
-    -fx-text-fill: #ac7d02;
+    -fx-text-fill: #dde400;
     -fx-font-weight: bold; /* bold font weight */
     -fx-alignment: center;
     -fx-wrap-text: true; /* Enable text wrapping */
@@ -39,7 +39,7 @@
 /* Style for labels under each robot image */
 .grid-label {
     -fx-font-size: 16px; /* font size for the labels */
-    -fx-text-fill: #ac7d02; /* dark gray text color */
+    -fx-text-fill: #dde400; /* dark gray text color */
     -fx-font-weight: bold; /* bold font weight */
     -fx-alignment: center;
     -fx-background-color: #2E2E2E;

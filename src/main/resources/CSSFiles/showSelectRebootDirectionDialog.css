@@ -1,5 +1,6 @@
 .root {
     -fx-font-family: "MyCustomFont";
+    -fx-background-color: #2E2E2E;
 }
 @font-face {
     font-family: "MyCustomFont";
@@ -15,12 +16,7 @@
     -fx-max-width: 100px;
     -fx-padding: 30; /* Padding around labels */
     -fx-font-family: "MyCustomFont";
-}
-
-/* Stil für den Hauptbereich des Dialogs */
-.dialog-pane {
     -fx-background-color: #2E2E2E;
-    -fx-padding: 10px;
 }
 
 .button {

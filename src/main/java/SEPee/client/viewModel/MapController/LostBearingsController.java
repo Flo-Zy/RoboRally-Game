@@ -18,7 +18,9 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LostBearingsController extends MapController {
@@ -67,6 +69,8 @@ public class LostBearingsController extends MapController {
     public ImageView Avatar6;
     @FXML
     public HBox totalHand;
+    @FXML
+    public ImageView checkPointImageView;
     @FXML
     public HBox totalRegister;
     @Getter
@@ -541,4 +545,8 @@ public class LostBearingsController extends MapController {
         }
     }
 
+    public void setCheckPointImage(String imageUrl) {
+        Image image = new Image(imageUrl);
+        checkPointImageView.setImage(image);
+    }
 }

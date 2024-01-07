@@ -10,7 +10,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController">
+<?import javafx.scene.control.Label?>
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="800.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
@@ -1652,70 +1653,14 @@
                             </ImageView>
                         </children>
                     </HBox>
-                    <!-- Installed Upgrades -->
-                    <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="650.0">
+                    <!-- Checkpoint ImageView -->
+                    <HBox alignment="CENTER" maxHeight="100.0" maxWidth="650.0" prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
                         <children>
-                            <!-- Installed permanent Upgrades -->
-                            <HBox fx:id="totalPermanentUpdate" prefHeight="100.0" prefWidth="195.0">
+                            <ImageView fx:id="checkPointImageView" fitHeight="70.0" fitWidth="70.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                                 <HBox.margin>
-                                    <Insets left="65.0" />
+                                    <Insets />
                                 </HBox.margin>
-                                <children>
-                                    <ImageView fx:id="permanentUpdate0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                        <HBox.margin>
-                                            <Insets />
-                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="permanentUpdate1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                        <HBox.margin>
-                                            <Insets />
-                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="permanentUpdate2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                        <HBox.margin>
-                                            <Insets />
-                                        </HBox.margin>
-                                    </ImageView>
-                                </children>
-                            </HBox>
-                            <!-- Installed temporary Upgrades -->
-                            <HBox fx:id="totalTemporaryUpdate" prefHeight="100.0" prefWidth="195.0">
-                                <children>
-                                    <ImageView fx:id="temporaryUpdate0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                        <HBox.margin>
-                                            <Insets />
-                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="temporaryUpdate1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                        <HBox.margin>
-                                            <Insets />
-                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="temporaryUpdate2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                        </image>
-                                    </ImageView>
-                                </children>
-                                <HBox.margin>
-                                    <Insets left="130.0" />
-                                </HBox.margin>
-                            </HBox>
+                            </ImageView>
                         </children>
                     </HBox>
                     <!-- Discard Pile, Programming Pile -->

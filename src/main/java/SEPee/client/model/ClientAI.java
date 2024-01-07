@@ -154,12 +154,20 @@ public class ClientAI extends Application {
 
                             // Create a new Player object
                             Player newPlayer = new Player(name, id, figure+1);
+                            boolean exists = false;
+                            for(Player player : playerListClient){
+                                if(player.getId() == id){
+                                    player.setName(name);
+                                    player.setFigure(figure+1);
+                                    exists = true;
+                                }
+                            }
+                            if(!exists){
+                                playerListClient.add(newPlayer);
+                            }
 
-                            // Add the new player to the client-side playerList
-                            Client.getPlayerListClient().add(newPlayer);
-
-                            for(Player player : Client.getPlayerListClient()){
-                                Client.getTakenFigures().add(player.getFigure());
+                            for(Player player : playerListClient){
+                                getTakenFigures().add(player.getFigure());
                             }
 
                             System.out.println("ClientAI - Player added");
