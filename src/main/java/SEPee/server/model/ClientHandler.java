@@ -132,7 +132,7 @@ public class ClientHandler implements Runnable {
                                     broadcast(serializedConnectionUpdate);
                                 }
                             }
-                             */
+                            */
 
                             break;
                         case "PlayerValues":
@@ -411,6 +411,68 @@ public class ClientHandler implements Runnable {
                                         //send twice turn by 90 degrees in order to end up turning 180 degrees
                                         broadcast(serializedPlayerTurningUTurn);
                                         broadcast(serializedPlayerTurningUTurn);
+                                        break;
+                                    case "Spam":
+                                        playSpam();
+                                        break;
+                                    case "TrojanHorse":
+                                        int damageCounter = 0;
+                                        for(int i = 0; i < 2; i++){
+                                            if(Server.getGame().getSpam() > 0){
+                                                for(Player player : Server.getGame().getPlayerList()){
+                                                     if(player.getId() == clientId){
+                                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                                         player.getPlayerMat().getDiscardPile().add("Spam");
+                                                     }
+                                                }
+                                            }else{
+                                              damageCounter++;
+                                            }
+                                        }
+                                        if(damageCounter > 0){
+                                            ArrayList<String> avaiableDamage = new ArrayList<>();
+                                            if(Server.getGame().getVirus() > 0){
+                                                avaiableDamage.add("Virus");
+                                            }
+                                            if(Server.getGame().getTrojanHorse() > 0){
+                                                avaiableDamage.add("Trojan");
+                                            }
+                                            if(Server.getGame().getWurm() > 0){
+                                                avaiableDamage.add("Worm");
+                                            }
+                                            if(!avaiableDamage.isEmpty()) {
+                                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
+
+                                                PlayerStatus allWait = new PlayerStatus(-9999, true);
+                                                String serializedAllWait = Serialisierer.serialize(allWait);
+                                                broadcast(serializedAllWait);
+
+                                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                                sendToOneClient(player.getId(), serializedPickDamage);
+                                            }
+                                        }
+                                        break;
+                                    case "Virus":
+                                        playVirus();
+                                        break;
+                                    case "Worm":
+                                        for(Player player : Server.getGame().getPlayerList()) {
+                                            if(player.getId() == clientId) {
+                                                int x = player.getRobot().getX();
+                                                if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
+                                                    if (x <= 9) {
+                                                        rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                                                    } else if (x > 9) {
+                                                        rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                                                    }
+                                                } else if (x < 3) {
+                                                    rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                                                } else if (x >= 3) {
+                                                    rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                                                }
+                                            }
+                                        }
                                         break;
                                     default:
                                         System.out.println("unknown card name");
