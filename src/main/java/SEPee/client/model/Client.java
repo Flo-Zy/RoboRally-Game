@@ -700,11 +700,14 @@ public class Client extends Application {
                             synchronized (playerListClient) {
                                 for (Player player : playerListClient) {
                                     if (player.getId() == clientID) {
-                                        controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                                         controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
 
                                     }
                                 }
+                            }
+
+                            if(clientID == controller.getId()){
+                                controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                             }
 
                             break;
