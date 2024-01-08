@@ -7,21 +7,23 @@ import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
-//auslagern
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.damageCard.*;
+import SEPee.server.model.card.damageCard.Spam;
+import SEPee.server.model.card.damageCard.TrojanHorse;
+import SEPee.server.model.card.damageCard.Virus;
+import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
-import SEPee.server.model.gameBoard.ExtraCrispy;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,16 +31,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import java.util.Iterator;
-
-
-import javafx.util.Duration;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Client extends Application {
@@ -144,6 +140,9 @@ public class Client extends Application {
                             Platform.runLater(() -> {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.init(this, primaryStage);
+
+                                controller.playCustomSound("get ready for this");
+
                                 // PlayerValues schicken
                                 PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                 String serializedPlayerValues = Serialisierer.serialize(playerValues);
@@ -265,6 +264,9 @@ public class Client extends Application {
                                 controller.loadDeathTrapFXML(this, primaryStage);
                             }
 
+                            controller.playEventSound("GameStartAnnouncement");
+
+
                             // weitere Maps
 
                             break;
@@ -325,6 +327,7 @@ public class Client extends Application {
                                 controller.setRegisterVisibilityFalse();
                                 controller.initRegister();
                                 System.out.println(" Programmierungsphase");
+                                controller.playEventSound("ProgrammingPhase");
                             }
                             if (controller.getCurrentPhase() == 3){
                                 System.out.println(" Aktivierungsphase");

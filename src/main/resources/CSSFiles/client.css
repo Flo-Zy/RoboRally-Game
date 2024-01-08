@@ -64,3 +64,9 @@
 .button {
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 36, 0.2, 0, 7);
 }
+
+.mute-button {
+    -fx-background-color: #CCCCCC; /* Example background color */
+    -fx-text-fill: white; /* Example text color */
+    /* Other button styles */
+}

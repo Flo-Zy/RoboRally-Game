@@ -1,18 +1,13 @@
 package SEPee.server.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-
-import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Movement;
-import SEPee.server.model.card.Card;
-import SEPee.server.model.card.Decks;
-import SEPee.server.model.card.upgradeCard.UpgradeCard;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 @Getter
 @Setter
@@ -48,6 +43,18 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
+
+
+            double millisToSleep = playerList.size() * 3750 - 5; // every animation is 750 millis long, times 5 registers, times the player amount
+
+            try {
+                Thread.sleep((long) millisToSleep);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
@@ -55,14 +62,9 @@ public class Game implements Robot.RobotPositionChangeListener {
             currentPhase++;
             // jetzt in AktivierungsPhase
 
-
-
-
             System.out.println("Wir sind in der Phase:" + currentPhase);
 
             //set teleports or clients
-
-
 
         }
     }

@@ -4,13 +4,12 @@ import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
-//Später auslagern
+import SEPee.serialisierung.messageType.MapSelected;
+import SEPee.serialisierung.messageType.SendChat;
+import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.progCard.*;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,18 +20,14 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +37,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientController {
     @FXML
@@ -87,6 +81,8 @@ public class ClientController {
     private VBox LostBearingsMap;
     @FXML
     private VBox DeathTrapMap;
+    @FXML
+    private Button muteButton;
     @Getter
     @Setter
     private static int currentPhase;
@@ -94,7 +90,6 @@ public class ClientController {
     private static int startPointX;
     @Getter
     private static int startPointY;
-
 
 
     public void init(Client Client, Stage stage) {
@@ -106,12 +101,21 @@ public class ClientController {
             dialog.setHeaderText("Please enter your username:");
             dialog.setContentText("Username:");
 
+
             dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
             dialog.getDialogPane().setGraphic(null);
 
             stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
                     "-fx-background-repeat: repeat;" +
                     "-fx-background-size: cover;");
+
+            Scene scene = stage.getScene();
+            scene.getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+            muteButton = new Button("Mute Sounds");
+            muteButton.getStyleClass().add("mute-button");
+            muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
+            VBox root = (VBox) scene.getRoot();
+            root.getChildren().add(muteButton);
 
             Optional<String> result = dialog.showAndWait();
 
@@ -280,6 +284,7 @@ public class ClientController {
     }
 
     String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
+
     private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
@@ -303,7 +308,7 @@ public class ClientController {
             imageView.setFitHeight(100);
 
             //Label nameLabel = new Label("Robot " + i);
-            Label nameLabel = new Label(robotNames[i-1]);
+            Label nameLabel = new Label(robotNames[i - 1]);
             nameLabel.setAlignment(Pos.CENTER);
             nameLabel.getStyleClass().add("grid-label");
 
@@ -322,7 +327,7 @@ public class ClientController {
                 imageView.setOnMouseClicked(event -> {
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
-                    avatarNameLabel.setText(robotNames[robotNumber-1]);
+                    avatarNameLabel.setText(robotNames[robotNumber - 1]);
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
@@ -351,12 +356,12 @@ public class ClientController {
 
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
-        while(true){
+        while (true) {
             int robotNumber = random.nextInt(1, 7);
             // Überprüfen, ob der Roboter bereits genommen wurde
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
-            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
+            } else if (takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
                 return -1;
             }
         }
@@ -543,7 +548,7 @@ public class ClientController {
         return selectedDirection[0];
     }
 
-    public String showSelectDamageDialog(ArrayList<String> availableList){
+    public String showSelectDamageDialog(ArrayList<String> availableList) {
         String selectedDamage = null;
 
         while (selectedDamage == null) {
@@ -594,7 +599,7 @@ public class ClientController {
         });
     }
 
-    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
+    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
@@ -804,9 +809,9 @@ public class ClientController {
         });
     }
 
-    public void addTakenStartingPoints(int x, int y){
+    public void addTakenStartingPoints(int x, int y) {
         int combinedValue = x * 10 + y;
-        switch(combinedValue){
+        switch (combinedValue) {
             case 11:
                 takenStartPoints.add(1);
                 break;
@@ -828,9 +833,9 @@ public class ClientController {
         }
     }
 
-    public void addTakenStartingPointsDeathTrap(int x, int y){
+    public void addTakenStartingPointsDeathTrap(int x, int y) {
         int combinedValue = x * 10 + y;
-        switch(combinedValue){
+        switch (combinedValue) {
             case 111:
                 takenStartPoints.add(1);
                 break;
@@ -915,7 +920,7 @@ public class ClientController {
                 selectedButton.setDisable(true); // Disable the selected button
             }
 
-            if(Client.getSelectedMap1().equals("Death Trap")) {
+            if (Client.getSelectedMap1().equals("Death Trap")) {
                 setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
             } else {
                 setStartingPointXY(selectedStartingpoint);
@@ -940,15 +945,15 @@ public class ClientController {
         Random random = new Random();
         int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
 
-        if(ClientAI.getSelectedMap1().equals("DeathTrap")) {
+        if (ClientAI.getSelectedMap1().equals("DeathTrap")) {
             setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
         } else {
             setStartingPointXY(selectedStartingPoint);
         }
     }
 
-    public void setStartingPointXY(int StartingPointNumber){
-        switch(StartingPointNumber){
+    public void setStartingPointXY(int StartingPointNumber) {
+        switch (StartingPointNumber) {
             case 1:
                 startPointX = 1;
                 startPointY = 1;
@@ -976,8 +981,8 @@ public class ClientController {
         }
     }
 
-    public void setStartingPointXYDeathTrap(int StartingPointNumber){
-        switch(StartingPointNumber){
+    public void setStartingPointXYDeathTrap(int StartingPointNumber) {
+        switch (StartingPointNumber) {
             case 1:
                 startPointX = 11;
                 startPointY = 1;
@@ -1005,27 +1010,27 @@ public class ClientController {
         }
     }
 
-    public void putAvatarDown(Player player, int x, int y){
+    public void putAvatarDown(Player player, int x, int y) {
         mapController.avatarAppear(player, x, y);
     }
 
-    public void initDrawPile(){
+    public void initDrawPile() {
         mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
     }
 
-    public void initRegister(){
+    public void initRegister() {
         mapController.initializeRegister(id, clientHand);
     }
 
-    public void initRegisterAI(){
+    public void initRegisterAI() {
         mapController.initializeRegisterAI(id, clientHand);
     }
 
-    public void setRegisterVisibilityFalse(){
+    public void setRegisterVisibilityFalse() {
         mapController.setRegisterVisibilityFalse();
     }
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards){
+    public void fillEmptyRegister(ArrayList<Card> nextCards) {
         mapController.fillEmptyRegister(nextCards);
     }
 
@@ -1033,11 +1038,18 @@ public class ClientController {
         mapController.movementPlayed(clientIdToMove, newX, newY);
     }
 
-    public void playerTurn(int clientIdToTurn, String rotation){
+    public void playerTurn(int clientIdToTurn, String rotation) {
         mapController.playerTurn(clientIdToTurn, rotation);
     }
 
     public void setCheckPointImage(String imageUrl) {
         mapController.setCheckPointImage(imageUrl);
+    }
+
+    public void playCustomSound(String soundName) {
+        SoundManager.playSound(soundName);
+    }
+    public void playEventSound(String soundName) {
+        SoundManager.playEventSound(soundName);
     }
 }
