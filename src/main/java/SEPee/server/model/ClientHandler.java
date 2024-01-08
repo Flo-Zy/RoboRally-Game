@@ -2777,4 +2777,145 @@ public class ClientHandler implements Runnable {
             broadcast(serializedConnectionUpdate);
         }, 5, TimeUnit.SECONDS);
     }
+
+    public void playSpam() throws InterruptedException {
+        String newCard = "";
+        for(Player player: Server.getGame().getPlayerList()){
+            if(player.getId() == clientId){
+                if(!player.getPlayerMat().getProgDeck().isEmpty()){
+                    newCard = player.getPlayerMat().getProgDeck().get(0).getName();
+                    player.getPlayerMat().getProgDeck().remove(0);
+                    if(newCard.equals("Spam") || newCard.equals("TrojanHorse") || newCard.equals("Virus") || newCard.equals("Worm")) {
+                        switch(newCard){
+                            case "Spam":
+                                Server.getGame().setSpam(Server.getGame().getSpam() + 1);
+                                break;
+                            case "TrojanHorse":
+                                Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse() + 1);
+                                break;
+                            case "Virus":
+                                Server.getGame().setVirus(Server.getGame().getVirus() + 1);
+                                break;
+                            case "Worm":
+                                Server.getGame().setWurm(Server.getGame().getWurm() + 1);
+                                break;
+                        }
+                    }else{
+                        player.getPlayerMat().getDiscardPile().add(newCard);
+                    }
+                }
+                switch (newCard) {
+                    case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                        handleRobotMovement(1, false);
+                        break;
+                    case "MoveI":
+                        handleRobotMovement(1, true);
+                        break;
+                    case "MoveII":
+                        handleRobotMovement(2, true);
+                        break;
+                    case "MoveIII":
+                        handleRobotMovement(3, true);
+                        break;
+                    case "PowerUp":
+                        //lastPlayedCard = "PowerUp";
+                        break;
+                    case "TurnRight":
+                        //lastPlayedCard = "RightTurn";
+                        RightTurn.makeEffect(this.robot);
+                        int clientIDRightTurn = this.clientId;
+                        PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
+                        String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
+                        Thread.sleep(750);
+                        broadcast(serializedPlayerTurningRight);
+                        break;
+                    case "TurnLeft":
+                        //lastPlayedCard = "LeftTurn";
+                        LeftTurn.makeEffect(this.robot);
+                        int clientIDLeftTurn = this.clientId;
+                        PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
+                        String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
+                        Thread.sleep(750);
+                        broadcast(serializedPlayerTurningLeft);
+                        break;
+                    case "UTurn":
+                        //lastPlayedCard = "UTurn";
+                        UTurn.makeEffect(this.robot);
+                        int clientIDUTurn = this.clientId;
+                        PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
+                        String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
+                        //send twice turn by 90 degrees in order to end up turning 180 degrees
+                        Thread.sleep(750);
+                        broadcast(serializedPlayerTurningUTurn);
+                        broadcast(serializedPlayerTurningUTurn);
+                        break;
+                    case "Spam":
+                        playSpam();
+                        break;
+                    case "TrojanHorse":
+                        int damageCounter = 0;
+                        for(int i = 0; i < 2; i++){
+                            if(Server.getGame().getSpam() > 0){
+                                Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getDiscardPile().add("Spam");
+                            }else{
+                                damageCounter++;
+                            }
+                        }
+                        if(damageCounter > 0){
+                            ArrayList<String> avaiableDamage = new ArrayList<>();
+                            if(Server.getGame().getVirus() > 0){
+                                avaiableDamage.add("Virus");
+                            }
+                            if(Server.getGame().getTrojanHorse() > 0){
+                                avaiableDamage.add("Trojan");
+                            }
+                            if(Server.getGame().getWurm() > 0){
+                                avaiableDamage.add("Worm");
+                            }
+                            if(!avaiableDamage.isEmpty()) {
+                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
+
+                                PlayerStatus allWait = new PlayerStatus(-9999, true);
+                                String serializedAllWait = Serialisierer.serialize(allWait);
+                                broadcast(serializedAllWait);
+
+                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
+                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
+                                sendToOneClient(player.getId(), serializedPickDamage);
+                            }
+                        }
+                        break;
+                    case "Virus":
+                        playVirus();
+                        break;
+                    case "Worm":
+                        int x = player.getRobot().getX();
+                        if (Server.getGame().getBoardClass().getBordName().equals("Death Trap")) {
+                            if (x <= 9) {
+                                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                            } else if (x > 9) {
+                                rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                            }
+                        } else if (x < 3) {
+                            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "startingPoint");
+                        } else if (x >= 3) {
+                            rebootThisRobot(player.getRobot().getX(), player.getRobot().getY(), "rebootField");
+                        }
+                        break;
+                    default:
+                        System.out.println("unknown card name");
+                        break;
+
+
+                }
+            }
+        }
+
+    }
+
+    public void playVirus(){
+
+    }
+
 }
