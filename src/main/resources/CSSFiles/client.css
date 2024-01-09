@@ -35,6 +35,10 @@
 
 #visibilityButton {
     -fx-background-color: #dde400;
+    -fx-min-width: 100px;
+    -fx-min-height: 26px;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 26px;
     -fx-text-fill: #2E2E2E;
     -fx-font-weight: bold;
 }
@@ -42,11 +46,6 @@
 #messageField {
     -fx-prompt-text-fill: #999999;
     -fx-pref-width: 100%;
-}
-
-#visibilityButton {
-    -fx-pref-width: 100px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 36, 0.2, 0, 7);
 }
 
 #sendButton {
