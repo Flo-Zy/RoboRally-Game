@@ -2918,4 +2918,19 @@ public class ClientHandler implements Runnable {
 
     }
 
+    public boolean isWithinSixFields(Robot robotPlayedVirus, Robot robotToBeChecked){
+        int xRobotPlayedVirus = robotPlayedVirus.getX();
+        int yRobotPlayedVirus = robotPlayedVirus.getY();
+
+        int xRobotToBeChecked = robotToBeChecked.getX();
+        int yRobotToBeChecked = robotToBeChecked.getY();
+
+        // Calculate Manhattan distance
+        int distance = Math.abs(xRobotPlayedVirus - xRobotToBeChecked) + Math.abs(yRobotPlayedVirus - yRobotToBeChecked);
+
+        // Check if the distance is within 6 fields
+        return distance <= 6;
+
+    }
+
 }
