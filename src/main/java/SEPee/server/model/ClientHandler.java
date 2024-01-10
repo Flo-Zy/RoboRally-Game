@@ -2885,6 +2885,8 @@ public class ClientHandler implements Runnable {
                                 sendToOneClient(player.getId(), serializedPickDamage);
                             }
                         }
+                        //play the top card of the draw pile this register
+                        playSpam();
                         break;
                     case "Virus":
                         playVirus();
@@ -2914,8 +2916,19 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void playVirus(){
+    public void playVirus() throws InterruptedException {
+        //loop through the player list and if it is not your own robot and within 6 fields of you apply the effect
+        for(Player player : Server.getGame().getPlayerList()){
+            if(isWithinSixFields(this.robot, player.getRobot()) && this.robot != player.getRobot()){
+                // was passiert wenn virus karten verbraucht sind?
 
+                //add a virus card to the player's discard pile
+                player.getPlayerMat().getDiscardPile().add("Virus");
+
+                //play the top card of the drawPil this register
+                playSpam();
+            }
+        }
     }
 
     public boolean isWithinSixFields(Robot robotPlayedVirus, Robot robotToBeChecked){
@@ -2928,6 +2941,8 @@ public class ClientHandler implements Runnable {
         // Calculate Manhattan distance
         int distance = Math.abs(xRobotPlayedVirus - xRobotToBeChecked) + Math.abs(yRobotPlayedVirus - yRobotToBeChecked);
 
+        System.out.print("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
+        System.out.println(distance <= 6);
         // Check if the distance is within 6 fields
         return distance <= 6;
 
