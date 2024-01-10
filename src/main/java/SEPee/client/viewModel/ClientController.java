@@ -104,17 +104,17 @@ public class ClientController {
 
     public void init(Client client, Stage stage) {
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
-        TextField usernameTextField = new TextField();
-        final int[] selectedRobotNumber = {0};
-        Font customFont1 = Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
-        String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
         dialog.setTitle("Welcome to RoboRally");
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
         dialog.getDialogPane().setGraphic(null);
-        dialog.getDialogPane().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
-                "-fx-background-repeat: repeat;" +
-                "-fx-background-size: cover;");
-        Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
+        dialog.getDialogPane().getStyleClass().add("dialog-background");
+
+        TextField usernameTextField = new TextField();
+        usernameTextField.setPromptText("Username");
+        usernameTextField.getStyleClass().add("username-text-field");
+
+        final int[] selectedRobotNumber = {0};
+        String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
 
         ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
@@ -122,42 +122,31 @@ public class ClientController {
         if (okButton instanceof Button) {
             ((Button) okButton).setDisable(true);
         }
+
         updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
-        stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
-                "-fx-background-repeat: repeat;" +
-                "-fx-background-size: cover;");
+        stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         GridPane roboRally = new GridPane();
-        roboRally.setMinWidth(600);
-        roboRally.setMinHeight(177);
         roboRally.getStyleClass().add("robo-rally-grid");
-        Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png"); // Ersetzen Sie "/path/to/image.png" mit dem Pfad zu Ihrem Bild
+        Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
         ImageView introImage = new ImageView(RoboRallyName);
-        introImage.getStyleClass().add("introImage");
-        introImage.setFitWidth(469); // Setzen Sie die gewünschte Breite
-        introImage.setFitHeight(91); // Setzen Sie die gewünschte Höhe
-        introImage.setPreserveRatio(true);
+        introImage.getStyleClass().add("intro-image");
         roboRally.add(introImage, 0,0);
         roboRally.setAlignment(Pos.CENTER);
         GridPane.setHalignment(roboRally, HPos.CENTER);
         GridPane.setValignment(roboRally, VPos.CENTER);
         grid.add(roboRally, 0,0);
-
-        usernameTextField.setPromptText("Username");
-        usernameTextField.getStyleClass().add("username-text-field");
-        GridPane.setHalignment(usernameTextField, HPos.CENTER);
-        GridPane.setValignment(usernameTextField, VPos.CENTER);
         grid.add(usernameTextField,0,1);
         grid.setMinHeight(300);
-        usernameTextField.setFont(Font.font("Digital-Bold"));
 
         GridPane robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
+        robotSelectionGrid.getStyleClass().add("robot-selection-grid");
         dialog.getDialogPane().setContent(grid);
 
         ColumnConstraints columnConstraints = new ColumnConstraints();
@@ -230,7 +219,7 @@ public class ClientController {
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
-                    avatarNameLabel.setFont(customFont1);
+                    //avatarNameLabel.setFont(customFont1);
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(10.0);
                     dropShadow.setOffsetX(3.0);
