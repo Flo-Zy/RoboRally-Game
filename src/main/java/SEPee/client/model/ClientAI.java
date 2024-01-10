@@ -84,6 +84,7 @@ public class ClientAI extends Application {
             primaryStage.setScene(scene);
 
             ClientController controller = loader.getController();
+            controller.setName("AI");
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
@@ -573,6 +574,7 @@ public class ClientAI extends Application {
                             break;
                         case "Movement":
                             System.out.println("Movement");
+                            controller.setPlayerListClient(playerListClientAI);
                             Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
 
                             int clientIdToMove = movement.getMessageBody().getClientID();
@@ -584,6 +586,7 @@ public class ClientAI extends Application {
                             break;
                         case "PlayerTurning":
                             System.out.println("Player Turning");
+                            controller.setPlayerListClient(playerListClientAI);
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
 
                             int clientIdToTurn = playerTurning.getMessageBody().getClientID();
