@@ -28,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.ButtonBar;
@@ -105,8 +106,9 @@ public class ClientController {
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
         TextField usernameTextField = new TextField();
         final int[] selectedRobotNumber = {0};
+        Font customFont1 = Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
         String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
-        dialog.setTitle("User and Robot Selection");
+        dialog.setTitle("Welcome to RoboRally");
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
         dialog.getDialogPane().setGraphic(null);
         dialog.getDialogPane().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
@@ -114,8 +116,8 @@ public class ClientController {
                 "-fx-background-size: cover;");
         Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
 
-        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+        ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
         if (okButton instanceof Button) {
             ((Button) okButton).setDisable(true);
@@ -171,10 +173,24 @@ public class ClientController {
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(120);
             imageView.setFitHeight(120);
+
             Label nameLabel = new Label(robotNames[i - 1]);
-            nameLabel.setFont(Font.font("Digital-Bold"));
             nameLabel.setAlignment(Pos.CENTER);
-            nameLabel.getStyleClass().add("grid-label");
+            nameLabel.getStyleClass().add("grid-label-robonames");
+            nameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 36));
+            nameLabel.setTextFill(Color.web("#dde400"));
+            DropShadow nameShadow = new DropShadow();
+            nameLabel.setEffect(nameShadow);
+            nameShadow.setRadius(50.0); // Radius des Schattens
+            nameShadow.setOffsetX(50.0); // Horizontaler Versatz des Schattens
+            nameShadow.setOffsetY(50.0); // Vertikaler Versatz des Schattens
+            nameShadow.setColor(Color.BLACK); // Farbe des Schattens
+
+
+            GridPane.setHalignment(imageView, HPos.CENTER);
+            GridPane.setValignment(imageView, VPos.CENTER);
+            GridPane.setHalignment(nameLabel, HPos.CENTER);
+            GridPane.setValignment(nameLabel, VPos.CENTER);
 
             robotSelectionGrid.add(imageView, i - 1, 0);
             robotSelectionGrid.add(nameLabel, i - 1, 1);
@@ -214,7 +230,7 @@ public class ClientController {
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
-                    avatarNameLabel.setFont(Font.font("Digital-Bold"));
+                    avatarNameLabel.setFont(customFont1);
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(10.0);
                     dropShadow.setOffsetX(3.0);

@@ -28,7 +28,6 @@
 .dialog-pane .header-panel .label {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-font-family: "MyCustomFont";
     -fx-text-fill: #dde400;
 }
 
@@ -85,10 +84,14 @@
 }
 
 /* Style for the grid layout */
-.grid-pane {
+.grid-pane-robonames /*.button .grid-label*/{
     -fx-hgap: 15px; /* horizontal gap between grid cells */
     -fx-vgap: 15px; /* vertical gap between grid cells */
     -fx-alignment: center; /* align content to the center */
+    -fx-font-family: "Canela Text";
+    -fx-text-fill: #dde400 ;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow(three-pass-box, rgba(10,10,10,12), 10, 0, 0, 10);
 }
 
 .text-field {
