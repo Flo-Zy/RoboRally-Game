@@ -1,10 +1,4 @@
-.root {
-    -fx-font-family: "MyCustomFont";
-}
-@font-face {
-    font-family: "MyCustomFont";
-    src: url("/CSSFiles/Digital-Bold.ttf");
-}
+
 /* Stil für den Hauptbereich des Dialogs */
 .dialog-pane {
     -fx-background-color: #2E2E2E;
@@ -49,14 +43,6 @@
     -fx-text-fill: #d8000c;
 }
 
-.root {
-    -fx-font-family: "MyCustomFont";
-}
-@font-face {
-    font-family: "MyCustomFont";
-    src: url("/CSSFiles/Digital-Bold.ttf");
-}
-
 /* Style for the dialog pane */
 .dialog-pane {
     -fx-background-color: #2E2E2E; /* grauer Hintergrund */
@@ -71,7 +57,6 @@
     -fx-wrap-text: true; /* Enable text wrapping */
     -fx-max-width: 100px;
     -fx-padding: 40; /* Padding around labels */
-    -fx-font-family: "MyCustomFont";
 }
 
 /* Style for images representing robots */
@@ -93,10 +78,10 @@
     -fx-text-fill: #dde400; /* dark gray text color */
     -fx-font-weight: bold; /* bold font weight */
     -fx-alignment: center;
-    -fx-background-color: #2E2E2E;
+    -fx-background-color: black;
     -fx-wrap-text: true; /* Enable text wrapping */
     -fx-max-width: 100px; /* Maximum width for labels */
-    -fx-padding: 5 0 5 0; /* Padding around labels */
+    -fx-padding: 0 0 0 0; /* Padding around labels */
 }
 
 /* Style for the grid layout */
@@ -106,7 +91,36 @@
     -fx-alignment: center; /* align content to the center */
 }
 
+.text-field {
+    -fx-pref-width: 200px; /* Bevorzugte Breite */
+    -fx-max-width: 300px; /* Maximale Breite */
+    -fx-alignment: center;
+    -fx-background-color: rgba(221, 228, 0, 0.64);
+    -fx-prompt-text-fill: #2E2E2E;
+    /* Zentriert den Text im TextField */
+}
+
 .image-view:hover {
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
+}
+
+
+/* Stil für das usernameTextField */
+.username-text-field {
+    /* Ihre CSS-Regeln hier, z.B. */
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+.introImage .image-view:hover {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.robo-rally-grid .image-view:hover {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-cursor: normal;
+    -fx-alignment: center;
 }

@@ -15,15 +15,15 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -109,6 +109,9 @@ public class ClientController {
         dialog.setTitle("User and Robot Selection");
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
         dialog.getDialogPane().setGraphic(null);
+        dialog.getDialogPane().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
+                "-fx-background-repeat: repeat;" +
+                "-fx-background-size: cover;");
 
         ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
@@ -125,15 +128,39 @@ public class ClientController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-
+        GridPane roboRally = new GridPane();
+        roboRally.setHgap(100);
+        roboRally.setVgap(100);
+        roboRally.getStyleClass().add("robo-rally-grid");
+        Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png"); // Ersetzen Sie "/path/to/image.png" mit dem Pfad zu Ihrem Bild
+        ImageView introImage = new ImageView(RoboRallyName);
+        introImage.getStyleClass().add("introImage");
+        introImage.setFitWidth(469); // Setzen Sie die gewünschte Breite
+        introImage.setFitHeight(91); // Setzen Sie die gewünschte Höhe
+        introImage.setPreserveRatio(true);
+        roboRally.add(introImage, 0,0);
+        GridPane.setHalignment(roboRally, HPos.CENTER);
+        GridPane.setValignment(roboRally, VPos.CENTER);
+        grid.add(roboRally, 0,0);
 
         usernameTextField.setPromptText("Username");
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(usernameTextField, 1, 0);
+        usernameTextField.getStyleClass().add("username-text-field");
+        GridPane.setHalignment(usernameTextField, HPos.CENTER);
+        grid.add(usernameTextField,0,1);
 
         GridPane robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
+        dialog.getDialogPane().setContent(grid);
+        //dialog.getDialogPane().setAlignment(Pos.CENTER);
+
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setHgrow(Priority.ALWAYS); // Erlaubt der Spalte, den verfügbaren Platz zu nutzen
+        grid.getColumnConstraints().add(columnConstraints);
+
+        RowConstraints rowConstraints = new RowConstraints();
+        rowConstraints.setVgrow(Priority.ALWAYS); // Erlaubt der Zeile, den verfügbaren Platz zu nutzen
+        grid.getRowConstraints().addAll(rowConstraints, rowConstraints, rowConstraints);
 
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
@@ -359,14 +386,16 @@ public class ClientController {
 
     public void shutdown() {
         try {
-            if (socket != null && !socket.isClosed()) {
-                if (writer != null) {
-                    writer.println(name + " has left the chat.");
-                    writer.flush();
-                    writer.close();
+            if (name != null) {
+                if (socket != null && !socket.isClosed()) {
+                    if (writer != null) {
+                        writer.println(name + " has left the chat.");
+                        writer.flush();
+                        writer.close();
+                    }
+                    Thread.sleep(100);
+                    socket.close();
                 }
-                Thread.sleep(100);
-                socket.close();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

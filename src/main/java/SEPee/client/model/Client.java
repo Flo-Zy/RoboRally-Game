@@ -144,11 +144,14 @@ public class Client extends Application {
                             Platform.runLater(() -> {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.init(this, primaryStage);
-                                // PlayerValues schicken
-                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
-                                String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                                writer.println(serializedPlayerValues);
-                                primaryStage.show();
+                                if ( controller.getName() == null || controller.getFigure() == 0) {
+                                    controller.shutdown();
+                                } else {
+                                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
+                                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                                    writer.println(serializedPlayerValues);
+                                    primaryStage.show();
+                                }
                             });
                             break;
                         case "PlayerAdded":
