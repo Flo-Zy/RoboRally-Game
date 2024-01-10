@@ -325,6 +325,7 @@ public class ClientController {
                 // Event Handler für Klicks auf das ImageView
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
+                    playUISound("Blips");
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
                     avatarNameLabel.setText(robotNames[robotNumber - 1]);
@@ -341,6 +342,7 @@ public class ClientController {
                     avatarNameLabel.setEffect(dropShadow);
                     avatarImageView.setEffect(dropShadow);
                     dialog.setResult(robotNumber);
+
                     dialog.close();
                 });
             }
@@ -1051,5 +1053,9 @@ public class ClientController {
     }
     public void playEventSound(String soundName) {
         SoundManager.playEventSound(soundName);
+    }
+
+    public void playUISound(String soundName) {
+        SoundManager.playUISound(soundName);
     }
 }
