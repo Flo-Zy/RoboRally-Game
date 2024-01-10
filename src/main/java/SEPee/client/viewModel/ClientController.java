@@ -34,6 +34,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,6 +68,9 @@ public class ClientController {
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
+    private List<Integer> takenFigures = new ArrayList<>();
+
+    private ImageView currentSelectedImageView = null;
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
@@ -97,45 +101,136 @@ public class ClientController {
 
 
 
-    public void init(Client Client, Stage stage) {
-        boolean validUsername = false;
+    public void init(Client client, Stage stage) {
+        Dialog<Pair<String, Integer>> dialog = new Dialog<>();
+        TextField usernameTextField = new TextField();
+        final int[] selectedRobotNumber = {0};
+        String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
+        dialog.setTitle("User and Robot Selection");
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+        dialog.getDialogPane().setGraphic(null);
 
-        while (!validUsername) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Username");
-            dialog.setHeaderText("Please enter your username:");
-            dialog.setContentText("Username:");
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+        Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
+        if (okButton instanceof Button) {
+            ((Button) okButton).setDisable(true);
+        }
+        updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
-            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
-            dialog.getDialogPane().setGraphic(null);
+        stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
+                "-fx-background-repeat: repeat;" +
+                "-fx-background-size: cover;");
 
-            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
-                    "-fx-background-repeat: repeat;" +
-                    "-fx-background-size: cover;");
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-            Optional<String> result = dialog.showAndWait();
 
-            if (result.isPresent() && !result.get().trim().isEmpty()) {
-                this.name = result.get().trim();
-                stage.setTitle("Client - " + name);
-                validUsername = true;
+        usernameTextField.setPromptText("Username");
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(usernameTextField, 1, 0);
 
-                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
-                setFigure(figure);
+        GridPane robotSelectionGrid = new GridPane();
+        robotSelectionGrid.setHgap(10);
+        robotSelectionGrid.setVgap(10);
 
-                sendButton.setOnAction(event -> sendMessage());
-                visibilityButton.setText("Alle");
-                visibilityButton.setOnAction(event -> toggleVisibility());
+        for (int i = 1; i <= 6; i++) {
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(120);
+            imageView.setFitHeight(120);
+            Label nameLabel = new Label(robotNames[i - 1]);
+            nameLabel.setAlignment(Pos.CENTER);
+            nameLabel.getStyleClass().add("grid-label");
+
+            robotSelectionGrid.add(imageView, i - 1, 0);
+            robotSelectionGrid.add(nameLabel, i - 1, 1);
+
+            if (client.getTakenFigures().contains(i)) {
+                imageView.setDisable(true);
+                imageView.setOpacity(0.1);
             } else {
-                // If Username is empty
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                alert.showAndWait();
+                final int robotNumber = i;
+                imageView.setOnMouseClicked(event -> {
+                    int newSelectedRobotNumber = 0; // Lokale Variable
+                    if (currentSelectedImageView == imageView) {
+                        // Deselektieren
+                        currentSelectedImageView.setOpacity(1.0);
+                        currentSelectedImageView = null;
+                    } else {
+                        // Auswählen
+                        if (currentSelectedImageView != null) {
+                            currentSelectedImageView.setOpacity(1.0);
+                        }
+                        imageView.setOpacity(0.5);
+                        newSelectedRobotNumber = robotNumber;
+                        currentSelectedImageView = imageView;
+                    }
+                    /*if (selectedRobotNumber[0] == robotNumber) {
+                        // Robot wird deselektiert
+                        selectedRobotNumber[0] = 0;
+                        imageView.setOpacity(1.0);
+                    } else {
+                        // Robot wird ausgewählt
+                        selectedRobotNumber[0] = robotNumber;
+                        imageView.setOpacity(0.5);
+                    }*/
+                    avatarImageView.setImage(image);
+                    avatarImageView.setVisible(true);
+                    avatarNameLabel.setText(robotNames[robotNumber-1]);
+                    avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
+                            "-fx-font-size: 40px; " +
+                            "-fx-font-family: 'Impact'");
 
-                Platform.exit();
+                    DropShadow dropShadow = new DropShadow();
+                    dropShadow.setRadius(10.0);
+                    dropShadow.setOffsetX(3.0);
+                    dropShadow.setOffsetY(3.0);
+                    dropShadow.setColor(Color.BLACK);
+
+                    avatarNameLabel.setEffect(dropShadow);
+                    avatarImageView.setEffect(dropShadow);
+                    selectedRobotNumber[0] = newSelectedRobotNumber;
+                    System.out.println("Selected Robot Number: " + selectedRobotNumber[0]);
+                    updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+                });
             }
+        }
+
+        grid.add(robotSelectionGrid, 0, 2, 2, 1);
+
+        usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+        });
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return new Pair<>(usernameTextField.getText().trim(), selectedRobotNumber[0]);
+            }
+            return null;
+        });
+
+        Optional<Pair<String, Integer>> result = dialog.showAndWait();
+
+        result.ifPresent(usernameRobotPair -> {
+            this.name = usernameRobotPair.getKey();
+            this.figure = usernameRobotPair.getValue();
+            stage.setTitle("Client - " + name);
+            // Hier Ihre weitere Initialisierungslogik
+        });
+    }
+
+    private void updateOkButtonState(Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
+        Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
+
+        if (okButton != null) {
+            boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty();
+            boolean isRobotSelected = selectedRobotNumber[0] > 0;
+            System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected);
+            okButton.setDisable(!(isUsernameValid && isRobotSelected));
         }
     }
 
@@ -279,8 +374,7 @@ public class ClientController {
         System.exit(0);
     }
 
-    String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
-    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
+    /*private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
 
@@ -347,7 +441,7 @@ public class ClientController {
         Optional<Integer> result = dialog.showAndWait();
 
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
-    }
+    }*/
 
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
@@ -356,7 +450,8 @@ public class ClientController {
             // Überprüfen, ob der Roboter bereits genommen wurde
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
-            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
+            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) &&
+                    takenFigures.contains(5) && takenFigures.contains(6)) {
                 return -1;
             }
         }
