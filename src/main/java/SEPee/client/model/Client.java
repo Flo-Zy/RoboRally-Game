@@ -15,6 +15,7 @@ import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.ExtraCrispy;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -34,14 +35,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.Iterator;
 
+
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 public class Client extends Application {
 
-    // private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    // private static final int SERVER_PORT = 52018;
+    //private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    //private static final int SERVER_PORT = 52018;
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
 
@@ -697,11 +700,14 @@ public class Client extends Application {
                             synchronized (playerListClient) {
                                 for (Player player : playerListClient) {
                                     if (player.getId() == clientID) {
-                                        controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                                         controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
 
                                     }
                                 }
+                            }
+
+                            if(clientID == controller.getId()){
+                                controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                             }
 
                             break;
