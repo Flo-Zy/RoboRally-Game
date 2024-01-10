@@ -78,7 +78,7 @@
     -fx-text-fill: #dde400; /* dark gray text color */
     -fx-font-weight: bold; /* bold font weight */
     -fx-alignment: center;
-    -fx-background-color: black;
+    -fx-background-color: transparent;
     -fx-wrap-text: true; /* Enable text wrapping */
     -fx-max-width: 100px; /* Maximum width for labels */
     -fx-padding: 0 0 0 0; /* Padding around labels */

@@ -112,6 +112,7 @@ public class ClientController {
         dialog.getDialogPane().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
                 "-fx-background-repeat: repeat;" +
                 "-fx-background-size: cover;");
+        Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 12);
 
         ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
@@ -129,8 +130,8 @@ public class ClientController {
         grid.setHgap(10);
         grid.setVgap(10);
         GridPane roboRally = new GridPane();
-        roboRally.setHgap(100);
-        roboRally.setVgap(100);
+        roboRally.setMinWidth(600);
+        roboRally.setMinHeight(177);
         roboRally.getStyleClass().add("robo-rally-grid");
         Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png"); // Ersetzen Sie "/path/to/image.png" mit dem Pfad zu Ihrem Bild
         ImageView introImage = new ImageView(RoboRallyName);
@@ -139,6 +140,7 @@ public class ClientController {
         introImage.setFitHeight(91); // Setzen Sie die gewünschte Höhe
         introImage.setPreserveRatio(true);
         roboRally.add(introImage, 0,0);
+        roboRally.setAlignment(Pos.CENTER);
         GridPane.setHalignment(roboRally, HPos.CENTER);
         GridPane.setValignment(roboRally, VPos.CENTER);
         grid.add(roboRally, 0,0);
@@ -146,13 +148,15 @@ public class ClientController {
         usernameTextField.setPromptText("Username");
         usernameTextField.getStyleClass().add("username-text-field");
         GridPane.setHalignment(usernameTextField, HPos.CENTER);
+        GridPane.setValignment(usernameTextField, VPos.CENTER);
         grid.add(usernameTextField,0,1);
+        grid.setMinHeight(300);
+        usernameTextField.setFont(Font.font("Digital-Bold"));
 
         GridPane robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
         dialog.getDialogPane().setContent(grid);
-        //dialog.getDialogPane().setAlignment(Pos.CENTER);
 
         ColumnConstraints columnConstraints = new ColumnConstraints();
         columnConstraints.setHgrow(Priority.ALWAYS); // Erlaubt der Spalte, den verfügbaren Platz zu nutzen
@@ -168,6 +172,7 @@ public class ClientController {
             imageView.setFitWidth(120);
             imageView.setFitHeight(120);
             Label nameLabel = new Label(robotNames[i - 1]);
+            nameLabel.setFont(Font.font("Digital-Bold"));
             nameLabel.setAlignment(Pos.CENTER);
             nameLabel.getStyleClass().add("grid-label");
 
@@ -209,7 +214,7 @@ public class ClientController {
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
-
+                    avatarNameLabel.setFont(Font.font("Digital-Bold"));
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(10.0);
                     dropShadow.setOffsetX(3.0);
