@@ -5,6 +5,10 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.damageCard.Spam;
+import SEPee.server.model.card.damageCard.TrojanHorse;
+import SEPee.server.model.card.damageCard.Virus;
+import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.field.ConveyorBelt;
 import SEPee.server.model.field.Field;
@@ -413,48 +417,28 @@ public class ClientHandler implements Runnable {
                                         broadcast(serializedPlayerTurningUTurn);
                                         break;
                                     case "Spam":
-                                        playSpam();
+                                        playTopOfProgDeck();
                                         break;
                                     case "TrojanHorse":
-                                        int damageCounter = 0;
-                                        for(int i = 0; i < 2; i++){
-                                            if(Server.getGame().getSpam() > 0){
-                                                for(Player player : Server.getGame().getPlayerList()){
-                                                     if(player.getId() == clientId){
-                                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                                     }
+                                        for(Player player : Server.getGame().getPlayerList()) {
+                                            if (player.getId() == clientId) {
+                                                for (int i = 0; i < 2; i++) {
+                                                    if (Server.getGame().getSpam() > 0) {
+                                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                                        player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                                    } else {
+                                                        player.setDamageCounter(player.getDamageCounter() + 1);
+                                                    }
                                                 }
-                                            }else{
-                                              damageCounter++;
                                             }
                                         }
-                                        if(damageCounter > 0){
-                                            ArrayList<String> avaiableDamage = new ArrayList<>();
-                                            if(Server.getGame().getVirus() > 0){
-                                                avaiableDamage.add("Virus");
-                                            }
-                                            if(Server.getGame().getTrojanHorse() > 0){
-                                                avaiableDamage.add("Trojan");
-                                            }
-                                            if(Server.getGame().getWurm() > 0){
-                                                avaiableDamage.add("Worm");
-                                            }
-                                            if(!avaiableDamage.isEmpty()) {
-                                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
-
-                                                PlayerStatus allWait = new PlayerStatus(-9999, true);
-                                                String serializedAllWait = Serialisierer.serialize(allWait);
-                                                broadcast(serializedAllWait);
-
-                                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
-                                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                                sendToOneClient(player.getId(), serializedPickDamage);
-                                            }
-                                        }
+                                        playTopOfProgDeck();
                                         break;
                                     case "Virus":
                                         playVirus();
+                                        playTopOfProgDeck();
                                         break;
                                     case "Worm":
                                         for(Player player : Server.getGame().getPlayerList()) {
@@ -505,7 +489,7 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Virus");
                                         }
                                         if(Server.getGame().getTrojanHorse() > 0){
-                                            avaiableDamage.add("Trojan");
+                                            avaiableDamage.add("TrojanHorse");
                                         }
                                         if(Server.getGame().getWurm() > 0){
                                             avaiableDamage.add("Worm");
@@ -1087,7 +1071,7 @@ public class ClientHandler implements Runnable {
                                                     player.setDamageCounter(player.getDamageCounter()-1);
                                                 }
                                                 break;
-                                            case "Trojan":
+                                            case "TrojanHorse":
                                                 if (Server.getGame().getTrojanHorse() > 0) {
                                                     player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
                                                     player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
@@ -1112,7 +1096,7 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Virus");
                                         }
                                         if(Server.getGame().getTrojanHorse() > 0){
-                                            avaiableDamage.add("Trojan");
+                                            avaiableDamage.add("TrojanHorse");
                                         }
                                         if(Server.getGame().getWurm() > 0){
                                             avaiableDamage.add("Worm");
@@ -2200,7 +2184,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else {
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                                    }
                                 }
                             }
                         }
@@ -2526,11 +2512,11 @@ public class ClientHandler implements Runnable {
             if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Spam")) {
                 Server.getGame().setSpam(Server.getGame().getSpam() + 1);
             } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("TrojanHorse")) {
-                Server.getGame().setSpam(Server.getGame().getTrojanHorse() + 1);
+                Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse() + 1);
             } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Virus")) {
-                Server.getGame().setSpam(Server.getGame().getVirus() + 1);
-            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Wurm")) {
-                Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+                Server.getGame().setVirus(Server.getGame().getVirus() + 1);
+            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Worm")) {
+                Server.getGame().setWurm(Server.getGame().getWurm() + 1);
             } else {
                 // füge sonst dem player in playerMat in den discardPile das n. Register
                 player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()));
@@ -2580,6 +2566,18 @@ public class ClientHandler implements Runnable {
                     break;
                 case "UTurn":
                     kartenStapel.add(new UTurn());
+                    break;
+                case "TrojanHorse":
+                    kartenStapel.add(new TrojanHorse());
+                    break;
+                case "Spam":
+                    kartenStapel.add(new Spam());
+                    break;
+                case "Virus":
+                    kartenStapel.add(new Virus());
+                    break;
+                case "Worm":
+                    kartenStapel.add(new Wurm());
                     break;
             }
         }
@@ -2850,46 +2848,24 @@ public class ClientHandler implements Runnable {
                         broadcast(serializedPlayerTurningUTurn);
                         break;
                     case "Spam":
-                        playSpam();
+                        playTopOfProgDeck();
                         break;
                     case "TrojanHorse":
-                        int damageCounter = 0;
                         for(int i = 0; i < 2; i++){
                             if(Server.getGame().getSpam() > 0){
                                 Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                 player.getPlayerMat().getDiscardPile().add("Spam");
                             }else{
-                                damageCounter++;
-                            }
-                        }
-                        if(damageCounter > 0){
-                            ArrayList<String> avaiableDamage = new ArrayList<>();
-                            if(Server.getGame().getVirus() > 0){
-                                avaiableDamage.add("Virus");
-                            }
-                            if(Server.getGame().getTrojanHorse() > 0){
-                                avaiableDamage.add("Trojan");
-                            }
-                            if(Server.getGame().getWurm() > 0){
-                                avaiableDamage.add("Worm");
-                            }
-                            if(!avaiableDamage.isEmpty()) {
-                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
-
-                                PlayerStatus allWait = new PlayerStatus(-9999, true);
-                                String serializedAllWait = Serialisierer.serialize(allWait);
-                                broadcast(serializedAllWait);
-
-                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
-                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                sendToOneClient(player.getId(), serializedPickDamage);
+                                player.setDamageCounter(player.getDamageCounter()+1);
                             }
                         }
                         //play the top card of the draw pile this register
-                        playSpam();
+                        playTopOfProgDeck();
                         break;
                     case "Virus":
                         playVirus();
+                        playTopOfProgDeck();
                         break;
                     case "Worm":
                         int x = player.getRobot().getX();
@@ -2917,16 +2893,24 @@ public class ClientHandler implements Runnable {
     }
 
     public void playVirus() throws InterruptedException {
+        Robot robot = new Robot(-9999, -9999, "");
+        for(Player player1: Server.getGame().getPlayerList()){
+            if(player1.getId() == clientId){
+                robot = player1.getRobot();
+            }
+        }
         //loop through the player list and if it is not your own robot and within 6 fields of you apply the effect
         for(Player player : Server.getGame().getPlayerList()){
-            if(isWithinSixFields(this.robot, player.getRobot()) && this.robot != player.getRobot()){
-                // was passiert wenn virus karten verbraucht sind?
-
-                //add a virus card to the player's discard pile
-                player.getPlayerMat().getDiscardPile().add("Virus");
-
-                //play the top card of the drawPil this register
-                playSpam();
+            if(!robot.equals(player.getRobot()) && isWithinSixFields(robot, player.getRobot())){
+                if(Server.getGame().getSpam() > 0) {
+                    //add a virus card to the player's discard pile
+                    player.getPlayerMat().getDiscardPile().add("Spam");
+                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                    Server.getGame().setSpam(Server.getGame().getSpam() -1);
+                }else{
+                    //if Virus cards are empty pick damage
+                    player.setDamageCounter(player.getDamageCounter()+1);
+                }
             }
         }
     }

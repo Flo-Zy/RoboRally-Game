@@ -457,7 +457,7 @@ public class Client extends Application {
                                     case "Virus":
                                         drawPile.add(new Virus());
                                         break;
-                                    case "Wurm":
+                                    case "Worm":
                                         drawPile.add(new Wurm());
                                         break;
                                     case "TrojanHorse":
@@ -543,7 +543,7 @@ public class Client extends Application {
                                     case "Virus":
                                         nextCards.add(new Virus());
                                         break;
-                                    case "Wurm":
+                                    case "Worm":
                                         nextCards.add(new Wurm());
                                         break;
                                     case "TrojanHorse":

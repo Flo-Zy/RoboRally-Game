@@ -43,6 +43,7 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.spam = 38;
         this.virus = 18;
         this.trojanHorse = 12;
+        this.wurm = 6;
         this.boardClass = boardClass;
     }
 
