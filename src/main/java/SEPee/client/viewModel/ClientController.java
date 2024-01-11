@@ -92,6 +92,8 @@ public class ClientController {
     private VBox LostBearingsMap;
     @FXML
     private VBox DeathTrapMap;
+    @FXML
+    private Button muteButton;
     @Getter
     @Setter
     private static int currentPhase;
@@ -245,6 +247,19 @@ public class ClientController {
             this.figure = usernameRobotPair.getValue();
             stage.setTitle("Client - " + name);
             // Hier Ihre weitere Initialisierungslogik
+
+            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
+                    "-fx-background-repeat: repeat;" +
+                    "-fx-background-size: cover;");
+
+            Scene scene = stage.getScene();
+            scene.getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+            muteButton = new Button("Mute Sounds");
+            muteButton.getStyleClass().add("mute-button");
+            muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
+            VBox root = (VBox) scene.getRoot();
+            root.getChildren().add(muteButton);
+
         });
     }
 
