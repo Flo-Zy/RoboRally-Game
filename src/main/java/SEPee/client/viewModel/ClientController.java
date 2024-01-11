@@ -99,7 +99,6 @@ public class ClientController {
     private static int startPointX;
     @Getter
     private static int startPointY;
-
     public void init(Client client, Stage stage) {
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
         Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
@@ -131,22 +130,20 @@ public class ClientController {
         GridPane grid = new GridPane();
         grid.setHgap(37);
         grid.setVgap(37);
-        GridPane roboRally = new GridPane();
-        roboRally.setHgap(37);
-        roboRally.setVgap(37);
-        roboRally.getStyleClass().add("robo-rally-grid");
+        //GridPane roboRally = new GridPane();
+        //roboRally.setHgap(37);
+        //roboRally.setVgap(37);
+        //roboRally.getStyleClass().add("robo-rally-grid");
         Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
         ImageView introImage = new ImageView(RoboRallyName);
         introImage.getStyleClass().add("intro-image");
-        roboRally.add(introImage, 0,0);
-        roboRally.setAlignment(Pos.CENTER);
-        GridPane.setHalignment(roboRally, HPos.CENTER);
-        GridPane.setValignment(roboRally, VPos.CENTER);
-        GridPane.setVgrow(roboRally, Priority.ALWAYS);
-        GridPane.setHgrow(roboRally, Priority.ALWAYS);
-        grid.add(roboRally, 0,0);
+        grid.add(introImage, 0,0);
+        //introImage(Pos.CENTER);
+        //GridPane.setHgrow(roboRally, Priority.ALWAYS);
+        //grid.add(introImage, 0,0);
         grid.add(usernameTextField,0,1);
         grid.setMinHeight(300);
+        grid.setAlignment(Pos.CENTER);
         introImage.getStyleClass().add("intro-image");
         introImage.setFitHeight(91);  // Setzt die maximale Höhe
         introImage.setFitWidth(469);  // Setzt die maximale Breite
