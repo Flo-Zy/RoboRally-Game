@@ -196,7 +196,7 @@ public class Client extends Application {
                             System.out.println("Player added");
                             synchronized (playerListClient) {
                                 for (int i = 0; i < playerListClient.size(); i++) {
-                                    System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
+                                    System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId() + "," + playerListClient.get(i).getFigure());
                                 }
                             }
                             break;
