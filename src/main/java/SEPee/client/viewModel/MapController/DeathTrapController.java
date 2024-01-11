@@ -2,6 +2,7 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
+import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.TimerStarted;
@@ -540,7 +541,7 @@ public class DeathTrapController extends MapController {
     }
 
     private Player getPlayerById(int clientId) {
-        for (Player player : Client.getPlayerListClient()) {
+        for (Player player : ClientController.getPlayerListClient()) {
             if (player.getId() == clientId) {
                 return player;
             }

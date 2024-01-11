@@ -64,6 +64,9 @@ public class ClientController {
     @Setter
     @Getter
     private int id;
+    @Setter
+    @Getter
+    private static ArrayList<Player> playerListClient;
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();

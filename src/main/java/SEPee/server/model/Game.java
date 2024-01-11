@@ -55,16 +55,7 @@ public class Game implements Robot.RobotPositionChangeListener {
         } else if (currentPhase == 2) { // Programming Phase
             currentPhase++;
             // jetzt in AktivierungsPhase
-
-
-
-
             System.out.println("Wir sind in der Phase:" + currentPhase);
-
-            //set teleports or clients
-
-
-
         }
     }
 

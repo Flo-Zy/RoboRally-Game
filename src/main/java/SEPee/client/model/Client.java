@@ -583,6 +583,7 @@ public class Client extends Application {
                             break;
                         case "Movement":
                             System.out.println("Movement");
+                            controller.setPlayerListClient(playerListClient);
                             Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
 
                             int clientIdToMove = movement.getMessageBody().getClientID();
@@ -593,6 +594,7 @@ public class Client extends Application {
                             break;
                         case "PlayerTurning":
                             System.out.println("Player Turning");
+                            controller.setPlayerListClient(playerListClient);
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
 
                             int clientIdToTurn = playerTurning.getMessageBody().getClientID();
