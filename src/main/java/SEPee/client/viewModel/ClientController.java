@@ -100,10 +100,9 @@ public class ClientController {
     @Getter
     private static int startPointY;
 
-
-
     public void init(Client client, Stage stage) {
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
+        Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
         dialog.setTitle("Welcome to RoboRally");
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
         dialog.getDialogPane().setGraphic(null);
@@ -112,15 +111,17 @@ public class ClientController {
         TextField usernameTextField = new TextField();
         usernameTextField.setPromptText("Username");
         usernameTextField.getStyleClass().add("username-text-field");
+        usernameTextField.setAlignment(Pos.CENTER);
 
         final int[] selectedRobotNumber = {0};
         String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
 
         ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
-        Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
-        if (okButton instanceof Button) {
-            ((Button) okButton).setDisable(true);
+        Node connectButton = dialog.getDialogPane().lookupButton(okButtonType);
+        connectButton.getStyleClass().add("connect-button");
+        if (connectButton instanceof Button) {
+            ((Button) connectButton).setDisable(true);
         }
 
         updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
@@ -128,9 +129,11 @@ public class ClientController {
         stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setHgap(37);
+        grid.setVgap(37);
         GridPane roboRally = new GridPane();
+        roboRally.setHgap(37);
+        roboRally.setVgap(37);
         roboRally.getStyleClass().add("robo-rally-grid");
         Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
         ImageView introImage = new ImageView(RoboRallyName);
@@ -139,23 +142,20 @@ public class ClientController {
         roboRally.setAlignment(Pos.CENTER);
         GridPane.setHalignment(roboRally, HPos.CENTER);
         GridPane.setValignment(roboRally, VPos.CENTER);
+        GridPane.setVgrow(roboRally, Priority.ALWAYS);
+        GridPane.setHgrow(roboRally, Priority.ALWAYS);
         grid.add(roboRally, 0,0);
         grid.add(usernameTextField,0,1);
         grid.setMinHeight(300);
-
+        introImage.getStyleClass().add("intro-image");
+        introImage.setFitHeight(91);  // Setzt die maximale Höhe
+        introImage.setFitWidth(469);  // Setzt die maximale Breite
+        introImage.setPreserveRatio(true);
         GridPane robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
         robotSelectionGrid.getStyleClass().add("robot-selection-grid");
         dialog.getDialogPane().setContent(grid);
-
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setHgrow(Priority.ALWAYS); // Erlaubt der Spalte, den verfügbaren Platz zu nutzen
-        grid.getColumnConstraints().add(columnConstraints);
-
-        RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setVgrow(Priority.ALWAYS); // Erlaubt der Zeile, den verfügbaren Platz zu nutzen
-        grid.getRowConstraints().addAll(rowConstraints, rowConstraints, rowConstraints);
 
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
@@ -164,17 +164,8 @@ public class ClientController {
             imageView.setFitHeight(120);
 
             Label nameLabel = new Label(robotNames[i - 1]);
-            nameLabel.setAlignment(Pos.CENTER);
             nameLabel.getStyleClass().add("grid-label-robonames");
             nameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 36));
-            nameLabel.setTextFill(Color.web("#dde400"));
-            DropShadow nameShadow = new DropShadow();
-            nameLabel.setEffect(nameShadow);
-            nameShadow.setRadius(50.0); // Radius des Schattens
-            nameShadow.setOffsetX(50.0); // Horizontaler Versatz des Schattens
-            nameShadow.setOffsetY(50.0); // Vertikaler Versatz des Schattens
-            nameShadow.setColor(Color.BLACK); // Farbe des Schattens
-
 
             GridPane.setHalignment(imageView, HPos.CENTER);
             GridPane.setValignment(imageView, VPos.CENTER);
