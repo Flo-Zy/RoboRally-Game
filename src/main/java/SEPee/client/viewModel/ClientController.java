@@ -1162,4 +1162,16 @@ public class ClientController {
     public void setCheckPointImage(String imageUrl) {
         mapController.setCheckPointImage(imageUrl);
     }
+
+    public void playUISound(String eventName){
+        SoundManager.playUISound(eventName);
+    }
+    public void playEventSound(String eventName){
+        SoundManager.playEventSound(eventName);
+    }
+
+    public void playSound(String soundName){
+        SoundManager.playSound(soundName);
+    }
+
 }

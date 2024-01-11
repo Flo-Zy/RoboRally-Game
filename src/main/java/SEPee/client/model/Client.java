@@ -49,10 +49,10 @@ import lombok.Setter;
 @Getter
 public class Client extends Application {
 
-    //private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    //private static final int SERVER_PORT = 52018;
-    private static final String SERVER_IP = "localhost";
-    private static final int SERVER_PORT = 8886;
+    private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    private static final int SERVER_PORT = 52020;
+    //private static final String SERVER_IP = "localhost";
+    //private static final int SERVER_PORT = 8886;
 
     @Getter
     @Setter
@@ -151,7 +151,7 @@ public class Client extends Application {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.init(this, primaryStage);
 
-                                controller.playCustomSound("get ready for this");
+                                // controller.playCustomSound("get ready for this");
 
                                 if ( controller.getName() == null || controller.getFigure() == 0) {
                                     controller.shutdown();
@@ -286,6 +286,12 @@ public class Client extends Application {
                         case "ReceivedChat":
                             String serializedReceivedChat = serializedReceivedString;
                             ReceivedChat deserializedReceivedChat = Deserialisierer.deserialize(serializedReceivedChat, ReceivedChat.class);
+
+                            if (deserializedReceivedChat.getMessageBody().isPrivate()){
+                                controller.playUISound("privMessage");
+                            } else {
+                                controller.playUISound("messageRecieved");
+                            }
 
                             String fromName = null;
                             synchronized (playerListClient) {
@@ -656,33 +662,43 @@ public class Client extends Application {
                             });
                             break;
                         case "Animation":
-                            System.out.println("Animation");
                             Animation animation = Deserialisierer.deserialize(serializedReceivedString, Animation.class);
+                            System.out.println("animation type: " + animation.getMessageBody().getType());
+
+                            String animationType = animation.getMessageBody().getType();
+
+                            if (animationType.equals("BlueConveyorBelt") || animationType.equals("GreenConveyorBelt")){
+                                controller.playUISound("Map/conveyor");
+
+                            } else if (animationType.equals("PushPanel")) {
+                                controller.playUISound("Map/pushPanel");
+
+                            } else if (animationType.equals("Gear")){
+                                // missing gear sound
+
+                            } else if (animationType.equals("CheckPoint")){
+                                //handle in checkpointreached msgt
+
+                            } else if (animationType.equals("PlayerShooting")){
+                                controller.playUISound("Map/RoboLaser");
+
+                            } else if (animationType.equals("WallShooting")){
+                                controller.playUISound("Map/BoardLaser");
+
+                            } else if (animationType.equals("EnergySpace")){
+                                //handle in MsgType
+
+                            }
+
                             break;
                         case "Reboot":
                             System.out.println("Reboot");
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
-                            /*
-
-                            // set robot direction TOP
-                            String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
-                            while (!orientationOfRobot.equals("top")) {
-                                controller.playerTurn(rebootingClientId, "clockwise");
-                                orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
+                            if (rebootingClientId == controller.getId()){
+                                controller.playUISound("Map/reBoot");
                             }
-                             */
-
-                            /*
-                            //RebootDirection erstmal immer mit top verschicken für default, falls nie was anderes ankommt
-                            //wird das genommen und falls was anderes ankommt, wird der halt nochmal gedreht
-
-                            RebootDirection rebootDirection = new RebootDirection("top");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            writer.println(serializedRebootDirection);
-
-                             */
 
                             // direction selection dialog fur rebootingClientId
                             // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
@@ -706,6 +722,11 @@ public class Client extends Application {
                         case "Energy":
                             System.out.println("Energy");
                             Energy energy = Deserialisierer.deserialize(serializedReceivedString, Energy.class);
+                            
+                            if (controller.getId() == energy.getMessageBody().getClientID()) {
+                                controller.playUISound("Map/powerUp");
+                            }
+                            
                             break;
                         case "CheckPointReached":
                             System.out.println("Check Point Reached");
@@ -717,13 +738,17 @@ public class Client extends Application {
                                 for (Player player : playerListClient) {
                                     if (player.getId() == clientID) {
                                         controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
-
+                                        controller.playEventSound("YouGotCheckpoint");
+                                        controller.playUISound("Map/checkpoint");
+                                    } else if (player.getId() != clientID) {
+                                        controller.playEventSound("CheckpointReached");
                                     }
                                 }
                             }
 
                             if(clientID == controller.getId()){
                                 controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
+                                controller.playUISound("Map/checkpoint");
                             }
 
                             break;
