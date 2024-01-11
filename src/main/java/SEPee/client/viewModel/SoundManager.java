@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SoundManager {
     private static boolean isMuted = false;
-    private static final Map<String, MediaPlayer> soundPlayers = new HashMap<>();
+    private static MediaPlayer backgroundMediaPlayer;
     private static final List<MediaPlayer> allMediaPlayers = new ArrayList<>();
 
     public static void playSound(String soundName) {
@@ -17,6 +17,7 @@ public class SoundManager {
             Media sound = new Media(new File(soundFilePath).toURI().toString());
             MediaPlayer mediaPlayer = new MediaPlayer(sound);
             allMediaPlayers.add(mediaPlayer);
+
             if (!isMuted) {
                 mediaPlayer.play();
             }
@@ -26,8 +27,12 @@ public class SoundManager {
     }
 
     public static void playEventSound(String eventName) {
-        System.out.println("event name: " + eventName + "ismuted: " + isMuted);
+        System.out.println("event name: " + eventName + " ismuted: " + isMuted);
         try {
+            if (backgroundMediaPlayer != null && backgroundMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                return;
+            }
+
             File eventDirectory = new File("src/main/resources/Sounds/Events/" + eventName);
             if (eventDirectory.isDirectory()) {
                 List<String> soundFiles = new ArrayList<>();
@@ -41,10 +46,11 @@ public class SoundManager {
                     Random random = new Random();
                     String randomSound = soundFiles.get(random.nextInt(soundFiles.size()));
                     Media sound = new Media(randomSound);
-                    MediaPlayer mediaPlayer = new MediaPlayer(sound);
-                    allMediaPlayers.add(mediaPlayer);
+                    backgroundMediaPlayer = new MediaPlayer(sound);
+                    allMediaPlayers.add(backgroundMediaPlayer);
+
                     if (!isMuted) {
-                        mediaPlayer.play();
+                        backgroundMediaPlayer.play();
                     }
                 }
             }
@@ -70,6 +76,7 @@ public class SoundManager {
                     Media sound = new Media(randomSound);
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     allMediaPlayers.add(mediaPlayer);
+
                     if (!isMuted) {
                         mediaPlayer.play();
                     }
@@ -82,13 +89,10 @@ public class SoundManager {
 
     public static void toggleSoundMute() {
         isMuted = !isMuted;
-        // Mute/unmute all MediaPlayers stored in allMediaPlayers list
-        for (MediaPlayer mediaPlayer : allMediaPlayers) {
-            mediaPlayer.setMute(isMuted);
-            if (isMuted) {
-                mediaPlayer.pause();
-            } else {
-                mediaPlayer.play();
+
+        if (isMuted) {
+            for (MediaPlayer mediaPlayer : allMediaPlayers) {
+                mediaPlayer.setMute(true);
             }
         }
     }

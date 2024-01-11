@@ -695,6 +695,7 @@ public class Client extends Application {
                             controller.playEventSound("Reboot");
                             if (rebootingClientId == controller.getId()){
                                 controller.playUISound("Map/reBoot");
+                                controller.playEventSound("YouRebooted");
                             }
 
                             // direction selection dialog fur rebootingClientId
@@ -760,8 +761,10 @@ public class Client extends Application {
                                     if (player.getId() == winnerId) {
                                         System.out.println("winner id ist " + winnerId);
                                         controller.appendToChatArea(player.getName() + " has won this game!!");
+                                        controller.playEventSound("YouWon");
 
-                                  } else if (player.getId() != winnerId){
+                                    } else if (player.getId() != winnerId){
+                                        controller.playEventSound("YouLost");
                                     }
                                 }
                             }
