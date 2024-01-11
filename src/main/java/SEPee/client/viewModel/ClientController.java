@@ -130,8 +130,8 @@ public class ClientController {
         stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
-        grid.setHgap(37);
-        grid.setVgap(37);
+        grid.setHgap(0);
+        grid.setVgap(50);
         //GridPane roboRally = new GridPane();
         //roboRally.setHgap(37);
         //roboRally.setVgap(37);
@@ -140,6 +140,8 @@ public class ClientController {
         ImageView introImage = new ImageView(RoboRallyName);
         introImage.getStyleClass().add("intro-image");
         grid.add(introImage, 0,0);
+        GridPane.setHalignment(introImage, HPos.CENTER);
+        GridPane.setValignment(introImage, VPos.CENTER);
         //introImage(Pos.CENTER);
         //GridPane.setHgrow(roboRally, Priority.ALWAYS);
         //grid.add(introImage, 0,0);
@@ -147,8 +149,8 @@ public class ClientController {
         grid.setMinHeight(300);
         grid.setAlignment(Pos.CENTER);
         introImage.getStyleClass().add("intro-image");
-        introImage.setFitHeight(91);  // Setzt die maximale Höhe
-        introImage.setFitWidth(469);  // Setzt die maximale Breite
+        introImage.setFitHeight(118);  // Setzt die maximale Höhe
+        introImage.setFitWidth(645);  // Setzt die maximale Breite
         introImage.setPreserveRatio(true);
         GridPane robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
