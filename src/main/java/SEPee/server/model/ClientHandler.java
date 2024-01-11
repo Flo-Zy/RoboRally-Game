@@ -2776,7 +2776,7 @@ public class ClientHandler implements Runnable {
         }, 5, TimeUnit.SECONDS);
     }
 
-    public void playSpam() throws InterruptedException {
+    public void playTopOfProgDeck() throws InterruptedException {
         String newCard = "";
         for(Player player: Server.getGame().getPlayerList()){
             if(player.getId() == clientId){
@@ -2922,14 +2922,17 @@ public class ClientHandler implements Runnable {
         int xRobotToBeChecked = robotToBeChecked.getX();
         int yRobotToBeChecked = robotToBeChecked.getY();
 
-        // Calculate Manhattan distance
-        int distance = Math.abs(xRobotPlayedVirus - xRobotToBeChecked) + Math.abs(yRobotPlayedVirus - yRobotToBeChecked);
-
-        System.out.print("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
-        System.out.println(distance <= 6);
-        // Check if the distance is within 6 fields
-        return distance <= 6;
-
+        int leftSideX = xRobotPlayedVirus - 6;
+        int rightSideX = xRobotPlayedVirus + 6;
+        int topY = yRobotPlayedVirus - 6;
+        int bottomY = yRobotPlayedVirus + 6;
+        if(leftSideX <= xRobotToBeChecked && xRobotToBeChecked <= rightSideX && topY <= yRobotToBeChecked && bottomY >= yRobotToBeChecked){
+            System.out.print("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
+            return true;
+        }else{
+            System.out.println(false + "virus");
+            return false;
+        }
     }
 
 }
