@@ -1,11 +1,3 @@
-.root {
-    -fx-font-family: "MyCustomFont";
-}
-@font-face {
-    font-family: "MyCustomFont";
-    src: url("/CSSFiles/Digital-Bold.ttf");
-}
-
 #SEPee.client.viewModel.ClientController HBox {
     -fx-spacing: 10;
 }

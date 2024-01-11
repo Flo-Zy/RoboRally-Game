@@ -7,8 +7,9 @@ import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Error;
 import SEPee.serialisierung.messageType.*;
+import SEPee.serialisierung.messageType.Error;
+//auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.Spam;
@@ -16,6 +17,8 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
+import SEPee.server.model.gameBoard.ExtraCrispy;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +38,13 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import java.util.Iterator;
+
+
+import javafx.util.Duration;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class Client extends Application {
@@ -143,11 +153,14 @@ public class Client extends Application {
 
                                 controller.playCustomSound("get ready for this");
 
-                                // PlayerValues schicken
-                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
-                                String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                                writer.println(serializedPlayerValues);
-                                primaryStage.show();
+                                if ( controller.getName() == null || controller.getFigure() == 0) {
+                                    controller.shutdown();
+                                } else {
+                                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
+                                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                                    writer.println(serializedPlayerValues);
+                                    primaryStage.show();
+                                }
                             });
                             break;
                         case "PlayerAdded":

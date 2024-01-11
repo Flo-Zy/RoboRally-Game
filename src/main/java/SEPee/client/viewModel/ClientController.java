@@ -4,31 +4,38 @@ import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.MapSelected;
-import SEPee.serialisierung.messageType.SendChat;
-import SEPee.serialisierung.messageType.SetStatus;
+import SEPee.serialisierung.messageType.*;
+//Später auslagern
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.progCard.*;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +44,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientController {
     @FXML
@@ -61,6 +69,9 @@ public class ClientController {
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
+    private List<Integer> takenFigures = new ArrayList<>();
+
+    private ImageView currentSelectedImageView = null;
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
@@ -81,8 +92,6 @@ public class ClientController {
     private VBox LostBearingsMap;
     @FXML
     private VBox DeathTrapMap;
-    @FXML
-    private Button muteButton;
     @Getter
     @Setter
     private static int currentPhase;
@@ -90,56 +99,163 @@ public class ClientController {
     private static int startPointX;
     @Getter
     private static int startPointY;
+    public void init(Client client, Stage stage) {
+        Dialog<Pair<String, Integer>> dialog = new Dialog<>();
+        Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
+        dialog.setTitle("Welcome to RoboRally");
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
+        dialog.getDialogPane().setGraphic(null);
+        dialog.getDialogPane().getStyleClass().add("dialog-background");
 
+        TextField usernameTextField = new TextField();
+        usernameTextField.setPromptText("Username");
+        usernameTextField.getStyleClass().add("username-text-field");
+        usernameTextField.setAlignment(Pos.CENTER);
 
-    public void init(Client Client, Stage stage) {
-        boolean validUsername = false;
+        final int[] selectedRobotNumber = {0};
+        String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
 
-        while (!validUsername) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Username");
-            dialog.setHeaderText("Please enter your username:");
-            dialog.setContentText("Username:");
+        ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
+        Node connectButton = dialog.getDialogPane().lookupButton(okButtonType);
+        connectButton.getStyleClass().add("connect-button");
+        if (connectButton instanceof Button) {
+            ((Button) connectButton).setDisable(true);
+        }
 
+        updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
-            dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
-            dialog.getDialogPane().setGraphic(null);
+        stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
-            stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
-                    "-fx-background-repeat: repeat;" +
-                    "-fx-background-size: cover;");
+        GridPane grid = new GridPane();
+        grid.setHgap(37);
+        grid.setVgap(37);
+        //GridPane roboRally = new GridPane();
+        //roboRally.setHgap(37);
+        //roboRally.setVgap(37);
+        //roboRally.getStyleClass().add("robo-rally-grid");
+        Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
+        ImageView introImage = new ImageView(RoboRallyName);
+        introImage.getStyleClass().add("intro-image");
+        grid.add(introImage, 0,0);
+        //introImage(Pos.CENTER);
+        //GridPane.setHgrow(roboRally, Priority.ALWAYS);
+        //grid.add(introImage, 0,0);
+        grid.add(usernameTextField,0,1);
+        grid.setMinHeight(300);
+        grid.setAlignment(Pos.CENTER);
+        introImage.getStyleClass().add("intro-image");
+        introImage.setFitHeight(91);  // Setzt die maximale Höhe
+        introImage.setFitWidth(469);  // Setzt die maximale Breite
+        introImage.setPreserveRatio(true);
+        GridPane robotSelectionGrid = new GridPane();
+        robotSelectionGrid.setHgap(10);
+        robotSelectionGrid.setVgap(10);
+        robotSelectionGrid.getStyleClass().add("robot-selection-grid");
+        dialog.getDialogPane().setContent(grid);
 
-            Scene scene = stage.getScene();
-            scene.getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
-            muteButton = new Button("Mute Sounds");
-            muteButton.getStyleClass().add("mute-button");
-            muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
-            VBox root = (VBox) scene.getRoot();
-            root.getChildren().add(muteButton);
+        for (int i = 1; i <= 6; i++) {
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(120);
+            imageView.setFitHeight(120);
 
-            Optional<String> result = dialog.showAndWait();
+            Label nameLabel = new Label(robotNames[i - 1]);
+            nameLabel.getStyleClass().add("grid-label-robonames");
+            nameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.ttf"), 36));
 
-            if (result.isPresent() && !result.get().trim().isEmpty()) {
-                this.name = result.get().trim();
-                stage.setTitle("Client - " + name);
-                validUsername = true;
+            GridPane.setHalignment(imageView, HPos.CENTER);
+            GridPane.setValignment(imageView, VPos.CENTER);
+            GridPane.setHalignment(nameLabel, HPos.CENTER);
+            GridPane.setValignment(nameLabel, VPos.CENTER);
 
-                figure = showRobotSelectionDialog(stage, Client.getTakenFigures());
-                setFigure(figure);
+            robotSelectionGrid.add(imageView, i - 1, 0);
+            robotSelectionGrid.add(nameLabel, i - 1, 1);
 
-                sendButton.setOnAction(event -> sendMessage());
-                visibilityButton.setText("Alle");
-                visibilityButton.setOnAction(event -> toggleVisibility());
+            if (client.getTakenFigures().contains(i)) {
+                imageView.setDisable(true);
+                imageView.setOpacity(0.1);
             } else {
-                // If Username is empty
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username cannot be empty. Please enter a valid username.");
-                alert.showAndWait();
+                final int robotNumber = i;
+                imageView.setOnMouseClicked(event -> {
+                    int newSelectedRobotNumber = 0; // Lokale Variable
+                    if (currentSelectedImageView == imageView) {
+                        // Deselektieren
+                        currentSelectedImageView.setOpacity(1.0);
+                        currentSelectedImageView = null;
+                    } else {
+                        // Auswählen
+                        if (currentSelectedImageView != null) {
+                            currentSelectedImageView.setOpacity(1.0);
+                        }
+                        imageView.setOpacity(0.5);
+                        newSelectedRobotNumber = robotNumber;
+                        currentSelectedImageView = imageView;
+                    }
+                    /*if (selectedRobotNumber[0] == robotNumber) {
+                        // Robot wird deselektiert
+                        selectedRobotNumber[0] = 0;
+                        imageView.setOpacity(1.0);
+                    } else {
+                        // Robot wird ausgewählt
+                        selectedRobotNumber[0] = robotNumber;
+                        imageView.setOpacity(0.5);
+                    }*/
+                    avatarImageView.setImage(image);
+                    avatarImageView.setVisible(true);
+                    avatarNameLabel.setText(robotNames[robotNumber-1]);
+                    avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
+                            "-fx-font-size: 40px; " +
+                            "-fx-font-family: 'Impact'");
+                    //avatarNameLabel.setFont(customFont1);
+                    DropShadow dropShadow = new DropShadow();
+                    dropShadow.setRadius(10.0);
+                    dropShadow.setOffsetX(3.0);
+                    dropShadow.setOffsetY(3.0);
+                    dropShadow.setColor(Color.BLACK);
 
-                Platform.exit();
+                    avatarNameLabel.setEffect(dropShadow);
+                    avatarImageView.setEffect(dropShadow);
+                    selectedRobotNumber[0] = newSelectedRobotNumber;
+                    System.out.println("Selected Robot Number: " + selectedRobotNumber[0]);
+                    updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+                });
             }
+        }
+
+        grid.add(robotSelectionGrid, 0, 2, 2, 1);
+
+        usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+        });
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return new Pair<>(usernameTextField.getText().trim(), selectedRobotNumber[0]);
+            }
+            return null;
+        });
+
+        Optional<Pair<String, Integer>> result = dialog.showAndWait();
+
+        result.ifPresent(usernameRobotPair -> {
+            this.name = usernameRobotPair.getKey();
+            this.figure = usernameRobotPair.getValue();
+            stage.setTitle("Client - " + name);
+            // Hier Ihre weitere Initialisierungslogik
+        });
+    }
+
+    private void updateOkButtonState(Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
+        Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
+
+        if (okButton != null) {
+            boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty();
+            boolean isRobotSelected = selectedRobotNumber[0] > 0;
+            System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected);
+            okButton.setDisable(!(isUsernameValid && isRobotSelected));
         }
     }
 
@@ -268,14 +384,16 @@ public class ClientController {
 
     public void shutdown() {
         try {
-            if (socket != null && !socket.isClosed()) {
-                if (writer != null) {
-                    writer.println(name + " has left the chat.");
-                    writer.flush();
-                    writer.close();
+            if (name != null) {
+                if (socket != null && !socket.isClosed()) {
+                    if (writer != null) {
+                        writer.println(name + " has left the chat.");
+                        writer.flush();
+                        writer.close();
+                    }
+                    Thread.sleep(100);
+                    socket.close();
                 }
-                Thread.sleep(100);
-                socket.close();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -283,9 +401,7 @@ public class ClientController {
         System.exit(0);
     }
 
-    String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
-
-    private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
+    /*private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
 
@@ -308,7 +424,7 @@ public class ClientController {
             imageView.setFitHeight(100);
 
             //Label nameLabel = new Label("Robot " + i);
-            Label nameLabel = new Label(robotNames[i - 1]);
+            Label nameLabel = new Label(robotNames[i-1]);
             nameLabel.setAlignment(Pos.CENTER);
             nameLabel.getStyleClass().add("grid-label");
 
@@ -325,10 +441,9 @@ public class ClientController {
                 // Event Handler für Klicks auf das ImageView
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
-                    playUISound("Blips");
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
-                    avatarNameLabel.setText(robotNames[robotNumber - 1]);
+                    avatarNameLabel.setText(robotNames[robotNumber-1]);
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
@@ -342,7 +457,6 @@ public class ClientController {
                     avatarNameLabel.setEffect(dropShadow);
                     avatarImageView.setEffect(dropShadow);
                     dialog.setResult(robotNumber);
-
                     dialog.close();
                 });
             }
@@ -354,16 +468,17 @@ public class ClientController {
         Optional<Integer> result = dialog.showAndWait();
 
         return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
-    }
+    }*/
 
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
-        while (true) {
+        while(true){
             int robotNumber = random.nextInt(1, 7);
             // Überprüfen, ob der Roboter bereits genommen wurde
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
-            } else if (takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) && takenFigures.contains(5) && takenFigures.contains(6)) {
+            } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) &&
+                    takenFigures.contains(5) && takenFigures.contains(6)) {
                 return -1;
             }
         }
@@ -550,7 +665,7 @@ public class ClientController {
         return selectedDirection[0];
     }
 
-    public String showSelectDamageDialog(ArrayList<String> availableList) {
+    public String showSelectDamageDialog(ArrayList<String> availableList){
         String selectedDamage = null;
 
         while (selectedDamage == null) {
@@ -601,7 +716,7 @@ public class ClientController {
         });
     }
 
-    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage) {
+    public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
@@ -811,9 +926,9 @@ public class ClientController {
         });
     }
 
-    public void addTakenStartingPoints(int x, int y) {
+    public void addTakenStartingPoints(int x, int y){
         int combinedValue = x * 10 + y;
-        switch (combinedValue) {
+        switch(combinedValue){
             case 11:
                 takenStartPoints.add(1);
                 break;
@@ -835,9 +950,9 @@ public class ClientController {
         }
     }
 
-    public void addTakenStartingPointsDeathTrap(int x, int y) {
+    public void addTakenStartingPointsDeathTrap(int x, int y){
         int combinedValue = x * 10 + y;
-        switch (combinedValue) {
+        switch(combinedValue){
             case 111:
                 takenStartPoints.add(1);
                 break;
@@ -922,7 +1037,7 @@ public class ClientController {
                 selectedButton.setDisable(true); // Disable the selected button
             }
 
-            if (Client.getSelectedMap1().equals("Death Trap")) {
+            if(Client.getSelectedMap1().equals("Death Trap")) {
                 setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
             } else {
                 setStartingPointXY(selectedStartingpoint);
@@ -947,15 +1062,15 @@ public class ClientController {
         Random random = new Random();
         int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
 
-        if (ClientAI.getSelectedMap1().equals("DeathTrap")) {
+        if(ClientAI.getSelectedMap1().equals("DeathTrap")) {
             setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
         } else {
             setStartingPointXY(selectedStartingPoint);
         }
     }
 
-    public void setStartingPointXY(int StartingPointNumber) {
-        switch (StartingPointNumber) {
+    public void setStartingPointXY(int StartingPointNumber){
+        switch(StartingPointNumber){
             case 1:
                 startPointX = 1;
                 startPointY = 1;
@@ -983,8 +1098,8 @@ public class ClientController {
         }
     }
 
-    public void setStartingPointXYDeathTrap(int StartingPointNumber) {
-        switch (StartingPointNumber) {
+    public void setStartingPointXYDeathTrap(int StartingPointNumber){
+        switch(StartingPointNumber){
             case 1:
                 startPointX = 11;
                 startPointY = 1;
@@ -1012,27 +1127,27 @@ public class ClientController {
         }
     }
 
-    public void putAvatarDown(Player player, int x, int y) {
+    public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
     }
 
-    public void initDrawPile() {
+    public void initDrawPile(){
         mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
     }
 
-    public void initRegister() {
+    public void initRegister(){
         mapController.initializeRegister(id, clientHand);
     }
 
-    public void initRegisterAI() {
+    public void initRegisterAI(){
         mapController.initializeRegisterAI(id, clientHand);
     }
 
-    public void setRegisterVisibilityFalse() {
+    public void setRegisterVisibilityFalse(){
         mapController.setRegisterVisibilityFalse();
     }
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards) {
+    public void fillEmptyRegister(ArrayList<Card> nextCards){
         mapController.fillEmptyRegister(nextCards);
     }
 
@@ -1040,22 +1155,11 @@ public class ClientController {
         mapController.movementPlayed(clientIdToMove, newX, newY);
     }
 
-    public void playerTurn(int clientIdToTurn, String rotation) {
+    public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
     }
 
     public void setCheckPointImage(String imageUrl) {
         mapController.setCheckPointImage(imageUrl);
-    }
-
-    public void playCustomSound(String soundName) {
-        SoundManager.playSound(soundName);
-    }
-    public void playEventSound(String soundName) {
-        SoundManager.playEventSound(soundName);
-    }
-
-    public void playUISound(String soundName) {
-        SoundManager.playUISound(soundName);
     }
 }
