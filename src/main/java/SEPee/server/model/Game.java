@@ -14,6 +14,10 @@ import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
 @Getter
 @Setter
 public class Game implements Robot.RobotPositionChangeListener {
@@ -49,13 +53,29 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
+
+
+            double millisToSleep = playerList.size() * 3750 - 5; // every animation is 750 millis long, times 5 registers, times the player amount
+
+            try {
+                Thread.sleep((long) millisToSleep);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
         } else if (currentPhase == 2) { // Programming Phase
             currentPhase++;
             // jetzt in AktivierungsPhase
+
             System.out.println("Wir sind in der Phase:" + currentPhase);
+
+            //set teleports or clients
+
         }
     }
 

@@ -1,50 +1,71 @@
-.root {
-    -fx-font-family: "MyCustomFont";
-}
-@font-face {
-    font-family: "MyCustomFont";
-    src: url("/CSSFiles/Digital-Bold.ttf");
-}
-/* Stil für den Hauptbereich des Dialogs */
-.dialog-pane {
-    -fx-background-color: #2E2E2E;
-    -fx-padding: 10px;
+.dialog-background {
+    -fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');
+    -fx-background-repeat: repeat;
+    -fx-background-size: cover;
 }
 
-/* Stil für den Header-Bereich des Dialogs */
-.dialog-pane .header-panel {
-    -fx-background-color: #2E2E2E;
-    -fx-text-fill: #dde400;
-}
-
-/* Stil für den Inhalt des Dialogs */
-.dialog-pane .content {
-    -fx-font-size: 16px;
-    -fx-text-fill: #dde400;
-}
-
-/* Stil für Buttons im Dialog */
-.button {
-    -fx-background-color: #dde400;
-    -fx-text-fill: #2E2E2E;
-    -fx-font-weight: bold;
-}
-
-/* Stil für den Titeltext im Header des Dialogs */
-.dialog-pane .header-panel .label {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-font-family: "MyCustomFont";
-    -fx-text-fill: #dde400;
-}
-
-/* Stil für den Textfeld-Bereich */
-.text-input-dialog .text-field {
+.username-text-field {
+    -fx-prompt-text-fill: #2E2E2E;
+    -fx-alignment: center;
     -fx-pref-width: 200px;
+    -fx-max-width: 300px;
+    -fx-background-color: rgba(221, 228, 0, 0.64);
+    -fx-font-family: "Digital-Bold";
+    -fx-font-size: 16px;
 }
 
-/* Stil für Fehlermeldungen (Alerts) */
-.alert .content {
-    -fx-font-size: 12px;
-    -fx-text-fill: #d8000c;
+.robo-rally-grid {
+    -fx-max-width: 469px;
+    -fx-max-height: 91px;
+    -fx-alignment: center;
+}
+
+.intro-image {
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(three-pass-box, rgb(0, 0, 0), 10, 0, 0, 10);
+}
+
+.robot-selection-grid {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(10,10,10,12), 10, 0, 0, 10);
+}
+
+.robot-image {
+    -fx-fit-width: 120px;
+    -fx-fit-height: 120px;
+    -fx-opacity: 1;
+    -fx-disable: false;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(10,10,10,12), 10, 0, 0, 10);*/
+}
+
+.robot-selection-grid .image-view:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-max-width: 469px;
+    -fx-max-height: 91px;
+}
+
+.grid-label-robonames {
+    -fx-alignment: center;
+    -fx-font-family: 'Digital-Bold';
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dde400;
+}
+
+.grid-label {
+    -fx-font-family: "Digital-Bold";
+    -fx-font-size: 16px;
+}
+
+.connect-button {
+    -fx-prompt-text-fill: #2E2E2E;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+    -fx-pref-width: 200px;
+    -fx-max-width: 300px;
+    -fx-background-color: rgba(221, 228, 0, 0.64);
+    -fx-font-family: "Digital-Bold";
+    -fx-font-size: 16px;
 }
