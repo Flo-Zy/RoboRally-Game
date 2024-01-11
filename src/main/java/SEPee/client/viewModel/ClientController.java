@@ -112,7 +112,6 @@ public class ClientController {
         TextField usernameTextField = new TextField();
         usernameTextField.setPromptText("Username");
         usernameTextField.getStyleClass().add("username-text-field");
-        usernameTextField.setAlignment(Pos.CENTER);
 
         final int[] selectedRobotNumber = {0};
         String[] robotNames = {"Gorbo", "LixLix", "Hasi", "Finki", "Flori", "Stinowski"};
@@ -127,11 +126,17 @@ public class ClientController {
 
         updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
+        GridPane.setHalignment(connectButton, HPos.CENTER);
+        GridPane.setValignment(connectButton, VPos.CENTER);
+
         stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
         grid.setHgap(0);
-        grid.setVgap(50);
+        grid.setVgap(60);
+        grid.add(connectButton, 0, 3);
+        GridPane.setHalignment(connectButton, HPos.CENTER);
+        GridPane.setValignment(connectButton, VPos.CENTER);
         //GridPane roboRally = new GridPane();
         //roboRally.setHgap(37);
         //roboRally.setVgap(37);
@@ -139,13 +144,13 @@ public class ClientController {
         Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
         ImageView introImage = new ImageView(RoboRallyName);
         introImage.getStyleClass().add("intro-image");
-        grid.add(introImage, 0,0);
+        grid.add(introImage, 0,0,2,1);
         GridPane.setHalignment(introImage, HPos.CENTER);
         GridPane.setValignment(introImage, VPos.CENTER);
         //introImage(Pos.CENTER);
-        //GridPane.setHgrow(roboRally, Priority.ALWAYS);
-        //grid.add(introImage, 0,0);
-        grid.add(usernameTextField,0,1);
+        grid.add(usernameTextField,0,1,3,1);
+        GridPane.setHalignment(usernameTextField, HPos.CENTER);
+        GridPane.setValignment(usernameTextField, VPos.CENTER);
         grid.setMinHeight(300);
         grid.setAlignment(Pos.CENTER);
         introImage.getStyleClass().add("intro-image");
@@ -159,7 +164,7 @@ public class ClientController {
         dialog.getDialogPane().setContent(grid);
 
         for (int i = 1; i <= 6; i++) {
-            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
+            Image image = new Image("boardElementsPNGs/Custom/Avatars/Figure" + i + ".png");
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(120);
             imageView.setFitHeight(120);
