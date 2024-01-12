@@ -2,6 +2,7 @@ package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
+import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.TimerStarted;
@@ -271,10 +272,16 @@ public class DizzyHighwayController extends MapController {
     }
 
     private void processMovement(MoveInstruction instruction) {
+        System.out.println("Instruction: " + instruction);
         Player player = getPlayerById(instruction.clientId);
-
+        System.out.println("player: " + player);
+        System.out.println("playerRobotMap: " + playerRobotMap);
         Robot robot = playerRobotMap.get(player);
+        System.out.println("robot: " + robot);
+        System.out.println("robotImageViewMap: " + robotImageViewMap);
         ImageView imageView = robotImageViewMap.get(robot);
+        System.out.println("imageView: " + imageView);
+
 
         int currentX = GridPane.getColumnIndex(imageView);
         int currentY = GridPane.getRowIndex(imageView);
@@ -301,7 +308,7 @@ public class DizzyHighwayController extends MapController {
     }
 
     private Player getPlayerById(int clientId) {
-        for (Player player : Client.getPlayerListClient()) {
+        for (Player player : ClientController.getPlayerListClient()) {
             if (player.getId() == clientId) {
                 return player;
             }

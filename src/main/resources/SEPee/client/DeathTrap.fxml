@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Label?>
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="800.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
@@ -1607,7 +1606,7 @@
             <VBox prefHeight="300.0" prefWidth="650.0">
                 <children>
                     <!-- Hand of 10 Card Spaces -->
-                    <HBox fx:id="totalHand" prefHeight="100.0" prefWidth="650.0">
+                    <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0">
                         <children>
                             <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
 
@@ -1642,10 +1641,6 @@
                             </ImageView>
 
                             <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-
-                            </ImageView>
-
-                            <ImageView fx:id="hand9" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
 
                             </ImageView>
                         </children>
@@ -1712,6 +1707,9 @@
                         </children>
                     </HBox>
                 </children>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
             </VBox>
         </VBox>
     </children>

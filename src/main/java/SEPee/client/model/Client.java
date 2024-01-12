@@ -198,7 +198,7 @@ public class Client extends Application {
                             System.out.println("Player added");
                             synchronized (playerListClient) {
                                 for (int i = 0; i < playerListClient.size(); i++) {
-                                    System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId());
+                                    System.out.println(playerListClient.get(i).getName() + "," + playerListClient.get(i).getId() + "," + playerListClient.get(i).getFigure());
                                 }
                             }
                             break;
@@ -481,7 +481,7 @@ public class Client extends Application {
                                     case "Virus":
                                         drawPile.add(new Virus());
                                         break;
-                                    case "Wurm":
+                                    case "Worm":
                                         drawPile.add(new Wurm());
                                         break;
                                     case "TrojanHorse":
@@ -567,7 +567,7 @@ public class Client extends Application {
                                     case "Virus":
                                         nextCards.add(new Virus());
                                         break;
-                                    case "Wurm":
+                                    case "Worm":
                                         nextCards.add(new Wurm());
                                         break;
                                     case "TrojanHorse":
@@ -607,6 +607,7 @@ public class Client extends Application {
                             break;
                         case "Movement":
                             System.out.println("Movement");
+                            controller.setPlayerListClient(playerListClient);
                             Movement movement = Deserialisierer.deserialize(serializedReceivedString, Movement.class);
 
                             int clientIdToMove = movement.getMessageBody().getClientID();
@@ -617,6 +618,7 @@ public class Client extends Application {
                             break;
                         case "PlayerTurning":
                             System.out.println("Player Turning");
+                            controller.setPlayerListClient(playerListClient);
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
 
                             int clientIdToTurn = playerTurning.getMessageBody().getClientID();

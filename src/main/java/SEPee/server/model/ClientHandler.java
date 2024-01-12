@@ -5,6 +5,10 @@ import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.card.Card;
+import SEPee.server.model.card.damageCard.Spam;
+import SEPee.server.model.card.damageCard.TrojanHorse;
+import SEPee.server.model.card.damageCard.Virus;
+import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.field.ConveyorBelt;
 import SEPee.server.model.field.Field;
@@ -69,9 +73,6 @@ public class ClientHandler implements Runnable {
                     Alive alive1 = new Alive();
                     String serializedAlive1 = Serialisierer.serialize(alive1);
                     sendToOneClient(clientId, serializedAlive1);
-                    ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-                    disconnectScheduler = scheduler;
-                    //disconnectTimer(disconnectScheduler);
                 }else{
                     System.out.println("Disconnect");
 
@@ -118,22 +119,6 @@ public class ClientHandler implements Runnable {
                                     System.out.println(player.getName());
                                 }
                             }
-                            //fehlt noch, dass wenn man kein alive zurückbekommt innerhalb 5 Sekunden, dann messageType connectionUpdate schicken
-
-                            /*
-                            // mus noch in if-Schleife, die abfrägt ob nach 5 Sekunden nix kam
-                            for (Player player : Server.getPlayerList()) {
-                                if(player.getId() == clientId){
-                                    //player löschen
-                                    Server.getPlayerList().remove(player);
-
-                                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "Ignore");
-                                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
-                                    broadcast(serializedConnectionUpdate);
-                                }
-                            }
-                            */
-
                             break;
                         case "PlayerValues":
                             System.out.println("Player Values erhalten");
@@ -267,10 +252,9 @@ public class ClientHandler implements Runnable {
 
                             if (receivedSendChatMessage.startsWith("/")) {
                                 if (receivedSendChatMessage.contains("/teleport")) {
-                                    // Split the message by spaces to get individual parts
                                     String[] parts = receivedSendChatMessage.split(" ");
 
-                                    // Check if the message has at least three parts (command, x, y)
+                                    // prüfen dass Nachricht mindestens drei Teile hat
                                     if (parts.length >= 3 && parts[0].equalsIgnoreCase("/teleport")) {
                                         try {
                                             int xCoordinate = Integer.parseInt(parts[1]);
@@ -369,7 +353,7 @@ public class ClientHandler implements Runnable {
 
                                 //logik für karteneffekte
                                 switch (lastPlayedCard) {
-                                    case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                                    case "BackUp":
                                         handleRobotMovement(1, false);
                                         break;
                                     case "MoveI":
@@ -382,10 +366,8 @@ public class ClientHandler implements Runnable {
                                         handleRobotMovement(3, true);
                                         break;
                                     case "PowerUp":
-                                        //lastPlayedCard = "PowerUp";
                                         break;
                                     case "TurnRight":
-                                        //lastPlayedCard = "RightTurn";
                                         RightTurn.makeEffect(this.robot);
                                         int clientIDRightTurn = this.clientId;
                                         PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
@@ -394,7 +376,6 @@ public class ClientHandler implements Runnable {
                                         broadcast(serializedPlayerTurningRight);
                                         break;
                                     case "TurnLeft":
-                                        //lastPlayedCard = "LeftTurn";
                                         LeftTurn.makeEffect(this.robot);
                                         int clientIDLeftTurn = this.clientId;
                                         PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
@@ -403,7 +384,6 @@ public class ClientHandler implements Runnable {
                                         broadcast(serializedPlayerTurningLeft);
                                         break;
                                     case "UTurn":
-                                        //lastPlayedCard = "UTurn";
                                         UTurn.makeEffect(this.robot);
                                         int clientIDUTurn = this.clientId;
                                         PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
@@ -413,48 +393,28 @@ public class ClientHandler implements Runnable {
                                         broadcast(serializedPlayerTurningUTurn);
                                         break;
                                     case "Spam":
-                                        playSpam();
+                                        playTopOfProgDeck();
                                         break;
                                     case "TrojanHorse":
-                                        int damageCounter = 0;
-                                        for(int i = 0; i < 2; i++){
-                                            if(Server.getGame().getSpam() > 0){
-                                                for(Player player : Server.getGame().getPlayerList()){
-                                                     if(player.getId() == clientId){
-                                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
-                                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                                     }
+                                        for(Player player : Server.getGame().getPlayerList()) {
+                                            if (player.getId() == clientId) {
+                                                for (int i = 0; i < 2; i++) {
+                                                    if (Server.getGame().getSpam() > 0) {
+                                                        Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                                        player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                                                        player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                                    } else {
+                                                        player.setDamageCounter(player.getDamageCounter() + 1);
+                                                    }
                                                 }
-                                            }else{
-                                              damageCounter++;
                                             }
                                         }
-                                        if(damageCounter > 0){
-                                            ArrayList<String> avaiableDamage = new ArrayList<>();
-                                            if(Server.getGame().getVirus() > 0){
-                                                avaiableDamage.add("Virus");
-                                            }
-                                            if(Server.getGame().getTrojanHorse() > 0){
-                                                avaiableDamage.add("Trojan");
-                                            }
-                                            if(Server.getGame().getWurm() > 0){
-                                                avaiableDamage.add("Worm");
-                                            }
-                                            if(!avaiableDamage.isEmpty()) {
-                                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
-
-                                                PlayerStatus allWait = new PlayerStatus(-9999, true);
-                                                String serializedAllWait = Serialisierer.serialize(allWait);
-                                                broadcast(serializedAllWait);
-
-                                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
-                                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                                sendToOneClient(player.getId(), serializedPickDamage);
-                                            }
-                                        }
+                                        playTopOfProgDeck();
                                         break;
                                     case "Virus":
                                         playVirus();
+                                        playTopOfProgDeck();
                                         break;
                                     case "Worm":
                                         for(Player player : Server.getGame().getPlayerList()) {
@@ -487,11 +447,7 @@ public class ClientHandler implements Runnable {
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
 
-                                /*for (Player player : Server.getGame().getPlayerList()) {
-                                    player.getPlayerMat().getReceivedDamageCards().clear();
-                                }*/
-
-                                fieldActivation(); // Belts, lasers, checkpoints.. etc.
+                                fieldActivation();
 
                                 for (Player player : Server.getGame().getPlayerList()) {
                                     if (!player.getPlayerMat().getReceivedDamageCards().isEmpty() && player.getDamageCounter() == 0) {
@@ -505,7 +461,7 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Virus");
                                         }
                                         if(Server.getGame().getTrojanHorse() > 0){
-                                            avaiableDamage.add("Trojan");
+                                            avaiableDamage.add("TrojanHorse");
                                         }
                                         if(Server.getGame().getWurm() > 0){
                                             avaiableDamage.add("Worm");
@@ -684,9 +640,6 @@ public class ClientHandler implements Runnable {
                                 String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
                                 broadcast(serializedCurrentPlayer);
                             }
-
-                            // Karteneffekt messagtype fur alle clients verschicken (Movement)
-
                             break;
                         case "SetStartingPoint":
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
@@ -709,7 +662,7 @@ public class ClientHandler implements Runnable {
                             this.robot.setStartingPointY(setStartingPoint.getMessageBody().getY());
 
                             Player associatedPlayer;
-                            //finds the associated Player and set the robot for that player
+                            //find player and set the robot for that player
                             for (Player player: Server.getPlayerList()){
                                 if(player.getId() == clientId){
                                     associatedPlayer = player;
@@ -718,7 +671,7 @@ public class ClientHandler implements Runnable {
                             }
 
 
-                            // Adds the game class(which implements RobotPositionChangeListener)as a listener to the robot
+                            // Add the game class(which implements RobotPositionChangeListener)as a listener to the robot
                             this.robot.addPositionChangeListener(Server.getGame());
 
                             String serializedStartingPointTaken = Serialisierer.serialize(startingPointTaken);
@@ -858,7 +811,7 @@ public class ClientHandler implements Runnable {
                                 String serializedTimerStarted = Serialisierer.serialize(timerStarted);
                                 broadcast(serializedTimerStarted);
 
-                                // wait 30 sec to send TimerEnded
+                                // warte 30 sec bis TimerEnded schicken
                                 Timer timer = new Timer();
                                 Timer timer1 = new Timer();
                                 TimerTask task = new TimerTask() {
@@ -868,7 +821,7 @@ public class ClientHandler implements Runnable {
                                             System.out.println("Alle fertig");
                                             setPlayerFertig(false);
                                             Server.setTimerSend(0);
-                                            // After 30 seconds, send TimerEnded
+                                            // nach 30 sec, sende TimerEnded
                                             ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
                                             for (Player player : Server.getGame().getPlayerList()) {
                                                 if (player.getPlayerMat().getNumRegister() < 5) {
@@ -915,7 +868,7 @@ public class ClientHandler implements Runnable {
                                                 System.out.println(activeCard.getCard());
                                             }
                                             Thread.currentThread().interrupt();
-                                            // Cancel the timer
+
                                             timer1.cancel();
                                             timer.cancel();
                                         }
@@ -925,7 +878,7 @@ public class ClientHandler implements Runnable {
                                 timer1.schedule(new TimerTask() {
                                     @Override
                                     public void run(){
-                                        // After 30 seconds, send TimerEnded
+                                        // nach 30 sec, sende TimerEnded
                                         ArrayList<Integer> clientIDsNotReady = new ArrayList<>();
                                         for (Player player : Server.getGame().getPlayerList()) {
                                             if (player.getPlayerMat().getNumRegister() < 5) {
@@ -1087,7 +1040,7 @@ public class ClientHandler implements Runnable {
                                                     player.setDamageCounter(player.getDamageCounter()-1);
                                                 }
                                                 break;
-                                            case "Trojan":
+                                            case "TrojanHorse":
                                                 if (Server.getGame().getTrojanHorse() > 0) {
                                                     player.getPlayerMat().getReceivedDamageCards().add(selectedDamageList.get(i));
                                                     player.getPlayerMat().getDiscardPile().add(selectedDamageList.get(i));
@@ -1112,7 +1065,7 @@ public class ClientHandler implements Runnable {
                                             avaiableDamage.add("Virus");
                                         }
                                         if(Server.getGame().getTrojanHorse() > 0){
-                                            avaiableDamage.add("Trojan");
+                                            avaiableDamage.add("TrojanHorse");
                                         }
                                         if(Server.getGame().getWurm() > 0){
                                             avaiableDamage.add("Worm");
@@ -1163,13 +1116,9 @@ public class ClientHandler implements Runnable {
                                 String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                                 broadcast(serializedPlayerTurning);
                             }
-
-                            //System.out.println("clientId rebootDirection: " + clientId);
-                            //Server.getGame().getPlayerList().get(clientId).getRobot().setOrientation(newRobotOrientation);
                             break;
                         default:
                             //Error-JSON an Client
-                            //System.out.println("Unknown command");
                             Error error = new Error("Whoops. That did not work. Try to adjust something.");
                             String serializedError = Serialisierer.serialize(error);
                             writer.println(serializedError);
@@ -1185,11 +1134,8 @@ public class ClientHandler implements Runnable {
                 String serializedLeftPlayerMessage = Serialisierer.serialize(leftPlayerMessage);
                 broadcast(serializedLeftPlayerMessage);
 
-
-                //falls das der fall ist, was dann?
-
             } catch (IOException e) {
-                e.printStackTrace(); // Other IO exceptions can be handled separately if needed
+                e.printStackTrace();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -1208,12 +1154,10 @@ public class ClientHandler implements Runnable {
     public void sendToOneClient(int clientId, String serializedObject) {
         for (ClientHandler client : clients) {
             if (client.getClientId() == clientId) {
-                // Found the target client, send the message to its socket
                 client.writer.println(serializedObject);
-                return; // Exit the loop after sending the message
+                return;
             }
         }
-        // If the loop completes and the target client is not found, you may handle it accordingly.
         System.out.println("Client with ID " + clientId + " not found.");
     }
 
@@ -1316,9 +1260,6 @@ public class ClientHandler implements Runnable {
         int x = player.getRobot().getX();
         int y = player.getRobot().getY();
 
-
-        //check current x y
-
         String standingOn = checkRobotField(player.getRobot());
 
         if (standingOn.contains("Wall [bottom") && (orientation.equals("bottom") && isForward || orientation.equals("top") && !isForward)) {
@@ -1347,24 +1288,11 @@ public class ClientHandler implements Runnable {
                     break;
             }
 
-            // handle robot movement recursively for fleeingrobot for potential new robots
-
-            // orientation of push haben wir
-            // player/ roboter der gepushed werden soll
-
-
-
-
             int xCoordinateNEWPushingRobot = player.getRobot().getX();
             int yCoordinateNEWPushingRobot = player.getRobot().getY();
 
             //FLAGPOINT PFEIL
-
-
-
-
             // wall check
-
 
             for (Player newFleeingPlayer : Server.getGame().getPlayerList()) {
                 int xPlayerFleeingRobot = newFleeingPlayer.getRobot().getX();
@@ -1375,7 +1303,6 @@ public class ClientHandler implements Runnable {
                 }
 
             }
-
 
             // IF abfrage FLAG
 
@@ -1467,14 +1394,13 @@ public class ClientHandler implements Runnable {
     }
 
     private static String checkRobotField(Robot robot) {
-        // Obtain the robot's current position
         int robotX = robot.getX();
         int robotY = robot.getY();
 
         List<Field> fields = new ArrayList<>();
 
         if (Server.getGameMap().getBordName().equals("Dizzy Highway")) {
-            DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
+            DizzyHighway highway = new DizzyHighway();
             fields = highway.getFieldsAt(robotX, robotY);
         } else if (Server.getGameMap().getBordName().equals("Extra Crispy")) {
             ExtraCrispy extraCrispy = new ExtraCrispy();
@@ -1494,7 +1420,6 @@ public class ClientHandler implements Runnable {
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
@@ -1503,28 +1428,22 @@ public class ClientHandler implements Runnable {
 
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
-                // Additional checks or actions for laser
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
                 System.out.println("Wall");
-                // Actions for wall
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                // Actions for an empty field
                 System.out.println("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
                 System.out.println("Start point");
-                // Actions for a start point
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
                 System.out.println("Checkpoint");
-                // Actions for a check point
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
-                // Actions for an energy space
                 result.append("EnergySpace, ");
             } else if (field instanceof Pit) {
                 result.append("Pit, ");
@@ -1533,30 +1452,20 @@ public class ClientHandler implements Runnable {
                 String[] orientations = field.getOrientation();
                 int[] registers = field.getRegisters();
                 result.append("PushPanel " + Arrays.toString(orientations) + " " + Arrays.toString(registers) + ", ");
-
-                // when to push because checkRobotField gets called often
-                // robot could be moving past a pusher with move 2 but panel will still active if we push here
-
             } else if (field instanceof Gear) {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
-
             } else {
-                // Default case
                 System.out.println("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
-
         // Remove the last comma and space
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-
         System.out.println(result);
-
         return result.toString();
-
     }
 
 
@@ -1565,7 +1474,7 @@ public class ClientHandler implements Runnable {
         List<Field> fields = new ArrayList<>();
 
         if (Server.getGameMap().getBordName().equals("Dizzy Highway")) {
-            DizzyHighway highway = new DizzyHighway();  // Create a new instance or use an existing one
+            DizzyHighway highway = new DizzyHighway();
             fields = highway.getFieldsAt(robotX, robotY);
         } else if (Server.getGameMap().getBordName().equals("Extra Crispy")) {
             ExtraCrispy extraCrispy = new ExtraCrispy();
@@ -1585,7 +1494,6 @@ public class ClientHandler implements Runnable {
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                // Additional checks or actions for conveyor belt
                 System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
@@ -1594,28 +1502,22 @@ public class ClientHandler implements Runnable {
 
             } else if (field instanceof Laser) {
                 System.out.println("Laser");
-                // Additional checks or actions for laser
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
                 System.out.println("Wall");
-                // Actions for wall
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                // Actions for an empty field
                 System.out.println("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
                 System.out.println("Start point");
-                // Actions for a start point
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
                 System.out.println("Checkpoint");
-                // Actions for a check point
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
-                // Actions for an energy space
                 result.append("EnergySpace, ");
             } else if (field instanceof Pit) {
                 result.append("Pit");
@@ -1624,34 +1526,23 @@ public class ClientHandler implements Runnable {
                 String[] orientations = field.getOrientation();
                 int[] registers = field.getRegisters();
                 result.append("PushPanel " + Arrays.toString(orientations) + " " + Arrays.toString(registers) + ", ");
-
-                // when to push because checkRobotField gets called often
-                // robot could be moving past a pusher with move 2 but panel will still active if we push here
-
             } else if (field instanceof Gear) {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
-
             } else {
-                // Default case
                 System.out.println("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
-
         // Remove the last comma and space
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-
         System.out.println(result);
-
         return result.toString();
-
     }
 
     public void fieldActivation() throws InterruptedException {
-        // Conveyor Belts
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkBlueConveyorBelts(i);
         }
@@ -1676,7 +1567,6 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkBlueConveyorBelts(int i) throws InterruptedException {
-        //blue conveyor
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
             if (standingOnBlueConveyor.contains("ConveyorBelt 2 [top")) {
@@ -1793,7 +1683,6 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkGreenConveyorBelts(int i) {
-        //blue conveyor
         String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
             if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
@@ -2092,8 +1981,6 @@ public class ClientHandler implements Runnable {
                     int yCoordinatePushingRobot = robot.getY();
 
                     for (Player player : Server.getGame().getPlayerList()) {
-                        //int xPlayerFleeingRobot = robot.getX();
-                        //int yPlayerFleeingRobot = robot.getY() + 1;
                         int xPlayerFleeingRobot = player.getRobot().getX();
                         int yPlayerFleeingRobot = player.getRobot().getY();
                         System.out.println("1536 robot on field: " + robotOnThisField(xCoordinatePushingRobot, yCoordinatePushingRobot));
@@ -2200,7 +2087,9 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    } //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else {
+                                        Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
+                                    }
                                 }
                             }
                         }
@@ -2235,7 +2124,7 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
@@ -2271,7 +2160,7 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
@@ -2307,7 +2196,7 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
-                                    }else { //hier kann man später mit else erweitern, wenn man PickDamage machen soll
+                                    }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
                                 }
@@ -2526,11 +2415,11 @@ public class ClientHandler implements Runnable {
             if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Spam")) {
                 Server.getGame().setSpam(Server.getGame().getSpam() + 1);
             } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("TrojanHorse")) {
-                Server.getGame().setSpam(Server.getGame().getTrojanHorse() + 1);
+                Server.getGame().setTrojanHorse(Server.getGame().getTrojanHorse() + 1);
             } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Virus")) {
-                Server.getGame().setSpam(Server.getGame().getVirus() + 1);
-            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Wurm")) {
-                Server.getGame().setSpam(Server.getGame().getWurm() + 1);
+                Server.getGame().setVirus(Server.getGame().getVirus() + 1);
+            } else if (player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()).equals("Worm")) {
+                Server.getGame().setWurm(Server.getGame().getWurm() + 1);
             } else {
                 // füge sonst dem player in playerMat in den discardPile das n. Register
                 player.getPlayerMat().getDiscardPile().add(player.getPlayerMat().getRegisterIndex(Server.getRegisterCounter()));
@@ -2556,7 +2445,7 @@ public class ClientHandler implements Runnable {
             switch (cardName) {
                 case "Again":
                     kartenStapel.add(new Again());
-                    break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                    break;
                 case "BackUp":
                     kartenStapel.add(new BackUp());
                     break;
@@ -2580,6 +2469,18 @@ public class ClientHandler implements Runnable {
                     break;
                 case "UTurn":
                     kartenStapel.add(new UTurn());
+                    break;
+                case "TrojanHorse":
+                    kartenStapel.add(new TrojanHorse());
+                    break;
+                case "Spam":
+                    kartenStapel.add(new Spam());
+                    break;
+                case "Virus":
+                    kartenStapel.add(new Virus());
+                    break;
+                case "Worm":
+                    kartenStapel.add(new Wurm());
                     break;
             }
         }
@@ -2613,8 +2514,7 @@ public class ClientHandler implements Runnable {
 
                     if(robotOnThisField(Server.getGame().getBoardClass().getRebootX(), Server.getGame().getBoardClass().getRebootY())){
 
-                        // push found robos in direction of reboot field
-
+                        // push found robots in direction of reboot field
                         String orientation = Server.getGame().getBoardClass().getOrientationOfReboot();
                         int xCoordinatePushingRobot = Server.getGame().getBoardClass().getRebootX();
                         int yCoordinatePushingRobot = Server.getGame().getBoardClass().getRebootY();
@@ -2633,7 +2533,6 @@ public class ClientHandler implements Runnable {
                         }
 
                         //robot on field push in direction of reboot
-
                         for (int j = 0; j < Server.getGame().getPlayerList().size(); j++) {
                             if ((Server.getGame().getPlayerList().get(j).getRobot().getX() == xCoordinatePushingRobot) &&
                                     (Server.getGame().getPlayerList().get(j).getRobot().getY() == yCoordinatePushingRobot)) {
@@ -2751,34 +2650,7 @@ public class ClientHandler implements Runnable {
         return false;
     }
 
-    public void disconnectTimer(ScheduledExecutorService disconnectScheduler){
-        disconnectScheduler.schedule(() -> {
-            System.out.println("Disconnect");
-
-            Player disconnectPLayer = new Player("", -9999, -9999);
-            for(Player player : Server.getPlayerList()){
-                if(player.getId() == clientId){
-                    disconnectPLayer = player;
-                }
-            }
-
-            Server.getPlayerList().remove(disconnectPLayer);
-            if(Server.isGameStarted()) {
-                for (Player player : Server.getPlayerList()) {
-                    if (player.getId() == clientId) {
-                        disconnectPLayer = player;
-                    }
-                }
-                Server.getGame().getPlayerList().remove(disconnectPLayer);
-            }
-            alive.cancel();
-            ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
-            String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
-            broadcast(serializedConnectionUpdate);
-        }, 5, TimeUnit.SECONDS);
-    }
-
-    public void playSpam() throws InterruptedException {
+    public void playTopOfProgDeck() throws InterruptedException {
         String newCard = "";
         for(Player player: Server.getGame().getPlayerList()){
             if(player.getId() == clientId){
@@ -2805,7 +2677,7 @@ public class ClientHandler implements Runnable {
                     }
                 }
                 switch (newCard) {
-                    case "BackUp": //vielleicht auch Move Back steht beides in Anleitung Seite 24
+                    case "BackUp":
                         handleRobotMovement(1, false);
                         break;
                     case "MoveI":
@@ -2818,10 +2690,8 @@ public class ClientHandler implements Runnable {
                         handleRobotMovement(3, true);
                         break;
                     case "PowerUp":
-                        //lastPlayedCard = "PowerUp";
                         break;
                     case "TurnRight":
-                        //lastPlayedCard = "RightTurn";
                         RightTurn.makeEffect(this.robot);
                         int clientIDRightTurn = this.clientId;
                         PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
@@ -2830,7 +2700,6 @@ public class ClientHandler implements Runnable {
                         broadcast(serializedPlayerTurningRight);
                         break;
                     case "TurnLeft":
-                        //lastPlayedCard = "LeftTurn";
                         LeftTurn.makeEffect(this.robot);
                         int clientIDLeftTurn = this.clientId;
                         PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
@@ -2839,7 +2708,6 @@ public class ClientHandler implements Runnable {
                         broadcast(serializedPlayerTurningLeft);
                         break;
                     case "UTurn":
-                        //lastPlayedCard = "UTurn";
                         UTurn.makeEffect(this.robot);
                         int clientIDUTurn = this.clientId;
                         PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
@@ -2850,44 +2718,24 @@ public class ClientHandler implements Runnable {
                         broadcast(serializedPlayerTurningUTurn);
                         break;
                     case "Spam":
-                        playSpam();
+                        playTopOfProgDeck();
                         break;
                     case "TrojanHorse":
-                        int damageCounter = 0;
                         for(int i = 0; i < 2; i++){
                             if(Server.getGame().getSpam() > 0){
                                 Server.getGame().setSpam(Server.getGame().getSpam() - 1);
+                                player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                 player.getPlayerMat().getDiscardPile().add("Spam");
                             }else{
-                                damageCounter++;
+                                player.setDamageCounter(player.getDamageCounter()+1);
                             }
                         }
-                        if(damageCounter > 0){
-                            ArrayList<String> avaiableDamage = new ArrayList<>();
-                            if(Server.getGame().getVirus() > 0){
-                                avaiableDamage.add("Virus");
-                            }
-                            if(Server.getGame().getTrojanHorse() > 0){
-                                avaiableDamage.add("Trojan");
-                            }
-                            if(Server.getGame().getWurm() > 0){
-                                avaiableDamage.add("Worm");
-                            }
-                            if(!avaiableDamage.isEmpty()) {
-                                Server.setNumPickDamage(Server.getNumPickDamage()+1);
-
-                                PlayerStatus allWait = new PlayerStatus(-9999, true);
-                                String serializedAllWait = Serialisierer.serialize(allWait);
-                                broadcast(serializedAllWait);
-
-                                PickDamage pickDamage = new PickDamage(damageCounter, avaiableDamage);
-                                String serializedPickDamage = Serialisierer.serialize(pickDamage);
-                                sendToOneClient(player.getId(), serializedPickDamage);
-                            }
-                        }
+                        //play the top card of the draw pile this register
+                        playTopOfProgDeck();
                         break;
                     case "Virus":
                         playVirus();
+                        playTopOfProgDeck();
                         break;
                     case "Worm":
                         int x = player.getRobot().getX();
@@ -2914,8 +2762,47 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public void playVirus(){
+    public void playVirus() throws InterruptedException {
+        Robot robot = new Robot(-9999, -9999, "");
+        for(Player player1: Server.getGame().getPlayerList()){
+            if(player1.getId() == clientId){
+                robot = player1.getRobot();
+            }
+        }
+        //loop through the player list and if it is not your own robot and within 6 fields of you apply the effect
+        for(Player player : Server.getGame().getPlayerList()){
+            if(!robot.equals(player.getRobot()) && isWithinSixFields(robot, player.getRobot())){
+                if(Server.getGame().getSpam() > 0) {
+                    //add a virus card to the player's discard pile
+                    player.getPlayerMat().getDiscardPile().add("Spam");
+                    player.getPlayerMat().getReceivedDamageCards().add("Spam");
+                    Server.getGame().setSpam(Server.getGame().getSpam() -1);
+                }else{
+                    //if Virus cards are empty pick damage
+                    player.setDamageCounter(player.getDamageCounter()+1);
+                }
+            }
+        }
+    }
 
+    public boolean isWithinSixFields(Robot robotPlayedVirus, Robot robotToBeChecked){
+        int xRobotPlayedVirus = robotPlayedVirus.getX();
+        int yRobotPlayedVirus = robotPlayedVirus.getY();
+
+        int xRobotToBeChecked = robotToBeChecked.getX();
+        int yRobotToBeChecked = robotToBeChecked.getY();
+
+        int leftSideX = xRobotPlayedVirus - 6;
+        int rightSideX = xRobotPlayedVirus + 6;
+        int topY = yRobotPlayedVirus - 6;
+        int bottomY = yRobotPlayedVirus + 6;
+        if(leftSideX <= xRobotToBeChecked && xRobotToBeChecked <= rightSideX && topY <= yRobotToBeChecked && bottomY >= yRobotToBeChecked){
+            System.out.print("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
+            return true;
+        }else{
+            System.out.println(false + "virus");
+            return false;
+        }
     }
 
 }

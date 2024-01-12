@@ -1,5 +1,14 @@
 package SEPee.server.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
+import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.Movement;
+import SEPee.server.model.card.Card;
+import SEPee.server.model.card.Decks;
+import SEPee.server.model.card.upgradeCard.UpgradeCard;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
@@ -38,6 +47,7 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.spam = 38;
         this.virus = 18;
         this.trojanHorse = 12;
+        this.wurm = 6;
         this.boardClass = boardClass;
     }
 
@@ -47,11 +57,11 @@ public class Game implements Robot.RobotPositionChangeListener {
 
             double millisToSleep = playerList.size() * 3750 - 5; // every animation is 750 millis long, times 5 registers, times the player amount
 
-            try {
+            /*try {
                 Thread.sleep((long) millisToSleep);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
 
 
