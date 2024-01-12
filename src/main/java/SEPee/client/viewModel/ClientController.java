@@ -295,7 +295,11 @@ public class ClientController {
         if (okButton != null) {
             boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty();
             boolean isRobotSelected = selectedRobotNumber[0] > 0;
-            boolean isRobotAvailable = !client.getTakenFigures().contains(selectedRobotNumber[0]);
+
+            boolean isRobotAvailable = false;
+            if (isRobotSelected) {
+                isRobotAvailable = !client.getTakenFigures().contains(selectedRobotNumber[0]);
+            }
 
             System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected + ", Robot Available = " + isRobotAvailable);
 
@@ -304,6 +308,21 @@ public class ClientController {
         }
     }
 
+    private void updateRobotImageViews(ArrayList<Integer> newTakenFigures) {
+        for (Node node : robotSelectionGrid.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                int robotNumber = GridPane.getColumnIndex(node);
+                if (newTakenFigures.contains(robotNumber + 1)) {
+                    imageView.setDisable(true);
+                    imageView.setOpacity(0.1);
+                } else {
+                    imageView.setDisable(false);
+                    imageView.setOpacity(1.0);
+                }
+            }
+        }
+    }
 
     public void initAI(ClientAI clientAI, Stage stage) {
         figure = robotSelectionAI(Client.getTakenFigures());
@@ -323,12 +342,6 @@ public class ClientController {
         }
     }
 
-    private int giveRecipientIdToSendMessage() {
-        return getSelectedRecipientId();
-
-    }
-
-    // Method to get the selected recipient ID
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
             System.out.println("ID selected " + selectedRecipientId);
@@ -1072,28 +1085,13 @@ public class ClientController {
     public void playUISound(String eventName){
         SoundManager.playUISound(eventName);
     }
+
     public void playEventSound(String eventName){
         SoundManager.playEventSound(eventName);
     }
 
     public void playSound(String soundName){
         SoundManager.playSound(soundName);
-    }
-
-    private void updateRobotImageViews(ArrayList<Integer> newTakenFigures) {
-        for (Node node : robotSelectionGrid.getChildren()) {
-            if (node instanceof ImageView) {
-                ImageView imageView = (ImageView) node;
-                int robotNumber = GridPane.getColumnIndex(node);
-                if (newTakenFigures.contains(robotNumber + 1)) {
-                    imageView.setDisable(true);
-                    imageView.setOpacity(0.1);
-                } else {
-                    imageView.setDisable(false);
-                    imageView.setOpacity(1.0);
-                }
-            }
-        }
     }
 
 }
