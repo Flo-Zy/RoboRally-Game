@@ -5,14 +5,19 @@
 }
 
 .dialog-pane {
-    -fx-min-width: 1100;
-    -fx-min-height: 650;
+    -fx-min-width: 950;
+    -fx-min-height: 600;
     -fx-max-width: 1200;
     -fx-max-height: 750;
 }
 
 .grid-pane .intro-image {
-    -fx-alignment: center;
+    /*-fx-alignment: center;*/
+}
+
+.grid-pane {
+    -fx-vgap: 60px;
+    -fx-hgap: 0px;
 }
 
 .username-text-field {

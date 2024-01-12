@@ -126,17 +126,17 @@ public class ClientController {
 
         updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
-        GridPane.setHalignment(connectButton, HPos.CENTER);
-        GridPane.setValignment(connectButton, VPos.CENTER);
+        //GridPane.setHalignment(connectButton, HPos.CENTER);
+        //GridPane.setValignment(connectButton, VPos.CENTER);
 
         stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
-        grid.setHgap(0);
-        grid.setVgap(60);
-        grid.add(connectButton, 0, 3);
+        grid.getStyleClass().add("grid-pane");
+        grid.add(connectButton, 1, 3, 1, 1);
         GridPane.setHalignment(connectButton, HPos.CENTER);
-        GridPane.setValignment(connectButton, VPos.CENTER);
+        //GridPane.setHalignment(connectButton, HPos.CENTER);
+        //GridPane.setValignment(connectButton, VPos.CENTER);
         //GridPane roboRally = new GridPane();
         //roboRally.setHgap(37);
         //roboRally.setVgap(37);
@@ -266,7 +266,8 @@ public class ClientController {
             muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
             VBox root = (VBox) scene.getRoot();
             root.getChildren().add(muteButton);
-
+            sendButton.setOnAction(event -> sendMessage());
+            visibilityButton.setOnAction(event -> toggleVisibility());
         });
     }
 
