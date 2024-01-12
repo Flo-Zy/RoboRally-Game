@@ -78,7 +78,7 @@ public class ClientController {
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
-    private static ArrayList<Card> clientHand = new ArrayList<>();
+    private ArrayList<Card> clientHand = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML

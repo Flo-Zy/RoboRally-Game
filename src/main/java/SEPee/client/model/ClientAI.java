@@ -11,10 +11,11 @@ import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
 //auslagern
 import SEPee.server.model.Player;
+import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
-import SEPee.server.model.gameBoard.ExtraCrispy;
+import SEPee.server.model.gameBoard.*;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -67,6 +68,10 @@ public class ClientAI extends Application {
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
+    private AIBestMove aiBestMove = new AIBestMove();
+    private GameBoard gameBoard;
+    private RobotAI aiRobot = new RobotAI();
+    private int numCheckpointToken = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -251,15 +256,18 @@ public class ClientAI extends Application {
                             System.out.println(selectedMap1);
                             if(selectedMap1.equals("Dizzy Highway")) {
                                 controller.loadDizzyHighwayFXMLAI(this, primaryStage);
+                                gameBoard = new DizzyHighway();
                             } else if(selectedMap1.equals("Extra Crispy")) {
                                 controller.loadExtraCrispyFXMLAI(this, primaryStage);
+                                gameBoard = new ExtraCrispy();
                             } else if(selectedMap1.equals("Lost Bearings")) {
                                 controller.loadLostBearingsFXMLAI(this, primaryStage);
+                                gameBoard = new LostBearings();
                             } else if(selectedMap1.equals("Death Trap")) {
                                 controller.loadDeathTrapFXMLAI(this, primaryStage);
+                                gameBoard = new DeathTrap();
                             }
-
-                            // weitere Maps
+                            aiBestMove.setGameBoard(gameBoard);
 
                             break;
                         case "ReceivedChat":
@@ -317,7 +325,8 @@ public class ClientAI extends Application {
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
-                                controller.initRegisterAI();
+                                //controller.initRegisterAI();
+                                aiBestMove.setRegister(aiRobot, controller.getClientHand());
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){
@@ -387,12 +396,17 @@ public class ClientAI extends Application {
                             StartingPointTaken startingPointTaken = Deserialisierer.deserialize(serializedReceivedString, StartingPointTaken.class);
 
                             if(selectedMap1.equals("Death Trap")) {
+                                aiRobot.setOrientation("left");
                                 controller.addTakenStartingPointsDeathTrap(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             } else {
                                 controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             }
 
                             int takenClientID = startingPointTaken.getMessageBody().getClientID();
+                            if(takenClientID == controller.getId()){
+                                aiRobot.setX(startingPointTaken.getMessageBody().getX());
+                                aiRobot.setY(startingPointTaken.getMessageBody().getY());
+                            }
                             // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
                             Player avatarPlayer = new Player("", -999,-999);
                             synchronized (playerListClientAI) {
@@ -580,6 +594,8 @@ public class ClientAI extends Application {
                             int clientIdToMove = movement.getMessageBody().getClientID();
                             int newX = movement.getMessageBody().getX();
                             int newY = movement.getMessageBody().getY();
+                            aiRobot.setX(newX);
+                            aiRobot.setY(newY);
                             System.out.println(clientIdToMove + ", " + newX + ", " + newY + ", " + controller.getId());
                             controller.movementPlayed(clientIdToMove,newX, newY);
 
@@ -588,9 +604,11 @@ public class ClientAI extends Application {
                             System.out.println("Player Turning");
                             controller.setPlayerListClient(playerListClientAI);
                             PlayerTurning playerTurning = Deserialisierer.deserialize(serializedReceivedString, PlayerTurning.class);
-
                             int clientIdToTurn = playerTurning.getMessageBody().getClientID();
                             String rotation = playerTurning.getMessageBody().getRotation();
+                            if(clientIdToTurn == controller.getId()){
+                                aiRobot.setOrientation(getResultingOrientation(rotation, aiRobot));
+                            }
                             controller.playerTurn(clientIdToTurn, rotation);
 
                             break;
@@ -694,6 +712,8 @@ public class ClientAI extends Application {
                             synchronized (playerListClientAI) {
                                 for (Player player : playerListClientAI) {
                                     if (player.getId() == clientID) {
+                                        numCheckpointToken++;
+                                        aiBestMove.setNumCheckpointToken(numCheckpointToken);
                                         controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                                         controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
 

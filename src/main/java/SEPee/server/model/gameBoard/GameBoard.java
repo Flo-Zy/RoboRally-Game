@@ -50,4 +50,8 @@ public class GameBoard {
         return rebootTo;
     }
 
+    public List<Field> getFieldsAt(int x, int y) {
+        return null;
+    }
+
 }
