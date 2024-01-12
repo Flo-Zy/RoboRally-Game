@@ -399,6 +399,7 @@ public class ClientAI extends Application {
                                 aiRobot.setOrientation("left");
                                 controller.addTakenStartingPointsDeathTrap(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             } else {
+                                aiRobot.setOrientation("right");
                                 controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             }
 
@@ -660,26 +661,6 @@ public class ClientAI extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
-                            /*
-
-                            // set robot direction TOP
-                            String orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
-                            while (!orientationOfRobot.equals("top")) {
-                                controller.playerTurn(rebootingClientId, "clockwise");
-                                orientationOfRobot = playerListClient.get(rebootingClientId).getRobot().getOrientation();
-                            }
-                             */
-
-                            /*
-                            //RebootDirection erstmal immer mit top verschicken für default, falls nie was anderes ankommt
-                            //wird das genommen und falls was anderes ankommt, wird der halt nochmal gedreht
-
-                            RebootDirection rebootDirection = new RebootDirection("top");
-                            String serializedRebootDirection = Serialisierer.serialize(rebootDirection);
-                            writer.println(serializedRebootDirection);
-
-                             */
-
                             // direction selection dialog fur rebootingClientId
                             // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
 
@@ -759,5 +740,33 @@ public class ClientAI extends Application {
 
     public static int getServerPort() {
         return SERVER_PORT;
+    }
+
+    private static String getResultingOrientation(String turningDirection, RobotAI robot) {
+        if (turningDirection.equals("clockwise")) {
+            switch (robot.getOrientation()) {
+                case "top":
+                    return "right";
+                case "bottom":
+                    return "left";
+                case "left":
+                    return "top";
+                case "right":
+                    return "bottom";
+            }
+        } else {
+            switch (robot.getOrientation()) {
+                case "top":
+                    return "left";
+                case "bottom":
+                    return "right";
+                case "left":
+                    return "bottom";
+                case "right":
+                    return "top";
+            }
+        }
+        //da sollte man nie hinkommen
+        return "---";
     }
 }
