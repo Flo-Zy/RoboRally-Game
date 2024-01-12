@@ -32,8 +32,15 @@ public class AIBestMove {
 
     public void setRegister(RobotAI robot,  ArrayList<Card> hand){
         this.clientHand = hand;
+        xRobot = robot.getX();
+        yRobot = robot.getY();
+        orientation = robot.getOrientation();
         setCheckpoint();
-        turnInCheckpointDirection(robot);
+
+        turnInCheckpointDirection();
+        checkWall();
+        //move();
+
         System.out.println("HIER AI KARTEN: "+register);
         int i = 1;
         for(String card: register){
@@ -127,10 +134,7 @@ public class AIBestMove {
         }
     }
 
-    private static String checkRobotField(RobotAI robot) {
-        int robotX = robot.getX();
-        int robotY = robot.getY();
-
+    private static String checkRobotField(int robotX, int robotY) {
         List<Field> fields = new ArrayList<>();
 
         if (gameBoard.getBordName().equals("Dizzy Highway")) {
@@ -197,12 +201,12 @@ public class AIBestMove {
         return result.toString();
     }
 
-    private void turnInCheckpointDirection(RobotAI robot){
+    private void turnInCheckpointDirection(){
         String direction = "---";
         if(gameBoard.getBordName().equals("Death Trap")){
-            if (xCheckpoint > robot.getX()) {
+            if (xCheckpoint > xRobot) {
                 direction = "left";
-            } else if (xCheckpoint < robot.getX()) {
+            } else if (xCheckpoint < xRobot) {
                 direction = "right";
             } else if (yCheckpoint > robot.getY()) {
                 direction = "bottom";
@@ -210,9 +214,9 @@ public class AIBestMove {
                 direction = "top";
             }
         }else {
-            if (xCheckpoint > robot.getX()) {
+            if (xCheckpoint > xRobot) {
                 direction = "right";
-            } else if (xCheckpoint < robot.getX()) {
+            } else if (xCheckpoint < xRobot) {
                 direction = "left";
             } else if (yCheckpoint > robot.getY()) {
                 direction = "bottom";
@@ -220,18 +224,19 @@ public class AIBestMove {
                 direction = "top";
             }
         }
-        if(!robot.getOrientation().equals(direction)){
-            switch(robot.getOrientation()){
+        if(!orientation.equals(direction)){
+            switch(orientation){
                 case "top":
                     switch (direction) {
                         case "right":
-                            if (!checkRobotField(robot).contains("Wall [right")) {
+                            if (!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnRight")) {
                                         if (cardCounter < 5) {
                                             cardCounter++;
                                             register.add("TurnRight");
                                             clientHand.remove(card);
+                                            orientation = "right";
                                             break;
                                         }
                                     }
@@ -246,6 +251,7 @@ public class AIBestMove {
                                             cardCounter++;
                                             register.add("TurnLeft");
                                             clientHand.remove(card);
+                                            orientation = "left";
                                             break;
                                         }
                                     }
@@ -253,7 +259,7 @@ public class AIBestMove {
                             }
                             break;
                         case "bottom":
-                            if (!checkRobotField(robot).contains("Wall [bottom")) {
+                            if (!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
                                 boolean finished = false;
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("UTurn")) {
@@ -297,7 +303,7 @@ public class AIBestMove {
                 case "right":
                     switch (direction) {
                         case "top":
-                            if(!checkRobotField(robot).contains("Wall [top")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnLeft")) {
                                         if (cardCounter < 5) {
@@ -311,7 +317,7 @@ public class AIBestMove {
                             }
                             break;
                         case "bottom":
-                            if(!checkRobotField(robot).contains("Wall [bottom")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnRight")) {
                                         if (cardCounter < 5) {
@@ -325,7 +331,7 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            if(!checkRobotField(robot).contains("Wall [left")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
                                 boolean finished = false;
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("UTurn")) {
@@ -369,7 +375,7 @@ public class AIBestMove {
                 case "bottom":
                     switch (direction) {
                         case "right":
-                            if(!checkRobotField(robot).contains("Wall [right")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnLeft")) {
                                         if (cardCounter < 5) {
@@ -383,7 +389,7 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            if(!checkRobotField(robot).contains("Wall [left")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnRight")) {
                                         if (cardCounter < 5) {
@@ -397,7 +403,7 @@ public class AIBestMove {
                             }
                             break;
                         case "top":
-                            if(!checkRobotField(robot).contains("Wall [top")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
                                 boolean finished = false;
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("UTurn")) {
@@ -410,7 +416,7 @@ public class AIBestMove {
                                         }
                                     }
                                 }
-                                if (!finished) {
+                                if (!finished && cardCounter < 4) {
                                     int turnRight = 0;
                                     int turnLeft = 0;
                                     for (Card card : clientHand) {
@@ -441,7 +447,7 @@ public class AIBestMove {
                 case "left":
                     switch (direction) {
                         case "top":
-                            if(!checkRobotField(robot).contains("Wall [top")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnRight")) {
                                         if (cardCounter < 5) {
@@ -455,7 +461,7 @@ public class AIBestMove {
                             }
                             break;
                         case "bottom":
-                            if(!checkRobotField(robot).contains("Wall [bottom")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnLeft")) {
                                         if (cardCounter < 5) {
@@ -469,7 +475,7 @@ public class AIBestMove {
                             }
                             break;
                         case "right":
-                            if(!checkRobotField(robot).contains("Wall [right")) {
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
                                 boolean finished = false;
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("UTurn")) {
