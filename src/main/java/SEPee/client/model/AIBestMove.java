@@ -29,6 +29,9 @@ public class AIBestMove {
     private int cardCounter = 0;
     private ArrayList<Card> clientHand = new ArrayList<>();
     private ArrayList<String> register = new ArrayList<>();
+    private int xRobot;
+    private int yRobot;
+    private String orientation;
 
     public void setRegister(RobotAI robot,  ArrayList<Card> hand){
         this.clientHand = hand;
@@ -52,9 +55,9 @@ public class AIBestMove {
         register.clear();
     }
 
-    private int calculateManhattanDistance(RobotAI robot){
-        int x = robot.getX();
-        int y = robot.getY();
+    private int calculateManhattanDistance(int xCoordinate, int yCoordinate){
+        int x = xCoordinate;
+        int y = yCoordinate;
 
         int manhattanDistance = Math.abs(x - xCheckpoint) + Math.abs(y - yCheckpoint);
 
@@ -208,9 +211,9 @@ public class AIBestMove {
                 direction = "left";
             } else if (xCheckpoint < xRobot) {
                 direction = "right";
-            } else if (yCheckpoint > robot.getY()) {
+            } else if (yCheckpoint > yRobot) {
                 direction = "bottom";
-            } else if (yCheckpoint < robot.getY()) {
+            } else if (yCheckpoint < yRobot) {
                 direction = "top";
             }
         }else {
@@ -218,9 +221,9 @@ public class AIBestMove {
                 direction = "right";
             } else if (xCheckpoint < xRobot) {
                 direction = "left";
-            } else if (yCheckpoint > robot.getY()) {
+            } else if (yCheckpoint > yRobot) {
                 direction = "bottom";
-            } else if (yCheckpoint < robot.getY()) {
+            } else if (yCheckpoint < yRobot) {
                 direction = "top";
             }
         }
@@ -244,7 +247,7 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            if (!checkRobotField(robot).contains("Wall [left")) {
+                            if (!checkRobotField(yRobot, yRobot).contains("Wall [left")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnLeft")) {
                                         if (cardCounter < 5) {
@@ -268,150 +271,7 @@ public class AIBestMove {
                                             register.add("UTurn");
                                             clientHand.remove(card);
                                             finished = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    break;
-                case "right":
-                    switch (direction) {
-                        case "top":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "bottom":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "left":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    break;
-                case "bottom":
-                    switch (direction) {
-                        case "right":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "left":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "top":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
+                                            orientation = "bottom";
                                             break;
                                         }
                                     }
@@ -432,12 +292,168 @@ public class AIBestMove {
                                         register.add("TurnRight");
                                         clientHand.remove("TurnRight");
                                         clientHand.remove("TurnRight");
+                                        orientation = "bottom";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
                                         clientHand.remove("TurnLeft");
                                         clientHand.remove("TurnLeft");
+                                        orientation = "bottom";
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                case "right":
+                    switch (direction) {
+                        case "top":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("TurnLeft")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("TurnLeft");
+                                            clientHand.remove(card);
+                                            orientation = "top";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "bottom":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("TurnRight")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("TurnRight");
+                                            clientHand.remove(card);
+                                            orientation = "bottom";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "left":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
+                                boolean finished = false;
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("UTurn")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("UTurn");
+                                            clientHand.remove(card);
+                                            finished = true;
+                                            orientation = "left";
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (Card card : clientHand) {
+                                        if (card.getName().equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.getName().equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "left";
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "left";
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                case "bottom":
+                    switch (direction) {
+                        case "right":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("TurnLeft")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("TurnLeft");
+                                            clientHand.remove(card);
+                                            orientation = "right";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "left":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("TurnRight")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("TurnRight");
+                                            clientHand.remove(card);
+                                            orientation = "left";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "top":
+                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
+                                boolean finished = false;
+                                for (Card card : clientHand) {
+                                    if (card.getName().equals("UTurn")) {
+                                        if (cardCounter < 5) {
+                                            cardCounter++;
+                                            register.add("UTurn");
+                                            clientHand.remove(card);
+                                            finished = true;
+                                            orientation = "top";
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (Card card : clientHand) {
+                                        if (card.getName().equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.getName().equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "top";
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "top";
                                     }
                                 }
                             }
@@ -454,6 +470,7 @@ public class AIBestMove {
                                             cardCounter++;
                                             register.add("TurnRight");
                                             clientHand.remove(card);
+                                            orientation = "top";
                                             break;
                                         }
                                     }
@@ -468,6 +485,7 @@ public class AIBestMove {
                                             cardCounter++;
                                             register.add("TurnLeft");
                                             clientHand.remove(card);
+                                            orientation = "bottom";
                                             break;
                                         }
                                     }
@@ -484,11 +502,12 @@ public class AIBestMove {
                                             register.add("UTurn");
                                             clientHand.remove(card);
                                             finished = true;
+                                            orientation = "right";
                                             break;
                                         }
                                     }
                                 }
-                                if (!finished) {
+                                if (!finished && cardCounter < 4) {
                                     int turnRight = 0;
                                     int turnLeft = 0;
                                     for (Card card : clientHand) {
@@ -504,12 +523,14 @@ public class AIBestMove {
                                         register.add("TurnRight");
                                         clientHand.remove("TurnRight");
                                         clientHand.remove("TurnRight");
+                                        orientation = "right";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
                                         clientHand.remove("TurnLeft");
                                         clientHand.remove("TurnLeft");
+                                        orientation = "right";
                                     }
                                 }
                             }
@@ -520,5 +541,283 @@ public class AIBestMove {
         }
     }
 
+    private void move(){
+        //conveyorBelts, Pits (beim gehen), nicht rauslaufen, Distanz besser
+        // für die Zukunft: Pits (beim drehen) und andere Roboter und PushPanel und Gears???
+        int initialDistance = calculateManhattanDistance(xRobot, yRobot);
+        int xFuture = xRobot;
+        int yFuture = yRobot;
+        boolean move1 = false;
+        boolean move2 = false;
+        boolean move3 = false;
+        for(Card card : clientHand){
+            if(card.getName().equals("MoveI") && !move1){
+                move1 = true;
+                switch (orientation){
+                    case "top":
+                        yFuture--;
+                        if(!(yFuture < 0)){
+
+                        }
+                        break;
+                    case "right":
+                        xFuture++;
+                        if(!(xFuture > 12)){
+
+                        }
+                        break;
+                    case "bottom":
+                        yFuture++;
+                        if(!(yFuture > 9)){
+
+                        }
+                        break;
+                    case "left":
+                        xFuture--;
+                        if(!(xFuture < 0)){
+
+                        }
+                        break;
+                }
+            }else if(card.getName().equals("MoveII") && !move2){
+                move2 = true;
+            }else if(card.getName().equals("MoveIII") && !move3){
+                move3 = true;
+            }
+        }
+    }
+
+    public void checkWall(){
+        switch (orientation){
+            case "top":
+                if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "left";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "right";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(!gameBoard.getBordName().equals("Death Trap")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "right";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else{
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "left";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "right":
+                if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "top";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "bottom";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(!gameBoard.getBordName().equals("Death Trap")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "bottom";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else{
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "top";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "right";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "left";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(!gameBoard.getBordName().equals("Death Trap")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "right";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else{
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "left";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "left":
+                if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "bottom";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "top";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else if(!gameBoard.getBordName().equals("Death Trap")){
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnRight")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove("TurnRight");
+                                    orientation = "top";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }else{
+                        for(Card card : clientHand){
+                            if(card.getName().equals("TurnLeft")){
+                                if(cardCounter < 5) {
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove("TurnLeft");
+                                    orientation = "bottom";
+                                    System.out.println("CHECK WALL");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
 
 }
