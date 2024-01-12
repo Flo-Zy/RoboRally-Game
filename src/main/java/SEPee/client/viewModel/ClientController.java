@@ -72,13 +72,13 @@ public class ClientController {
     public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
-    private List<Integer> takenFigures = new ArrayList<>();
-
     private ImageView currentSelectedImageView = null;
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
     @Getter
     private static ArrayList<Card> clientHand = new ArrayList<>();
+    private static int confirmedClients = 0;
+    private static Button connectButton;
     @FXML
     private TextArea chatArea;
     @FXML
@@ -123,13 +123,14 @@ public class ClientController {
 
         ButtonType okButtonType = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType);
-        Node connectButton = dialog.getDialogPane().lookupButton(okButtonType);
-        connectButton.getStyleClass().add("connect-button");
-        if (connectButton instanceof Button) {
-            ((Button) connectButton).setDisable(true);
+        Node connectButtonNode = dialog.getDialogPane().lookupButton(okButtonType);
+        connectButton = (connectButtonNode instanceof Button) ? (Button) connectButtonNode : null;
+        if (connectButton != null) {
+            connectButton.getStyleClass().add("connect-button");
+            connectButton.setDisable(true);
         }
 
-        updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+        updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
         //GridPane.setHalignment(connectButton, HPos.CENTER);
         //GridPane.setValignment(connectButton, VPos.CENTER);
@@ -187,18 +188,24 @@ public class ClientController {
             robotSelectionGrid.add(nameLabel, i - 1, 1);
 
             if (client.getTakenFigures().contains(i)) {
-                imageView.setDisable(true);
-                imageView.setOpacity(0.1);
+                if (imageView != currentSelectedImageView) {
+                    imageView.setDisable(true);
+                    imageView.setOpacity(0.1);
+                } else {
+                    currentSelectedImageView.setOpacity(1.0);
+                    currentSelectedImageView = null;
+                    updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
+                }
             } else {
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
                     int newSelectedRobotNumber = 0; // Lokale Variable
                     if (currentSelectedImageView == imageView) {
-                        // Deselektieren
+                        // Deselect
                         currentSelectedImageView.setOpacity(1.0);
                         currentSelectedImageView = null;
                     } else {
-                        // Auswählen
+                        // Select
                         if (currentSelectedImageView != null) {
                             currentSelectedImageView.setOpacity(1.0);
                         }
@@ -223,15 +230,16 @@ public class ClientController {
                     avatarImageView.setEffect(dropShadow);
                     selectedRobotNumber[0] = newSelectedRobotNumber;
                     System.out.println("Selected Robot Number: " + selectedRobotNumber[0]);
-                    updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+                    updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
                 });
             }
         }
 
+
         grid.add(robotSelectionGrid, 0, 2, 2, 1);
 
         usernameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateOkButtonState(dialog, usernameTextField, selectedRobotNumber, okButtonType);
+            updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
         });
 
         dialog.getDialogPane().setContent(grid);
@@ -256,6 +264,13 @@ public class ClientController {
             this.name = usernameRobotPair.getKey();
             this.figure = usernameRobotPair.getValue();
             stage.setTitle("Client - " + name);
+
+            confirmedClients++;
+
+            // Check if both clients have confirmed before enabling the "Connect" button
+            if (confirmedClients == 2 && connectButton != null) {
+                connectButton.setDisable(false);
+            }
             // Hier Ihre weitere Initialisierungslogik
 
             stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
@@ -274,16 +289,21 @@ public class ClientController {
         });
     }
 
-    private void updateOkButtonState(Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
+    private void updateOkButtonState(Client client, Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
 
         if (okButton != null) {
             boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty();
             boolean isRobotSelected = selectedRobotNumber[0] > 0;
-            System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected);
-            okButton.setDisable(!(isUsernameValid && isRobotSelected));
+            boolean isRobotAvailable = !client.getTakenFigures().contains(selectedRobotNumber[0]);
+
+            System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected + ", Robot Available = " + isRobotAvailable);
+
+            // Check if both conditions are true before enabling the button
+            okButton.setDisable(!(isUsernameValid && isRobotSelected && isRobotAvailable && confirmedClients < 2));
         }
     }
+
 
     public void initAI(ClientAI clientAI, Stage stage) {
         figure = robotSelectionAI(Client.getTakenFigures());
