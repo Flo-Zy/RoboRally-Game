@@ -101,7 +101,9 @@ public class ClientController {
     private static int startPointX;
     @Getter
     private static int startPointY;
+    private GridPane robotSelectionGrid;
     public void init(Client client, Stage stage) {
+
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
         Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
         dialog.setTitle("Welcome to RoboRally");
@@ -157,7 +159,7 @@ public class ClientController {
         introImage.setFitHeight(118);  // Setzt die maximale Höhe
         introImage.setFitWidth(645);  // Setzt die maximale Breite
         introImage.setPreserveRatio(true);
-        GridPane robotSelectionGrid = new GridPane();
+        robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
         robotSelectionGrid.getStyleClass().add("robot-selection-grid");
@@ -201,15 +203,6 @@ public class ClientController {
                         newSelectedRobotNumber = robotNumber;
                         currentSelectedImageView = imageView;
                     }
-                    /*if (selectedRobotNumber[0] == robotNumber) {
-                        // Robot wird deselektiert
-                        selectedRobotNumber[0] = 0;
-                        imageView.setOpacity(1.0);
-                    } else {
-                        // Robot wird ausgewählt
-                        selectedRobotNumber[0] = robotNumber;
-                        imageView.setOpacity(0.5);
-                    }*/
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
                     avatarNameLabel.setText(robotNames[robotNumber-1]);
@@ -245,6 +238,13 @@ public class ClientController {
                 return new Pair<>(usernameTextField.getText().trim(), selectedRobotNumber[0]);
             }
             return null;
+        });
+
+        client.addTakenFiguresChangeListener(new Client.TakenFiguresChangeListener() {
+            @Override
+            public void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures) {
+                Platform.runLater(() -> updateRobotImageViews(newTakenFigures));
+            }
         });
 
         Optional<Pair<String, Integer>> result = dialog.showAndWait();
@@ -424,75 +424,6 @@ public class ClientController {
         System.exit(0);
     }
 
-    /*private int showRobotSelectionDialog(Stage stage, ArrayList<Integer> takenFigures) {
-        Dialog<Integer> dialog = new Dialog<>();
-        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showRobotSelectionDialog.css").toExternalForm());
-
-        dialog.setTitle("Robot Selection");
-
-        Label headerLabel = new Label("Please select a robot:");
-        headerLabel.setFont(new Font("Arial", 56));
-        dialog.getDialogPane().setHeader(headerLabel);
-        headerLabel.getStyleClass().add("header-label");
-
-        // GridPane für die Anordnung der Bilder und Namen
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-
-        for (int i = 1; i <= 6; i++) {
-            Image image = new Image("boardElementsPNGs/Custom/Avatars/Avatar" + i + ".png");
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-
-            //Label nameLabel = new Label("Robot " + i);
-            Label nameLabel = new Label(robotNames[i-1]);
-            nameLabel.setAlignment(Pos.CENTER);
-            nameLabel.getStyleClass().add("grid-label");
-
-
-            // Hinzufügen von ImageView und Label zum GridPane
-            grid.add(imageView, i - 1, 0);
-            grid.add(nameLabel, i - 1, 1);
-
-            // Überprüfen, ob der Roboter bereits genommen wurde
-            if (takenFigures.contains(i)) {
-                imageView.setDisable(true); // Deaktivieren des ImageView
-                imageView.setOpacity(0.1); // Reduzierung der Transparenz
-            } else {
-                // Event Handler für Klicks auf das ImageView
-                final int robotNumber = i;
-                imageView.setOnMouseClicked(event -> {
-                    avatarImageView.setImage(image);
-                    avatarImageView.setVisible(true);
-                    avatarNameLabel.setText(robotNames[robotNumber-1]);
-                    avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
-                            "-fx-font-size: 40px; " +
-                            "-fx-font-family: 'Impact'");
-
-                    DropShadow dropShadow = new DropShadow();
-                    dropShadow.setRadius(10.0);
-                    dropShadow.setOffsetX(3.0);
-                    dropShadow.setOffsetY(3.0);
-                    dropShadow.setColor(Color.BLACK);
-
-                    avatarNameLabel.setEffect(dropShadow);
-                    avatarImageView.setEffect(dropShadow);
-                    dialog.setResult(robotNumber);
-                    dialog.close();
-                });
-            }
-        }
-        // Hinzufügen des GridPane zum Dialog
-        dialog.getDialogPane().setContent(grid);
-
-        // Anzeigen des Dialogs und Warten auf das Ergebnis
-        Optional<Integer> result = dialog.showAndWait();
-
-        return result.orElse(0); // Rückgabe der ausgewählten Roboter-Nummer oder 0
-    }*/
-
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
         while(true){
@@ -538,78 +469,7 @@ public class ClientController {
         }
         return selectedMap;
     }
-    //erste version
-    /*public String showSelectRebootDirectionDialog(Stage stage) {
-        GridPane root = new GridPane();
-        root.setHgap(10);
-        root.setVgap(10);
-        root.setPadding(new Insets(20));
-        root.setAlignment(Pos.CENTER);
 
-        String[] selectedDirection = {null};
-
-        // Top Button in der ersten Reihe mittig
-        Button topButton = new Button("top");
-        topButton.setOnAction(event -> {
-            selectedDirection[0] = "top";
-            stage.close();
-        });
-        root.add(topButton, 1, 0, 1, 1);
-
-        // Left Button in der zweiten Reihe links
-        Button leftButton = new Button("left");
-        leftButton.setOnAction(event -> {
-            selectedDirection[0] = "left";
-            stage.close();
-        });
-        root.add(leftButton, 0, 1, 1, 1);
-
-        // Right Button in der zweiten Reihe rechts
-        Button rightButton = new Button("right");
-        rightButton.setOnAction(event -> {
-            selectedDirection[0] = "right";
-            stage.close();
-        });
-        root.add(rightButton, 2, 1, 1, 1);
-
-        // Bottom Button in der dritten Reihe mittig
-        Button bottomButton = new Button("bottom");
-        bottomButton.setOnAction(event -> {
-            selectedDirection[0] = "bottom";
-            stage.close();
-        });
-        root.add(bottomButton, 1, 2, 1, 1);
-
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
-
-        stage.setScene(scene);
-        stage.setTitle("Reboot direction selection");
-
-        Text text = new Text("Reboot direction selection");
-        text.getStyleClass().add("header-label");
-        double titleWidth = text.getBoundsInLocal().getWidth();
-        stage.setWidth(titleWidth + 40);
-
-        Duration duration = Duration.seconds(10);
-        Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
-            if (stage.isShowing()) {
-                stage.close();
-                selectedDirection[0] = "top";
-            }
-        }));
-        timeline.setCycleCount(1);
-        timeline.play();
-
-        stage.setOnHiding(event -> timeline.stop());
-
-        stage.showAndWait();
-
-        return selectedDirection[0];
-    }
-    */
-
-    //zweite Version
     public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
         root.setHgap(10);
@@ -1195,6 +1055,22 @@ public class ClientController {
 
     public void playSound(String soundName){
         SoundManager.playSound(soundName);
+    }
+
+    private void updateRobotImageViews(ArrayList<Integer> newTakenFigures) {
+        for (Node node : robotSelectionGrid.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                int robotNumber = GridPane.getColumnIndex(node);
+                if (newTakenFigures.contains(robotNumber + 1)) {
+                    imageView.setDisable(true);
+                    imageView.setOpacity(0.1);
+                } else {
+                    imageView.setDisable(false);
+                    imageView.setOpacity(1.0);
+                }
+            }
+        }
     }
 
 }

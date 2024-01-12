@@ -33,10 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.Iterator;
@@ -73,6 +70,9 @@ public class Client extends Application {
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
+    public interface TakenFiguresChangeListener {
+        void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures);
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -192,6 +192,8 @@ public class Client extends Application {
                                     getTakenFigures().add(player.getFigure());
                                 }
                             }
+                            updateTakenFigures();
+                            notifyTakenFiguresChangeListeners(); //probably redundant bcs of update taken figs
 
                             System.out.println("Player added");
                             synchronized (playerListClient) {
@@ -790,4 +792,30 @@ public class Client extends Application {
     public static int getServerPort() {
         return SERVER_PORT;
     }
+
+    private final List<TakenFiguresChangeListener> takenFiguresChangeListeners = new ArrayList<>();
+
+    public void addTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
+        takenFiguresChangeListeners.add(listener);
+    }
+
+    public void removeTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
+        takenFiguresChangeListeners.remove(listener);
+    }
+
+    private void notifyTakenFiguresChangeListeners() {
+        for (TakenFiguresChangeListener listener : takenFiguresChangeListeners) {
+            listener.onTakenFiguresChanged(new ArrayList<>(takenFigures));
+        }
+    }
+
+    private void updateTakenFigures() {
+        synchronized (playerListClient) {
+            for (Player player : playerListClient) {
+                getTakenFigures().add(player.getFigure());
+            }
+        }
+        notifyTakenFiguresChangeListeners();
+    }
+
 }
