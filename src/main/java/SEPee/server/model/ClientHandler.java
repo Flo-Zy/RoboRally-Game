@@ -372,7 +372,6 @@ public class ClientHandler implements Runnable {
                                         int clientIDRightTurn = this.clientId;
                                         PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
                                         String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
-
                                         broadcast(serializedPlayerTurningRight);
                                         break;
                                     case "TurnLeft":
@@ -380,7 +379,6 @@ public class ClientHandler implements Runnable {
                                         int clientIDLeftTurn = this.clientId;
                                         PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
                                         String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
-
                                         broadcast(serializedPlayerTurningLeft);
                                         break;
                                     case "UTurn":
@@ -390,6 +388,7 @@ public class ClientHandler implements Runnable {
                                         String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
                                         //send twice turn by 90 degrees in order to end up turning 180 degrees
                                         broadcast(serializedPlayerTurningUTurn);
+                                        Thread.sleep(750);
                                         broadcast(serializedPlayerTurningUTurn);
                                         break;
                                     case "Spam":
@@ -442,6 +441,7 @@ public class ClientHandler implements Runnable {
                                 }
 
                                 broadcast(serializedCardPlayed);
+                                Thread.sleep(750);
                             }
 
                             // wenn letzter Player aus PlayerList dran ist
@@ -1176,8 +1176,6 @@ public class ClientHandler implements Runnable {
 
                     checkForRobotsAndMove(this.robot, isForward);
 
-                    // FLAG ANFANG
-
                     if (!wallFlagMovePush){
 
                         if (isForward) {
@@ -1187,8 +1185,7 @@ public class ClientHandler implements Runnable {
                             BackUp.makeEffect(this.robot);
                             checkRobotField(this.robot);
                         }
-
-                        //FLAG ende
+                        Thread.sleep(750);
                     }
                 } else {
                     if (isForward) {
@@ -1569,6 +1566,11 @@ public class ClientHandler implements Runnable {
     private void checkBlueConveyorBelts(int i) throws InterruptedException {
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
+            Animation animation = new Animation("BlueConveyorBelt");
+            String serializedAnimation = Serialisierer.serialize(animation);
+            broadcast(serializedAnimation);
+
+            Thread.sleep(750);
             if (standingOnBlueConveyor.contains("ConveyorBelt 2 [top")) {
 
                 //falls austreten aus blu conveyor funktioniert set nur einseitig!
@@ -1586,12 +1588,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondBlue.contains("ConveyorBelt 2 [left")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1613,12 +1625,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondBlue.contains("ConveyorBelt 2 [top")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1640,12 +1662,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondBlue.contains("ConveyorBelt 2 [left")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1667,12 +1699,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1685,6 +1727,12 @@ public class ClientHandler implements Runnable {
     private void checkGreenConveyorBelts(int i) {
         String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
+            try {
+                Thread.sleep(750);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
                 int yCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getY() - 1;
                 int xCoordinateNewField = Server.getGame().getPlayerList().get(i).getRobot().getX();
@@ -1721,16 +1769,36 @@ public class ClientHandler implements Runnable {
 
                 if (!secondGreen.contains("ConveyorBelt 1 [top")) {
                     if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1774,12 +1842,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1824,12 +1902,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondGreen.contains("ConveyorBelt 1 [left")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("clockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -1874,12 +1962,22 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
                         Server.getGame().getPlayerList().get(i).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(i).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(i).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        try {
+                            Thread.sleep(750);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
@@ -1975,7 +2073,6 @@ public class ClientHandler implements Runnable {
 
                 } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
 
-
                     String orientation = "bottom";
                     int xCoordinatePushingRobot = robot.getX();
                     int yCoordinatePushingRobot = robot.getY();
@@ -1983,9 +2080,6 @@ public class ClientHandler implements Runnable {
                     for (Player player : Server.getGame().getPlayerList()) {
                         int xPlayerFleeingRobot = player.getRobot().getX();
                         int yPlayerFleeingRobot = player.getRobot().getY();
-                        System.out.println("1536 robot on field: " + robotOnThisField(xCoordinatePushingRobot, yCoordinatePushingRobot));
-                        System.out.println("1537 robot on field: " + robotOnThisField(xPlayerFleeingRobot, yPlayerFleeingRobot));
-
 
                         if (shouldPush(true, orientation, xCoordinatePushingRobot, yCoordinatePushingRobot, xPlayerFleeingRobot, yPlayerFleeingRobot)) {
                             try {
@@ -1996,14 +2090,15 @@ public class ClientHandler implements Runnable {
                         }
                     }
 
-
                     robot.setY(robot.getY() + 1);
-                    System.out.println("1548 " + robotId + " set y to " + robot.getY());
-
                 }
                 Movement movement = new Movement(robotId, robot.getX(), robot.getY());
                 String serializedMovement = Serialisierer.serialize(movement);
                 broadcast(serializedMovement);
+
+                Animation animation = new Animation("PushPanel");
+                String serializedAnimation = Serialisierer.serialize(animation);
+                broadcast(serializedAnimation);
             }
         }
     }
@@ -2032,6 +2127,15 @@ public class ClientHandler implements Runnable {
             PlayerTurning playerTurning = new PlayerTurning(robotId, rotateDirection);
             String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
             broadcast(serializedPlayerTurning);
+
+            Animation animation = new Animation("Gear");
+            String serializedAnimation = Serialisierer.serialize(animation);
+            broadcast(serializedAnimation);
+            try {
+                Thread.sleep(750);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -2040,6 +2144,10 @@ public class ClientHandler implements Runnable {
         String standingOnBoardLaser = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
         if (standingOnBoardLaser.contains("Laser")) {
             if (Server.getGame().getSpam() > 0) {
+                Animation animation = new Animation("WallShooting");
+                String serializedAnimation = Serialisierer.serialize(animation);
+                broadcast(serializedAnimation);
+
                 Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getReceivedDamageCards().add("Spam");
                 Server.getGame().getPlayerList().get(i).getPlayerMat().getDiscardPile().add("Spam");
@@ -2087,6 +2195,10 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                        Animation animation = new Animation("PlayerShooting");
+                                        String serializedAnimation = Serialisierer.serialize(animation);
+                                        broadcast(serializedAnimation);
                                     }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
@@ -2124,6 +2236,10 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                        Animation animation = new Animation("PlayerShooting");
+                                        String serializedAnimation = Serialisierer.serialize(animation);
+                                        broadcast(serializedAnimation);
                                     }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
@@ -2160,6 +2276,10 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                        Animation animation = new Animation("PlayerShooting");
+                                        String serializedAnimation = Serialisierer.serialize(animation);
+                                        broadcast(serializedAnimation);
                                     }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
@@ -2196,6 +2316,10 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().setSpam(Server.getGame().getSpam() - 1);
                                         player.getPlayerMat().getReceivedDamageCards().add("Spam");
                                         player.getPlayerMat().getDiscardPile().add("Spam");
+
+                                        Animation animation = new Animation("PlayerShooting");
+                                        String serializedAnimation = Serialisierer.serialize(animation);
+                                        broadcast(serializedAnimation);
                                     }else {
                                         Server.getGame().getPlayerList().get(i).setDamageCounter(Server.getGame().getPlayerList().get(i).getDamageCounter()+1);
                                     }
@@ -2255,6 +2379,8 @@ public class ClientHandler implements Runnable {
                 String serialisedCheckPointReached = Serialisierer.serialize(checkPointReached);
                 broadcast(serialisedCheckPointReached);
 
+
+
                 checkGameFinished(i);
             }
         }
@@ -2272,11 +2398,8 @@ public class ClientHandler implements Runnable {
     }
 
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
-
-
-
-
         if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
+            Thread.sleep(750);
             if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [top")) {
                 Server.getGame().getPlayerList().get(j).getRobot().setY(Server.getGame().getPlayerList().get(j).getRobot().getY() - 1);
 
@@ -2291,12 +2414,14 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                     if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                 }
 
@@ -2315,12 +2440,14 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                     if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                 }
 
@@ -2340,12 +2467,14 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                     if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                 }
 
@@ -2367,12 +2496,14 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "clockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                     if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
                         Server.getGame().getPlayerList().get(j).getRobot().setOrientation(getResultingOrientation("counterclockwise", Server.getGame().getPlayerList().get(j).getRobot()));
                         PlayerTurning playerTurning = new PlayerTurning(Server.getGame().getPlayerList().get(j).getId(), "counterclockwise");
                         String serializedPlayerTurning = Serialisierer.serialize(playerTurning);
                         broadcast(serializedPlayerTurning);
+                        Thread.sleep(750);
                     }
                 }
 
@@ -2696,7 +2827,7 @@ public class ClientHandler implements Runnable {
                         int clientIDRightTurn = this.clientId;
                         PlayerTurning playerTurningRight = new PlayerTurning(clientIDRightTurn, "clockwise");
                         String serializedPlayerTurningRight = Serialisierer.serialize(playerTurningRight);
-                        Thread.sleep(750);
+                        //Thread.sleep(750);
                         broadcast(serializedPlayerTurningRight);
                         break;
                     case "TurnLeft":
@@ -2704,7 +2835,7 @@ public class ClientHandler implements Runnable {
                         int clientIDLeftTurn = this.clientId;
                         PlayerTurning playerTurningLeft = new PlayerTurning(clientIDLeftTurn, "counterclockwise");
                         String serializedPlayerTurningLeft = Serialisierer.serialize(playerTurningLeft);
-                        Thread.sleep(750);
+                        //Thread.sleep(750);
                         broadcast(serializedPlayerTurningLeft);
                         break;
                     case "UTurn":
@@ -2713,7 +2844,7 @@ public class ClientHandler implements Runnable {
                         PlayerTurning playerTurningUTurn = new PlayerTurning(clientIDUTurn, "clockwise");
                         String serializedPlayerTurningUTurn = Serialisierer.serialize(playerTurningUTurn);
                         //send twice turn by 90 degrees in order to end up turning 180 degrees
-                        Thread.sleep(750);
+                        //Thread.sleep(750);
                         broadcast(serializedPlayerTurningUTurn);
                         broadcast(serializedPlayerTurningUTurn);
                         break;
