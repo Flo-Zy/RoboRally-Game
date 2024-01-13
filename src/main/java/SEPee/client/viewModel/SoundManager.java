@@ -8,6 +8,7 @@ import java.util.*;
 
 public class SoundManager {
     private static boolean isMuted = false;
+    private static boolean isEventSoundPlaying = false;
     private static MediaPlayer backgroundMediaPlayer;
     private static final List<MediaPlayer> allMediaPlayers = new ArrayList<>();
 
@@ -29,7 +30,8 @@ public class SoundManager {
     public static void playEventSound(String eventName) {
         System.out.println("event name: " + eventName + " ismuted: " + isMuted);
         try {
-            if (backgroundMediaPlayer != null && backgroundMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            if (isEventSoundPlaying) {
+                System.out.println("Event sound is already playing");
                 return;
             }
 
@@ -49,7 +51,12 @@ public class SoundManager {
                     backgroundMediaPlayer = new MediaPlayer(sound);
                     allMediaPlayers.add(backgroundMediaPlayer);
 
+                    backgroundMediaPlayer.setOnEndOfMedia(() -> {
+                        isEventSoundPlaying = false;
+                    });
+
                     if (!isMuted) {
+                        isEventSoundPlaying = true;
                         backgroundMediaPlayer.play();
                     }
                 }
