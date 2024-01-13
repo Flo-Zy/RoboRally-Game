@@ -7,9 +7,8 @@ import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
-//auslagern
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.Spam;
@@ -17,8 +16,6 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
-import SEPee.server.model.gameBoard.ExtraCrispy;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -35,13 +32,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import java.util.Iterator;
-
-
-import javafx.util.Duration;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Client extends Application {
@@ -215,6 +205,9 @@ public class Client extends Application {
                                     }
                                 }
                             }
+
+                            controller.playEventSound("Ready");
+
                             break;
                         case "SelectMap":
                             System.out.println("SelectMap von " + controller.getName());
@@ -352,7 +345,9 @@ public class Client extends Application {
                             }
                             if (controller.getCurrentPhase() == 3){
                                 System.out.println(" Aktivierungsphase");
+                                controller.playEventSound("ActivationPhase");
                             }
+
                             break;
                         case "CurrentPlayer":
                             System.out.println("Current Player");
@@ -688,6 +683,7 @@ public class Client extends Application {
 
                             } else if (animationType.equals("WallShooting")){
                                 controller.playUISound("Map/BoardLaser");
+                                controller.playEventSound("hitByLaser");
 
                             } else if (animationType.equals("EnergySpace")){
                                 //handle in MsgType
@@ -700,8 +696,10 @@ public class Client extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
+                            controller.playEventSound("Reboot");
                             if (rebootingClientId == controller.getId()){
                                 controller.playUISound("Map/reBoot");
+                                controller.playEventSound("YouRebooted");
                             }
 
                             // direction selection dialog fur rebootingClientId
@@ -767,7 +765,10 @@ public class Client extends Application {
                                     if (player.getId() == winnerId) {
                                         System.out.println("winner id ist " + winnerId);
                                         controller.appendToChatArea(player.getName() + " has won this game!!");
-                                        System.out.println("ausgabe hier");
+                                        controller.playEventSound("YouWon");
+
+                                    } else if (player.getId() != winnerId){
+                                        controller.playEventSound("YouLost");
                                     }
                                 }
                             }

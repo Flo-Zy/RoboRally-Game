@@ -3,6 +3,7 @@ package SEPee.client.viewModel.MapController;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.SoundManager;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.TimerStarted;
@@ -353,6 +354,8 @@ public class ExtraCrispyController extends MapController {
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
 
                                 if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    SoundManager.playUISound("CardChosen");
+
                                     Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
                                     registerImageView.setImage(cardImage);
 
@@ -401,6 +404,8 @@ public class ExtraCrispyController extends MapController {
                                     counter1.decrementAndGet();
 
                                     if (indexNew < 9) {
+                                        SoundManager.playUISound("card put back");
+
                                         ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
                                         handImageView.setVisible(true);
 

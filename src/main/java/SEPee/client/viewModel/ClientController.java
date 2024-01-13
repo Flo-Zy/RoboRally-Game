@@ -4,13 +4,12 @@ import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
-//Später auslagern
+import SEPee.serialisierung.messageType.MapSelected;
+import SEPee.serialisierung.messageType.SendChat;
+import SEPee.serialisierung.messageType.SetStatus;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.progCard.*;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -23,17 +22,14 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import lombok.Getter;
@@ -44,7 +40,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientController {
     @FXML
@@ -169,6 +164,8 @@ public class ClientController {
         robotSelectionGrid.setVgap(10);
         robotSelectionGrid.getStyleClass().add("robot-selection-grid");
         dialog.getDialogPane().setContent(grid);
+
+        playEventSound("FigureSelected");
 
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Figure" + i + ".png");
