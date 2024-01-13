@@ -299,6 +299,7 @@ public class ClientController {
             root.getChildren().add(muteButton);
             sendButton.setOnAction(event -> sendMessage());
             visibilityButton.setOnAction(event -> toggleVisibility());
+            
         });
     }
 
