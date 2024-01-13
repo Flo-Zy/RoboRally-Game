@@ -105,8 +105,9 @@ public class ClientController {
     @Getter
     private static int startPointY;
     private GridPane robotSelectionGrid;
-    public void init(Client client, Stage stage) {
+    private ArrayList<Integer> newTakenFigures;
 
+    public void init(Client client, Stage stage) {
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
         Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
         dialog.setTitle("Welcome to RoboRally");
@@ -207,7 +208,11 @@ public class ClientController {
                     } else {
                         // Select
                         if (currentSelectedImageView != null) {
-                            currentSelectedImageView.setOpacity(1.0);
+                            if (newTakenFigures == null) {
+                                currentSelectedImageView.setOpacity(1.0);
+                            } else if (!newTakenFigures.contains(GridPane.getColumnIndex(currentSelectedImageView) + 1)) {
+                                currentSelectedImageView.setOpacity(1.0);
+                            }
                         }
                         imageView.setOpacity(0.5);
                         newSelectedRobotNumber = robotNumber;
@@ -254,9 +259,20 @@ public class ClientController {
         client.addTakenFiguresChangeListener(new Client.TakenFiguresChangeListener() {
             @Override
             public void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures) {
+                ClientController.this.newTakenFigures = newTakenFigures;
+
                 Platform.runLater(() -> updateRobotImageViews(newTakenFigures));
+
+                if (currentSelectedImageView != null && robotSelectionGrid.getChildren().contains(currentSelectedImageView)) {
+                    if (newTakenFigures == null || newTakenFigures.contains(GridPane.getColumnIndex(currentSelectedImageView) + 1)) {
+                        currentSelectedImageView = null;
+                        updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
+                        System.out.println("komm ich hier rein?");
+                    }
+                }
             }
         });
+
 
         Optional<Pair<String, Integer>> result = dialog.showAndWait();
 
@@ -293,7 +309,7 @@ public class ClientController {
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
 
         if (okButton != null) {
-            boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty();
+            boolean isUsernameValid = usernameTextField.getText() != null && !usernameTextField.getText().trim().isEmpty() && !Objects.equals(usernameTextField.getText(), "null");
             boolean isRobotSelected = selectedRobotNumber[0] > 0;
 
             boolean isRobotAvailable = false;
@@ -303,7 +319,6 @@ public class ClientController {
 
             System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected + ", Robot Available = " + isRobotAvailable);
 
-            // Check if both conditions are true before enabling the button
             okButton.setDisable(!(isUsernameValid && isRobotSelected && isRobotAvailable && confirmedClients < 2));
         }
     }
@@ -345,9 +360,9 @@ public class ClientController {
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
             System.out.println("ID selected " + selectedRecipientId);
-            return selectedRecipientId; // Return the ID of the selected player for private messages
+            return selectedRecipientId;
         } else {
-            return -1; // If it's a message to all, return -1
+            return -1;
         }
     }
 
@@ -377,7 +392,6 @@ public class ClientController {
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         ClientAI.getWriter().println(serializedSetStatus);
 
-        //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
         MapSelected mapSelected1 = new MapSelected("");
         String serializedMapSelected1 = Serialisierer.serialize(mapSelected1);
         ClientAI.getWriter().println(serializedMapSelected1);
@@ -443,7 +457,7 @@ public class ClientController {
 
     public void shutdown() {
         try {
-            if (name != null) {
+            if (name != null && !name.equals("null")) {
                 if (socket != null && !socket.isClosed()) {
                     if (writer != null) {
                         writer.println(name + " has left the chat.");
