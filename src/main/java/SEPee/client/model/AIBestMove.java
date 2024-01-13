@@ -1,7 +1,12 @@
 package SEPee.client.model;
 
 import SEPee.serialisierung.Serialisierer;
+import SEPee.serialisierung.messageType.Movement;
+import SEPee.serialisierung.messageType.PlayerTurning;
 import SEPee.serialisierung.messageType.SelectedCard;
+import SEPee.server.model.Player;
+import SEPee.server.model.Robot;
+import SEPee.server.model.Server;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.Spam;
 import SEPee.server.model.card.damageCard.TrojanHorse;
@@ -37,8 +42,11 @@ public class AIBestMove {
     private int xRobot;
     private int yRobot;
     private String orientation;
+    private int xFuture;
+    private int yFuture;
+    private String futureOrientation;
 
-    public void setRegister(RobotAI robot,  ArrayList<Card> hand){
+    public void setRegister(RobotAI robot,  ArrayList<Card> hand) throws InterruptedException{
         this.clientHand = hand;
         xRobot = robot.getX();
         yRobot = robot.getY();
@@ -313,10 +321,11 @@ public class AIBestMove {
                                         orientation = "bottom";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
+                                        LeftTurn leftTurn = new LeftTurn();
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove(leftTurn);
+                                        clientHand.remove(leftTurn);
                                         orientation = "bottom";
                                     }
                                 }
@@ -386,16 +395,16 @@ public class AIBestMove {
                                         RightTurn rightTurn = new RightTurn();
                                         register.add("TurnRight");
                                         register.add("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                        clientHand.remove("TurnRight");
+                                        clientHand.remove(rightTurn);
+                                        clientHand.remove(rightTurn);
                                         orientation = "left";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
                                         LeftTurn leftTurn = new LeftTurn();
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove(leftTurn);
+                                        clientHand.remove(leftTurn);
                                         orientation = "left";
                                     }
                                 }
@@ -465,16 +474,16 @@ public class AIBestMove {
                                         RightTurn turnRightCard = new RightTurn();
                                         register.add("TurnRight");
                                         register.add("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                        clientHand.remove("TurnRight");
+                                        clientHand.remove(turnRightCard);
+                                        clientHand.remove(turnRightCard);
                                         orientation = "top";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
                                         LeftTurn turnLeftCard = new LeftTurn();
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove(turnLeftCard);
+                                        clientHand.remove(turnLeftCard);
                                         orientation = "top";
                                     }
                                 }
@@ -544,16 +553,16 @@ public class AIBestMove {
                                         RightTurn turnRightCard = new RightTurn();
                                         register.add("TurnRight");
                                         register.add("TurnRight");
-                                        clientHand.remove("TurnRight");
-                                        clientHand.remove("TurnRight");
+                                        clientHand.remove(turnRightCard);
+                                        clientHand.remove(turnRightCard);
                                         orientation = "right";
                                     } else if (turnLeft >= 2) {
                                         cardCounter = cardCounter + 2;
                                         LeftTurn turnLeftCard = new LeftTurn();
                                         register.add("TurnLeft");
                                         register.add("TurnLeft");
-                                        clientHand.remove("TurnLeft");
-                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove(turnLeftCard);
+                                        clientHand.remove(turnLeftCard);
                                         orientation = "right";
                                     }
                                 }
@@ -565,12 +574,12 @@ public class AIBestMove {
         }
     }
 
-    private void move(){
-        //conveyorBelts, Pits (beim gehen), nicht rauslaufen, Distanz besser
+    private void move() throws InterruptedException{
         // für die Zukunft: Pits (beim drehen) und andere Roboter und PushPanel und Gears???
         int initialDistance = calculateManhattanDistance(xRobot, yRobot);
-        int xFuture = xRobot;
-        int yFuture = yRobot;
+        xFuture = xRobot;
+        yFuture = yRobot;
+        futureOrientation = orientation;
         boolean move1 = false;
         boolean move2 = false;
         boolean move3 = false;
@@ -587,26 +596,78 @@ public class AIBestMove {
                 switch (orientation){
                     case "top":
                         yFuture--;
-                        if(!(yFuture < 0)){
-
+                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "MoveI";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
                         }
                         break;
                     case "right":
                         xFuture++;
-                        if(!(xFuture > 12)){
-
+                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "MoveI";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
                         }
                         break;
                     case "bottom":
                         yFuture++;
-                        if(!(yFuture > 9)){
-
+                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "MoveI";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
                         }
                         break;
                     case "left":
                         xFuture--;
-                        if(!(xFuture < 0)){
-
+                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "MoveI";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
                         }
                         break;
                 }
@@ -615,8 +676,493 @@ public class AIBestMove {
                 futureOrientation = orientation;
             }else if(card.getName().equals("MoveII") && !move2){
                 move2 = true;
+                switch (orientation){
+                    case "top":
+                        yFuture--;
+                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                yFuture--;
+                                if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "right":
+                        xFuture++;
+                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                xFuture++;
+                                if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        yFuture++;
+                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                yFuture++;
+                                if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "left":
+                        xFuture--;
+                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                xFuture--;
+                                if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                }
+                xFuture = xRobot;
+                yFuture = yRobot;
+                futureOrientation = orientation;
             }else if(card.getName().equals("MoveIII") && !move3){
                 move3 = true;
+                switch (orientation){
+                    case "top":
+                        yFuture--;
+                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                yFuture--;
+                                if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                        yFuture--;
+                                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            String result = checkRobotField(xFuture, yFuture);
+                                            if (result.contains("ConveyorBelt 2")) {
+                                                checkBlueConveyorBelts(result);
+                                            } else if (result.contains("ConveyorBelt 1")) {
+                                                checkGreenConveyorBelts(result);
+                                            }
+                                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                            if (distanceFuture < bestDistance) {
+                                                bestDistance = distanceFuture;
+                                                bestCard = "MoveIII";
+                                                bestX = xFuture;
+                                                bestY = yFuture;
+                                                bestOrientation = futureOrientation;
+                                            }
+                                        }
+                                    }else{
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveIII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveIII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "right":
+                        xFuture++;
+                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                xFuture++;
+                                if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                        xFuture++;
+                                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            String result = checkRobotField(xFuture, yFuture);
+                                            if (result.contains("ConveyorBelt 2")) {
+                                                checkBlueConveyorBelts(result);
+                                            } else if (result.contains("ConveyorBelt 1")) {
+                                                checkGreenConveyorBelts(result);
+                                            }
+                                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                            if (distanceFuture < bestDistance) {
+                                                bestDistance = distanceFuture;
+                                                bestCard = "MoveIII";
+                                                bestX = xFuture;
+                                                bestY = yFuture;
+                                                bestOrientation = futureOrientation;
+                                            }
+                                        }
+                                    }else{
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveIII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveIII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        yFuture++;
+                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                yFuture++;
+                                if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                        yFuture++;
+                                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            String result = checkRobotField(xFuture, yFuture);
+                                            if (result.contains("ConveyorBelt 2")) {
+                                                checkBlueConveyorBelts(result);
+                                            } else if (result.contains("ConveyorBelt 1")) {
+                                                checkGreenConveyorBelts(result);
+                                            }
+                                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                            if (distanceFuture < bestDistance) {
+                                                bestDistance = distanceFuture;
+                                                bestCard = "MoveIII";
+                                                bestX = xFuture;
+                                                bestY = yFuture;
+                                                bestOrientation = futureOrientation;
+                                            }
+                                        }
+                                    }else{
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveIII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveIII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                    case "left":
+                        xFuture--;
+                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                xFuture--;
+                                if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                        xFuture--;
+                                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            String result = checkRobotField(xFuture, yFuture);
+                                            if (result.contains("ConveyorBelt 2")) {
+                                                checkBlueConveyorBelts(result);
+                                            } else if (result.contains("ConveyorBelt 1")) {
+                                                checkGreenConveyorBelts(result);
+                                            }
+                                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                            if (distanceFuture < bestDistance) {
+                                                bestDistance = distanceFuture;
+                                                bestCard = "MoveIII";
+                                                bestX = xFuture;
+                                                bestY = yFuture;
+                                                bestOrientation = futureOrientation;
+                                            }
+                                        }
+                                    }else{
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveIII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                }
+                            }else{
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveIII";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
+                            }
+                        }
+                        break;
+                }
+                xFuture = xRobot;
+                yFuture = yRobot;
+                futureOrientation = orientation;
+            }else if(card.getName().equals("BackUp") && !backUp) {
+                backUp = true;
+                switch (orientation){
+                    case "top":
+                        yFuture++;
+                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "BackUp";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
+                        }
+                        break;
+                    case "right":
+                        xFuture--;
+                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "BackUp";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        yFuture--;
+                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "BackUp";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
+                        }
+                        break;
+                    case "left":
+                        xFuture++;
+                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                            String result = checkRobotField(xFuture, yFuture);
+                            if(result.contains("ConveyorBelt 2")){
+                                checkBlueConveyorBelts(result);
+                            }else if(result.contains("ConveyorBelt 1")){
+                                checkGreenConveyorBelts(result);
+                            }
+                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                            if(distanceFuture < bestDistance){
+                                bestDistance = distanceFuture;
+                                bestCard = "BackUp";
+                                bestX = xFuture;
+                                bestY = yFuture;
+                                bestOrientation = futureOrientation;
+                            }
+                        }
+                        break;
+                }
+                xFuture = xRobot;
+                yFuture = yRobot;
+                futureOrientation = orientation;
             }
         }
         if(bestCard != null && cardCounter < 5){
@@ -861,6 +1407,274 @@ public class AIBestMove {
                 }
                 break;
         }
+    }
+
+    private void checkBlueConveyorBelts(String standingOnBlueConveyor) throws InterruptedException {
+        if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
+            if (standingOnBlueConveyor.contains("ConveyorBelt 2 [top")) {
+                yFuture--;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [top")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                }
+
+                checkConveyorBeltAgain(secondBlue);
+
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [right")) {
+                xFuture++;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [right")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                }
+
+                checkConveyorBeltAgain(secondBlue);
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [bottom")) {
+
+                yFuture++;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                }
+
+                checkConveyorBeltAgain(secondBlue);
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [left")) {
+
+                xFuture--;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [left")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        orientation = getResultingOrientation("clockwise", orientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        orientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                }
+
+                checkConveyorBeltAgain(secondBlue);
+
+            }
+        }
+    }
+
+    private void checkConveyorBeltAgain(String standingOnBlueConveyorBelt) throws InterruptedException {
+
+        if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
+            if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [top")) {
+                yFuture--;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [right")) {
+                xFuture++;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [bottom")) {
+                yFuture++;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [left")) {
+
+                xFuture--;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [left")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            }
+        }
+
+
+    }
+
+
+    private void checkGreenConveyorBelts(String standingOnGreenConveyor) {
+        if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
+            if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
+
+                yFuture--;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [top")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [right")) {
+
+                xFuture++;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [right")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [bottom")) {
+
+                yFuture++;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [left")) {
+
+                xFuture--;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [left")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
+                    }
+                }
+            }
+        }
+    }
+
+    private static String getResultingOrientation(String turningDirection, String currentOrientation) {
+        if (turningDirection.equals("clockwise")) {
+            switch (currentOrientation) {
+                case "top":
+                    return "right";
+                case "bottom":
+                    return "left";
+                case "left":
+                    return "top";
+                case "right":
+                    return "bottom";
+            }
+        } else {
+            switch (currentOrientation) {
+                case "top":
+                    return "left";
+                case "bottom":
+                    return "right";
+                case "left":
+                    return "bottom";
+                case "right":
+                    return "top";
+            }
+        }
+        //da sollte man nie hinkommen
+        return "---";
+    }
+
+    private Card bestCardTransformer(String cardName){
+        switch (cardName) {
+            case "Again":
+                return new Again();
+            case "BackUp":
+                return new BackUp();
+            case "TurnLeft":
+                return new LeftTurn();
+            case "MoveI":
+                return new MoveI();
+            case "MoveII":
+                return new MoveII();
+            case "MoveIII":
+                return new MoveIII();
+            case "PowerUp":
+                return new PowerUp();
+            case "TurnRight":
+                return new RightTurn();
+            case "UTurn":
+                return new UTurn();
+            case "Spam":
+                return new Spam();
+            case "Virus":
+                return new Virus();
+            case "Wurm":
+                return new Wurm();
+            case "TrojanHorse":
+                return new TrojanHorse();
+        }
+        return null;
     }
 
 }

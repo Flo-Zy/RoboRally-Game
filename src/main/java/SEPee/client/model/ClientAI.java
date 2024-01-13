@@ -663,8 +663,7 @@ public class ClientAI extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
-                            // direction selection dialog fur rebootingClientId
-                            // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
+                            // bei AI immer default direction top
 
                             if (controller.getId() == rebootingClientId) {
                                 RebootDirection rebootDirection2 = new RebootDirection("top");
