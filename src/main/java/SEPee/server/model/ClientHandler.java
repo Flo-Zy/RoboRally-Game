@@ -1018,7 +1018,7 @@ public class ClientHandler implements Runnable {
                                         timer.cancel();
                                         timer1.cancel();
                                     }
-                                }, 30000);
+                                }, 1000);
                             }
                             break;
                         case "SelectedDamage":

@@ -595,8 +595,10 @@ public class ClientAI extends Application {
                             int clientIdToMove = movement.getMessageBody().getClientID();
                             int newX = movement.getMessageBody().getX();
                             int newY = movement.getMessageBody().getY();
-                            aiRobot.setX(newX);
-                            aiRobot.setY(newY);
+                            if(clientIdToMove == controller.getId()) {
+                                aiRobot.setX(newX);
+                                aiRobot.setY(newY);
+                            }
                             System.out.println(clientIdToMove + ", " + newX + ", " + newY + ", " + controller.getId());
                             controller.movementPlayed(clientIdToMove,newX, newY);
 
@@ -665,19 +667,9 @@ public class ClientAI extends Application {
                             // Dialog muss schliessen falls neue Phase vor direction auswahl kommt
 
                             if (controller.getId() == rebootingClientId) {
-                                Platform.runLater(() -> {
-                                    String selectedRebootDirection;
-                                    System.out.println("controllerID " + controller.getId());
-                                    System.out.println("rebootingID " + rebootingClientId);
-
-                                    Stage stage = new Stage();
-
-                                    selectedRebootDirection = controller.showSelectRebootDirectionDialog(stage);
-                                    System.out.println(selectedRebootDirection);
-                                    RebootDirection rebootDirection2 = new RebootDirection(selectedRebootDirection);
-                                    String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
-                                    writer.println(serializedRebootDirection2);
-                                });
+                                RebootDirection rebootDirection2 = new RebootDirection("top");
+                                String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
+                                writer.println(serializedRebootDirection2);
                             }
                             break;
                         case "Energy":
@@ -692,7 +684,7 @@ public class ClientAI extends Application {
 
                             synchronized (playerListClientAI) {
                                 for (Player player : playerListClientAI) {
-                                    if (player.getId() == clientID) {
+                                    if (player.getId() == clientID && clientID == controller.getId()) {
                                         numCheckpointToken++;
                                         aiBestMove.setNumCheckpointToken(numCheckpointToken);
                                         controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
