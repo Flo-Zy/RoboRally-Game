@@ -69,7 +69,7 @@ public class AIBestMove {
         while(j < 5 - register.size()){
             if(register.isEmpty()) {
                 for (Card card : clientHand) {
-                    if(!card.equals("Again")){
+                    if(!card.getName().equals("Again")){
                         register.add(card.getName());
                         clientHand.remove(card);
                         break;
@@ -94,10 +94,8 @@ public class AIBestMove {
     }
 
     private int calculateManhattanDistance(int xCoordinate, int yCoordinate){
-        int x = xCoordinate;
-        int y = yCoordinate;
 
-        int manhattanDistance = Math.abs(x - xCheckpoint) + Math.abs(y - yCheckpoint);
+        int manhattanDistance = Math.abs(xCoordinate - xCheckpoint) + Math.abs(yCoordinate - yCheckpoint);
 
         return manhattanDistance;
     }
@@ -272,7 +270,7 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            if (!checkRobotField(yRobot, yRobot).contains("Wall [left")) {
+                            if (!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
                                 for (Card card : clientHand) {
                                     if (card.getName().equals("TurnLeft")) {
                                         if (cardCounter < 5) {
@@ -1168,7 +1166,8 @@ public class AIBestMove {
         if(bestCard != null && cardCounter < 5){
             cardCounter++;
             register.add(bestCard);
-            clientHand.remove(bestCard);
+            Card bestCardObject = bestCardTransformer(bestCard);
+            clientHand.remove(bestCardObject);
             orientation = bestOrientation;
             xRobot = bestX;
             yRobot = bestY;
@@ -1185,8 +1184,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn turnLeft = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(turnLeft);
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1198,8 +1198,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1211,8 +1212,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1224,8 +1226,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1242,8 +1245,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1255,8 +1259,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1268,8 +1273,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1281,8 +1287,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1299,8 +1306,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1312,8 +1320,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1325,8 +1334,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1338,8 +1348,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1356,8 +1367,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1369,8 +1381,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1382,8 +1395,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove("TurnRight");
+                                    clientHand.remove(rightTurn);
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1395,8 +1409,9 @@ public class AIBestMove {
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
+                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove("TurnLeft");
+                                    clientHand.remove(leftTurn);
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
