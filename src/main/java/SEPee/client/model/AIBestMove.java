@@ -37,7 +37,7 @@ public class AIBestMove {
     @Setter
     private int numCheckpointToken;
     private int cardCounter = 0;
-    private ArrayList<Card> clientHand = new ArrayList<>();
+    private ArrayList<String> clientHand = new ArrayList<>();
     private ArrayList<String> register = new ArrayList<>();
     private int xRobot;
     private int yRobot;
@@ -45,6 +45,7 @@ public class AIBestMove {
     private int xFuture;
     private int yFuture;
     private String futureOrientation;
+    private boolean done = false;
 
     public void setRegister(RobotAI robot,  ArrayList<Card> hand) throws InterruptedException{
         this.clientHand = hand;
@@ -61,16 +62,20 @@ public class AIBestMove {
             checkWall();
             move();
             filledRegisters = register.size();
-            if(oldRegister == filledRegisters){
+            if(cardCounter == 5){
                 finished = true;
+            }else if(oldRegister == filledRegisters){
+                finished = moveAndCheckAgain();
             }
         }
-        int j = 0;
+
+
+        /*int j = 0;
         while(j < 5 - register.size()){
             if(register.isEmpty()) {
-                for (Card card : clientHand) {
-                    if(!card.getName().equals("Again")){
-                        register.add(card.getName());
+                for (String card : clientHand) {
+                    if(!card.equals("Again")){
+                        register.add(card);
                         clientHand.remove(card);
                         break;
                     }
@@ -80,7 +85,7 @@ public class AIBestMove {
                 clientHand.remove(0);
             }
 
-        }
+        }*/
 
         System.out.println("HIER AI KARTEN: "+register);
         int i = 1;
@@ -91,6 +96,7 @@ public class AIBestMove {
             i++;
         }
         register.clear();
+        cardCounter = 0;
     }
 
     private int calculateManhattanDistance(int xCoordinate, int yCoordinate){
@@ -240,336 +246,55 @@ public class AIBestMove {
         return result.toString();
     }
 
-    private void turnInCheckpointDirection(){
+    private void turnInCheckpointDirection() throws InterruptedException {
         String direction;
-        int xDifference = xCheckpoint - xRobot;
-        int yDifference = yCheckpoint - yRobot;
+        xFuture = xRobot;
+        yFuture = yRobot;
+        futureOrientation = orientation;
+
+        if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2")){
+            checkBlueConveyorBelts(checkRobotField(xRobot, yRobot));
+        }else if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 1")){
+            checkGreenConveyorBelts(checkRobotField(xRobot, yRobot));
+        }
+
+        int xDifference = xCheckpoint - xFuture;
+        int yDifference = yCheckpoint - yFuture;
 
         if (Math.abs(xDifference) >= Math.abs(yDifference)) {
+            System.out.println("1.CHECKPOINT CHECK");
             direction = (xDifference > 0) ? "right" : "left";
+            System.out.println("CHECKPOINT TURN "+orientation);
+            System.out.println("2.CHECKPOINT DIRECTION: "+direction);
+            if(!orientation.equals(direction)){
+                checkPointDirectionSwitchCase(direction);
+                if(!done){
+                    System.out.println("2.CHECKPOINT CHECK");
+                    direction = (yDifference < 0) ? "top" : "bottom";
+                    System.out.println("2.CHECKPOINT DIRECTION: "+direction);
+                    if(!orientation.equals(direction)){
+                        checkPointDirectionSwitchCase(direction);
+                    }
+                }
+            }
         } else {
+            System.out.println("1.CHECKPOINT CHECK");
             direction = (yDifference < 0) ? "top" : "bottom";
-        }
-        if(!orientation.equals(direction)){
-            switch(orientation){
-                case "top":
-                    switch (direction) {
-                        case "right":
-                            if (!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            orientation = "right";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "left":
-                            if (!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            orientation = "left";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "bottom":
-                            if (!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
-                                            orientation = "bottom";
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished && cardCounter < 4) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        RightTurn rightTurn = new RightTurn();
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove(rightTurn);
-                                        clientHand.remove(rightTurn);
-                                        orientation = "bottom";
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        LeftTurn leftTurn = new LeftTurn();
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove(leftTurn);
-                                        clientHand.remove(leftTurn);
-                                        orientation = "bottom";
-                                    }
-                                }
-                            }
-                            break;
+            System.out.println("CHECKPOINT TURN "+orientation);
+            System.out.println("2.CHECKPOINT DIRECTION: "+direction);
+            if(!orientation.equals(direction)){
+                checkPointDirectionSwitchCase(direction);
+                if(!done){
+                    System.out.println("2.CHECKPOINT CHECK");
+                    direction = (xDifference > 0) ? "right" : "left";
+                    System.out.println("2.CHECKPOINT DIRECTION: "+direction);
+                    if(!orientation.equals(direction)){
+                        checkPointDirectionSwitchCase(direction);
                     }
-                    break;
-                case "right":
-                    switch (direction) {
-                        case "top":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            orientation = "top";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "bottom":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            orientation = "bottom";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "left":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
-                                            orientation = "left";
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished && cardCounter < 4) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        RightTurn rightTurn = new RightTurn();
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove(rightTurn);
-                                        clientHand.remove(rightTurn);
-                                        orientation = "left";
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        LeftTurn leftTurn = new LeftTurn();
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove(leftTurn);
-                                        clientHand.remove(leftTurn);
-                                        orientation = "left";
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    break;
-                case "bottom":
-                    switch (direction) {
-                        case "right":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            orientation = "right";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "left":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [left")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            orientation = "left";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "top":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
-                                            orientation = "top";
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished && cardCounter < 4) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        RightTurn turnRightCard = new RightTurn();
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove(turnRightCard);
-                                        clientHand.remove(turnRightCard);
-                                        orientation = "top";
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        LeftTurn turnLeftCard = new LeftTurn();
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove(turnLeftCard);
-                                        clientHand.remove(turnLeftCard);
-                                        orientation = "top";
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    break;
-                case "left":
-                    switch (direction) {
-                        case "top":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [top")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnRight")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnRight");
-                                            clientHand.remove(card);
-                                            orientation = "top";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "bottom":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [bottom")) {
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("TurnLeft")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("TurnLeft");
-                                            clientHand.remove(card);
-                                            orientation = "bottom";
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "right":
-                            if(!checkRobotField(xRobot, yRobot).contains("Wall [right")) {
-                                boolean finished = false;
-                                for (Card card : clientHand) {
-                                    if (card.getName().equals("UTurn")) {
-                                        if (cardCounter < 5) {
-                                            cardCounter++;
-                                            register.add("UTurn");
-                                            clientHand.remove(card);
-                                            finished = true;
-                                            orientation = "right";
-                                            break;
-                                        }
-                                    }
-                                }
-                                if (!finished && cardCounter < 4) {
-                                    int turnRight = 0;
-                                    int turnLeft = 0;
-                                    for (Card card : clientHand) {
-                                        if (card.getName().equals("TurnRight")) {
-                                            turnRight++;
-                                        } else if (card.getName().equals("TurnLeft")) {
-                                            turnLeft++;
-                                        }
-                                    }
-                                    if (turnRight >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        RightTurn turnRightCard = new RightTurn();
-                                        register.add("TurnRight");
-                                        register.add("TurnRight");
-                                        clientHand.remove(turnRightCard);
-                                        clientHand.remove(turnRightCard);
-                                        orientation = "right";
-                                    } else if (turnLeft >= 2) {
-                                        cardCounter = cardCounter + 2;
-                                        LeftTurn turnLeftCard = new LeftTurn();
-                                        register.add("TurnLeft");
-                                        register.add("TurnLeft");
-                                        clientHand.remove(turnLeftCard);
-                                        clientHand.remove(turnLeftCard);
-                                        orientation = "right";
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                    break;
+                }
             }
         }
+        done = false;
     }
 
     private void move() throws InterruptedException{
@@ -588,83 +313,92 @@ public class AIBestMove {
         int bestY = -9999;
         String bestOrientation = "---";
         int distanceFuture;
-        for(Card card : clientHand){
-            if(card.getName().equals("MoveI") && !move1){
+        for(String card : clientHand){
+            if(card.equals("MoveI") && !move1){
+                System.out.println("CHECK FUTURE MOVE1");
                 move1 = true;
                 switch (orientation){
                     case "top":
-                        yFuture--;
-                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            String result = checkRobotField(xFuture, yFuture);
-                            if(result.contains("ConveyorBelt 2")){
-                                checkBlueConveyorBelts(result);
-                            }else if(result.contains("ConveyorBelt 1")){
-                                checkGreenConveyorBelts(result);
-                            }
-                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
-                                bestDistance = distanceFuture;
-                                bestCard = "MoveI";
-                                bestX = xFuture;
-                                bestY = yFuture;
-                                bestOrientation = futureOrientation;
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            yFuture--;
+                            if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveI";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
                             }
                         }
                         break;
                     case "right":
-                        xFuture++;
-                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            String result = checkRobotField(xFuture, yFuture);
-                            if(result.contains("ConveyorBelt 2")){
-                                checkBlueConveyorBelts(result);
-                            }else if(result.contains("ConveyorBelt 1")){
-                                checkGreenConveyorBelts(result);
-                            }
-                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
-                                bestDistance = distanceFuture;
-                                bestCard = "MoveI";
-                                bestX = xFuture;
-                                bestY = yFuture;
-                                bestOrientation = futureOrientation;
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            xFuture++;
+                            if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveI";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
                             }
                         }
                         break;
                     case "bottom":
-                        yFuture++;
-                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            String result = checkRobotField(xFuture, yFuture);
-                            if(result.contains("ConveyorBelt 2")){
-                                checkBlueConveyorBelts(result);
-                            }else if(result.contains("ConveyorBelt 1")){
-                                checkGreenConveyorBelts(result);
-                            }
-                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
-                                bestDistance = distanceFuture;
-                                bestCard = "MoveI";
-                                bestX = xFuture;
-                                bestY = yFuture;
-                                bestOrientation = futureOrientation;
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            yFuture++;
+                            if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveI";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
                             }
                         }
                         break;
                     case "left":
-                        xFuture--;
-                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            String result = checkRobotField(xFuture, yFuture);
-                            if(result.contains("ConveyorBelt 2")){
-                                checkBlueConveyorBelts(result);
-                            }else if(result.contains("ConveyorBelt 1")){
-                                checkGreenConveyorBelts(result);
-                            }
-                            distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
-                                bestDistance = distanceFuture;
-                                bestCard = "MoveI";
-                                bestX = xFuture;
-                                bestY = yFuture;
-                                bestOrientation = futureOrientation;
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            xFuture--;
+                            if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                String result = checkRobotField(xFuture, yFuture);
+                                if (result.contains("ConveyorBelt 2")) {
+                                    checkBlueConveyorBelts(result);
+                                } else if (result.contains("ConveyorBelt 1")) {
+                                    checkGreenConveyorBelts(result);
+                                }
+                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                if (distanceFuture < bestDistance) {
+                                    bestDistance = distanceFuture;
+                                    bestCard = "MoveI";
+                                    bestX = xFuture;
+                                    bestY = yFuture;
+                                    bestOrientation = futureOrientation;
+                                }
                             }
                         }
                         break;
@@ -674,13 +408,31 @@ public class AIBestMove {
                 futureOrientation = orientation;
             }else if(card.getName().equals("MoveII") && !move2){
                 move2 = true;
+                System.out.println("CHECK FUTURE MOVE2");
                 switch (orientation){
                     case "top":
-                        yFuture--;
-                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
-                                yFuture--;
-                                if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            yFuture--;
+                            if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                    yFuture--;
+                                    if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                } else {
                                     String result = checkRobotField(xFuture, yFuture);
                                     if (result.contains("ConveyorBelt 2")) {
                                         checkBlueConveyorBelts(result);
@@ -695,31 +447,33 @@ public class AIBestMove {
                                         bestY = yFuture;
                                         bestOrientation = futureOrientation;
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
                                 }
                             }
                         }
                         break;
                     case "right":
-                        xFuture++;
-                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
-                                xFuture++;
-                                if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            xFuture++;
+                            if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                    xFuture++;
+                                    if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                } else {
                                     String result = checkRobotField(xFuture, yFuture);
                                     if (result.contains("ConveyorBelt 2")) {
                                         checkBlueConveyorBelts(result);
@@ -734,31 +488,33 @@ public class AIBestMove {
                                         bestY = yFuture;
                                         bestOrientation = futureOrientation;
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
                                 }
                             }
                         }
                         break;
                     case "bottom":
-                        yFuture++;
-                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
-                                yFuture++;
-                                if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            yFuture++;
+                            if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                    yFuture++;
+                                    if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                } else {
                                     String result = checkRobotField(xFuture, yFuture);
                                     if (result.contains("ConveyorBelt 2")) {
                                         checkBlueConveyorBelts(result);
@@ -773,31 +529,33 @@ public class AIBestMove {
                                         bestY = yFuture;
                                         bestOrientation = futureOrientation;
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
                                 }
                             }
                         }
                         break;
                     case "left":
-                        xFuture--;
-                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
-                                xFuture--;
-                                if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            xFuture--;
+                            if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                    xFuture--;
+                                    if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        String result = checkRobotField(xFuture, yFuture);
+                                        if (result.contains("ConveyorBelt 2")) {
+                                            checkBlueConveyorBelts(result);
+                                        } else if (result.contains("ConveyorBelt 1")) {
+                                            checkGreenConveyorBelts(result);
+                                        }
+                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                        if (distanceFuture < bestDistance) {
+                                            bestDistance = distanceFuture;
+                                            bestCard = "MoveII";
+                                            bestX = xFuture;
+                                            bestY = yFuture;
+                                            bestOrientation = futureOrientation;
+                                        }
+                                    }
+                                } else {
                                     String result = checkRobotField(xFuture, yFuture);
                                     if (result.contains("ConveyorBelt 2")) {
                                         checkBlueConveyorBelts(result);
@@ -812,21 +570,6 @@ public class AIBestMove {
                                         bestY = yFuture;
                                         bestOrientation = futureOrientation;
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
                                 }
                             }
                         }
@@ -837,16 +580,34 @@ public class AIBestMove {
                 futureOrientation = orientation;
             }else if(card.getName().equals("MoveIII") && !move3){
                 move3 = true;
+                System.out.println("CHECK FUTURE MOVE3");
                 switch (orientation){
                     case "top":
-                        yFuture--;
-                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
-                                yFuture--;
-                                if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
-                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
-                                        yFuture--;
-                                        if(!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            yFuture--;
+                            if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                    yFuture--;
+                                    if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        if (!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                            yFuture--;
+                                            if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                String result = checkRobotField(xFuture, yFuture);
+                                                if (result.contains("ConveyorBelt 2")) {
+                                                    checkBlueConveyorBelts(result);
+                                                } else if (result.contains("ConveyorBelt 1")) {
+                                                    checkGreenConveyorBelts(result);
+                                                }
+                                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                                if (distanceFuture < bestDistance) {
+                                                    bestDistance = distanceFuture;
+                                                    bestCard = "MoveIII";
+                                                    bestX = xFuture;
+                                                    bestY = yFuture;
+                                                    bestOrientation = futureOrientation;
+                                                }
+                                            }
+                                        } else {
                                             String result = checkRobotField(xFuture, yFuture);
                                             if (result.contains("ConveyorBelt 2")) {
                                                 checkBlueConveyorBelts(result);
@@ -862,50 +623,52 @@ public class AIBestMove {
                                                 bestOrientation = futureOrientation;
                                             }
                                         }
-                                    }else{
-                                        String result = checkRobotField(xFuture, yFuture);
-                                        if (result.contains("ConveyorBelt 2")) {
-                                            checkBlueConveyorBelts(result);
-                                        } else if (result.contains("ConveyorBelt 1")) {
-                                            checkGreenConveyorBelts(result);
-                                        }
-                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
-                                            bestDistance = distanceFuture;
-                                            bestCard = "MoveIII";
-                                            bestX = xFuture;
-                                            bestY = yFuture;
-                                            bestOrientation = futureOrientation;
-                                        }
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveIII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
+                                } else {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveIII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
                                 }
                             }
                         }
                         break;
                     case "right":
-                        xFuture++;
-                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
-                                xFuture++;
-                                if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
-                                    if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
-                                        xFuture++;
-                                        if(!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            xFuture++;
+                            if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                    xFuture++;
+                                    if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                            xFuture++;
+                                            if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                String result = checkRobotField(xFuture, yFuture);
+                                                if (result.contains("ConveyorBelt 2")) {
+                                                    checkBlueConveyorBelts(result);
+                                                } else if (result.contains("ConveyorBelt 1")) {
+                                                    checkGreenConveyorBelts(result);
+                                                }
+                                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                                if (distanceFuture < bestDistance) {
+                                                    bestDistance = distanceFuture;
+                                                    bestCard = "MoveIII";
+                                                    bestX = xFuture;
+                                                    bestY = yFuture;
+                                                    bestOrientation = futureOrientation;
+                                                }
+                                            }
+                                        } else {
                                             String result = checkRobotField(xFuture, yFuture);
                                             if (result.contains("ConveyorBelt 2")) {
                                                 checkBlueConveyorBelts(result);
@@ -921,50 +684,52 @@ public class AIBestMove {
                                                 bestOrientation = futureOrientation;
                                             }
                                         }
-                                    }else{
-                                        String result = checkRobotField(xFuture, yFuture);
-                                        if (result.contains("ConveyorBelt 2")) {
-                                            checkBlueConveyorBelts(result);
-                                        } else if (result.contains("ConveyorBelt 1")) {
-                                            checkGreenConveyorBelts(result);
-                                        }
-                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
-                                            bestDistance = distanceFuture;
-                                            bestCard = "MoveIII";
-                                            bestX = xFuture;
-                                            bestY = yFuture;
-                                            bestOrientation = futureOrientation;
-                                        }
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveIII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
+                                } else {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveIII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
                                 }
                             }
                         }
                         break;
                     case "bottom":
-                        yFuture++;
-                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
-                                yFuture++;
-                                if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
-                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
-                                        yFuture++;
-                                        if(!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            yFuture++;
+                            if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                    yFuture++;
+                                    if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        if (!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                            yFuture++;
+                                            if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                String result = checkRobotField(xFuture, yFuture);
+                                                if (result.contains("ConveyorBelt 2")) {
+                                                    checkBlueConveyorBelts(result);
+                                                } else if (result.contains("ConveyorBelt 1")) {
+                                                    checkGreenConveyorBelts(result);
+                                                }
+                                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                                if (distanceFuture < bestDistance) {
+                                                    bestDistance = distanceFuture;
+                                                    bestCard = "MoveIII";
+                                                    bestX = xFuture;
+                                                    bestY = yFuture;
+                                                    bestOrientation = futureOrientation;
+                                                }
+                                            }
+                                        } else {
                                             String result = checkRobotField(xFuture, yFuture);
                                             if (result.contains("ConveyorBelt 2")) {
                                                 checkBlueConveyorBelts(result);
@@ -980,50 +745,52 @@ public class AIBestMove {
                                                 bestOrientation = futureOrientation;
                                             }
                                         }
-                                    }else{
-                                        String result = checkRobotField(xFuture, yFuture);
-                                        if (result.contains("ConveyorBelt 2")) {
-                                            checkBlueConveyorBelts(result);
-                                        } else if (result.contains("ConveyorBelt 1")) {
-                                            checkGreenConveyorBelts(result);
-                                        }
-                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
-                                            bestDistance = distanceFuture;
-                                            bestCard = "MoveIII";
-                                            bestX = xFuture;
-                                            bestY = yFuture;
-                                            bestOrientation = futureOrientation;
-                                        }
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveIII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
+                                } else {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveIII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
                                 }
                             }
                         }
                         break;
                     case "left":
-                        xFuture--;
-                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
-                            if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
-                                xFuture--;
-                                if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
-                                    if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
-                                        xFuture--;
-                                        if(!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            xFuture--;
+                            if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                if (!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                    xFuture--;
+                                    if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        if (!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                            xFuture--;
+                                            if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                String result = checkRobotField(xFuture, yFuture);
+                                                if (result.contains("ConveyorBelt 2")) {
+                                                    checkBlueConveyorBelts(result);
+                                                } else if (result.contains("ConveyorBelt 1")) {
+                                                    checkGreenConveyorBelts(result);
+                                                }
+                                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                                if (distanceFuture < bestDistance) {
+                                                    bestDistance = distanceFuture;
+                                                    bestCard = "MoveIII";
+                                                    bestX = xFuture;
+                                                    bestY = yFuture;
+                                                    bestOrientation = futureOrientation;
+                                                }
+                                            }
+                                        } else {
                                             String result = checkRobotField(xFuture, yFuture);
                                             if (result.contains("ConveyorBelt 2")) {
                                                 checkBlueConveyorBelts(result);
@@ -1039,37 +806,22 @@ public class AIBestMove {
                                                 bestOrientation = futureOrientation;
                                             }
                                         }
-                                    }else{
-                                        String result = checkRobotField(xFuture, yFuture);
-                                        if (result.contains("ConveyorBelt 2")) {
-                                            checkBlueConveyorBelts(result);
-                                        } else if (result.contains("ConveyorBelt 1")) {
-                                            checkGreenConveyorBelts(result);
-                                        }
-                                        distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
-                                            bestDistance = distanceFuture;
-                                            bestCard = "MoveIII";
-                                            bestX = xFuture;
-                                            bestY = yFuture;
-                                            bestOrientation = futureOrientation;
-                                        }
                                     }
-                                }
-                            }else{
-                                String result = checkRobotField(xFuture, yFuture);
-                                if (result.contains("ConveyorBelt 2")) {
-                                    checkBlueConveyorBelts(result);
-                                } else if (result.contains("ConveyorBelt 1")) {
-                                    checkGreenConveyorBelts(result);
-                                }
-                                distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
-                                    bestDistance = distanceFuture;
-                                    bestCard = "MoveIII";
-                                    bestX = xFuture;
-                                    bestY = yFuture;
-                                    bestOrientation = futureOrientation;
+                                } else {
+                                    String result = checkRobotField(xFuture, yFuture);
+                                    if (result.contains("ConveyorBelt 2")) {
+                                        checkBlueConveyorBelts(result);
+                                    } else if (result.contains("ConveyorBelt 1")) {
+                                        checkGreenConveyorBelts(result);
+                                    }
+                                    distanceFuture = calculateManhattanDistance(xFuture, yFuture);
+                                    if (distanceFuture < bestDistance) {
+                                        bestDistance = distanceFuture;
+                                        bestCard = "MoveIII";
+                                        bestX = xFuture;
+                                        bestY = yFuture;
+                                        bestOrientation = futureOrientation;
+                                    }
                                 }
                             }
                         }
@@ -1166,25 +918,25 @@ public class AIBestMove {
         if(bestCard != null && cardCounter < 5){
             cardCounter++;
             register.add(bestCard);
-            Card bestCardObject = bestCardTransformer(bestCard);
-            clientHand.remove(bestCardObject);
+            clientHand.remove(bestCard);
             orientation = bestOrientation;
             xRobot = bestX;
             yRobot = bestY;
             System.out.println("MOVE GELEGT");
+            System.out.println(clientHand);
         }
     }
 
     public void checkWall(){
         switch (orientation){
             case "top":
+                System.out.println("CHECK WALL TOP");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
                         for(Card card : clientHand){
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn turnLeft = new LeftTurn();
                                     register.add("TurnLeft");
                                     clientHand.remove(turnLeft);
                                     orientation = "left";
@@ -1198,7 +950,6 @@ public class AIBestMove {
                             if(card.getName().equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
                                     clientHand.remove(rightTurn);
                                     orientation = "right";
@@ -1208,8 +959,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(!gameBoard.getBordName().equals("Death Trap")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1222,11 +973,10 @@ public class AIBestMove {
                             }
                         }
                     }else{
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
                                     clientHand.remove(leftTurn);
                                     orientation = "left";
@@ -1239,13 +989,13 @@ public class AIBestMove {
                 }
                 break;
             case "right":
+                System.out.println("CHECK WALL RIGHT");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
                         for(Card card : clientHand){
                             if(card.getName().equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
                                     clientHand.remove(leftTurn);
                                     orientation = "top";
@@ -1255,11 +1005,10 @@ public class AIBestMove {
                             }
                         }
                     }else if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
                                     clientHand.remove(rightTurn);
                                     orientation = "bottom";
@@ -1269,8 +1018,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(!gameBoard.getBordName().equals("Death Trap")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1283,8 +1032,8 @@ public class AIBestMove {
                             }
                         }
                     }else{
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     LeftTurn leftTurn = new LeftTurn();
@@ -1300,10 +1049,11 @@ public class AIBestMove {
                 }
                 break;
             case "bottom":
+                System.out.println("CHECK WALL BOTTOM");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     LeftTurn leftTurn = new LeftTurn();
@@ -1316,8 +1066,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1330,8 +1080,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(!gameBoard.getBordName().equals("Death Trap")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     LeftTurn leftTurn = new LeftTurn();
@@ -1344,8 +1094,8 @@ public class AIBestMove {
                             }
                         }
                     }else{
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1361,10 +1111,11 @@ public class AIBestMove {
                 }
                 break;
             case "left":
+                System.out.println("CHECK WALL LEFT");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     LeftTurn leftTurn = new LeftTurn();
@@ -1377,8 +1128,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1391,8 +1142,8 @@ public class AIBestMove {
                             }
                         }
                     }else if(!gameBoard.getBordName().equals("Death Trap")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     RightTurn rightTurn = new RightTurn();
@@ -1405,8 +1156,8 @@ public class AIBestMove {
                             }
                         }
                     }else{
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     LeftTurn leftTurn = new LeftTurn();
@@ -1660,36 +1411,444 @@ public class AIBestMove {
         return "---";
     }
 
-    private Card bestCardTransformer(String cardName){
-        switch (cardName) {
-            case "Again":
-                return new Again();
-            case "BackUp":
-                return new BackUp();
-            case "TurnLeft":
-                return new LeftTurn();
-            case "MoveI":
-                return new MoveI();
-            case "MoveII":
-                return new MoveII();
-            case "MoveIII":
-                return new MoveIII();
-            case "PowerUp":
-                return new PowerUp();
-            case "TurnRight":
-                return new RightTurn();
-            case "UTurn":
-                return new UTurn();
-            case "Spam":
-                return new Spam();
-            case "Virus":
-                return new Virus();
-            case "Wurm":
-                return new Wurm();
-            case "TrojanHorse":
-                return new TrojanHorse();
+    private void checkPointDirectionSwitchCase(String direction){
+        switch(futureOrientation){
+            case "top":
+                switch (direction) {
+                    case "right":
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnRight")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnRight");
+                                        clientHand.remove(card);
+                                        orientation = "right";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "left":
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnLeft")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnLeft");
+                                        clientHand.remove(card);
+                                        orientation = "left";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                            boolean finished = false;
+                            for (String card : clientHand) {
+                                if (card.equals("UTurn")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("UTurn");
+                                        clientHand.remove(card);
+                                        finished = true;
+                                        orientation = "bottom";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!checkRobotField(xFuture, yFuture).contains("ConveyorBelt")) {
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (String card : clientHand) {
+                                        if (card.equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "bottom";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "bottom";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+                break;
+            case "right":
+                switch (direction) {
+                    case "top":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnLeft")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnLeft");
+                                        clientHand.remove(card);
+                                        orientation = "top";
+                                        done = true;
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnRight")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnRight");
+                                        clientHand.remove(card);
+                                        orientation = "bottom";
+                                        done = true;
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "left":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                            boolean finished = false;
+                            for (String card : clientHand) {
+                                if (card.equals("UTurn")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("UTurn");
+                                        clientHand.remove(card);
+                                        finished = true;
+                                        orientation = "left";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!checkRobotField(xFuture, yFuture).contains("ConveyorBelt")) {
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (String card : clientHand) {
+                                        if (card.equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "left";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "left";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+                break;
+            case "bottom":
+                switch (direction) {
+                    case "right":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnLeft")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnLeft");
+                                        clientHand.remove(card);
+                                        orientation = "right";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "left":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnRight")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnRight");
+                                        clientHand.remove(card);
+                                        orientation = "left";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "top":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                            boolean finished = false;
+                            for (String card : clientHand) {
+                                if (card.equals("UTurn")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("UTurn");
+                                        clientHand.remove(card);
+                                        finished = true;
+                                        orientation = "top";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!checkRobotField(xFuture, yFuture).contains("ConveyorBelt")) {
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (String card : clientHand) {
+                                        if (card.equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "top";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "top";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+                break;
+            case "left":
+                switch (direction) {
+                    case "top":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnRight")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnRight");
+                                        clientHand.remove(card);
+                                        orientation = "top";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "bottom":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                            for (String card : clientHand) {
+                                if (card.equals("TurnLeft")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("TurnLeft");
+                                        clientHand.remove(card);
+                                        orientation = "bottom";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "right":
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                            boolean finished = false;
+                            for (String card : clientHand) {
+                                if (card.equals("UTurn")) {
+                                    if (cardCounter < 5) {
+                                        cardCounter++;
+                                        register.add("UTurn");
+                                        clientHand.remove(card);
+                                        finished = true;
+                                        orientation = "right";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!checkRobotField(xFuture, yFuture).contains("ConveyorBelt")) {
+                                if (!finished && cardCounter < 4) {
+                                    int turnRight = 0;
+                                    int turnLeft = 0;
+                                    for (String card : clientHand) {
+                                        if (card.equals("TurnRight")) {
+                                            turnRight++;
+                                        } else if (card.equals("TurnLeft")) {
+                                            turnLeft++;
+                                        }
+                                    }
+                                    if (turnRight >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnRight");
+                                        register.add("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        clientHand.remove("TurnRight");
+                                        orientation = "right";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    } else if (turnLeft >= 2) {
+                                        cardCounter = cardCounter + 2;
+                                        register.add("TurnLeft");
+                                        register.add("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        clientHand.remove("TurnLeft");
+                                        orientation = "right";
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                        done = true;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+                break;
         }
-        return null;
     }
 
+    private boolean moveAndCheckAgain(){
+        xFuture = xRobot;
+        yFuture = yRobot;
+        boolean safe = true;
+        boolean wall = false;
+        for(String card : clientHand){
+            if(card.equals("MoveI")){
+                switch(orientation){
+                    case "top":
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                            wall = true;
+                        }
+                        yFuture--;
+                        if(yFuture < 0){
+                            safe = false;
+                        }
+                        break;
+                    case "right":
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                            wall = true;
+                        }
+                        xFuture++;
+                        if(xFuture > 12){
+                            safe = false;
+                        }
+                        break;
+                    case "bottom":
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                            wall = true;
+                        }
+                        yFuture++;
+                        if(yFuture > 9){
+                            safe = false;
+                        }
+                        break;
+                    case "left":
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                            wall = true;
+                        }
+                        xFuture--;
+                        if(xFuture < 0){
+                            safe = false;
+                        }
+                        break;
+                }
+                if(safe && !wall) {
+                    cardCounter++;
+                    xRobot = xFuture;
+                    yRobot = yFuture;
+                    register.add("MoveI");
+                    clientHand.remove("MoveI");
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
 }

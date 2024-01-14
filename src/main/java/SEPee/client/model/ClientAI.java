@@ -326,7 +326,7 @@ public class ClientAI extends Application {
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
                                 //controller.initRegisterAI();
-                                aiBestMove.setRegister(aiRobot, controller.getClientHand());
+                                aiBestMove.setRegister(aiRobot, controller.getHandAi());
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){
@@ -475,6 +475,7 @@ public class ClientAI extends Application {
                                 }
                             }
                             controller.setClientHand(drawPile);
+                            controller.setHandAi(yourCards.getMessageBody().getCardsInHand());
 
                             break;
 

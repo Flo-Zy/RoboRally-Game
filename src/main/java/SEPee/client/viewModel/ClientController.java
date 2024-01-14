@@ -79,6 +79,9 @@ public class ClientController {
     @Setter
     @Getter
     private ArrayList<Card> clientHand = new ArrayList<>();
+    @Getter
+    @Setter
+    private ArrayList<String> handAi = new ArrayList<>();
     @FXML
     private TextArea chatArea;
     @FXML
@@ -493,7 +496,7 @@ public class ClientController {
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
         while(true){
-            int robotNumber = random.nextInt(1, 7);
+            int robotNumber = random.nextInt(1, 2);
             // Überprüfen, ob der Roboter bereits genommen wurde
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
