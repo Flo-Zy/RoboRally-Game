@@ -1,18 +1,7 @@
 package SEPee.client.model;
 
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Movement;
-import SEPee.serialisierung.messageType.PlayerTurning;
 import SEPee.serialisierung.messageType.SelectedCard;
-import SEPee.server.model.Player;
-import SEPee.server.model.Robot;
-import SEPee.server.model.Server;
-import SEPee.server.model.card.Card;
-import SEPee.server.model.card.damageCard.Spam;
-import SEPee.server.model.card.damageCard.TrojanHorse;
-import SEPee.server.model.card.damageCard.Virus;
-import SEPee.server.model.card.damageCard.Wurm;
-import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.field.*;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
@@ -47,7 +36,7 @@ public class AIBestMove {
     private String futureOrientation;
     private boolean done = false;
 
-    public void setRegister(RobotAI robot,  ArrayList<Card> hand) throws InterruptedException{
+    public void setRegister(RobotAI robot,  ArrayList<String> hand) throws InterruptedException{
         this.clientHand = hand;
         xRobot = robot.getX();
         yRobot = robot.getY();
@@ -81,7 +70,7 @@ public class AIBestMove {
                     }
                 }
             }else{
-                register.add(clientHand.get(0).getName());
+                register.add(clientHand.get(0));
                 clientHand.remove(0);
             }
 
@@ -406,7 +395,7 @@ public class AIBestMove {
                 xFuture = xRobot;
                 yFuture = yRobot;
                 futureOrientation = orientation;
-            }else if(card.getName().equals("MoveII") && !move2){
+            }else if(card.equals("MoveII") && !move2){
                 move2 = true;
                 System.out.println("CHECK FUTURE MOVE2");
                 switch (orientation){
@@ -578,7 +567,7 @@ public class AIBestMove {
                 xFuture = xRobot;
                 yFuture = yRobot;
                 futureOrientation = orientation;
-            }else if(card.getName().equals("MoveIII") && !move3){
+            }else if(card.equals("MoveIII") && !move3){
                 move3 = true;
                 System.out.println("CHECK FUTURE MOVE3");
                 switch (orientation){
@@ -830,7 +819,7 @@ public class AIBestMove {
                 xFuture = xRobot;
                 yFuture = yRobot;
                 futureOrientation = orientation;
-            }else if(card.getName().equals("BackUp") && !backUp) {
+            }else if(card.equals("BackUp") && !backUp) {
                 backUp = true;
                 switch (orientation){
                     case "top":
@@ -933,12 +922,12 @@ public class AIBestMove {
                 System.out.println("CHECK WALL TOP");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     register.add("TurnLeft");
-                                    clientHand.remove(turnLeft);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -946,12 +935,12 @@ public class AIBestMove {
                             }
                         }
                     }else if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnRight")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -963,9 +952,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -978,7 +966,7 @@ public class AIBestMove {
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -992,12 +980,12 @@ public class AIBestMove {
                 System.out.println("CHECK WALL RIGHT");
                 if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
                     if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
-                        for(Card card : clientHand){
-                            if(card.getName().equals("TurnLeft")){
+                        for(String card : clientHand){
+                            if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1010,7 +998,7 @@ public class AIBestMove {
                                 if(cardCounter < 5) {
                                     cardCounter++;
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1022,9 +1010,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1036,9 +1023,8 @@ public class AIBestMove {
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1056,9 +1042,8 @@ public class AIBestMove {
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1070,9 +1055,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1084,9 +1068,8 @@ public class AIBestMove {
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "right";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1098,9 +1081,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "left";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1118,9 +1100,8 @@ public class AIBestMove {
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1132,9 +1113,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1146,9 +1126,8 @@ public class AIBestMove {
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    RightTurn rightTurn = new RightTurn();
                                     register.add("TurnRight");
-                                    clientHand.remove(rightTurn);
+                                    clientHand.remove("TurnRight");
                                     orientation = "top";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1160,9 +1139,8 @@ public class AIBestMove {
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
                                     cardCounter++;
-                                    LeftTurn leftTurn = new LeftTurn();
                                     register.add("TurnLeft");
-                                    clientHand.remove(leftTurn);
+                                    clientHand.remove("TurnLeft");
                                     orientation = "bottom";
                                     System.out.println("CHECK WALL");
                                     break;
@@ -1235,10 +1213,10 @@ public class AIBestMove {
 
                 if (!secondBlue.contains("ConveyorBelt 2 [left")) {
                     if (secondBlue.contains("ConveyorBelt 2 [top")) {
-                        orientation = getResultingOrientation("clockwise", orientation);
+                        futureOrientation = getResultingOrientation("clockwise", orientation);
                     }
                     if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
-                        orientation = getResultingOrientation("counterclockwise", orientation);
+                        futureOrientation = getResultingOrientation("counterclockwise", orientation);
                     }
                 }
 
