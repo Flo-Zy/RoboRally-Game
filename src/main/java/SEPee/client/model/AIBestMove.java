@@ -35,6 +35,7 @@ public class AIBestMove {
     private int yFuture;
     private String futureOrientation;
     private boolean done = false;
+    private boolean turnFlag = false;
 
     public void setRegister(RobotAI robot,  ArrayList<String> hand) throws InterruptedException{
         this.clientHand = hand;
@@ -47,9 +48,16 @@ public class AIBestMove {
         boolean finished = false;
         while(!finished) {
             int oldRegister = filledRegisters;
-            turnInCheckpointDirection();
+            standingOnConveyorInOppositeDirection();
+            if(!turnFlag) {
+                if(checkRobotField(xRobot, yRobot).contains("Gear")) {
+                    turnsWithGears();
+                }
+                turnInCheckpointDirection();
+            }
             checkWall();
             move();
+            turnFlag = false;
             filledRegisters = register.size();
             if(cardCounter == 5){
                 finished = true;
@@ -1828,5 +1836,208 @@ public class AIBestMove {
             }
         }
         return true;
+    }
+
+    private void standingOnConveyorInOppositeDirection() throws InterruptedException {
+        xFuture = xRobot;
+        yFuture = yRobot;
+        futureOrientation = orientation;
+
+        int xDifference = xCheckpoint - xRobot;
+        int yDifference = yCheckpoint - yRobot;
+        String direction;
+
+        if (Math.abs(xDifference) >= Math.abs(yDifference)) {
+            direction = (xDifference > 0) ? "right" : "left";
+        } else {
+            direction = (yDifference < 0) ? "top" : "bottom";
+        }
+        switch(direction){
+            case "top":
+                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [bottom")){
+                    switch (orientation){
+                        case "top":
+                            for(String card : clientHand){
+                                if(card.equals("TurnRight")){
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "right":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "bottom":
+                            for(String card : clientHand){
+                                if(card.equals("TurnLeft")){
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "left":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                    }
+                }
+                break;
+            case "right":
+                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
+                    switch (orientation){
+                        case "top":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "right":
+                            for(String card : clientHand){
+                                if(card.equals("TurnRight")){
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "bottom":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "left":
+                            for(String card : clientHand){
+                                if(card.equals("TurnLeft")){
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                    }
+                }
+                break;
+            case "bottom":
+                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [bottom")){
+                    switch (orientation){
+                        case "top":
+                            for(String card : clientHand){
+                                if(card.equals("TurnLeft")){
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "right":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "bottom":
+                            for(String card : clientHand){
+                                if(card.equals("TurnRight")){
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "left":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                    }
+                }
+                break;
+            case "left":
+                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
+                    switch (orientation){
+                        case "top":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "right":
+                            for(String card : clientHand){
+                                if(card.equals("TurnLeft")){
+                                    cardCounter++;
+                                    register.add("TurnLeft");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        case "bottom":
+                            //nix machen einfach nicht drehen und gehen
+                            turnFlag = true;
+                            break;
+                        case "left":
+                            for(String card : clientHand){
+                                if(card.equals("TurnRight")){
+                                    cardCounter++;
+                                    register.add("TurnRight");
+                                    clientHand.remove(card);
+                                    checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    orientation = futureOrientation;
+                                    xRobot = xFuture;
+                                    yRobot = yFuture;
+                                    turnFlag = true;
+                                    break;
+                                }
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
+    }
+
+    private void turnsWithGears(){
+        //turnInCheckpointDirection needs different futureOrientation if you are standing on a gear
+        if(checkRobotField(xRobot, yRobot).contains("Gear [clockwise")){
+            futureOrientation = getResultingOrientation("clockwise", orientation);
+        }else if(checkRobotField(xRobot, yRobot).contains("Gear [counterclockwise")){
+            futureOrientation = getResultingOrientation("counterclockwise", orientation);
+        }
     }
 }
