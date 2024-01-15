@@ -316,8 +316,8 @@ public class ClientAI extends Application {
                             controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
-                                controller.setRegisterVisibilityFalse();
-                                controller.initRegisterAI();
+                                // controller.setRegisterVisibilityFalse();
+                                // controller.initRegisterAI();
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){

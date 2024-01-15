@@ -83,7 +83,6 @@ public class LostBearingsController extends MapController {
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
-    private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
     @Getter
     private final Queue<MoveInstruction> movementQueue = new LinkedList<>();

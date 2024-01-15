@@ -95,8 +95,6 @@ public class DeathTrapController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     public void initAI(ClientAI clientAI, Stage stage) {

@@ -340,7 +340,7 @@ public class Client extends Application {
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
-                                controller.initRegister();
+                                controller.initializeRegister();
                                 System.out.println(" Programmierungsphase");
                                 controller.playEventSound("ProgrammingPhase");
                             }
@@ -487,8 +487,8 @@ public class Client extends Application {
                             }
                                 controller.setClientHand(drawPile);
                                 // initialisiere die 9 Karten von YourCards in Hand des players
-                                controller.initDrawPile();
-                                controller.initRegister();
+                                controller.initializeDrawPile();
+                                controller.initializeRegister();
 
                             break;
 

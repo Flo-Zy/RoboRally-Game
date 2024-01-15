@@ -99,9 +99,9 @@ public class DizzyHighwayController extends MapController {
     private Map<Integer, Integer> indexToCounterMap;
     private AtomicInteger counter1 = new AtomicInteger(0);
 
-    public void setCounter1(int counter) {
+    /* public void setCounter1(int counter) {
         counter1.set(counter);
-    }
+    } */
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
@@ -115,7 +115,7 @@ public class DizzyHighwayController extends MapController {
         robotImageViewMap = new HashMap<>();
     }
 
-    /*public void avatarAppear(Player player, int x, int y) {
+    public void avatarAppear(Player player, int x, int y) {
         System.out.println("getFigure: " + player.getFigure());
 
         switch (player.getFigure()) {
@@ -201,9 +201,9 @@ public class DizzyHighwayController extends MapController {
                 System.out.println("Robot not found.");
                 break;
         }
-    }*/
+    }
 
-    /*private void updateAvatarPosition(Robot robot) {
+    private void updateAvatarPosition(Robot robot) {
         ImageView imageView = robotImageViewMap.get(robot);
         GridPane.setColumnIndex(imageView, robot.getX());
         GridPane.setRowIndex(imageView, robot.getY());
@@ -211,7 +211,7 @@ public class DizzyHighwayController extends MapController {
         Point initialPosition = new Point(robot.getX(), robot.getY());
         avatarInitialPositions.put(imageView, initialPosition);
 
-    }*/
+    }
 
     public synchronized void playerTurn(int clientIdToTurn, String rotation) {
         movementQueue.offer(new MoveInstruction(clientIdToTurn, rotation));

@@ -316,6 +316,10 @@ public class ClientController {
         });
     }
 
+    public void initAI(ClientAI clientAI, Stage stage) {
+        figure = robotSelectionAI(Client.getTakenFigures());
+    }
+
     private void updateOkButtonState(Client client, Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
 
@@ -348,10 +352,6 @@ public class ClientController {
                 }
             }
         }
-    }
-
-    public void initAI(ClientAI clientAI, Stage stage) {
-        figure = robotSelectionAI(Client.getTakenFigures());
     }
 
     @FXML

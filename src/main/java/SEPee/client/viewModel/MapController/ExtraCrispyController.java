@@ -87,24 +87,16 @@ public class ExtraCrispyController extends MapController {
     private final Queue<MoveInstruction> movementQueue = new LinkedList<MoveInstruction>();
     private boolean isTransitioning = false;
 
-    public void setCounter1(int counter){
-        counter1.set(counter);
-    }
-
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     public void initAI(ClientAI clientAI, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     public void avatarAppear(Player player, int x, int y) {
