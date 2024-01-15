@@ -48,6 +48,7 @@ public class AIBestMove {
         boolean finished = false;
         while(!finished) {
             int oldRegister = filledRegisters;
+            checkMoveCheckpointBeforeConveyorBelt();
             standingOnConveyorInOppositeDirection();
             if(!turnFlag) {
                 if(checkRobotField(xRobot, yRobot).contains("Gear")) {
@@ -2038,6 +2039,70 @@ public class AIBestMove {
             futureOrientation = getResultingOrientation("clockwise", orientation);
         }else if(checkRobotField(xRobot, yRobot).contains("Gear [counterclockwise")){
             futureOrientation = getResultingOrientation("counterclockwise", orientation);
+        }
+    }
+
+    private void checkMoveCheckpointBeforeConveyorBelt(){
+        //if you are able to reach the checkpoint with one move make that move before ConveyorBelts activate
+        xFuture = xRobot;
+        yFuture = yRobot;
+        switch(orientation){
+            case "top":
+                for(String card : clientHand){
+                    if(card.equals("MoveI")){
+                        yFuture--;
+                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
+                            cardCounter++;
+                            register.add("MoveI");
+                            clientHand.remove(card);
+                            yRobot = yFuture;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case "right":
+                for(String card : clientHand){
+                    if(card.equals("MoveI")){
+                        xFuture++;
+                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
+                            cardCounter++;
+                            register.add("MoveI");
+                            clientHand.remove(card);
+                            xRobot = xFuture;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                for(String card : clientHand){
+                    if(card.equals("MoveI")){
+                        yFuture++;
+                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
+                            cardCounter++;
+                            register.add("MoveI");
+                            clientHand.remove(card);
+                            yRobot = yFuture;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case "left":
+                for(String card : clientHand){
+                    if(card.equals("MoveI")){
+                        xFuture--;
+                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
+                            cardCounter++;
+                            register.add("MoveI");
+                            clientHand.remove(card);
+                            xRobot = xFuture;
+                            break;
+                        }
+                    }
+                }
+                break;
         }
     }
 }
