@@ -271,8 +271,33 @@ public class AIBestMove {
         yFuture = yRobot;
         futureOrientation = orientation;
 
+        System.out.println("INCHECKPOINTDIRECTION");
+        System.out.println("X: "+ xRobot);
+        System.out.println("Y: "+ yRobot);
+        System.out.println("XFUTURE : "+ xFuture);
+        System.out.println("YFUTURE : "+ yFuture);
+
+        checkMoveCheckpointBeforeConveyorBelt();
+
+        xFuture = xRobot;
+        yFuture = yRobot;
+
+        System.out.println("INCHECKPOINTDIRECTION");
+        System.out.println("X: "+ xRobot);
+        System.out.println("Y: "+ yRobot);
+        System.out.println("XFUTURE : "+ xFuture);
+        System.out.println("YFUTURE : "+ yFuture);
+
         if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2")){
             checkBlueConveyorBelts(checkRobotField(xRobot, yRobot));
+            xFuture = xRobot;
+            yFuture = yRobot;
+            futureOrientation = orientation;
+            System.out.println("INCHECKPOINTDIRECTION");
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
         }else if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 1")){
             checkGreenConveyorBelts(checkRobotField(xRobot, yRobot));
             xFuture = xRobot;
@@ -648,6 +673,7 @@ public class AIBestMove {
                 switch (orientation){
                     case "top":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            System.out.println("KEINE WALL");
                             yFuture--;
                             if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
@@ -709,6 +735,7 @@ public class AIBestMove {
                         break;
                     case "right":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            System.out.println("KEINE WALL");
                             xFuture++;
                             if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
@@ -770,6 +797,7 @@ public class AIBestMove {
                         break;
                     case "bottom":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            System.out.println("KEINE WALL");
                             yFuture++;
                             if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
@@ -831,6 +859,7 @@ public class AIBestMove {
                         break;
                     case "left":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            System.out.println("KEINE WALL");
                             xFuture--;
                             if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
@@ -1891,6 +1920,13 @@ public class AIBestMove {
                         break;
                 }
                 if(safe && !wall) {
+                    if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2")){
+                        checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                    }else if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 1")){
+                        checkGreenConveyorBelts(checkRobotField(xFuture, yFuture));
+                    }else if(checkRobotField(xFuture, yFuture).contains("Gear")){
+                        turnsWithGears();
+                    }
                     cardCounter++;
                     xRobot = xFuture;
                     yRobot = yFuture;
@@ -1930,6 +1966,17 @@ public class AIBestMove {
                                     register.add("TurnRight");
                                     clientHand.remove(card);
                                     checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    for(String card1 : clientHand){
+                                        if(card1.equals("MoveI")){
+                                            if(yFuture-1 >= 0) {
+                                                yFuture--;
+                                                cardCounter++;
+                                                register.add("MoveI");
+                                                clientHand.remove(card1);
+                                            }
+                                            break;
+                                        }
+                                    }
                                     orientation = futureOrientation;
                                     xRobot = xFuture;
                                     yRobot = yFuture;
@@ -1961,6 +2008,17 @@ public class AIBestMove {
                                     register.add("TurnLeft");
                                     clientHand.remove(card);
                                     checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
+                                    for(String card1 : clientHand){
+                                        if(card1.equals("MoveI")){
+                                            if(yFuture+1 <= 9) {
+                                                yFuture++;
+                                                cardCounter++;
+                                                register.add("MoveI");
+                                                clientHand.remove(card1);
+                                            }
+                                            break;
+                                        }
+                                    }
                                     orientation = futureOrientation;
                                     xRobot = xFuture;
                                     yRobot = yFuture;
