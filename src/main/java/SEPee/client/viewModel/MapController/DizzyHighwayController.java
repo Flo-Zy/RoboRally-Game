@@ -97,27 +97,22 @@ public class DizzyHighwayController extends MapController {
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
-    private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
 
     public void setCounter1(int counter) {
         counter1.set(counter);
     }
 
-    /*public void init(Client client, Stage stage) {
+    public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
-    }*/
+    }
 
     public void initAI(ClientAI clientAI, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     /*public void avatarAppear(Player player, int x, int y) {

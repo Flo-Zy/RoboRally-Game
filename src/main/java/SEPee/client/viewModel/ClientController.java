@@ -4,9 +4,7 @@ import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.MapSelected;
-import SEPee.serialisierung.messageType.SendChat;
-import SEPee.serialisierung.messageType.SetStatus;
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import javafx.animation.KeyFrame;
@@ -25,6 +23,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -40,10 +39,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientController {
     @FXML
     private Button sendButton;
+    @Setter
+    @FXML
+    private HBox totalHand;
+    @FXML
+    public HBox totalRegister;
+    private Map<Integer, List<Card>> clientHandMap;
     @FXML
     private Button visibilityButton;
     @FXML
@@ -103,8 +109,13 @@ public class ClientController {
     private static int startPointY;
     private GridPane robotSelectionGrid;
     private ArrayList<Integer> newTakenFigures;
+    private ArrayList<Zahlen> zahlen = new ArrayList<>();
+    private AtomicInteger counter1 = new AtomicInteger(0);
+    private Map<Integer, Integer> indexToCounterMap;
 
     public void init(Client client, Stage stage) {
+        this.clientHandMap = new HashMap<>();
+        this.indexToCounterMap = new HashMap<>();
         Dialog<Pair<String, Integer>> dialog = new Dialog<>();
         Font.loadFont(getClass().getResourceAsStream("/CSSFiles/Digital-Bold.tff"), 14);
         dialog.setTitle("Welcome to RoboRally");
@@ -1048,24 +1059,8 @@ public class ClientController {
         mapController.avatarAppear(player, x, y);
     }
 
-    public void initDrawPile(){
-        mapController.initializeDrawPile(id, clientHand); // int, ArrayList<String>
-    }
-
-    public void initRegister(){
-        mapController.initializeRegister(id, clientHand);
-    }
-
     public void initRegisterAI(){
         //mapController.initializeRegisterAI(id, clientHand);
-    }
-
-    public void setRegisterVisibilityFalse(){
-        mapController.setRegisterVisibilityFalse();
-    }
-
-    public void fillEmptyRegister(ArrayList<Card> nextCards){
-        mapController.fillEmptyRegister(nextCards);
     }
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
@@ -1093,4 +1088,230 @@ public class ClientController {
         SoundManager.playSound(soundName);
     }
 
+    public void initializeDrawPile() {
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (clientHandMap.containsKey(id)) {
+            clientHandMap.remove(id);
+        }
+
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        clientHandMap.put(id, new ArrayList<>(clientHand));
+
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> drawPileClient = clientHandMap.get(id);
+
+        // Prüfe, ob der Kartenstapel nicht leer ist
+        if (!drawPileClient.isEmpty()) {
+            // Hole die HBox mit fx:id="totalHand"
+            //HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
+
+            // Prüfe, ob die HBox gefunden wurde
+            if (totalHand != null) {
+
+                // Durchlaufe die ersten 9 ImageView-Elemente in der HBox
+                for (int i = 0; i < 9; i++) {
+                    // Hole das i-te ImageView-Element
+                    ImageView imageView = (ImageView) totalHand.getChildren().get(i);
+
+                    // Prüfe, ob das ImageView-Element gefunden wurde
+                    if (imageView != null) {
+                        // Prüfe, ob es noch Karten im Kartenstapel gibt
+                        if (!drawPileClient.isEmpty()) {
+                            // Hole die oberste Karte vom Kartenstapel
+                            Card topCard = drawPileClient.get(i);
+                            // Entferne die oberste Karte vom Kartenstapel
+                            // drawPileClient.remove(0);
+
+                            // Setze das Bild des ImageView-Elements mit dem Bild der Karte
+                            javafx.scene.image.Image cardImage = new Image(topCard.getImageUrl());
+                            imageView.setImage(cardImage);
+
+                            // Mache das ImageView-Element sichtbar
+                            imageView.setVisible(true);
+                            imageView.setManaged(true);
+                        } else {
+                            // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
+                            imageView.setImage(null);
+                            imageView.setVisible(false);
+                            imageView.setManaged(false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void initializeRegister() {
+        zahlen.clear();
+        counter1.set(0);
+        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
+        if (clientHandMap.containsKey(id)) {
+            clientHandMap.remove(id);
+        }
+        // Erstelle eine Kopie der drawPile-Liste für diesen Client
+        clientHandMap.put(id, new ArrayList<>(clientHand));
+        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
+        List<Card> drawPileClient = clientHandMap.get(id);
+
+        // Prüfe, ob der Kartenstapel nicht leer ist
+        if (!drawPileClient.isEmpty()) {
+            // Prüfe, ob die HBox totalHand gefunden wurde
+            // Prüfe, ob die HBox totalRegister gefunden wurde
+            //HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
+
+            if (totalHand != null && totalRegister != null) {
+
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 9; i++) {
+                    ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+
+                    if (handImageView != null) {
+                        final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
+                        // Füge den Event-Handler für das ImageView hinzu
+                        //if(counter1.get() <= 4 ) {
+                        handImageView.setOnMouseClicked(mouseEvent -> {
+
+                            if (counter1.get() < 5) {
+                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
+                                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
+                                if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    SoundManager.playUISound("CardChosen");
+
+                                    Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
+                                    registerImageView.setImage(cardImage);
+
+                                    registerImageView.setVisible(true);
+                                    registerImageView.setManaged(true);
+
+                                    // gewählte Karte aus Hand unsichtbar machen
+                                    handImageView.setVisible(false);
+
+                                    // sende serialisiertes SelectedCard
+                                    SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get() + 1);
+                                    String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                    Client.getWriter().println(serializedCardSelected);
+
+                                    zahlen.add(new ClientController.Zahlen(index, counter1.get()));
+                                    indexToCounterMap.put(index, counter1.get());
+
+                                    int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                    counter1.set(smallestEmptyRegisterIndex);
+                                    if(counter1.get() == 5){
+                                        TimerStarted timerStarted = new TimerStarted();
+                                        String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+                                        Client.getWriter().println(serializedTimerStarted);
+                                    }
+                                }
+                            } else {
+                                System.out.println("Register voll");
+
+                            }
+                        });
+                        //}
+                    }
+                }
+                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
+                for (int i = 0; i < 5; i++) {
+                    ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+
+                    if (registerImageView != null) {
+                        final int registerIndex = i;
+
+                        registerImageView.setOnMouseClicked(mouseEvent -> {
+                            if (registerImageView.getImage() != null) {
+                                if (counter1.get() < 5) {
+                                    int indexNew = mapRegisterIndexToHandIndex(registerIndex);
+                                    counter1.decrementAndGet();
+
+                                    if (indexNew < 9) {
+                                        SoundManager.playUISound("card put back");
+
+                                        ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
+                                        handImageView.setVisible(true);
+
+                                        registerImageView.setImage(null);
+
+                                        int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
+                                        counter1.set(smallestEmptyRegisterIndex);
+
+                                        // sende serialisiertes SelectedCard
+                                        SelectedCard selectedCard = new SelectedCard(null, registerIndex+1);
+                                        String serializedCardSelected = Serialisierer.serialize(selectedCard);
+                                        Client.getWriter().println(serializedCardSelected);
+                                    } else {
+                                        System.out.println("Hand voll");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    public void fillEmptyRegister(ArrayList<Card> nextCards) {
+        int index = 0;
+        int emptyIndex;
+        while (index < nextCards.size()) {
+            emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
+            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
+
+            Image cardImage = new Image(nextCards.get(index).getImageUrl());
+            registerImageView.setImage(cardImage);
+
+            registerImageView.setVisible(true);
+            registerImageView.setManaged(true);
+            index++;
+        }
+    }
+
+    private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
+        for (int i = 0; i < 5; i++) {
+            ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+            if (registerImageView.getImage() == null) {
+                return i;
+            }
+        }
+        return 5;
+    }
+
+    private int mapRegisterIndexToHandIndex(int registerIndex) {
+        int storedInt;
+        for (int i = 0; i < zahlen.size(); i++) {
+            if (zahlen.get(i).register == registerIndex) {
+                storedInt = zahlen.get(i).hand;
+                zahlen.remove(i); // entferne handIndex mit entsprechendem registerIndex
+                return storedInt;
+            }
+        }
+        return -1;
+    }
+
+    public void setRegisterVisibilityFalse() {
+        // Prüfe, ob die HBox totalRegister gefunden wurde
+
+        if (totalRegister != null) {
+            for (int i = 0; i < 5; i++) {
+                ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
+                if (registerImageView != null) {
+                    registerImageView.setImage(null);
+                }
+            }
+        }
+    }
+
+    public void setCounter1(int counter) {
+        counter1.set(counter);
+    }
+
+    class Zahlen {
+        public int hand;
+        public int register;
+
+        Zahlen(int hand, int register){
+            this.hand = hand;
+            this.register = register;
+        }
+    }
 }

@@ -520,7 +520,7 @@ public class Client extends Application {
                             System.out.println("Timer Ended");
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
                             controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
-                            controller.mapController.setCounter1(5);
+                            controller.setCounter1(5);
                             break;
                         case "CardsYouGotNow":
                             System.out.println("Cards You Got Now");
