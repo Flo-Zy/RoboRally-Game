@@ -16,7 +16,6 @@ public abstract class MapController {
     public void fillEmptyRegister(ArrayList<Card> nextCards){}
     public void movementPlayed(int clientId, int newX, int newY){}
     public void playerTurn(int clientIdtoTurn, String rotation){}
-    public void setCheckPointImage(String imageUrl) {}
     class Zahlen{
         public int hand;
         public int register;

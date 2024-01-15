@@ -74,8 +74,6 @@ public class DeathTrapController extends MapController {
     @FXML
     public HBox totalHand;
     @FXML
-    public ImageView checkPointImageView;
-    @FXML
     public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
@@ -550,10 +548,5 @@ public class DeathTrapController extends MapController {
             }
         }
         return null;
-    }
-
-    public void setCheckPointImage(String imageUrl) {
-        Image image = new Image(imageUrl);
-        checkPointImageView.setImage(image);
     }
 }

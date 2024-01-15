@@ -48,6 +48,8 @@ public class ClientController {
     private Button visibilityButton;
     @FXML
     private Button readyButton;
+    @FXML
+    public ImageView checkPointImageView;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -636,8 +638,6 @@ public class ClientController {
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
-                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
-
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -665,8 +665,6 @@ public class ClientController {
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
-
-                dizzyHighwayController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -696,8 +694,6 @@ public class ClientController {
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
 
-                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
-
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -725,8 +721,6 @@ public class ClientController {
                 ExtraCrispyMap.getChildren().setAll(extraCrispy);
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
-
-                extraCrispyController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -756,8 +750,6 @@ public class ClientController {
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
 
-                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
-
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -785,8 +777,6 @@ public class ClientController {
                 LostBearingsMap.getChildren().setAll(lostBearings);
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
-
-                lostBearingsController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -816,8 +806,6 @@ public class ClientController {
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
 
-                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
-
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
@@ -845,8 +833,6 @@ public class ClientController {
                 DeathTrapMap.getChildren().setAll(deathTrap);
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
-
-                deathTrapController.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
 
                 //Hide Bereit nicht bereit button
                 readyButton.setVisible(false);
@@ -1091,7 +1077,8 @@ public class ClientController {
     }
 
     public void setCheckPointImage(String imageUrl) {
-        mapController.setCheckPointImage(imageUrl);
+        Image image = new Image(imageUrl);
+        checkPointImageView.setImage(image);
     }
 
     public void playUISound(String eventName){

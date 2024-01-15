@@ -149,6 +149,7 @@ public class Client extends Application {
                                     PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                     String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                     writer.println(serializedPlayerValues);
+                                    controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
                                     primaryStage.show();
                                 }
                             });

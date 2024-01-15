@@ -1646,15 +1646,7 @@
                         </children>
                     </HBox>
                     <!-- Checkpoint ImageView -->
-                    <HBox alignment="CENTER" maxHeight="100.0" maxWidth="650.0" prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
-                        <children>
-                            <ImageView fx:id="checkPointImageView" fitHeight="70.0" fitWidth="70.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
-                                <HBox.margin>
-                                    <Insets />
-                                </HBox.margin>
-                            </ImageView>
-                        </children>
-                    </HBox>
+                    <HBox alignment="CENTER" maxHeight="100.0" maxWidth="650.0" prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER" />
                     <!-- Discard Pile, Programming Pile -->
                     <HBox layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="650.0">
                         <children>

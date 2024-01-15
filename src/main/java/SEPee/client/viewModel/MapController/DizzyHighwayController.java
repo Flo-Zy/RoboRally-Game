@@ -83,8 +83,6 @@ public class DizzyHighwayController extends MapController {
     @FXML
     public HBox totalHand;
     @FXML
-    public ImageView checkPointImageView;
-    @FXML
     public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
@@ -548,10 +546,10 @@ public class DizzyHighwayController extends MapController {
         return -1;
     }
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards){
+    public void fillEmptyRegister(ArrayList<Card> nextCards) {
         int index = 0;
         int emptyIndex;
-        while(index < nextCards.size()){
+        while (index < nextCards.size()) {
             emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
@@ -562,11 +560,6 @@ public class DizzyHighwayController extends MapController {
             registerImageView.setManaged(true);
             index++;
         }
-    }
-
-    public void setCheckPointImage(String imageUrl) {
-        Image image = new Image(imageUrl);
-        checkPointImageView.setImage(image);
     }
 }
 
