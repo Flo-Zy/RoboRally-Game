@@ -48,22 +48,43 @@ public class AIBestMove {
         boolean finished = false;
         while(!finished) {
             int oldRegister = filledRegisters;
-            checkMoveCheckpointBeforeConveyorBelt();
+            //checkMoveCheckpointBeforeConveyorBelt();
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
             standingOnConveyorInOppositeDirection();
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
             if(!turnFlag) {
-                if(checkRobotField(xRobot, yRobot).contains("Gear")) {
-                    turnsWithGears();
-                }
                 turnInCheckpointDirection();
+                System.out.println("X: "+ xRobot);
+                System.out.println("Y: "+ yRobot);
+                System.out.println("XFUTURE : "+ xFuture);
+                System.out.println("YFUTURE : "+ yFuture);
             }
             checkWall();
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
             move();
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
             turnFlag = false;
             filledRegisters = register.size();
             if(cardCounter == 5){
                 finished = true;
             }else if(oldRegister == filledRegisters){
                 finished = moveAndCheckAgain();
+                System.out.println("X: "+ xRobot);
+                System.out.println("Y: "+ yRobot);
+                System.out.println("XFUTURE : "+ xFuture);
+                System.out.println("YFUTURE : "+ yFuture);
             }
         }
 
@@ -254,6 +275,19 @@ public class AIBestMove {
             checkBlueConveyorBelts(checkRobotField(xRobot, yRobot));
         }else if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 1")){
             checkGreenConveyorBelts(checkRobotField(xRobot, yRobot));
+            xFuture = xRobot;
+            yFuture = yRobot;
+            futureOrientation = orientation;
+            System.out.println("INCHECKPOINTDIRECTION");
+            System.out.println("X: "+ xRobot);
+            System.out.println("Y: "+ yRobot);
+            System.out.println("XFUTURE : "+ xFuture);
+            System.out.println("YFUTURE : "+ yFuture);
+        }else if(checkRobotField(xRobot, yRobot).contains("Gear")){
+            turnsWithGears();
+            xFuture = xRobot;
+            yFuture = yRobot;
+            futureOrientation = orientation;
         }
 
         int xDifference = xCheckpoint - xFuture;
@@ -266,12 +300,22 @@ public class AIBestMove {
             System.out.println("2.CHECKPOINT DIRECTION: "+direction);
             if(!orientation.equals(direction)){
                 checkPointDirectionSwitchCase(direction);
+                System.out.println("INCHECKPOINTDIRECTION");
+                System.out.println("X: "+ xRobot);
+                System.out.println("Y: "+ yRobot);
+                System.out.println("XFUTURE : "+ xFuture);
+                System.out.println("YFUTURE : "+ yFuture);
                 if(!done){
                     System.out.println("2.CHECKPOINT CHECK");
                     direction = (yDifference < 0) ? "top" : "bottom";
                     System.out.println("2.CHECKPOINT DIRECTION: "+direction);
                     if(!orientation.equals(direction)){
                         checkPointDirectionSwitchCase(direction);
+                        System.out.println("INCHECKPOINTDIRECTION");
+                        System.out.println("X: "+ xRobot);
+                        System.out.println("Y: "+ yRobot);
+                        System.out.println("XFUTURE : "+ xFuture);
+                        System.out.println("YFUTURE : "+ yFuture);
                     }
                 }
             }
@@ -282,12 +326,22 @@ public class AIBestMove {
             System.out.println("2.CHECKPOINT DIRECTION: "+direction);
             if(!orientation.equals(direction)){
                 checkPointDirectionSwitchCase(direction);
+                System.out.println("INCHECKPOINTDIRECTION");
+                System.out.println("X: "+ xRobot);
+                System.out.println("Y: "+ yRobot);
+                System.out.println("XFUTURE : "+ xFuture);
+                System.out.println("YFUTURE : "+ yFuture);
                 if(!done){
                     System.out.println("2.CHECKPOINT CHECK");
                     direction = (xDifference > 0) ? "right" : "left";
                     System.out.println("2.CHECKPOINT DIRECTION: "+direction);
                     if(!orientation.equals(direction)){
                         checkPointDirectionSwitchCase(direction);
+                        System.out.println("INCHECKPOINTDIRECTION");
+                        System.out.println("X: "+ xRobot);
+                        System.out.println("Y: "+ yRobot);
+                        System.out.println("XFUTURE : "+ xFuture);
+                        System.out.println("YFUTURE : "+ yFuture);
                     }
                 }
             }
@@ -318,6 +372,7 @@ public class AIBestMove {
                 switch (orientation){
                     case "top":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            System.out.println("KEINE WALL");
                             yFuture--;
                             if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 String result = checkRobotField(xFuture, yFuture);
@@ -339,6 +394,7 @@ public class AIBestMove {
                         break;
                     case "right":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            System.out.println("KEINE WALL");
                             xFuture++;
                             if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 String result = checkRobotField(xFuture, yFuture);
@@ -360,6 +416,7 @@ public class AIBestMove {
                         break;
                     case "bottom":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            System.out.println("KEINE WALL");
                             yFuture++;
                             if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 String result = checkRobotField(xFuture, yFuture);
@@ -381,6 +438,7 @@ public class AIBestMove {
                         break;
                     case "left":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            System.out.println("KEINE WALL");
                             xFuture--;
                             if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 String result = checkRobotField(xFuture, yFuture);
@@ -410,9 +468,11 @@ public class AIBestMove {
                 switch (orientation){
                     case "top":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                            System.out.println("KEINE WALL");
                             yFuture--;
                             if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [top"))) {
+                                    System.out.println("KEINE WALL");
                                     yFuture--;
                                     if (!(yFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                         String result = checkRobotField(xFuture, yFuture);
@@ -451,9 +511,11 @@ public class AIBestMove {
                         break;
                     case "right":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                            System.out.println("KEINE WALL");
                             xFuture++;
                             if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [right"))) {
+                                    System.out.println("KEINE WALL");
                                     xFuture++;
                                     if (!(xFuture > 12) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                         String result = checkRobotField(xFuture, yFuture);
@@ -492,9 +554,11 @@ public class AIBestMove {
                         break;
                     case "bottom":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                            System.out.println("KEINE WALL");
                             yFuture++;
                             if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [bottom"))) {
+                                    System.out.println("KEINE WALL");
                                     yFuture++;
                                     if (!(yFuture > 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                         String result = checkRobotField(xFuture, yFuture);
@@ -533,9 +597,11 @@ public class AIBestMove {
                         break;
                     case "left":
                         if(!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                            System.out.println("KEINE WALL");
                             xFuture--;
                             if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                 if (!(checkRobotField(xFuture, yFuture).contains("Wall [left"))) {
+                                    System.out.println("KEINE WALL");
                                     xFuture--;
                                     if (!(xFuture < 0) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                                         String result = checkRobotField(xFuture, yFuture);
@@ -1779,7 +1845,7 @@ public class AIBestMove {
         }
     }
 
-    private boolean moveAndCheckAgain(){
+    private boolean moveAndCheckAgain() throws InterruptedException {
         xFuture = xRobot;
         yFuture = yRobot;
         boolean safe = true;
@@ -1873,7 +1939,19 @@ public class AIBestMove {
                             }
                             break;
                         case "right":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(xFuture+1 <= 12) {
+                                        xFuture++;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "bottom":
@@ -1892,7 +1970,19 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(xFuture-1 >= 0) {
+                                        xFuture--;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                     }
@@ -1902,7 +1992,19 @@ public class AIBestMove {
                 if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
                     switch (orientation){
                         case "top":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(yFuture-1 >= 0) {
+                                        yFuture--;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "right":
@@ -1921,7 +2023,19 @@ public class AIBestMove {
                             }
                             break;
                         case "bottom":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(yFuture+1 <= 9) {
+                                        yFuture++;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "left":
@@ -1961,7 +2075,19 @@ public class AIBestMove {
                             }
                             break;
                         case "right":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(xFuture+1 <= 12) {
+                                        xFuture++;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "bottom":
@@ -1980,7 +2106,19 @@ public class AIBestMove {
                             }
                             break;
                         case "left":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(xFuture-1 >= 0) {
+                                        xFuture--;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                     }
@@ -1990,7 +2128,19 @@ public class AIBestMove {
                 if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
                     switch (orientation){
                         case "top":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(yFuture-1 >= 0) {
+                                        yFuture--;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "right":
@@ -2009,7 +2159,19 @@ public class AIBestMove {
                             }
                             break;
                         case "bottom":
-                            //nix machen einfach nicht drehen und gehen
+                            for(String card1 : clientHand){
+                                if(card1.equals("MoveI")){
+                                    if(yFuture+1 <= 9) {
+                                        yFuture++;
+                                        cardCounter++;
+                                        register.add("MoveI");
+                                        clientHand.remove(card1);
+                                        xRobot = xFuture;
+                                        yRobot = yFuture;
+                                    }
+                                    break;
+                                }
+                            }
                             turnFlag = true;
                             break;
                         case "left":

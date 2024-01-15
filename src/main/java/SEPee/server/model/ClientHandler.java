@@ -901,7 +901,7 @@ public class ClientHandler implements Runnable {
                                                 if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().registerSize()) {
                                                     System.out.println(player.getPlayerMat().registerSize());
                                                     while (i < (5 - player.getPlayerMat().getNumRegister())) {
-                                                        if (i == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
+                                                        if (player.getPlayerMat().registerSize() == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
                                                             cursor++;
                                                             if (!player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // nächste Karte auf ProgDeck nicht Again
                                                                 Card card1 = player.getPlayerMat().getProgDeck().get(cursor); // card = nächste Karte auf ProgDeck des players
