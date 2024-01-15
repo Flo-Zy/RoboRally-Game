@@ -630,8 +630,8 @@ public class ClientController {
                 DizzyHighwayController dizzyHighwayController = loader.getController();
                 mapController = dizzyHighwayController;
 
-                dizzyHighwayController.init(client, primaryStage);
-                dizzyHighwayController.setRootVBox(DizzyHighwayMap);
+                mapController.init(client, primaryStage);
+                mapController.setRootVBox(DizzyHighwayMap);
 
                 // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
@@ -1057,7 +1057,7 @@ public class ClientController {
     }
 
     public void initRegisterAI(){
-        mapController.initializeRegisterAI(id, clientHand);
+        //mapController.initializeRegisterAI(id, clientHand);
     }
 
     public void setRegisterVisibilityFalse(){
