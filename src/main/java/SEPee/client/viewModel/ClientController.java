@@ -48,6 +48,17 @@ public class ClientController {
     private Button visibilityButton;
     @FXML
     private Button readyButton;
+    @FXML
+    private Slider uiSoundSlider;
+
+    @FXML
+    private Slider eventSoundSlider;
+
+    @FXML
+    private Slider generalSoundSlider;
+
+    @FXML
+    private Slider masterVolumeSlider;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -165,7 +176,7 @@ public class ClientController {
         robotSelectionGrid.getStyleClass().add("robot-selection-grid");
         dialog.getDialogPane().setContent(grid);
 
-        playEventSound("FigureSelected");
+        // playEventSound("FigureSelected");
 
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Figure" + i + ".png");
@@ -270,7 +281,6 @@ public class ClientController {
             }
         });
 
-
         Optional<Pair<String, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(usernameRobotPair -> {
@@ -299,8 +309,45 @@ public class ClientController {
             root.getChildren().add(muteButton);
             sendButton.setOnAction(event -> sendMessage());
             visibilityButton.setOnAction(event -> toggleVisibility());
+
+            uiSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                double volume = newValue.doubleValue() / 100.0;
+                SoundManager.setUISoundVolume(volume);
+            });
+
+            eventSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                double volume = newValue.doubleValue() / 100.0;
+                SoundManager.setEventSoundVolume(volume);
+            });
+
+            generalSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                double volume = newValue.doubleValue() / 100.0;
+                SoundManager.setGeneralSoundVolume(volume);
+            });
+
+            masterVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                double volume = newValue.doubleValue() / 100.0;
+                SoundManager.setMasterVolume(volume);
+            });
         });
     }
+
+    private Slider createSlider(String label, SoundManager.VolumeSetter volumeSetter) {
+        Slider slider = new Slider(0, 100, 50);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+
+        Label sliderLabel = new Label(label);
+
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            volumeSetter.setVolume(newValue.doubleValue() / 100.0);
+        });
+
+        return slider;
+    }
+
 
     private void updateOkButtonState(Client client, Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);

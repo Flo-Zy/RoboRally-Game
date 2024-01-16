@@ -7,6 +7,10 @@ import java.io.File;
 import java.util.*;
 
 public class SoundManager {
+    private static double uiSoundVolume = 0.5;
+    private static double eventSoundVolume = 0.5;
+    private static double generalSoundVolume = 0.5;
+    private static double masterVolume = 0.5;
     private static boolean isMuted = false;
     private static boolean isEventSoundPlaying = false;
     private static MediaPlayer backgroundMediaPlayer;
@@ -103,4 +107,38 @@ public class SoundManager {
             }
         }
     }
+
+    public static void setUISoundVolume(double volume) {
+        uiSoundVolume = volume;
+        updateAllMediaPlayersVolume();
+    }
+
+    public static void setEventSoundVolume(double volume) {
+        eventSoundVolume = volume;
+        updateAllMediaPlayersVolume();
+    }
+
+    public static void setGeneralSoundVolume(double volume) {
+        generalSoundVolume = volume;
+        updateAllMediaPlayersVolume();
+    }
+
+    public static void setMasterVolume(double volume) {
+        masterVolume = volume;
+        updateAllMediaPlayersVolume();
+    }
+
+    private static void updateAllMediaPlayersVolume() {
+        for (MediaPlayer mediaPlayer : allMediaPlayers) {
+            if (mediaPlayer != null) {
+                mediaPlayer.setVolume(uiSoundVolume * masterVolume);
+            }
+        }
+    }
+
+    @FunctionalInterface
+    interface VolumeSetter {
+        void setVolume(double volume);
+    }
 }
+
