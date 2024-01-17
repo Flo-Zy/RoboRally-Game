@@ -281,6 +281,7 @@ public class ClientController {
             }
         });
 
+
         Optional<Pair<String, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(usernameRobotPair -> {
