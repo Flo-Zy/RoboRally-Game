@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -15,17 +16,17 @@
 
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="935.0" VBox.vgrow="NEVER">
-      <VBox>
+      <VBox prefHeight="800.0" prefWidth="680.0">
          <children>
               <!-- Linke HBox -->
-              <HBox alignment="CENTER" prefHeight="800.0" prefWidth="680.0" spacing="10">
+              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <HBox.margin>
-                        <Insets bottom="190.0" />
+                        <Insets />
                      </HBox.margin>
                   </Button>
             
@@ -43,6 +44,71 @@
                     </VBox>
                </children>
             </HBox>
+            <VBox prefHeight="300.0" prefWidth="664.0">
+               <children>
+                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0">
+                     <children>
+                        <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="665.0" prefHeight="100.0" prefWidth="665.0" VBox.vgrow="NEVER" />
+                  <HBox prefHeight="100.0" prefWidth="650.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="60.0">
+                           <HBox.margin>
+                              <Insets left="20.0" right="60.0" />
+                           </HBox.margin>
+                           <children>
+                              <ImageView fx:id="discardPile" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@/boardElementsPNGs/defaultCard.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="totalRegister" layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
+                           <children>
+                              <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                           <HBox.margin>
+                              <Insets right="60.0" />
+                           </HBox.margin>
+                        </HBox>
+                        <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
+                           <children>
+                              <ImageView fx:id="programmingDeck" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@/boardElementsPNGs/flippedCard.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
       </VBox>
       <AnchorPane prefHeight="800.0" prefWidth="272.0" HBox.hgrow="NEVER">
@@ -85,7 +151,7 @@
                           </VBox>
                       </HBox>
                       <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
-                      <VBox prefWidth="220.0" VBox.vgrow="NEVER">
+                      <VBox prefHeight="286.0" prefWidth="271.0" VBox.vgrow="NEVER">
                           <!-- HBox für Textfield und VisibilityButton -->
                           <HBox VBox.vgrow="NEVER">
                               <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="SOMETIMES">
@@ -122,43 +188,38 @@
                           </HBox>
                           <VBox>
                               <children>
-                                  <HBox>
-                                      <VBox prefHeight="124.0" prefWidth="271.0">
-                                          <children>
-                                              <!-- Create sliders for sound categories and master volume -->
-                                              <VBox styleClass="vbox-label">
-                                                  <children>
-                                                      <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
-                                                      <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox>
-                                                  <children>
-                                                      <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
-                                                      <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox>
-                                                  <children>
-                                                      <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
-                                                      <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                                  </children>
-                                              </VBox>
-                                              <VBox>
-                                                  <children>
-                                                      <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
-                                                      <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                                  </children>
-                                              </VBox>
-                                          </children>
-                                 <padding>
-                                    <Insets left="15.0" />
-                                 </padding>
-                                      </VBox>
-                              <opaqueInsets>
+                                   <VBox prefHeight="124.0" prefWidth="271.0">
+                                       <children>
+                                           <!-- Create sliders for sound categories and master volume -->
+                                           <VBox styleClass="vbox-label">
+                                               <children>
+                                                   <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
+                                                   <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
+                                               </children>
+                                           </VBox>
+                                           <VBox>
+                                               <children>
+                                                   <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
+                                                   <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                               </children>
+                                           </VBox>
+                                           <VBox>
+                                               <children>
+                                                   <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
+                                                   <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                               </children>
+                                           </VBox>
+                                           <VBox>
+                                               <children>
+                                                   <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
+                                                   <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                               </children>
+                                           </VBox>
+                                       </children>
+                              <padding>
                                  <Insets left="15.0" />
-                              </opaqueInsets>
-                                  </HBox>
+                              </padding>
+                                   </VBox>
                               </children>
                         <opaqueInsets>
                            <Insets />
