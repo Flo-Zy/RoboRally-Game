@@ -322,7 +322,7 @@ public class ClientController {
 
             generalSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 double volume = newValue.doubleValue() / 100.0;
-                SoundManager.setGeneralSoundVolume(volume);
+                SoundManager.setMusicVolume(volume);
             });
 
             masterVolumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -1149,7 +1149,7 @@ public class ClientController {
     }
 
     public void playSound(String soundName){
-        SoundManager.playSound(soundName);
+        SoundManager.playMusic(soundName);
     }
 
 }

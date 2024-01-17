@@ -273,6 +273,7 @@ public class Client extends Application {
                             }
 
                             controller.playEventSound("GameStartAnnouncement");
+                            controller.playSound("sountrack");
 
 
                             // weitere Maps
