@@ -117,7 +117,7 @@
               <VBox prefHeight="800.0" prefWidth="271.0">
                   <!-- Verankerte rechte TextArea -->
                   <VBox VBox.vgrow="ALWAYS">
-                      <HBox prefHeight="515.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                      <HBox prefHeight="480.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                           <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="272.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                         <HBox VBox.vgrow="NEVER">
                            <children>
@@ -139,7 +139,7 @@
                            </VBox.margin>
                         </HBox>
 
-                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="422.0" prefWidth="241.0" VBox.vgrow="NEVER">
+                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="380.0" prefWidth="241.0" VBox.vgrow="NEVER">
                                   <VBox.margin>
                                       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                   </VBox.margin>
@@ -151,7 +151,7 @@
                           </VBox>
                       </HBox>
                       <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
-                      <VBox prefHeight="286.0" prefWidth="271.0" VBox.vgrow="NEVER">
+                      <VBox prefHeight="321.0" prefWidth="271.0" VBox.vgrow="NEVER">
                           <!-- HBox für Textfield und VisibilityButton -->
                           <HBox VBox.vgrow="NEVER">
                               <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="SOMETIMES">
@@ -186,40 +186,59 @@
                            </AnchorPane>
                         </children>
                           </HBox>
-                          <VBox>
-                              <children>
-                                   <VBox prefHeight="124.0" prefWidth="271.0">
-                                       <children>
-                                           <!-- Create sliders for sound categories and master volume -->
-                                           <VBox styleClass="vbox-label">
-                                               <children>
-                                                   <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
-                                                   <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
-                                               </children>
-                                           </VBox>
-                                           <VBox>
-                                               <children>
-                                                   <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
-                                                   <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                               </children>
-                                           </VBox>
-                                           <VBox>
-                                               <children>
-                                                   <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
-                                                   <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                               </children>
-                                           </VBox>
-                                           <VBox>
-                                               <children>
-                                                   <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
-                                                   <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                               </children>
-                                           </VBox>
-                                       </children>
-                              <padding>
+                     <HBox prefHeight="85.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                        <children>
+                           <ImageView fx:id="checkPointImageView" fitHeight="70.0" fitWidth="70.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                              <HBox.margin>
                                  <Insets left="15.0" />
-                              </padding>
-                                   </VBox>
+                              </HBox.margin>
+                           </ImageView>
+                           <ImageView fx:id="energyCubesImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                              <HBox.margin>
+                                 <Insets left="15.0" />
+                              </HBox.margin>
+                           </ImageView>
+                        </children>
+                     </HBox>
+                          <VBox VBox.vgrow="NEVER">
+                              <children>
+                                     <!-- Create sliders for sound categories and master volume -->
+                                     <VBox styleClass="vbox-label">
+                                         <children>
+                                             <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
+                                             <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
+                                         </children>
+                              <VBox.margin>
+                                 <Insets left="15.0" right="15.0" />
+                              </VBox.margin>
+                                     </VBox>
+                                     <VBox>
+                                         <children>
+                                             <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
+                                             <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                         </children>
+                              <VBox.margin>
+                                 <Insets left="15.0" right="15.0" />
+                              </VBox.margin>
+                                     </VBox>
+                                     <VBox>
+                                         <children>
+                                             <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
+                                             <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                         </children>
+                              <VBox.margin>
+                                 <Insets left="15.0" right="15.0" />
+                              </VBox.margin>
+                                     </VBox>
+                                     <VBox>
+                                         <children>
+                                             <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
+                                             <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                         </children>
+                              <VBox.margin>
+                                 <Insets left="15.0" right="15.0" />
+                              </VBox.margin>
+                                     </VBox>
                               </children>
                         <opaqueInsets>
                            <Insets />
