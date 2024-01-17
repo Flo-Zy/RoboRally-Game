@@ -41,50 +41,32 @@ public class AIBestMove {
         this.clientHand = hand;
         xRobot = robot.getX();
         yRobot = robot.getY();
+        xFuture = xRobot;
+        yFuture = yRobot;
         orientation = robot.getOrientation();
+        futureOrientation = orientation;
+
         setCheckpoint();
 
         int filledRegisters = 0;
         boolean finished = false;
         while(!finished) {
             int oldRegister = filledRegisters;
-            //checkMoveCheckpointBeforeConveyorBelt();
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
+            checkMoveCheckpointBeforeConveyorBelt();
+
             standingOnConveyorInOppositeDirection();
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
+
             if(!turnFlag) {
                 turnInCheckpointDirection();
-                System.out.println("X: "+ xRobot);
-                System.out.println("Y: "+ yRobot);
-                System.out.println("XFUTURE : "+ xFuture);
-                System.out.println("YFUTURE : "+ yFuture);
             }
             checkWall();
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
             move();
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
             turnFlag = false;
             filledRegisters = register.size();
             if(cardCounter == 5){
                 finished = true;
             }else if(oldRegister == filledRegisters){
                 finished = moveAndCheckAgain();
-                System.out.println("X: "+ xRobot);
-                System.out.println("Y: "+ yRobot);
-                System.out.println("XFUTURE : "+ xFuture);
-                System.out.println("YFUTURE : "+ yFuture);
             }
         }
 
@@ -407,7 +389,8 @@ public class AIBestMove {
                                     checkGreenConveyorBelts(result);
                                 }
                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
+                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    turnsWithGears();
                                     bestDistance = distanceFuture;
                                     bestCard = "MoveI";
                                     bestX = xFuture;
@@ -429,7 +412,8 @@ public class AIBestMove {
                                     checkGreenConveyorBelts(result);
                                 }
                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
+                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    turnsWithGears();
                                     bestDistance = distanceFuture;
                                     bestCard = "MoveI";
                                     bestX = xFuture;
@@ -451,7 +435,8 @@ public class AIBestMove {
                                     checkGreenConveyorBelts(result);
                                 }
                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
+                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    turnsWithGears();
                                     bestDistance = distanceFuture;
                                     bestCard = "MoveI";
                                     bestX = xFuture;
@@ -473,7 +458,8 @@ public class AIBestMove {
                                     checkGreenConveyorBelts(result);
                                 }
                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                if (distanceFuture < bestDistance) {
+                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                    turnsWithGears();
                                     bestDistance = distanceFuture;
                                     bestCard = "MoveI";
                                     bestX = xFuture;
@@ -507,7 +493,8 @@ public class AIBestMove {
                                             checkGreenConveyorBelts(result);
                                         }
                                         distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
+                                        if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            turnsWithGears();
                                             bestDistance = distanceFuture;
                                             bestCard = "MoveII";
                                             bestX = xFuture;
@@ -523,7 +510,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveII";
                                         bestX = xFuture;
@@ -550,7 +538,8 @@ public class AIBestMove {
                                             checkGreenConveyorBelts(result);
                                         }
                                         distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
+                                        if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            turnsWithGears();
                                             bestDistance = distanceFuture;
                                             bestCard = "MoveII";
                                             bestX = xFuture;
@@ -566,7 +555,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveII";
                                         bestX = xFuture;
@@ -593,7 +583,8 @@ public class AIBestMove {
                                             checkGreenConveyorBelts(result);
                                         }
                                         distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
+                                        if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            turnsWithGears();
                                             bestDistance = distanceFuture;
                                             bestCard = "MoveII";
                                             bestX = xFuture;
@@ -609,7 +600,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveII";
                                         bestX = xFuture;
@@ -636,7 +628,8 @@ public class AIBestMove {
                                             checkGreenConveyorBelts(result);
                                         }
                                         distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                        if (distanceFuture < bestDistance) {
+                                        if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                            turnsWithGears();
                                             bestDistance = distanceFuture;
                                             bestCard = "MoveII";
                                             bestX = xFuture;
@@ -652,7 +645,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveII";
                                         bestX = xFuture;
@@ -689,7 +683,8 @@ public class AIBestMove {
                                                     checkGreenConveyorBelts(result);
                                                 }
                                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                                if (distanceFuture < bestDistance) {
+                                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                    turnsWithGears();
                                                     bestDistance = distanceFuture;
                                                     bestCard = "MoveIII";
                                                     bestX = xFuture;
@@ -705,7 +700,8 @@ public class AIBestMove {
                                                 checkGreenConveyorBelts(result);
                                             }
                                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                            if (distanceFuture < bestDistance) {
+                                            if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                turnsWithGears();
                                                 bestDistance = distanceFuture;
                                                 bestCard = "MoveIII";
                                                 bestX = xFuture;
@@ -722,7 +718,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveIII";
                                         bestX = xFuture;
@@ -751,7 +748,8 @@ public class AIBestMove {
                                                     checkGreenConveyorBelts(result);
                                                 }
                                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                                if (distanceFuture < bestDistance) {
+                                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                    turnsWithGears();
                                                     bestDistance = distanceFuture;
                                                     bestCard = "MoveIII";
                                                     bestX = xFuture;
@@ -767,7 +765,8 @@ public class AIBestMove {
                                                 checkGreenConveyorBelts(result);
                                             }
                                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                            if (distanceFuture < bestDistance) {
+                                            if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                turnsWithGears();
                                                 bestDistance = distanceFuture;
                                                 bestCard = "MoveIII";
                                                 bestX = xFuture;
@@ -784,7 +783,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveIII";
                                         bestX = xFuture;
@@ -813,7 +813,8 @@ public class AIBestMove {
                                                     checkGreenConveyorBelts(result);
                                                 }
                                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                                if (distanceFuture < bestDistance) {
+                                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                    turnsWithGears();
                                                     bestDistance = distanceFuture;
                                                     bestCard = "MoveIII";
                                                     bestX = xFuture;
@@ -829,7 +830,8 @@ public class AIBestMove {
                                                 checkGreenConveyorBelts(result);
                                             }
                                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                            if (distanceFuture < bestDistance) {
+                                            if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                turnsWithGears();
                                                 bestDistance = distanceFuture;
                                                 bestCard = "MoveIII";
                                                 bestX = xFuture;
@@ -846,7 +848,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveIII";
                                         bestX = xFuture;
@@ -875,7 +878,8 @@ public class AIBestMove {
                                                     checkGreenConveyorBelts(result);
                                                 }
                                                 distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                                if (distanceFuture < bestDistance) {
+                                                if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                    turnsWithGears();
                                                     bestDistance = distanceFuture;
                                                     bestCard = "MoveIII";
                                                     bestX = xFuture;
@@ -891,7 +895,8 @@ public class AIBestMove {
                                                 checkGreenConveyorBelts(result);
                                             }
                                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                            if (distanceFuture < bestDistance) {
+                                            if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                                turnsWithGears();
                                                 bestDistance = distanceFuture;
                                                 bestCard = "MoveIII";
                                                 bestX = xFuture;
@@ -908,7 +913,8 @@ public class AIBestMove {
                                         checkGreenConveyorBelts(result);
                                     }
                                     distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                                    if (distanceFuture < bestDistance) {
+                                    if (distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                                        turnsWithGears();
                                         bestDistance = distanceFuture;
                                         bestCard = "MoveIII";
                                         bestX = xFuture;
@@ -936,7 +942,8 @@ public class AIBestMove {
                                 checkGreenConveyorBelts(result);
                             }
                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
+                            if(distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                                turnsWithGears();
                                 bestDistance = distanceFuture;
                                 bestCard = "BackUp";
                                 bestX = xFuture;
@@ -955,7 +962,8 @@ public class AIBestMove {
                                 checkGreenConveyorBelts(result);
                             }
                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
+                            if(distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                                turnsWithGears();
                                 bestDistance = distanceFuture;
                                 bestCard = "BackUp";
                                 bestX = xFuture;
@@ -974,7 +982,8 @@ public class AIBestMove {
                                 checkGreenConveyorBelts(result);
                             }
                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
+                            if(distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                                turnsWithGears();
                                 bestDistance = distanceFuture;
                                 bestCard = "BackUp";
                                 bestX = xFuture;
@@ -993,7 +1002,8 @@ public class AIBestMove {
                                 checkGreenConveyorBelts(result);
                             }
                             distanceFuture = calculateManhattanDistance(xFuture, yFuture);
-                            if(distanceFuture < bestDistance){
+                            if(distanceFuture < bestDistance && !(checkRobotField(xFuture, yFuture).contains("Pit"))){
+                                turnsWithGears();
                                 bestDistance = distanceFuture;
                                 bestCard = "BackUp";
                                 bestX = xFuture;
@@ -1924,7 +1934,7 @@ public class AIBestMove {
                         }
                         break;
                 }
-                if(safe && !wall) {
+                if(safe && !wall && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                     if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2")){
                         checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
                     }else if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 1")){
@@ -1932,11 +1942,15 @@ public class AIBestMove {
                     }else if(checkRobotField(xFuture, yFuture).contains("Gear")){
                         turnsWithGears();
                     }
-                    cardCounter++;
-                    xRobot = xFuture;
-                    yRobot = yFuture;
-                    register.add("MoveI");
-                    clientHand.remove("MoveI");
+                    if(!(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                        cardCounter++;
+                        xRobot = xFuture;
+                        yRobot = yFuture;
+                        register.add("MoveI");
+                        clientHand.remove("MoveI");
+                    }else{
+                        return true;
+                    }
                     return false;
                 }else{
                     return true;
@@ -1962,7 +1976,7 @@ public class AIBestMove {
         }
         switch(direction){
             case "top":
-                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [bottom")){
+                if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2 [bottom")){
                     switch (orientation){
                         case "top":
                             for(String card : clientHand){
@@ -1971,17 +1985,6 @@ public class AIBestMove {
                                     register.add("TurnRight");
                                     clientHand.remove(card);
                                     checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
-                                    for(String card1 : clientHand){
-                                        if(card1.equals("MoveI")){
-                                            if(yFuture-1 >= 0) {
-                                                yFuture--;
-                                                cardCounter++;
-                                                register.add("MoveI");
-                                                clientHand.remove(card1);
-                                            }
-                                            break;
-                                        }
-                                    }
                                     orientation = futureOrientation;
                                     xRobot = xFuture;
                                     yRobot = yFuture;
@@ -1993,7 +1996,7 @@ public class AIBestMove {
                         case "right":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(xFuture+1 <= 12) {
+                                    if(xFuture+1 <= 12 && checkRobotField(xFuture, yFuture).contains("Wall [right")) {
                                         xFuture++;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2013,17 +2016,6 @@ public class AIBestMove {
                                     register.add("TurnLeft");
                                     clientHand.remove(card);
                                     checkBlueConveyorBelts(checkRobotField(xFuture, yFuture));
-                                    for(String card1 : clientHand){
-                                        if(card1.equals("MoveI")){
-                                            if(yFuture+1 <= 9) {
-                                                yFuture++;
-                                                cardCounter++;
-                                                register.add("MoveI");
-                                                clientHand.remove(card1);
-                                            }
-                                            break;
-                                        }
-                                    }
                                     orientation = futureOrientation;
                                     xRobot = xFuture;
                                     yRobot = yFuture;
@@ -2035,7 +2027,7 @@ public class AIBestMove {
                         case "left":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(xFuture-1 >= 0) {
+                                    if(xFuture-1 >= 0 && checkRobotField(xFuture, yFuture).contains("Wall [left")) {
                                         xFuture--;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2057,7 +2049,7 @@ public class AIBestMove {
                         case "top":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(yFuture-1 >= 0) {
+                                    if(yFuture-1 >= 0 && checkRobotField(xFuture, yFuture).contains("Wall [top")) {
                                         yFuture--;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2088,7 +2080,7 @@ public class AIBestMove {
                         case "bottom":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(yFuture+1 <= 9) {
+                                    if(yFuture+1 <= 9 && checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
                                         yFuture++;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2140,7 +2132,7 @@ public class AIBestMove {
                         case "right":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(xFuture+1 <= 12) {
+                                    if(xFuture+1 <= 12 && checkRobotField(xFuture, yFuture).contains("Wall [right")) {
                                         xFuture++;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2171,7 +2163,7 @@ public class AIBestMove {
                         case "left":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(xFuture-1 >= 0) {
+                                    if(xFuture-1 >= 0 && checkRobotField(xFuture, yFuture).contains("Wall [left")) {
                                         xFuture--;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2193,7 +2185,7 @@ public class AIBestMove {
                         case "top":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(yFuture-1 >= 0) {
+                                    if(yFuture-1 >= 0 && checkRobotField(xFuture, yFuture).contains("Wall [top")) {
                                         yFuture--;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2224,7 +2216,7 @@ public class AIBestMove {
                         case "bottom":
                             for(String card1 : clientHand){
                                 if(card1.equals("MoveI")){
-                                    if(yFuture+1 <= 9) {
+                                    if(yFuture+1 <= 9 && checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
                                         yFuture++;
                                         cardCounter++;
                                         register.add("MoveI");
@@ -2275,13 +2267,15 @@ public class AIBestMove {
             case "top":
                 for(String card : clientHand){
                     if(card.equals("MoveI")){
-                        yFuture--;
-                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
-                            cardCounter++;
-                            register.add("MoveI");
-                            clientHand.remove(card);
-                            yRobot = yFuture;
-                            break;
+                        if(checkRobotField(xFuture,yFuture).contains("Wall [top")) {
+                            yFuture--;
+                            if (yFuture == yCheckpoint && xFuture == xCheckpoint) {
+                                cardCounter++;
+                                register.add("MoveI");
+                                clientHand.remove(card);
+                                yRobot = yFuture;
+                                break;
+                            }
                         }
                     }
                 }
@@ -2289,13 +2283,15 @@ public class AIBestMove {
             case "right":
                 for(String card : clientHand){
                     if(card.equals("MoveI")){
-                        xFuture++;
-                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
-                            cardCounter++;
-                            register.add("MoveI");
-                            clientHand.remove(card);
-                            xRobot = xFuture;
-                            break;
+                        if(checkRobotField(xFuture,yFuture).contains("Wall [right")) {
+                            xFuture++;
+                            if (yFuture == yCheckpoint && xFuture == xCheckpoint) {
+                                cardCounter++;
+                                register.add("MoveI");
+                                clientHand.remove(card);
+                                xRobot = xFuture;
+                                break;
+                            }
                         }
                     }
                 }
@@ -2303,13 +2299,15 @@ public class AIBestMove {
             case "bottom":
                 for(String card : clientHand){
                     if(card.equals("MoveI")){
-                        yFuture++;
-                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
-                            cardCounter++;
-                            register.add("MoveI");
-                            clientHand.remove(card);
-                            yRobot = yFuture;
-                            break;
+                        if(checkRobotField(xFuture,yFuture).contains("Wall [bottom")) {
+                            yFuture++;
+                            if (yFuture == yCheckpoint && xFuture == xCheckpoint) {
+                                cardCounter++;
+                                register.add("MoveI");
+                                clientHand.remove(card);
+                                yRobot = yFuture;
+                                break;
+                            }
                         }
                     }
                 }
