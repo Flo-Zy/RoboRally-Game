@@ -1885,37 +1885,42 @@ public class AIBestMove {
                     case "top":
                         if(checkRobotField(xFuture, yFuture).contains("Wall [top")){
                             wall = true;
+                        }else{
+                            yFuture--;
+                            if(yFuture < 0){
+                                safe = false;
+                            }
                         }
-                        yFuture--;
-                        if(yFuture < 0){
-                            safe = false;
-                        }
+
                         break;
                     case "right":
                         if(checkRobotField(xFuture, yFuture).contains("Wall [right")){
                             wall = true;
-                        }
-                        xFuture++;
-                        if(xFuture > 12){
-                            safe = false;
+                        }else{
+                            xFuture++;
+                            if(xFuture > 12){
+                                safe = false;
+                            }
                         }
                         break;
                     case "bottom":
                         if(checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
                             wall = true;
-                        }
-                        yFuture++;
-                        if(yFuture > 9){
-                            safe = false;
+                        }else{
+                            yFuture++;
+                            if(yFuture > 9){
+                                safe = false;
+                            }
                         }
                         break;
                     case "left":
                         if(checkRobotField(xFuture, yFuture).contains("Wall [left")){
                             wall = true;
-                        }
-                        xFuture--;
-                        if(xFuture < 0){
-                            safe = false;
+                        }else{
+                            xFuture--;
+                            if(xFuture < 0){
+                                safe = false;
+                            }
                         }
                         break;
                 }
