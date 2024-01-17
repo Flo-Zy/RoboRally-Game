@@ -3,6 +3,7 @@ package SEPee.server.model.gameBoard;
 import SEPee.server.model.field.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LostBearings extends GameBoard {
@@ -678,18 +679,25 @@ public class LostBearings extends GameBoard {
 
 
     public List<Field> getFieldsAt(int x, int y) {
-        if (x < 0 || x >= this.getGameBoard().size()) {
-            throw new IllegalArgumentException("X-coordinate out of bounds");
-        }
+        try {
+            if (x < 0 || x >= this.getGameBoard().size()) {
+                throw new IllegalArgumentException("X-coordinate out of bounds");
+            }
 
-        List<List<Field>> column = this.getGameBoard().get(x);
-        if (y < 0 || y >= column.size()) {
-            throw new IllegalArgumentException("Y-coordinate out of bounds");
-        }
+            List<List<Field>> column = this.getGameBoard().get(x);
+            if (y < 0 || y >= column.size()) {
+                throw new IllegalArgumentException("Y-coordinate out of bounds");
+            }
 
-        List<Field> fieldsAtXY = column.get(y);
-        return fieldsAtXY;
+            List<Field> fieldsAtXY = column.get(y);
+            return fieldsAtXY;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Robot out of bounds. Handling the exception...");
+            //ontinue with the rest of code
+            return Collections.emptyList();
+        }
     }
+
 
     public int getRebootX(){
         return 0;

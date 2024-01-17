@@ -7,9 +7,8 @@ import SEPee.client.viewModel.MapController.ExtraCrispyController;
 import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
-//auslagern
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.Spam;
@@ -17,8 +16,6 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
-import SEPee.server.model.gameBoard.ExtraCrispy;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -33,18 +30,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import java.util.Iterator;
-
-
-import javafx.util.Duration;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Client extends Application {
@@ -73,6 +60,9 @@ public class Client extends Application {
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
+    public interface TakenFiguresChangeListener {
+        void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures);
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -159,6 +149,7 @@ public class Client extends Application {
                                     PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                     String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                     writer.println(serializedPlayerValues);
+                                    controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
                                     primaryStage.show();
                                 }
                             });
@@ -192,6 +183,8 @@ public class Client extends Application {
                                     getTakenFigures().add(player.getFigure());
                                 }
                             }
+                            updateTakenFigures();
+                            notifyTakenFiguresChangeListeners(); //probably redundant bcs of update taken figs
 
                             System.out.println("Player added");
                             synchronized (playerListClient) {
@@ -213,6 +206,9 @@ public class Client extends Application {
                                     }
                                 }
                             }
+
+                            controller.playEventSound("Ready");
+
                             break;
                         case "SelectMap":
                             System.out.println("SelectMap von " + controller.getName());
@@ -278,6 +274,7 @@ public class Client extends Application {
                             }
 
                             controller.playEventSound("GameStartAnnouncement");
+                            controller.playSound("sountrack");
 
 
                             // weitere Maps
@@ -344,13 +341,15 @@ public class Client extends Application {
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
-                                controller.initRegister();
+                                controller.initializeRegister();
                                 System.out.println(" Programmierungsphase");
                                 controller.playEventSound("ProgrammingPhase");
                             }
                             if (controller.getCurrentPhase() == 3){
                                 System.out.println(" Aktivierungsphase");
+                                controller.playEventSound("ActivationPhase");
                             }
+
                             break;
                         case "CurrentPlayer":
                             System.out.println("Current Player");
@@ -489,8 +488,8 @@ public class Client extends Application {
                             }
                                 controller.setClientHand(drawPile);
                                 // initialisiere die 9 Karten von YourCards in Hand des players
-                                controller.initDrawPile();
-                                controller.initRegister();
+                                controller.initializeDrawPile();
+                                controller.initializeRegister();
 
                             break;
 
@@ -522,7 +521,7 @@ public class Client extends Application {
                             System.out.println("Timer Ended");
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
                             controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
-                            controller.mapController.setCounter1(5);
+                            controller.setCounter1(5);
                             break;
                         case "CardsYouGotNow":
                             System.out.println("Cards You Got Now");
@@ -686,6 +685,7 @@ public class Client extends Application {
 
                             } else if (animationType.equals("WallShooting")){
                                 controller.playUISound("Map/BoardLaser");
+                                controller.playEventSound("hitByLaser");
 
                             } else if (animationType.equals("EnergySpace")){
                                 //handle in MsgType
@@ -698,8 +698,10 @@ public class Client extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
+                            controller.playEventSound("Reboot");
                             if (rebootingClientId == controller.getId()){
                                 controller.playUISound("Map/reBoot");
+                                controller.playEventSound("YouRebooted");
                             }
 
                             // direction selection dialog fur rebootingClientId
@@ -765,7 +767,10 @@ public class Client extends Application {
                                     if (player.getId() == winnerId) {
                                         System.out.println("winner id ist " + winnerId);
                                         controller.appendToChatArea(player.getName() + " has won this game!!");
-                                        System.out.println("ausgabe hier");
+                                        controller.playEventSound("YouWon");
+
+                                    } else if (player.getId() != winnerId){
+                                        controller.playEventSound("YouLost");
                                     }
                                 }
                             }
@@ -792,4 +797,30 @@ public class Client extends Application {
     public static int getServerPort() {
         return SERVER_PORT;
     }
+
+    private final List<TakenFiguresChangeListener> takenFiguresChangeListeners = new ArrayList<>();
+
+    public void addTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
+        takenFiguresChangeListeners.add(listener);
+    }
+
+    public void removeTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
+        takenFiguresChangeListeners.remove(listener);
+    }
+
+    private void notifyTakenFiguresChangeListeners() {
+        for (TakenFiguresChangeListener listener : takenFiguresChangeListeners) {
+            listener.onTakenFiguresChanged(new ArrayList<>(takenFigures));
+        }
+    }
+
+    private void updateTakenFigures() {
+        synchronized (playerListClient) {
+            for (Player player : playerListClient) {
+                getTakenFigures().add(player.getFigure());
+            }
+        }
+        notifyTakenFiguresChangeListeners();
+    }
+
 }

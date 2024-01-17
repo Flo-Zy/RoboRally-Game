@@ -3,6 +3,7 @@ package SEPee.client.viewModel.MapController;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.ClientController;
+import SEPee.client.viewModel.SoundManager;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.serialisierung.messageType.TimerStarted;
@@ -29,6 +30,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 
@@ -80,8 +83,6 @@ public class DizzyHighwayController extends MapController {
     @FXML
     public HBox totalHand;
     @FXML
-    public ImageView checkPointImageView;
-    @FXML
     public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
@@ -96,27 +97,22 @@ public class DizzyHighwayController extends MapController {
     private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
     private Map<Integer, List<Card>> clientHandMap;
     private Map<Integer, Integer> indexToCounterMap;
-    private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
 
-    public void setCounter1(int counter) {
+    /* public void setCounter1(int counter) {
         counter1.set(counter);
-    }
+    } */
 
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     public void initAI(ClientAI clientAI, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        clientHandMap = new HashMap<>();
-        indexToCounterMap = new HashMap<>();
     }
 
     public void avatarAppear(Player player, int x, int y) {
@@ -272,16 +268,10 @@ public class DizzyHighwayController extends MapController {
     }
 
     private void processMovement(MoveInstruction instruction) {
-        System.out.println("Instruction: " + instruction);
         Player player = getPlayerById(instruction.clientId);
-        System.out.println("player: " + player);
-        System.out.println("playerRobotMap: " + playerRobotMap);
-        Robot robot = playerRobotMap.get(player);
-        System.out.println("robot: " + robot);
-        System.out.println("robotImageViewMap: " + robotImageViewMap);
-        ImageView imageView = robotImageViewMap.get(robot);
-        System.out.println("imageView: " + imageView);
 
+        Robot robot = playerRobotMap.get(player);
+        ImageView imageView = robotImageViewMap.get(robot);
 
         int currentX = GridPane.getColumnIndex(imageView);
         int currentY = GridPane.getRowIndex(imageView);
@@ -316,7 +306,7 @@ public class DizzyHighwayController extends MapController {
         return null;
     }
 
-    public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
+    /*public void initializeDrawPile(int clientId, ArrayList<Card> clientHand) {
 
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (clientHandMap.containsKey(clientId)) {
@@ -368,9 +358,9 @@ public class DizzyHighwayController extends MapController {
                 }
             }
         }
-    }
+    }*/
 
-    public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
+    /*public void initializeRegister(int clientId, ArrayList<Card> clientHand) {
         zahlen.clear();
         counter1.set(0);
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
@@ -405,6 +395,8 @@ public class DizzyHighwayController extends MapController {
                                 // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
                                 if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
+                                    SoundManager.playUISound("CardChosen");
+
                                     Image cardImage = new Image(drawPileClient.get(index).getImageUrl());
                                     registerImageView.setImage(cardImage);
 
@@ -452,6 +444,8 @@ public class DizzyHighwayController extends MapController {
                                     counter1.decrementAndGet();
 
                                     if (indexNew < 9) {
+                                        SoundManager.playUISound("card put back");
+
                                         ImageView handImageView = (ImageView) totalHand.getChildren().get(indexNew);
                                         handImageView.setVisible(true);
 
@@ -474,9 +468,9 @@ public class DizzyHighwayController extends MapController {
                 }
             }
         }
-    }
+    }*/
 
-    public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand) {
+    /*public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand) {
         // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (clientHandMap.containsKey(clientId)) {
             clientHandMap.remove(clientId);
@@ -509,9 +503,9 @@ public class DizzyHighwayController extends MapController {
         TimerStarted timerStarted = new TimerStarted();
         String serializedTimerStarted = Serialisierer.serialize(timerStarted);
         ClientAI.getWriter().println(serializedTimerStarted);
-    }
+    }*/
 
-    private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
+    /*private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
         for (int i = 0; i < 5; i++) {
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
             if (registerImageView.getImage() == null) {
@@ -519,9 +513,9 @@ public class DizzyHighwayController extends MapController {
             }
         }
         return 5;
-    }
+    }*/
 
-    public void setRegisterVisibilityFalse() {
+    /*public void setRegisterVisibilityFalse() {
         // Prüfe, ob die HBox totalRegister gefunden wurde
         HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
 
@@ -533,9 +527,9 @@ public class DizzyHighwayController extends MapController {
                 }
             }
         }
-    }
+    }*/
 
-    private int mapRegisterIndexToHandIndex(int registerIndex) {
+    /*private int mapRegisterIndexToHandIndex(int registerIndex) {
         int storedInt;
         for (int i = 0; i < zahlen.size(); i++) {
             if (zahlen.get(i).register == registerIndex) {
@@ -545,12 +539,12 @@ public class DizzyHighwayController extends MapController {
             }
         }
         return -1;
-    }
+    }*/
 
-    public void fillEmptyRegister(ArrayList<Card> nextCards){
+    /*public void fillEmptyRegister(ArrayList<Card> nextCards) {
         int index = 0;
         int emptyIndex;
-        while(index < nextCards.size()){
+        while (index < nextCards.size()) {
             emptyIndex = findSmallestEmptyRegisterIndex(totalRegister);
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(emptyIndex);
 
@@ -561,12 +555,7 @@ public class DizzyHighwayController extends MapController {
             registerImageView.setManaged(true);
             index++;
         }
-    }
-
-    public void setCheckPointImage(String imageUrl) {
-        Image image = new Image(imageUrl);
-        checkPointImageView.setImage(image);
-    }
+    }*/
 }
 
 

@@ -4,6 +4,22 @@
     -fx-background-size: cover;
 }
 
+.dialog-pane {
+    -fx-min-width: 950;
+    -fx-min-height: 650;
+    -fx-max-width: 1200;
+    -fx-max-height: 750;
+}
+
+.grid-pane .intro-image {
+    -fx-vgap: 20px;
+}
+
+.grid-pane {
+    -fx-vgap: 60px;
+    -fx-hgap: 0px;
+}
+
 .username-text-field {
     -fx-prompt-text-fill: #2E2E2E;
     -fx-alignment: center;
@@ -14,21 +30,18 @@
     -fx-font-size: 16px;
 }
 
-.robo-rally-grid {
-    -fx-max-width: 469px;
-    -fx-max-height: 91px;
-    -fx-alignment: center;
-}
-
 .intro-image {
+    -fx-pref-width: 500;
+    -fx-pref-height: 500;
     -fx-preserve-ratio: true;
-    -fx-effect: dropshadow(three-pass-box, rgb(0, 0, 0), 10, 0, 0, 10);
+    -fx-effect: dropshadow(three-pass-box, rgb(0, 0, 0), 30, 0.3, 0, 10);
+    -fx-alignment: center;
 }
 
 .robot-selection-grid {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
-    -fx-effect: dropshadow(three-pass-box, rgba(10,10,10,12), 10, 0, 0, 10);
+    -fx-effect: dropshadow(three-pass-box, rgb(0, 0, 0), 30, 0.3, 0, 10);
 }
 
 .robot-image {
@@ -61,7 +74,6 @@
 
 .connect-button {
     -fx-prompt-text-fill: #2E2E2E;
-    -fx-alignment: center;
     -fx-font-weight: bold;
     -fx-pref-width: 200px;
     -fx-max-width: 300px;
