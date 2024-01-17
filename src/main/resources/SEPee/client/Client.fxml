@@ -1,111 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
-   
+<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="935.0" VBox.vgrow="NEVER">
-      <VBox prefHeight="800.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
+        <!-- Linke HBox -->
+        <HBox alignment="CENTER" prefHeight="800.0" prefWidth="680.0" spacing="10" HBox.hgrow="NEVER">
          <children>
-            <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Button fx:id="readyButton" alignment="CENTER" minWidth="100.0" onAction="#sendReady" text="BEREIT">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </Button>
-               
-                    <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
-                        <fx:include source="DizzyHighway.fxml" />
-                    </VBox>
-                    <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
-                        <fx:include source="ExtraCrispy.fxml" />
-                    </VBox>
-                    <VBox fx:id="LostBearingsMap" managed="false" visible="false">
-                        <fx:include source="LostBearings.fxml" />
-                    </VBox>
-                    <VBox fx:id="DeathTrapMap" managed="false" visible="false">
-                        <fx:include source="DeathTrap.fxml" />
-                    </VBox>
-               </children>
-            </HBox>
-            <VBox prefHeight="300.0" prefWidth="664.0">
-               <children>
-                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0">
-                     <children>
-                        <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </ImageView>
-                        <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="665.0" prefHeight="100.0" prefWidth="665.0" VBox.vgrow="NEVER" />
-                  <HBox prefHeight="100.0" prefWidth="650.0">
-                     <children>
-                        <HBox prefHeight="100.0" prefWidth="60.0">
-                           <HBox.margin>
-                              <Insets left="20.0" right="60.0" />
-                           </HBox.margin>
-                           <children>
-                              <ImageView fx:id="discardPile" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <HBox fx:id="totalRegister" layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                           <children>
-                              <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                           </children>
-                           <HBox.margin>
-                              <Insets right="60.0" />
-                           </HBox.margin>
-                        </HBox>
-                        <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                           <children>
-                              <ImageView fx:id="programmingDeck" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/boardElementsPNGs/flippedCard.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </HBox>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
+            <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="190.0" />
+               </HBox.margin>
+            </Button>
+         </children></HBox>
+
+        <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
+            <fx:include source="DizzyHighway.fxml" />
+        </VBox>
+        <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
+            <fx:include source="ExtraCrispy.fxml" />
+        </VBox>
+        <VBox fx:id="LostBearingsMap" managed="false" visible="false">
+            <fx:include source="LostBearings.fxml" />
+        </VBox>
+        <VBox fx:id="DeathTrapMap" managed="false" visible="false">
+            <fx:include source="DeathTrap.fxml" />
+        </VBox>
       <AnchorPane prefHeight="800.0" prefWidth="272.0" HBox.hgrow="NEVER">
          <children>
               <!-- Rechte HBox (Chatarea VBox) -->
@@ -116,13 +44,13 @@
                           <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="272.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                         <HBox VBox.vgrow="NEVER">
                            <children>
-   
+
                                     <ImageView fx:id="avatarImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets left="15.0" />
                                  </HBox.margin>
                                     </ImageView>
-   
+
                                     <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets left="10.0" right="15.0" />
@@ -133,8 +61,8 @@
                               <Insets top="15.0" />
                            </VBox.margin>
                         </HBox>
-   
-                              <TextArea fx:id="chatArea" editable="false" prefHeight="422.0" prefWidth="241.0" VBox.vgrow="NEVER">
+
+                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="422.0" prefWidth="241.0" VBox.vgrow="NEVER">
                                   <VBox.margin>
                                       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                   </VBox.margin>
@@ -142,11 +70,11 @@
                         <HBox.margin>
                            <Insets />
                         </HBox.margin>
-   
+
                           </VBox>
                       </HBox>
                       <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
-                      <VBox prefHeight="285.0" prefWidth="271.0" VBox.vgrow="NEVER">
+                      <VBox prefWidth="220.0" VBox.vgrow="NEVER">
                           <!-- HBox für Textfield und VisibilityButton -->
                           <HBox VBox.vgrow="NEVER">
                               <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="SOMETIMES">
@@ -181,20 +109,54 @@
                            </AnchorPane>
                         </children>
                           </HBox>
-                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                        <children>
-                           <ImageView fx:id="checkPointImageView" fitHeight="70.0" fitWidth="70.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
-                              <HBox.margin>
+                          <VBox>
+                              <children>
+                                  <HBox>
+                                      <VBox prefHeight="124.0" prefWidth="271.0">
+                                          <children>
+                                              <!-- Create sliders for sound categories and master volume -->
+                                              <VBox styleClass="vbox-label">
+                                                  <children>
+                                                      <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
+                                                      <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
+                                                  </children>
+                                              </VBox>
+                                              <VBox>
+                                                  <children>
+                                                      <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
+                                                      <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                                  </children>
+                                              </VBox>
+                                              <VBox>
+                                                  <children>
+                                                      <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
+                                                      <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                                  </children>
+                                              </VBox>
+                                              <VBox>
+                                                  <children>
+                                                      <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
+                                                      <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                                  </children>
+                                              </VBox>
+                                          </children>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                                      </VBox>
+                              <opaqueInsets>
                                  <Insets left="15.0" />
-                              </HBox.margin>
-                           </ImageView>
-                           <ImageView fx:id="energyCubesImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                              <HBox.margin>
-                                 <Insets left="15.0" />
-                              </HBox.margin>
-                           </ImageView>
-                        </children>
-                     </HBox>
+                              </opaqueInsets>
+                                  </HBox>
+                              </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                          </VBox>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+
                       </VBox>
                   </VBox>
               </VBox>

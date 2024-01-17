@@ -61,3 +61,48 @@
     -fx-text-fill: white; /* Example text color */
     /* Other button styles */
 }
+
+
+/* ChatArea VBox */
+#SEPee.client.viewModel.ClientController HBox > VBox {
+    -fx-spacing: 10;
+    -fx-pref-height: 645.0;
+    -fx-pref-width: 287.0;
+    -fx-background-color: #2e2e2e;
+}
+
+.slider {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 10px;
+}
+
+.slider .thumb {
+    -fx-background-color: #dde400;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0, 0, 0;
+    -fx-padding: 3px;
+}
+
+.slider .track {
+    -fx-background-color: #f0f0f0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.slider .filled-track {
+    -fx-background-color: #dde400;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.slider .thumb {
+    -fx-text-fill: #ffffff; /* White text color */
+}
+
+.slider .value {
+    -fx-text-fill: #ffffff; /* White text color for the value label */
+}
+
+.slider .axis .tick-mark .tick-label {
+    -fx-fill: #ffffff; /* White text color for tick labels */
+}
