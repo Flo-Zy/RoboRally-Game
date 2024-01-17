@@ -253,48 +253,20 @@ public class AIBestMove {
         yFuture = yRobot;
         futureOrientation = orientation;
 
-        System.out.println("INCHECKPOINTDIRECTION");
-        System.out.println("X: "+ xRobot);
-        System.out.println("Y: "+ yRobot);
-        System.out.println("XFUTURE : "+ xFuture);
-        System.out.println("YFUTURE : "+ yFuture);
-
         checkMoveCheckpointBeforeConveyorBelt();
 
-        xFuture = xRobot;
-        yFuture = yRobot;
-
-        System.out.println("INCHECKPOINTDIRECTION");
-        System.out.println("X: "+ xRobot);
-        System.out.println("Y: "+ yRobot);
-        System.out.println("XFUTURE : "+ xFuture);
-        System.out.println("YFUTURE : "+ yFuture);
+        xRobot = xFuture;
+        yRobot = yFuture;
+        orientation = futureOrientation;
 
         if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2")){
             checkBlueConveyorBelts(checkRobotField(xRobot, yRobot));
-            xFuture = xRobot;
-            yFuture = yRobot;
-            futureOrientation = orientation;
-            System.out.println("INCHECKPOINTDIRECTION");
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
+
         }else if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 1")){
             checkGreenConveyorBelts(checkRobotField(xRobot, yRobot));
-            xFuture = xRobot;
-            yFuture = yRobot;
-            futureOrientation = orientation;
-            System.out.println("INCHECKPOINTDIRECTION");
-            System.out.println("X: "+ xRobot);
-            System.out.println("Y: "+ yRobot);
-            System.out.println("XFUTURE : "+ xFuture);
-            System.out.println("YFUTURE : "+ yFuture);
+
         }else if(checkRobotField(xRobot, yRobot).contains("Gear")){
             turnsWithGears();
-            xFuture = xRobot;
-            yFuture = yRobot;
-            futureOrientation = orientation;
         }
 
         int xDifference = xCheckpoint - xFuture;
@@ -304,25 +276,14 @@ public class AIBestMove {
             System.out.println("1.CHECKPOINT CHECK");
             direction = (xDifference > 0) ? "right" : "left";
             System.out.println("CHECKPOINT TURN "+orientation);
-            System.out.println("2.CHECKPOINT DIRECTION: "+direction);
             if(!orientation.equals(direction)){
                 checkPointDirectionSwitchCase(direction);
-                System.out.println("INCHECKPOINTDIRECTION");
-                System.out.println("X: "+ xRobot);
-                System.out.println("Y: "+ yRobot);
-                System.out.println("XFUTURE : "+ xFuture);
-                System.out.println("YFUTURE : "+ yFuture);
                 if(!done){
-                    System.out.println("2.CHECKPOINT CHECK");
+                    System.out.println("2.CHECKPOINT CHECK" +direction);
                     direction = (yDifference < 0) ? "top" : "bottom";
                     System.out.println("2.CHECKPOINT DIRECTION: "+direction);
                     if(!orientation.equals(direction)){
                         checkPointDirectionSwitchCase(direction);
-                        System.out.println("INCHECKPOINTDIRECTION");
-                        System.out.println("X: "+ xRobot);
-                        System.out.println("Y: "+ yRobot);
-                        System.out.println("XFUTURE : "+ xFuture);
-                        System.out.println("YFUTURE : "+ yFuture);
                     }
                 }
             }
@@ -330,25 +291,14 @@ public class AIBestMove {
             System.out.println("1.CHECKPOINT CHECK");
             direction = (yDifference < 0) ? "top" : "bottom";
             System.out.println("CHECKPOINT TURN "+orientation);
-            System.out.println("2.CHECKPOINT DIRECTION: "+direction);
             if(!orientation.equals(direction)){
                 checkPointDirectionSwitchCase(direction);
-                System.out.println("INCHECKPOINTDIRECTION");
-                System.out.println("X: "+ xRobot);
-                System.out.println("Y: "+ yRobot);
-                System.out.println("XFUTURE : "+ xFuture);
-                System.out.println("YFUTURE : "+ yFuture);
                 if(!done){
                     System.out.println("2.CHECKPOINT CHECK");
                     direction = (xDifference > 0) ? "right" : "left";
                     System.out.println("2.CHECKPOINT DIRECTION: "+direction);
                     if(!orientation.equals(direction)){
                         checkPointDirectionSwitchCase(direction);
-                        System.out.println("INCHECKPOINTDIRECTION");
-                        System.out.println("X: "+ xRobot);
-                        System.out.println("Y: "+ yRobot);
-                        System.out.println("XFUTURE : "+ xFuture);
-                        System.out.println("YFUTURE : "+ yFuture);
                     }
                 }
             }
@@ -1405,8 +1355,6 @@ public class AIBestMove {
 
             }
         }
-
-
     }
 
 
@@ -2044,7 +1992,7 @@ public class AIBestMove {
                 }
                 break;
             case "right":
-                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
+                if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2 [left")){
                     switch (orientation){
                         case "top":
                             for(String card1 : clientHand){
@@ -2112,7 +2060,7 @@ public class AIBestMove {
                 }
                 break;
             case "bottom":
-                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [bottom")){
+                if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2 [bottom")){
                     switch (orientation){
                         case "top":
                             for(String card : clientHand){
@@ -2180,7 +2128,7 @@ public class AIBestMove {
                 }
                 break;
             case "left":
-                if(checkRobotField(xRobot, yRobot).contains("ConveyorBelt 2 [left")){
+                if(checkRobotField(xFuture, yFuture).contains("ConveyorBelt 2 [left")){
                     switch (orientation){
                         case "top":
                             for(String card1 : clientHand){
@@ -2315,17 +2263,22 @@ public class AIBestMove {
             case "left":
                 for(String card : clientHand){
                     if(card.equals("MoveI")){
-                        xFuture--;
-                        if(yFuture == yCheckpoint && xFuture == xCheckpoint){
-                            cardCounter++;
-                            register.add("MoveI");
-                            clientHand.remove(card);
-                            xRobot = xFuture;
-                            break;
+                        if(checkRobotField(xFuture,yFuture).contains("Wall [left")) {
+                            xFuture--;
+                            if (yFuture == yCheckpoint && xFuture == xCheckpoint) {
+                                cardCounter++;
+                                register.add("MoveI");
+                                clientHand.remove(card);
+                                xRobot = xFuture;
+                                break;
+                            }
                         }
                     }
                 }
                 break;
         }
+        xFuture = xRobot;
+        yFuture = yRobot;
+        futureOrientation = orientation;
     }
 }
