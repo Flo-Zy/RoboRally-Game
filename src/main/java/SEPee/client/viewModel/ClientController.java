@@ -283,7 +283,7 @@ public class ClientController {
     }
 
     public void initAI(ClientAI clientAI, Stage stage) {
-        figure = robotSelectionAI(Client.getTakenFigures());
+        figure = robotSelectionAI(ClientAI.getTakenFigures());
     }
 
     @FXML
@@ -496,7 +496,7 @@ public class ClientController {
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
         while(true){
-            int robotNumber = random.nextInt(1, 2);
+            int robotNumber = random.nextInt(1, 7);
             // Überprüfen, ob der Roboter bereits genommen wurde
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
