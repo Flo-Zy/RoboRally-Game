@@ -19,7 +19,7 @@
       <VBox prefHeight="800.0" prefWidth="680.0">
          <children>
               <!-- Linke HBox -->
-              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
+              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="680.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
                      <opaqueInsets>
@@ -30,23 +30,23 @@
                      </HBox.margin>
                   </Button>
             
-                    <VBox fx:id="DizzyHighwayMap" managed="false" visible="false">
+                    <VBox fx:id="DizzyHighwayMap" alignment="TOP_CENTER" managed="false" visible="false">
                         <fx:include source="DizzyHighway.fxml" />
                     </VBox>
-                    <VBox fx:id="ExtraCrispyMap" managed="false" visible="false">
+                    <VBox fx:id="ExtraCrispyMap" alignment="TOP_CENTER" managed="false" visible="false">
                         <fx:include source="ExtraCrispy.fxml" />
                     </VBox>
-                    <VBox fx:id="LostBearingsMap" managed="false" visible="false">
+                    <VBox fx:id="LostBearingsMap" alignment="TOP_CENTER" managed="false" visible="false">
                         <fx:include source="LostBearings.fxml" />
                     </VBox>
-                    <VBox fx:id="DeathTrapMap" managed="false" visible="false">
+                    <VBox fx:id="DeathTrapMap" alignment="TOP_CENTER" managed="false" visible="false">
                         <fx:include source="DeathTrap.fxml" />
                     </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="300.0" prefWidth="664.0">
+            <VBox prefHeight="300.0" prefWidth="664.0" VBox.vgrow="NEVER">
                <children>
-                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0">
+                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
                      <children>
                         <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
@@ -67,7 +67,7 @@
                      </VBox.margin>
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="100.0" maxWidth="665.0" prefHeight="100.0" prefWidth="665.0" VBox.vgrow="NEVER" />
-                  <HBox prefHeight="100.0" prefWidth="650.0">
+                  <HBox prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
                      <children>
                         <HBox prefHeight="100.0" prefWidth="60.0">
                            <HBox.margin>
@@ -111,14 +111,14 @@
             </VBox>
          </children>
       </VBox>
-      <AnchorPane prefHeight="800.0" prefWidth="272.0" HBox.hgrow="NEVER">
+      <AnchorPane prefHeight="800.0" prefWidth="256.0" HBox.hgrow="NEVER">
          <children>
               <!-- Rechte HBox (Chatarea VBox) -->
               <VBox prefHeight="800.0" prefWidth="271.0">
                   <!-- Verankerte rechte TextArea -->
-                  <VBox VBox.vgrow="ALWAYS">
-                      <HBox prefHeight="480.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
-                          <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="272.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                  <VBox VBox.vgrow="NEVER">
+                      <HBox prefHeight="548.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+                          <VBox alignment="TOP_CENTER" prefHeight="537.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
                         <HBox VBox.vgrow="NEVER">
                            <children>
 
@@ -139,9 +139,9 @@
                            </VBox.margin>
                         </HBox>
 
-                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="380.0" prefWidth="241.0" VBox.vgrow="NEVER">
+                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="412.0" prefWidth="241.0" VBox.vgrow="ALWAYS">
                                   <VBox.margin>
-                                      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                      <Insets bottom="15.0" right="7.0" top="15.0" />
                                   </VBox.margin>
                               </TextArea>
                         <HBox.margin>
@@ -156,28 +156,28 @@
                           <HBox VBox.vgrow="NEVER">
                               <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="SOMETIMES">
                                   <children>
-                                        <Button fx:id="visibilityButton" layoutX="15.0" minHeight="26.0" minWidth="37.5" prefHeight="26.0" prefWidth="37.5" text="Alle" />
+                                        <Button fx:id="visibilityButton" minHeight="26.0" minWidth="37.5" prefHeight="26.0" prefWidth="37.5" text="Alle" />
                                   </children>
                                   <HBox.margin>
-                                      <Insets bottom="5.0" />
+                                      <Insets bottom="7.0" />
                                   </HBox.margin>
                               </AnchorPane>
                           </HBox>
                           <!-- HBox für SendButton -->
                           <HBox VBox.vgrow="NEVER">
                         <children>
-                           <AnchorPane prefWidth="220.0" HBox.hgrow="ALWAYS">
+                           <AnchorPane prefWidth="220.0" HBox.hgrow="NEVER">
                               <children>
-                                 <HBox prefHeight="41.0" prefWidth="271.0">
+                                 <HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="271.0">
                                     <children>
-                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="164.0" prefHeight="26.0" prefWidth="165.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
+                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="198.0" prefHeight="26.0" prefWidth="198.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
                                           <HBox.margin>
-                                             <Insets bottom="15.0" left="15.0" />
+                                             <Insets />
                                           </HBox.margin>
                                        </TextField>
                                        <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
                                           <HBox.margin>
-                                             <Insets left="15.0" />
+                                             <Insets left="7.0" right="7.0" />
                                           </HBox.margin>
                                        </Button>
                                     </children>
@@ -186,14 +186,14 @@
                            </AnchorPane>
                         </children>
                           </HBox>
-                     <HBox prefHeight="85.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                     <HBox prefHeight="65.0" prefWidth="271.0" VBox.vgrow="NEVER">
                         <children>
-                           <ImageView fx:id="checkPointImageView" fitHeight="70.0" fitWidth="70.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                           <ImageView fx:id="checkPointImageView" fitHeight="50.0" fitWidth="50.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                               <HBox.margin>
-                                 <Insets left="15.0" />
+                                 <Insets />
                               </HBox.margin>
                            </ImageView>
-                           <ImageView fx:id="energyCubesImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <ImageView fx:id="energyCubesImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                               <HBox.margin>
                                  <Insets left="15.0" />
                               </HBox.margin>
@@ -203,13 +203,13 @@
                           <VBox VBox.vgrow="NEVER">
                               <children>
                                      <!-- Create sliders for sound categories and master volume -->
-                                     <VBox styleClass="vbox-label">
+                                     <VBox prefWidth="274.0" styleClass="vbox-label">
                                          <children>
                                              <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
                                              <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
                                          </children>
                               <VBox.margin>
-                                 <Insets left="15.0" right="15.0" />
+                                 <Insets right="7.0" />
                               </VBox.margin>
                                      </VBox>
                                      <VBox>
@@ -218,7 +218,7 @@
                                              <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
                                          </children>
                               <VBox.margin>
-                                 <Insets left="15.0" right="15.0" />
+                                 <Insets right="7.0" />
                               </VBox.margin>
                                      </VBox>
                                      <VBox>
@@ -227,7 +227,7 @@
                                              <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
                                          </children>
                               <VBox.margin>
-                                 <Insets left="15.0" right="15.0" />
+                                 <Insets right="7.0" />
                               </VBox.margin>
                                      </VBox>
                                      <VBox>
@@ -236,7 +236,7 @@
                                              <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
                                          </children>
                               <VBox.margin>
-                                 <Insets left="15.0" right="15.0" />
+                                 <Insets right="7.0" />
                               </VBox.margin>
                                      </VBox>
                               </children>
