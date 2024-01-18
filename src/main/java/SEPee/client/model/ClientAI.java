@@ -69,6 +69,7 @@ public class ClientAI extends Application {
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
     private AIBestMove aiBestMove = new AIBestMove();
+    private SmartAi smartAi = new SmartAi();
     private GameBoard gameBoard;
     private RobotAI aiRobot = new RobotAI();
     private int numCheckpointToken = 0;
