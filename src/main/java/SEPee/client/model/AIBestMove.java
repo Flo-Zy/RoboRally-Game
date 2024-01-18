@@ -47,26 +47,37 @@ public class AIBestMove {
         futureOrientation = orientation;
 
         setCheckpoint();
-
+        System.out.println("ORIENTATION:" + orientation);
+        System.out.println("FUTUREORIENTATION:" + futureOrientation);
         int filledRegisters = 0;
         boolean finished = false;
         while(!finished) {
             int oldRegister = filledRegisters;
             checkMoveCheckpointBeforeConveyorBelt();
-
+            System.out.println("ORIENTATION:" + orientation);
+            System.out.println("FUTUREORIENTATION:" + futureOrientation);
             standingOnConveyorInOppositeDirection();
-
+            System.out.println("ORIENTATION:" + orientation);
+            System.out.println("FUTUREORIENTATION:" + futureOrientation);
             if(!turnFlag) {
                 turnInCheckpointDirection();
+                System.out.println("ORIENTATION:" + orientation);
+                System.out.println("FUTUREORIENTATION:" + futureOrientation);
             }
             checkWall();
+            System.out.println("ORIENTATION:" + orientation);
+            System.out.println("FUTUREORIENTATION:" + futureOrientation);
             move();
+            System.out.println("ORIENTATION:" + orientation);
+            System.out.println("FUTUREORIENTATION:" + futureOrientation);
             turnFlag = false;
             filledRegisters = register.size();
             if(cardCounter == 5){
                 finished = true;
             }else if(oldRegister == filledRegisters){
                 finished = moveAndCheckAgain();
+                System.out.println("ORIENTATION:" + orientation);
+                System.out.println("FUTUREORIENTATION:" + futureOrientation);
             }
         }
 
@@ -984,8 +995,8 @@ public class AIBestMove {
         switch (orientation){
             case "top":
                 System.out.println("CHECK WALL TOP");
-                if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
-                    if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
+                if(checkRobotField(xRobot, yRobot).contains("Wall [top") || ((yRobot-1 >= 0) && checkRobotField(xRobot, yRobot -1).contains("Pit"))){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [right") || ((xRobot+1 <= 12) && checkRobotField(xRobot + 1, yRobot).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
@@ -998,7 +1009,7 @@ public class AIBestMove {
                                 }
                             }
                         }
-                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [left") ||  ((xRobot-1 >= 0) && checkRobotField(xRobot -1, yRobot).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
@@ -1042,8 +1053,8 @@ public class AIBestMove {
                 break;
             case "right":
                 System.out.println("CHECK WALL RIGHT");
-                if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
-                    if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
+                if(checkRobotField(xRobot, yRobot).contains("Wall [right") ||  ((xRobot+1 <= 12) && checkRobotField(xRobot + 1, yRobot).contains("Pit"))){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [bottom") ||  ((yRobot+1 <= 9) && checkRobotField(xRobot, yRobot + 1).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
@@ -1056,7 +1067,7 @@ public class AIBestMove {
                                 }
                             }
                         }
-                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [top") ||  ((yRobot-1 >= 0) && checkRobotField(xRobot, yRobot - 1).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
@@ -1100,8 +1111,8 @@ public class AIBestMove {
                 break;
             case "bottom":
                 System.out.println("CHECK WALL BOTTOM");
-                if(checkRobotField(xRobot, yRobot).contains("Wall [bottom")){
-                    if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
+                if(checkRobotField(xRobot, yRobot).contains("Wall [bottom") || ((yRobot+1 <= 9) && checkRobotField(xRobot, yRobot + 1).contains("Pit"))){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [left") || ((xRobot-1 >= 0) && checkRobotField(xRobot - 1, yRobot).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
@@ -1114,7 +1125,7 @@ public class AIBestMove {
                                 }
                             }
                         }
-                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [right")){
+                    }else if(checkRobotField(xRobot, yRobot).contains("Wall [right") || ((xRobot+1 <= 12) &&checkRobotField(xRobot + 1, yRobot).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnRight")){
                                 if(cardCounter < 5) {
@@ -1158,8 +1169,8 @@ public class AIBestMove {
                 break;
             case "left":
                 System.out.println("CHECK WALL LEFT");
-                if(checkRobotField(xRobot, yRobot).contains("Wall [left")){
-                    if(checkRobotField(xRobot, yRobot).contains("Wall [top")){
+                if(checkRobotField(xRobot, yRobot).contains("Wall [left") || ((xRobot-1 >= 0) && checkRobotField(xRobot - 1, yRobot).contains("Pit"))){
+                    if(checkRobotField(xRobot, yRobot).contains("Wall [top") || ((yRobot-1 >= 0) && checkRobotField(xRobot, yRobot - 1).contains("Pit"))){
                         for(String card : clientHand){
                             if(card.equals("TurnLeft")){
                                 if(cardCounter < 5) {
@@ -1456,7 +1467,7 @@ public class AIBestMove {
             case "top":
                 switch (direction) {
                     case "right":
-                        if (!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [right") && ((xFuture+1 <= 9) && !checkRobotField(xFuture+1, yFuture).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnRight")) {
                                     if (cardCounter < 5) {
@@ -1474,7 +1485,7 @@ public class AIBestMove {
                         }
                         break;
                     case "left":
-                        if (!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [left") && ((xFuture-1 >= 0) && !checkRobotField(xFuture-1, yFuture).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnLeft")) {
                                     if (cardCounter < 5) {
@@ -1492,7 +1503,7 @@ public class AIBestMove {
                         }
                         break;
                     case "bottom":
-                        if (!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                        if (!checkRobotField(xFuture, yFuture).contains("Wall [bottom") && ((yFuture+1 <= 9) && !checkRobotField(xFuture, yFuture+1).contains("Pit"))) {
                             boolean finished = false;
                             for (String card : clientHand) {
                                 if (card.equals("UTurn")) {
@@ -1550,7 +1561,7 @@ public class AIBestMove {
             case "right":
                 switch (direction) {
                     case "top":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top") && ((yFuture-1 >= 0) && !checkRobotField(xFuture, yFuture-1).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnLeft")) {
                                     if (cardCounter < 5) {
@@ -1568,7 +1579,7 @@ public class AIBestMove {
                         }
                         break;
                     case "bottom":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom") && ((yFuture+1 <= 9) && !checkRobotField(xFuture, yFuture+1).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnRight")) {
                                     if (cardCounter < 5) {
@@ -1586,7 +1597,7 @@ public class AIBestMove {
                         }
                         break;
                     case "left":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left") && ((xFuture-1 >= 0) && !checkRobotField(xFuture-1, yFuture).contains("Pit"))) {
                             boolean finished = false;
                             for (String card : clientHand) {
                                 if (card.equals("UTurn")) {
@@ -1644,7 +1655,7 @@ public class AIBestMove {
             case "bottom":
                 switch (direction) {
                     case "right":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right") && ((xFuture+1 <= 12) && !checkRobotField(xFuture+1, yFuture).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnLeft")) {
                                     if (cardCounter < 5) {
@@ -1662,7 +1673,7 @@ public class AIBestMove {
                         }
                         break;
                     case "left":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [left") && ((xFuture-1 >= 0) && !checkRobotField(xFuture-1, yFuture).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnRight")) {
                                     if (cardCounter < 5) {
@@ -1680,7 +1691,7 @@ public class AIBestMove {
                         }
                         break;
                     case "top":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top") && ((yFuture-1 >= 0) && !checkRobotField(xFuture, yFuture-1).contains("Pit"))) {
                             boolean finished = false;
                             for (String card : clientHand) {
                                 if (card.equals("UTurn")) {
@@ -1738,7 +1749,7 @@ public class AIBestMove {
             case "left":
                 switch (direction) {
                     case "top":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [top") && ((yFuture-1 >= 0) && !checkRobotField(xFuture, yFuture-1).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnRight")) {
                                     if (cardCounter < 5) {
@@ -1756,7 +1767,7 @@ public class AIBestMove {
                         }
                         break;
                     case "bottom":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom") && ((yFuture+1 <= 9) && !checkRobotField(xFuture, yFuture+1).contains("Pit"))) {
                             for (String card : clientHand) {
                                 if (card.equals("TurnLeft")) {
                                     if (cardCounter < 5) {
@@ -1774,7 +1785,7 @@ public class AIBestMove {
                         }
                         break;
                     case "right":
-                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right")) {
+                        if(!checkRobotField(xFuture, yFuture).contains("Wall [right") && ((xFuture+1 <= 12) && !checkRobotField(xFuture+1, yFuture).contains("Pit"))) {
                             boolean finished = false;
                             for (String card : clientHand) {
                                 if (card.equals("UTurn")) {
@@ -1841,7 +1852,7 @@ public class AIBestMove {
             if(card.equals("MoveI")){
                 switch(orientation){
                     case "top":
-                        if(checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [top") || ((yFuture-1 >= 0) && checkRobotField(xFuture, yFuture-1).contains("Pit"))){
                             wall = true;
                         }else{
                             yFuture--;
@@ -1852,7 +1863,7 @@ public class AIBestMove {
 
                         break;
                     case "right":
-                        if(checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [right") || ((xFuture+1 >= 0) && checkRobotField(xFuture+1, yFuture).contains("Pit"))){
                             wall = true;
                         }else{
                             xFuture++;
@@ -1862,7 +1873,7 @@ public class AIBestMove {
                         }
                         break;
                     case "bottom":
-                        if(checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [bottom") || ((yFuture+1 <= 9) && checkRobotField(xFuture, yFuture+1).contains("Pit"))){
                             wall = true;
                         }else{
                             yFuture++;
@@ -1872,7 +1883,7 @@ public class AIBestMove {
                         }
                         break;
                     case "left":
-                        if(checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                        if(checkRobotField(xFuture, yFuture).contains("Wall [left") || ((xFuture-1 >= 0) && checkRobotField(xFuture-1, yFuture).contains("Pit"))){
                             wall = true;
                         }else{
                             xFuture--;
@@ -1890,7 +1901,7 @@ public class AIBestMove {
                     }else if(checkRobotField(xFuture, yFuture).contains("Gear")){
                         turnsWithGears();
                     }
-                    if(!(checkRobotField(xFuture, yFuture).contains("Pit"))) {
+                    if((xFuture >= 0 && xFuture <= 12) && (yFuture >= 0 && yFuture <= 9) && !(checkRobotField(xFuture, yFuture).contains("Pit"))) {
                         cardCounter++;
                         xRobot = xFuture;
                         yRobot = yFuture;
