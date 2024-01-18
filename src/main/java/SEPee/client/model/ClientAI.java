@@ -268,6 +268,7 @@ public class ClientAI extends Application {
                                 gameBoard = new DeathTrap();
                             }
                             aiBestMove.setGameBoard(gameBoard);
+                            smartAi.setGameBoard(gameBoard);
 
                             break;
                         case "ReceivedChat":
@@ -326,7 +327,9 @@ public class ClientAI extends Application {
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
                                 //controller.initRegisterAI();
-                                aiBestMove.setRegister(aiRobot, controller.getHandAi());
+                                //aiBestMove.setRegister(aiRobot, controller.getHandAi());
+                                System.out.println("ICH SETTE REGISTER");
+                                smartAi.setRegister(aiRobot, controller.getHandAi());
                                 System.out.println(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){
@@ -687,6 +690,7 @@ public class ClientAI extends Application {
                                     if (player.getId() == clientID && clientID == controller.getId()) {
                                         numCheckpointToken++;
                                         aiBestMove.setNumCheckpointToken(numCheckpointToken);
+                                        smartAi.setNumCheckpointToken(numCheckpointToken);
                                         controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter" + number + ".png");
                                         controller.appendToChatArea(player.getName() + " has reached checkpoint " + number);
 
