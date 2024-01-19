@@ -92,16 +92,19 @@ public class SmartAi {
                     }
                 }
             }
-        }
 
-        System.out.println(clientHand);
-        System.out.println("HIER AI KARTEN: "+bestRegister);
-        int i = 1;
-        for(String card: bestRegister){
-            SelectedCard selectedCard = new SelectedCard(card, i);
-            String serializedSelectedCard = Serialisierer.serialize(selectedCard);
-            ClientAI.getWriter().println(serializedSelectedCard);
-            i++;
+             */
+        }else {
+
+            System.out.println(clientHand);
+            System.out.println("HIER AI KARTEN: " + bestRegister);
+            int i = 1;
+            for (String card : bestRegister) {
+                SelectedCard selectedCard = new SelectedCard(card, i);
+                String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedSelectedCard);
+                i++;
+            }
         }
         bestRegister.clear();
         checkpointReached = false;
