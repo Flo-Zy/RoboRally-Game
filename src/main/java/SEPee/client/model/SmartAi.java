@@ -48,6 +48,10 @@ public class SmartAi {
     private boolean reboot = false;
     private int currentRegisterNum = 0;
     private AIBestMove aiBestMove = new AIBestMove();
+    private int xDistanceBest;
+    private int yDistanceBest;
+    private boolean checkpointReached;
+    private int currentCheckpointToken;
 
 
 
@@ -60,10 +64,12 @@ public class SmartAi {
         yFuture = yRobot;
         orientation = robot.getOrientation();
         futureOrientation = orientation;
+        checkpointReached = false;
 
+        currentCheckpointToken = numCheckpointToken;
         setCheckpoint();
         bestDistance = calculateManhattanDistance(xRobot, yRobot);
-
+        
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
 
@@ -79,6 +85,7 @@ public class SmartAi {
             aiBestMove.setRegister(robot, hand);
         }
         bestRegister.clear();
+        checkpointReached = false;
 
     }
 
@@ -214,10 +221,11 @@ public class SmartAi {
                 int currentDistance;
                 reboot = false;
                 currentRegisterNum = 0;
-                int xDistance = Math.abs(xCheckpoint-xFuture);
-                int yDistance = Math.abs(yCheckpoint-yFuture);
+                checkpointReached = false;
+                currentCheckpointToken = numCheckpointToken;
                 for (String card : currentRegister) {
                     currentRegisterNum++;
+                    setCheckpoint();
                     switch (card) {
                         case "Again":
                             again();
@@ -276,7 +284,13 @@ public class SmartAi {
                         fieldActivation();
                     }
                 }
-                currentDistance = calculateManhattanDistance(xFuture, yFuture);
+
+                if(checkpointReached){
+                    currentDistance = 0;
+                }else {
+                    currentDistance = calculateManhattanDistance(xFuture, yFuture);
+                }
+
                 if(!reboot && currentDistance < bestDistance){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
@@ -645,7 +659,7 @@ public class SmartAi {
 
         checkGears();
 
-        //checkCheckpoint();
+        checkCheckpoint();
     }
 
     private void checkBlueConveyorBelts(){
@@ -719,6 +733,9 @@ public class SmartAi {
                 checkConveyorBeltAgain();
 
             }
+        }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
         }
     }
 
@@ -852,6 +869,9 @@ public class SmartAi {
                 }
             }
         }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
+        }
     }
 
     private void checkPushPanels() {
@@ -886,6 +906,9 @@ public class SmartAi {
                 }
             }
         }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
+        }
     }
 
     private void checkGears(){
@@ -900,28 +923,33 @@ public class SmartAi {
         String standingOnCheckPoint = checkRobotField(xFuture, yFuture);
 
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
-            if (numCheckpointToken == 0) { //check whether no checkPoints were reached before
-                numCheckpointToken++;
+            if (currentCheckpointToken == 0) { //check whether no checkPoints were reached before
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
-            if (numCheckpointToken == 1) { //check whether one checkPoint was reached before
-                numCheckpointToken++;
+            if (currentCheckpointToken == 1) { //check whether one checkPoint was reached before
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
-            if (numCheckpointToken == 2) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 2) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
-            if (numCheckpointToken == 3) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 3) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
-            if (numCheckpointToken == 4) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 4) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         }

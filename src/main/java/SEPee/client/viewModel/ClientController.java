@@ -1047,7 +1047,7 @@ public class ClientController {
         Random random = new Random();
         int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
 
-        if(ClientAI.getSelectedMap1().equals("DeathTrap")) {
+        if(ClientAI.getSelectedMap1().equals("Death Trap")) {
             setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
         } else {
             setStartingPointXY(selectedStartingPoint);
