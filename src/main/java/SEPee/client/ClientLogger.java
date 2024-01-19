@@ -6,6 +6,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.logging.LogRecord;
 
 public class ClientLogger {
     private static Logger logger = Logger.getLogger("ClientLogger");
@@ -13,15 +14,16 @@ public class ClientLogger {
     static {
         FileHandler fileHandler;
         try {
-            // für unique logFile
+            // Für eindeutiges LogFile
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String timestamp = dateFormat.format(new Date());
             String clientLogFile = "ClientLogger_" + timestamp + ".log";
 
-            fileHandler = new FileHandler(System.getProperty("user.dir") + System.getProperty("file.separator") + clientLogFile, true); // um log files anzufügen
+            fileHandler = new FileHandler(System.getProperty("user.dir") + System.getProperty("file.separator") + clientLogFile, true);
             logger.addHandler(fileHandler);
-            SimpleFormatter simpleFormatter = new SimpleFormatter();
-            fileHandler.setFormatter(simpleFormatter);
+
+            // Setze benutzerdefinierten Formatter
+            fileHandler.setFormatter(new CustomFormatter());
 
             logger.info("ClientLogger initialized");
         } catch (Exception e) {
@@ -29,10 +31,19 @@ public class ClientLogger {
         }
     }
 
+    static class CustomFormatter extends SimpleFormatter {
+        @Override
+        public String format(LogRecord record) {
+            // nur die Nachricht, kein INFO-Präfix
+            return record.getMessage() + System.lineSeparator();
+        }
+    }
+
     public static void writeToClientLog(Object object) {
         logger.info(String.valueOf(object));
     }
-    public static void writeToClientLog(String message, Exception e){
+
+    public static void writeToClientLog(String message, Exception e) {
         logger.log(Level.WARNING, message, e);
     }
 }
