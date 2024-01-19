@@ -34,21 +34,24 @@ public class SmartAi {
     @Setter
     private int numCheckpointToken;
     private ArrayList<String> clientHand = new ArrayList<>();
-    private ArrayList<String> register = new ArrayList<>();
+
     private int xRobot;
     private int yRobot;
     private String orientation;
     private int xFuture;
     private int yFuture;
     private String futureOrientation;
-    private int bestDistance = 99999999;
+    private int bestDistance;
     private ArrayList<String> bestRegister;
     private ArrayList<ArrayList<String>> combinations= new ArrayList<>();
     private String lastPlayedCard;
-    boolean reboot = false;
+    private boolean reboot = false;
+    private int currentRegisterNum = 0;
+    private AIBestMove aiBestMove = new AIBestMove();
 
 
-    public void setRegister(RobotAI robot, ArrayList<String> hand){
+
+    public void setRegister(RobotAI robot, ArrayList<String> hand) throws InterruptedException {
         System.out.println("ICH BIN HIER");
         this.clientHand = hand;
         xRobot = robot.getX();
@@ -59,9 +62,23 @@ public class SmartAi {
         futureOrientation = orientation;
 
         setCheckpoint();
+        bestDistance = calculateManhattanDistance(xRobot, yRobot);
 
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
+
+        System.out.println("HIER AI KARTEN: "+bestRegister);
+        int i = 1;
+        for(String card: bestRegister){
+            SelectedCard selectedCard = new SelectedCard(card, i);
+            String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+            ClientAI.getWriter().println(serializedSelectedCard);
+            i++;
+        }
+        if(bestRegister.isEmpty()){
+            aiBestMove.setRegister(robot, hand);
+        }
+        bestRegister.clear();
 
     }
 
@@ -187,16 +204,20 @@ public class SmartAi {
         }
     }
 
-    public void calculateBestRegister(){
+    public void calculateBestRegister() throws InterruptedException {
         for(int i = 0; i < combinations.size(); i++){
             ArrayList<String> currentRegister = combinations.get(i);
             if(!currentRegister.get(0).equals("Again")) {
                 xFuture = xRobot;
                 yFuture = yRobot;
                 futureOrientation = orientation;
-                int currentDistance = 99999;
+                int currentDistance;
                 reboot = false;
+                currentRegisterNum = 0;
+                int xDistance = Math.abs(xCheckpoint-xFuture);
+                int yDistance = Math.abs(yCheckpoint-yFuture);
                 for (String card : currentRegister) {
+                    currentRegisterNum++;
                     switch (card) {
                         case "Again":
                             again();
@@ -251,8 +272,11 @@ public class SmartAi {
                     }
                     if(reboot){
                         break;
+                    }else{
+                        fieldActivation();
                     }
                 }
+                currentDistance = calculateManhattanDistance(xFuture, yFuture);
                 if(!reboot && currentDistance < bestDistance){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
@@ -338,11 +362,89 @@ public class SmartAi {
     }
 
     private void moveI(){
-
+        switch(futureOrientation){
+            case "top":
+                if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                    yFuture--;
+                }
+                break;
+            case "right":
+                if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                    xFuture++;
+                }
+                break;
+            case "bottom":
+                if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                    yFuture++;
+                }
+                break;
+            case "left":
+                if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                    xFuture--;
+                }
+                break;
+        }
     }
 
     private void moveII(){
-
+        switch(futureOrientation){
+            case "top":
+                if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                    yFuture--;
+                    if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                        yFuture--;
+                    }
+                }
+                break;
+            case "right":
+                if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                    xFuture++;
+                    if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                        xFuture++;
+                    }
+                }
+                break;
+            case "bottom":
+                if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                    yFuture++;
+                    if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                        yFuture++;
+                    }
+                }
+                break;
+            case "left":
+                if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                    xFuture--;
+                    if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                        xFuture--;
+                    }
+                }
+                break;
+        }
     }
 
     private void moveIII(){
@@ -358,7 +460,8 @@ public class SmartAi {
     }
 
     private void uTurn(){
-
+        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
     }
 
     private String checkRobotField(int robotX, int robotY) {
