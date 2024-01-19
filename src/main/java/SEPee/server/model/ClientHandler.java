@@ -74,7 +74,7 @@ public class ClientHandler implements Runnable {
                     String serializedAlive1 = Serialisierer.serialize(alive1);
                     sendToOneClient(clientId, serializedAlive1);
                 }else{
-                    System.out.println("Disconnect");
+                    ServerLogger.writeToServerLog("Disconnect");
 
                     Player disconnectPLayer = new Player("", -9999, -9999);
                     for(Player player : Server.getPlayerList()){
@@ -111,17 +111,17 @@ public class ClientHandler implements Runnable {
                     switch (input) {
                         //HelloServer wird oben behandelt beim Verbindungsaufbau
                         case "Alive":
-                            System.out.println("Alive zurück bekommen");
+                            ServerLogger.writeToServerLog("Alive zurück bekommen");
                             gotAlive = true;
                             disconnectScheduler.shutdownNow();
                             synchronized (Server.getPlayerList()) {
                                 for (Player player : Server.getPlayerList()) {
-                                    System.out.println(player.getName());
+                                    ServerLogger.writeToServerLog(player.getName());
                                 }
                             }
                             break;
                         case "PlayerValues":
-                            System.out.println("Player Values erhalten");
+                            ServerLogger.writeToServerLog("Player Values erhalten");
 
                             PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedReceivedString, PlayerValues.class);
                             playerName = deserializedPlayerValues.getMessageBody().getName();
@@ -148,7 +148,7 @@ public class ClientHandler implements Runnable {
 
                             break;
                         case "SetStatus":
-                            System.out.println("Set Status");
+                            ServerLogger.writeToServerLog("SetStatus");
                             SetStatus setStatus = Deserialisierer.deserialize(serializedReceivedString, SetStatus.class);
                             Server.addReady(player.getId());
                             //playerList vom Server aktualisieren
@@ -190,7 +190,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "MapSelected":
-                            System.out.println("Map Selected");
+                            ServerLogger.writeToServerLog("MapSelected");
                             MapSelected mapSelected = Deserialisierer.deserialize(serializedReceivedString, MapSelected.class);
                             if (!mapSelected.getMessageBody().getMap().equals("")) {
                                 broadcast(serializedReceivedString);
@@ -231,7 +231,7 @@ public class ClientHandler implements Runnable {
                                 GameStarted gameStarted = new GameStarted(Server.getGameMap().getGameBoard());
                                 String serializedGameStarted = Serialisierer.serialize(gameStarted);
                                 broadcast(serializedGameStarted);
-                                System.out.println("Das Spiel wird gestartet");
+                                ServerLogger.writeToServerLog("Game started");
 
                                 ActivePhase activePhase = new ActivePhase(Server.getGame().getCurrentPhase());
                                 String serializedActivePhase = Serialisierer.serialize(activePhase);
@@ -243,7 +243,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "SendChat":
-                            System.out.println("Send Chat");
+                            ServerLogger.writeToServerLog("Send Chat");
                             SendChat receivedSendChat = Deserialisierer.deserialize(serializedReceivedString, SendChat.class);
                             String receivedSendChatMessage = receivedSendChat.getMessageBody().getMessage();
 
@@ -271,10 +271,10 @@ public class ClientHandler implements Runnable {
                                                 }
                                             }
                                         } catch (NumberFormatException e) {
-                                            System.err.println("Invalid coordinates format");
+                                            ServerLogger.writeToServerLog("Invalid coordinates format: ", e);
                                         }
                                     } else {
-                                        System.err.println("Invalid /teleport command format");
+                                        ServerLogger.writeToServerLog("Invalid /teleport command format");
                                     }
                                 }
                                 if (receivedSendChatMessage.contains("/inactive")){
@@ -345,7 +345,7 @@ public class ClientHandler implements Runnable {
                                 String playCardCard = playCard.getMessageBody().getCard();
                                 CardPlayed cardPlayed = new CardPlayed(clientId, playCardCard);
                                 String serializedCardPlayed = Serialisierer.serialize(cardPlayed);
-                                System.out.println("id: " + clientId + "played: " + playCardCard);
+                                ServerLogger.writeToServerLog("id: " + clientId + "played: " + playCardCard);
 
                                 if (!playCardCard.equals("Again")) {
                                     lastPlayedCard = playCardCard;
@@ -434,7 +434,7 @@ public class ClientHandler implements Runnable {
                                         }
                                         break;
                                     default:
-                                        System.out.println("unknown card name");
+                                        ServerLogger.writeToServerLog("unknown card name");
                                         break;
 
 
@@ -501,11 +501,6 @@ public class ClientHandler implements Runnable {
                                     CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getCurrentPlayer().getId());
                                     String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
                                     broadcast(serializedCurrentPlayer);
-
-                                    // test
-                                    for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
-                                        System.out.println(activeCard.getCard());
-                                    }
                                 } else { // Server.getRegisterCounter() größer 4
                                     for (Player player : Server.getPlayerList()) {
                                         player.setReboot(false);
@@ -519,12 +514,12 @@ public class ClientHandler implements Runnable {
                                     Server.getGame().nextCurrentPhase();
 
                                     for (Player player : Server.getGame().getPlayerList()) {
-                                        System.out.println("Player " + player.getId() + " discardPile: " + player.getPlayerMat().getDiscardPile());
+                                        ServerLogger.writeToServerLog(player.getId() + " discardPile: " + player.getPlayerMat().getDiscardPile());
                                     }
 
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         for (int i = 0; i < 5; i++) {
-                                            System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                            ServerLogger.writeToServerLog(player.getPlayerMat().getRegisterIndex(i));
                                         }
                                     }
 
@@ -536,7 +531,7 @@ public class ClientHandler implements Runnable {
                                     // teste ob alle register leer
                                     for (Player player : Server.getGame().getPlayerList()) {
                                         for (int i = 0; i < 5; i++) {
-                                            System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                            ServerLogger.writeToServerLog(player.getPlayerMat().getRegisterIndex(i));
                                         }
                                     }
 
@@ -557,13 +552,12 @@ public class ClientHandler implements Runnable {
 
                                             // test ob clientHand richtig gesetzt
                                             for (String card : player.getPlayerMat().getClientHand()) {
-                                                System.out.println("Player " + player.getId() + ": " + card);
+                                                ServerLogger.writeToServerLog(player.getId() + ": " + card);
                                             }
 
                                             // sendet Karten Infos an aktuellen player
                                             YourCards yourCards = new YourCards(clientCards);
                                             String serializedYourCards = Serialisierer.serialize(yourCards);
-                                            System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                             // sende an diesen Client sein ProgDeck
                                             sendToOneClient(player.getId(), serializedYourCards);
 
@@ -590,7 +584,7 @@ public class ClientHandler implements Runnable {
 
                                             // test ob clientHand richtig gesetzt
                                             for (String card : player.getPlayerMat().getClientHand()) {
-                                                System.out.println("Player " + player.getId() + ": " + card);
+                                                ServerLogger.writeToServerLog(player.getId() + ": " + card);
                                             }
 
                                             ShuffleCoding shuffleCoding = new ShuffleCoding(player.getId());
@@ -614,7 +608,6 @@ public class ClientHandler implements Runnable {
 
                                             YourCards yourCards = new YourCards(clientCards);
                                             String serializedYourCards = Serialisierer.serialize(yourCards);
-                                            System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                             // sende an diesen Client sein ProgDeck
                                             sendToOneClient(player.getId(), serializedYourCards);
 
@@ -626,7 +619,6 @@ public class ClientHandler implements Runnable {
                                                     sendToOneClient(Server.getGame().getPlayerList().get(j).getId(), serializedNotYourCards);
                                                 }
                                             }
-
                                         }
                                     }
 
@@ -643,11 +635,11 @@ public class ClientHandler implements Runnable {
                             break;
                         case "SetStartingPoint":
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
-                            System.out.println("Set Starting Points");
+                            ServerLogger.writeToServerLog("SetStartingPoints");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
 
                             StartingPointTaken startingPointTaken = new StartingPointTaken(setStartingPoint.getMessageBody().getX(), setStartingPoint.getMessageBody().getY(), clientId);
-                            System.out.println("StartingPointTaken - X: " + setStartingPoint.getMessageBody().getX() + ", Y: " + setStartingPoint.getMessageBody().getY() + ", ClientID: " + clientId);
+                            ServerLogger.writeToServerLog("StartingPointTaken of " + clientId + ": " + setStartingPoint.getMessageBody().getX() + ", " + setStartingPoint.getMessageBody().getY());
 
                             if (Server.getGameMap().getBordName().equals("Death Trap")) {
                                 this.robot = new Robot(0, 0, "left");
@@ -698,13 +690,12 @@ public class ClientHandler implements Runnable {
 
                                         // test ob clientHand richtig gesetzt
                                         for (String card : player.getPlayerMat().getClientHand()) {
-                                            System.out.println("Player " + player.getId() + ": " + card);
+                                            ServerLogger.writeToServerLog(player.getId() + ": " + card);
                                         }
 
                                         // sendet Karten Infos an aktuellen player
                                         YourCards yourCards = new YourCards(clientCards);
                                         String serializedYourCards = Serialisierer.serialize(yourCards);
-                                        System.out.println("Test: " + player.getId() + ", " + serializedYourCards);
                                         // sende an diesen Client sein ProgDeck
                                         sendToOneClient(player.getId(), serializedYourCards);
 
@@ -734,7 +725,7 @@ public class ClientHandler implements Runnable {
 
                             break;
                         case "SelectedCard":
-                            System.out.println("Selected Card");
+                            ServerLogger.writeToServerLog("Selected Card");
                             SelectedCard selectedCard = Deserialisierer.deserialize(serializedReceivedString, SelectedCard.class);
                             String card = selectedCard.getMessageBody().getCard();
                             int cardRegister = selectedCard.getMessageBody().getRegister();
@@ -755,7 +746,7 @@ public class ClientHandler implements Runnable {
                                         Server.getGame().getPlayerList().get(i).getPlayerMat().setNumRegister(
                                                 Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister() + 1);
 
-                                        System.out.println(Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister());
+                                        ServerLogger.writeToServerLog(Server.getGame().getPlayerList().get(i).getPlayerMat().getNumRegister());
                                     }
                                 }
                             }
@@ -784,11 +775,11 @@ public class ClientHandler implements Runnable {
 
                             for (Player player : Server.getGame().getPlayerList()) {
                                 for (int i = 0; i < 5; i++) {
-                                    System.out.println(player.getPlayerMat().getRegisterIndex(i));
+                                    ServerLogger.writeToServerLog(player.getPlayerMat().getRegisterIndex(i));
                                 }
                             }
 
-                            System.out.println(card);
+                            ServerLogger.writeToServerLog(card);
                             CardSelected cardSelected = new CardSelected(clientId, cardRegister, true);
                             String serializedCardSelected = Serialisierer.serialize(cardSelected);
                             broadcast(serializedCardSelected);
@@ -818,7 +809,7 @@ public class ClientHandler implements Runnable {
                                     @Override
                                     public void run() {
                                         if (Server.getTimerSend() == Server.getGame().getPlayerList().size()) {
-                                            System.out.println("Alle fertig");
+                                            ServerLogger.writeToServerLog("Everyone finished");
                                             setPlayerFertig(false);
                                             Server.setTimerSend(0);
                                             // nach 30 sec, sende TimerEnded
@@ -852,7 +843,7 @@ public class ClientHandler implements Runnable {
                                             String serializedActivePhase = Serialisierer.serialize(activePhase);
                                             broadcast(serializedActivePhase);
 
-                                            System.out.println(Server.getGame().getCurrentPhase());
+                                            ServerLogger.writeToServerLog(Server.getGame().getCurrentPhase());
 
                                             // nulltes register wird an alle gesendet
                                             CurrentCards currentCards = new CurrentCards(activeCards);
@@ -865,7 +856,7 @@ public class ClientHandler implements Runnable {
                                             broadcast(serializedCurrentPlayer1);
                                             // test
                                             for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
-                                                System.out.println(activeCard.getCard());
+                                                ServerLogger.writeToServerLog(activeCard.getCard());
                                             }
                                             Thread.currentThread().interrupt();
 
@@ -899,7 +890,7 @@ public class ClientHandler implements Runnable {
                                                 int i = 0;
                                                 int cursor = 0;
                                                 if (player.getPlayerMat().getProgDeck().size() >= 5 - player.getPlayerMat().registerSize()) {
-                                                    System.out.println(player.getPlayerMat().registerSize());
+                                                    ServerLogger.writeToServerLog(player.getPlayerMat().registerSize());
                                                     while (i < (5 - player.getPlayerMat().getNumRegister())) {
                                                         if (player.getPlayerMat().registerSize() == 0 && player.getPlayerMat().getProgDeck().get(cursor).getName().equals("Again")) { // wenn erstes Register & oberste Karte auf ProgDeck Again
                                                             cursor++;
@@ -972,7 +963,7 @@ public class ClientHandler implements Runnable {
                                                             j++;
                                                         }
                                                     }
-                                                    System.out.println("This is Player " + player.getId() + "'s missing Cards: " + missingClientCards);
+                                                    ServerLogger.writeToServerLog(player.getId() + "'s missing Cards: " + missingClientCards);
                                                 }
                                                 CardsYouGotNow cardsYouGotNow = new CardsYouGotNow(missingClientCards);
                                                 String serializedCardYouGotNow = Serialisierer.serialize(cardsYouGotNow);
@@ -1000,7 +991,7 @@ public class ClientHandler implements Runnable {
                                         String serializedActivePhase = Serialisierer.serialize(activePhase);
                                         broadcast(serializedActivePhase);
 
-                                        System.out.println(Server.getGame().getCurrentPhase());
+                                        ServerLogger.writeToServerLog(Server.getGame().getCurrentPhase());
 
                                         // nulltes register wird an alle gesendet
                                         CurrentCards currentCards = new CurrentCards(activeCards);
@@ -1013,7 +1004,7 @@ public class ClientHandler implements Runnable {
                                         broadcast(serializedCurrentPlayer1);
                                         // test
                                         for (CurrentCards.ActiveCard activeCard : currentCards.getMessageBody().getActiveCards()) {
-                                            System.out.println(activeCard.getCard());
+                                            ServerLogger.writeToServerLog(activeCard.getCard());
                                         }
                                         timer.cancel();
                                         timer1.cancel();
@@ -1022,7 +1013,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "SelectedDamage":
-                            System.out.println("Selected Damage");
+                            ServerLogger.writeToServerLog("SelectedDamage");
                             for(Player player : Server.getGame().getPlayerList()) {
                                 if(player.getId() == clientId) {
                                     SelectedDamage selectedDamage = Deserialisierer.deserialize(serializedReceivedString, SelectedDamage.class);
@@ -1098,17 +1089,17 @@ public class ClientHandler implements Runnable {
                                 String serializedAllGo = Serialisierer.serialize(allGo);
                                 broadcast(serializedAllGo);
                             }
-                            System.out.println("Selected Damage ende");
+                            ServerLogger.writeToServerLog("Selected Damage ende");
                             break;
                         case "RebootDirection":
-                            System.out.println("Reboot Direction");
+                            ServerLogger.writeToServerLog("RebootDirection");
                             RebootDirection rebootDirection = Deserialisierer.deserialize(serializedReceivedString, RebootDirection.class);
                             String newRobotOrientation = rebootDirection.getMessageBody().getDirection();
                             String orientationOfRobot = robot.getOrientation();
 
                             //entsprechend viele PlayerTurning schicken, bis es passt
                             while (!orientationOfRobot.equals(newRobotOrientation)) {
-                                System.out.println("791 " + robot.getOrientation());
+                                ServerLogger.writeToServerLog(robot.getOrientation());
                                 String resultingOrientation = getResultingOrientation("clockwise", robot);
                                 robot.setOrientation(resultingOrientation);
                                 orientationOfRobot = resultingOrientation;
@@ -1127,7 +1118,7 @@ public class ClientHandler implements Runnable {
                 }
             } catch (SocketException e) {
                 // Handle clientseitiger close
-                System.out.println("Client disconnected: " + e.getMessage());
+                ServerLogger.writeToServerLog("Client disconnected: ", e);
                 //wer disconnect
 
                 ReceivedChat leftPlayerMessage = new ReceivedChat(playerName + " has left the chat.", 999, false);
@@ -1158,7 +1149,7 @@ public class ClientHandler implements Runnable {
                 return;
             }
         }
-        System.out.println("Client with ID " + clientId + " not found.");
+        ServerLogger.writeToServerLog("Client with ID " + clientId + " not found.");
     }
 
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
@@ -1189,9 +1180,9 @@ public class ClientHandler implements Runnable {
                     }
                 } else {
                     if (isForward) {
-                        System.out.println("Roboter mit ID: " + this.clientId + " läuft gegen wand.");
+                        ServerLogger.writeToServerLog("Roboter id: " + this.clientId + " runs against wall");
                     } else {
-                        System.out.println("Roboter mit ID: " + this.clientId + " steht mit dem Rücken gegen die Wand.");
+                        ServerLogger.writeToServerLog("Roboter id: " + this.clientId + " with back to wall");
                     }
                 }
 
@@ -1229,24 +1220,24 @@ public class ClientHandler implements Runnable {
             case "top":
                 boolean topCondition = (isForward && yFleeing == yPushing - 1 && xFleeing == xPushing) ||
                         (!isForward && yFleeing == yPushing + 1 && xFleeing == xPushing);
-                System.out.println("Top condition: " + topCondition);
+                ServerLogger.writeToServerLog("Top condition: " + topCondition);
                 return topCondition;
             case "right":
                 boolean rightCondition = (isForward && xFleeing == xPushing + 1 && yFleeing == yPushing) ||
                         (!isForward && xFleeing == xPushing - 1 && yFleeing == yPushing);
-                System.out.println("Right condition: " + rightCondition);
+                ServerLogger.writeToServerLog("Right condition: " + rightCondition);
                 return rightCondition;
             case "left":
                 boolean leftCondition = (isForward && xFleeing == xPushing - 1 && yFleeing == yPushing) ||
                         (!isForward && xFleeing == xPushing + 1 && yFleeing == yPushing);
-                System.out.println("932 fleeing x, y: " + xFleeing + yFleeing + " , orientation: " + orientation + " is forward: " + isForward);
-                System.out.println("934 pushing x, y: " + xPushing + yPushing );
-                System.out.println("Left condition: " + leftCondition);
+                ServerLogger.writeToServerLog("932 fleeing x, y: " + xFleeing + yFleeing + " , orientation: " + orientation + " is forward: " + isForward);
+                ServerLogger.writeToServerLog("934 pushing x, y: " + xPushing + yPushing );
+                ServerLogger.writeToServerLog("Left condition: " + leftCondition);
                 return leftCondition;
             case "bottom":
                 boolean bottomCondition = (isForward && yFleeing == yPushing + 1 && xFleeing == xPushing) ||
                         (!isForward && yFleeing == yPushing - 1 && xFleeing == xPushing);
-                System.out.println("Bottom condition: " + bottomCondition);
+                ServerLogger.writeToServerLog("Bottom condition: " + bottomCondition);
                 return bottomCondition;
             default:
                 return false;
@@ -1316,7 +1307,7 @@ public class ClientHandler implements Runnable {
                         int updatedX = player.getRobot().getX();
                         int updatedY = player.getRobot().getY();
 
-                        System.out.println(player.getName() + " wird geschoben");
+                        ServerLogger.writeToServerLog(player.getName() + " wird geschoben");
 
                         Movement movement = new Movement(player.getId(), updatedX, updatedY);
                         String serializedMovement = Serialisierer.serialize(movement);
@@ -1333,7 +1324,7 @@ public class ClientHandler implements Runnable {
                     int updatedX = player.getRobot().getX();
                     int updatedY = player.getRobot().getY();
 
-                    System.out.println(player.getName() + " wird geschoben");
+                    ServerLogger.writeToServerLog(player.getName() + " wird geschoben");
 
                     Movement movement = new Movement(player.getId(), updatedX, updatedY);
                     String serializedMovement = Serialisierer.serialize(movement);
@@ -1411,33 +1402,33 @@ public class ClientHandler implements Runnable {
         }
 
         //tester string
-        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        ServerLogger.writeToServerLog("Fields at (" + robotX + ", " + robotY + "): " + fields);
 
         StringBuilder result = new StringBuilder();
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                System.out.println("ConveyorBelt");
+                ServerLogger.writeToServerLog("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
 
                 result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
 
             } else if (field instanceof Laser) {
-                System.out.println("Laser");
+                ServerLogger.writeToServerLog("Laser");
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
-                System.out.println("Wall");
+                ServerLogger.writeToServerLog("Wall");
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                System.out.println("Empty field");
+                ServerLogger.writeToServerLog("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
-                System.out.println("Start point");
+                ServerLogger.writeToServerLog("Start point");
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
-                System.out.println("Checkpoint");
+                ServerLogger.writeToServerLog("Checkpoint");
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
@@ -1453,7 +1444,7 @@ public class ClientHandler implements Runnable {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
             } else {
-                System.out.println("Field nicht gefunden");
+                ServerLogger.writeToServerLog("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
@@ -1461,7 +1452,7 @@ public class ClientHandler implements Runnable {
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-        System.out.println(result);
+        ServerLogger.writeToServerLog(result);
         return result.toString();
     }
 
@@ -1485,33 +1476,33 @@ public class ClientHandler implements Runnable {
         }
 
         //tester string
-        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        ServerLogger.writeToServerLog("Fields at (" + robotX + ", " + robotY + "): " + fields);
 
         StringBuilder result = new StringBuilder();
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                System.out.println("ConveyorBelt");
+                ServerLogger.writeToServerLog("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
 
                 result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
 
             } else if (field instanceof Laser) {
-                System.out.println("Laser");
+                ServerLogger.writeToServerLog("Laser");
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
-                System.out.println("Wall");
+                ServerLogger.writeToServerLog("Wall");
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                System.out.println("Empty field");
+                ServerLogger.writeToServerLog("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
-                System.out.println("Start point");
+                ServerLogger.writeToServerLog("Start point");
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
-                System.out.println("Checkpoint");
+                ServerLogger.writeToServerLog("Checkpoint");
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
@@ -1527,7 +1518,7 @@ public class ClientHandler implements Runnable {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
             } else {
-                System.out.println("Field nicht gefunden");
+                ServerLogger.writeToServerLog("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
@@ -1535,7 +1526,7 @@ public class ClientHandler implements Runnable {
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-        System.out.println(result);
+        ServerLogger.writeToServerLog(result);
         return result.toString();
     }
 
@@ -2565,7 +2556,7 @@ public class ClientHandler implements Runnable {
             }
             player.getPlayerMat().getClientHand().clear(); // Leere die Hand des Spielers
             for (String discardCard : player.getPlayerMat().getDiscardPile()) {
-                System.out.println(player.getId() + ": " + discardCard);
+                ServerLogger.writeToServerLog(player.getId() + ": " + discardCard);
             }
         }
     }
@@ -2735,7 +2726,7 @@ public class ClientHandler implements Runnable {
                                 robot.setY(yCheckForStartPoint);
                                 robot.setAlreadyRebooted(false);
 
-                                System.out.println("rebooting to other free starting point");
+                                ServerLogger.writeToServerLog("rebooting to other free starting point");
                                 break;
                             }
                         }
@@ -2765,7 +2756,7 @@ public class ClientHandler implements Runnable {
                     broadcast(serializedReboot);
 
                 } else {
-                    System.out.println("Invalid Reboot String");
+                    ServerLogger.writeToServerLog("Invalid Reboot String");
                 }
 
             }
@@ -2883,7 +2874,7 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     default:
-                        System.out.println("unknown card name");
+                        ServerLogger.writeToServerLog("unknown card name");
                         break;
 
 
@@ -2928,10 +2919,10 @@ public class ClientHandler implements Runnable {
         int topY = yRobotPlayedVirus - 6;
         int bottomY = yRobotPlayedVirus + 6;
         if(leftSideX <= xRobotToBeChecked && xRobotToBeChecked <= rightSideX && topY <= yRobotToBeChecked && bottomY >= yRobotToBeChecked){
-            System.out.print("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
+            ServerLogger.writeToServerLog("The robot " + robotToBeChecked + " is within a six field radius of the robot " + robotPlayedVirus);
             return true;
         }else{
-            System.out.println(false + "virus");
+            ServerLogger.writeToServerLog(false + "virus");
             return false;
         }
     }

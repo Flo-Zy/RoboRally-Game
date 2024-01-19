@@ -60,12 +60,12 @@ public class Robot {
     private void handleReboot() {
         GameBoard gameBoard = Server.getGame().getBoardClass();
         String rebootTo = gameBoard.checkRebootConditions(x, y);
-        System.out.println("rebootTo: " + rebootTo);
+        ServerLogger.writeToServerLog("rebootTo: " + rebootTo);
 
         if (!rebootTo.equals("continue") && !alreadyRebooted) {
             alreadyRebooted = true; // Set the flag to prevent repeated reboots
 
-            System.out.println("Rebooting this robot to: " + rebootTo);
+            ServerLogger.writeToServerLog("Rebooting this robot to: " + rebootTo);
             ClientHandler.rebootThisRobot(x, y, rebootTo);
         }
     }

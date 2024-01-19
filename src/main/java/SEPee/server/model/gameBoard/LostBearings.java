@@ -1,5 +1,6 @@
 package SEPee.server.model.gameBoard;
 
+import SEPee.server.model.ServerLogger;
 import SEPee.server.model.field.*;
 
 import java.util.ArrayList;
@@ -692,7 +693,7 @@ public class LostBearings extends GameBoard {
             List<Field> fieldsAtXY = column.get(y);
             return fieldsAtXY;
         } catch (IllegalArgumentException e) {
-            System.out.println("Robot out of bounds. Handling the exception...");
+            ServerLogger.writeToServerLog("Robot out of bounds. Handling the exception...");
             //ontinue with the rest of code
             return Collections.emptyList();
         }

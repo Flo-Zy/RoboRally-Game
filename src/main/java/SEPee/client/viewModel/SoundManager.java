@@ -1,5 +1,6 @@
 package SEPee.client.viewModel;
 
+import SEPee.client.ClientLogger;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -33,7 +34,7 @@ public class SoundManager {
     }
 
     public static void playEventSound(String eventName) {
-        System.out.println("event name: " + eventName + " ismuted: " + isMuted);
+        ClientLogger.writeToClientLog("event name: " + eventName + " ismuted: " + isMuted);
         try {
             if (backgroundMediaPlayer != null && backgroundMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                 return;

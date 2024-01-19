@@ -72,7 +72,7 @@ public class Game implements Robot.RobotPositionChangeListener {
             currentPhase++;
             // jetzt in AktivierungsPhase
 
-            System.out.println("Wir sind in der Phase:" + currentPhase);
+            ServerLogger.writeToServerLog("Wir sind in der Phase:" + currentPhase);
 
             //set teleports or clients
 

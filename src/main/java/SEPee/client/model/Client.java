@@ -214,7 +214,7 @@ public class Client extends Application {
                             mapList = selectMap.getMessageBody().getAvailableMaps();
                             Platform.runLater(() -> {
                                 selectedMap1 = controller.showSelectMapDialog();
-                                System.out.println(selectedMap1);
+                                ClientLogger.writeToClientLog(selectedMap1);
                                 MapSelected mapSelected = new MapSelected(selectedMap1);
                                 String serializedMapSelected = Serialisierer.serialize(mapSelected);
                                 writer.println(serializedMapSelected);
@@ -666,7 +666,7 @@ public class Client extends Application {
                                     Stage stage = new Stage();
 
                                     selectedRebootDirection = controller.showSelectRebootDirectionDialog(stage);
-                                    System.out.println(selectedRebootDirection);
+                                    ClientLogger.writeToClientLog(selectedRebootDirection);
                                     RebootDirection rebootDirection2 = new RebootDirection(selectedRebootDirection);
                                     String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
                                     writer.println(serializedRebootDirection2);

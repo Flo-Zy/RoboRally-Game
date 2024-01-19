@@ -1,5 +1,6 @@
 package SEPee.server.model.card.progCard;
 import SEPee.server.model.Robot;
+import SEPee.server.model.ServerLogger;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +34,7 @@ public class UTurn extends ProgCard {
                 break;
 
             default:
-                System.out.println("something wong wotation");
+                ServerLogger.writeToServerLog("something went wrong");
                 break;
         }
 

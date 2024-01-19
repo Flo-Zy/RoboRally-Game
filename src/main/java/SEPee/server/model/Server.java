@@ -71,10 +71,10 @@ public class Server extends Thread{
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Server wurde gestartet. Warte auf Verbindungen...");
+            ServerLogger.writeToServerLog("Server wurde gestartet. Warte auf Verbindungen...");
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Neue potentielle Verbindung: " + clientSocket);
+                ServerLogger.writeToServerLog("Neue potentielle Verbindung: " + clientSocket);
                 // Sende HelloClient an den Client
                 HelloClient helloClient = new HelloClient("Version 1.0");
                 String serializedHelloClient = Serialisierer.serialize(helloClient);
@@ -86,7 +86,7 @@ public class Server extends Thread{
 
                 // Empfange Antwort vom Client
                 String serializedHelloServer = reader.readLine();
-                System.out.println(serializedHelloServer);
+                ServerLogger.writeToServerLog(serializedHelloServer);
                 HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
                 if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
                     clientID = assigningClientID();
@@ -95,16 +95,16 @@ public class Server extends Thread{
                     //associate socket with ID in the Player object
                     Player.associateSocketWithId(clientSocket, clientID);
 
-                    System.out.println("101 server: " + Player.getClientIdFromSocket(clientSocket));
+                    ServerLogger.writeToServerLog("101 server: " + Player.getClientIdFromSocket(clientSocket));
 
                     new Thread(clientHandler).start();
-                    System.out.println("Verbindung erfolgreich. Client verbunden: " + clientSocket);
+                    ServerLogger.writeToServerLog("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                     //welcome erstellen und an den Client schicken
 
-                    //alive message sender erst raus weil stört unnormal.
+                    // alive message sender erst raus weil stört unnormal.
                     // new Thread(new AliveMessageSender()).start();
 
-                    System.out.println(clientID);
+                    ServerLogger.writeToServerLog(clientID);
                     playerList.add(new Player("", clientID, -9999));
                     Welcome welcome = new Welcome(clientID);
                     String serializedWelcome = Serialisierer.serialize(welcome);
@@ -116,7 +116,7 @@ public class Server extends Thread{
                         clientHandler.sendToOneClient(clientID, serializedPlayerAdded);
                     }
                 } else {
-                    System.out.println("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
+                    ServerLogger.writeToServerLog("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
                     clientSocket.close();
 
                     //FEHLERMELDUNG BEHEBEN socket muss richtig geschlossen werden
@@ -137,7 +137,7 @@ public class Server extends Thread{
                     Thread.sleep(5000);  // Warte 5 Sekunden
                 }
             } catch (InterruptedException e) {
-                System.out.println("AliveMessageSender wurde unterbrochen");
+                ServerLogger.writeToServerLog("AliveMessageSender wurde unterbrochen");
             }
         }
     }

@@ -1,5 +1,6 @@
 package SEPee.server.model.card.progCard;
 import SEPee.server.model.Robot;
+import SEPee.server.model.ServerLogger;
 import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,14 +34,10 @@ public class LeftTurn extends ProgCard {
                 break;
 
             default:
-                System.out.println("something wong wotation");
+                ServerLogger.writeToServerLog("Something went wrong");
                 break;
         }
-
-
     }
-
-
 
     @Override
     public String getImageUrl() {

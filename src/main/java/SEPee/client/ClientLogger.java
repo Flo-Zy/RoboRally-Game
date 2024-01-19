@@ -1,18 +1,24 @@
 package SEPee.client;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class ClientLogger {
-    private static Logger logger = Logger.getLogger("MyClientLogger");
+    private static Logger logger = Logger.getLogger("ClientLogger");
 
     static {
         FileHandler fileHandler;
         try {
-            fileHandler = new FileHandler(System.getProperty("user.dir") + System.getProperty("file.separator") + "ClientLogFile", true); // um log files anzufügen
+            // für unique logFile
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String timestamp = dateFormat.format(new Date());
+            String clientLogFile = "ClientLogger_" + timestamp + ".log";
+
+            fileHandler = new FileHandler(System.getProperty("user.dir") + System.getProperty("file.separator") + clientLogFile, true); // um log files anzufügen
             logger.addHandler(fileHandler);
             SimpleFormatter simpleFormatter = new SimpleFormatter();
             fileHandler.setFormatter(simpleFormatter);
