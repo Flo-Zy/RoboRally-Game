@@ -69,22 +69,49 @@ public class SmartAi {
         currentCheckpointToken = numCheckpointToken;
         setCheckpoint();
         bestDistance = calculateManhattanDistance(xRobot, yRobot);
-        
+
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
 
         if(bestRegister.isEmpty()){
-            //aiBestMove.setRegister(robot, hand);
+            int numDamage = 0;
+            for(String card : clientHand){
+                if(card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")){
+                    numDamage++;
+                }
+            }
+            if(numDamage >= 5){
+                int i = 0;
+                for(String card : clientHand){
+                    if(card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")){
+                        bestRegister.add(card);
+                    }
+                }
+            }
+            if(bestRegister.isEmpty()) {
+                aiBestMove.setRegister(robot, hand);
+            }else{
+                System.out.println(clientHand);
+                System.out.println("HIER AI KARTEN: " + bestRegister);
+                int i = 1;
+                for (String card : bestRegister) {
+                    SelectedCard selectedCard = new SelectedCard(card, i);
+                    String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+                    ClientAI.getWriter().println(serializedSelectedCard);
+                    i++;
+                }
+            }
+            /*
             int cardCounter=0;
             for(String card : clientHand){
                 if(cardCounter<5) {
                     if (card.equals("TurnRight") || card.equals("TurnLeft") || card.equals("PowerUp") || card.equals("UTurn") || card.equals("Again")) {
-                        if(cardCounter > 0 && card.equals("Again")){
-                            if (lastPlayedCard.equals("TurnRight") || lastPlayedCard.equals("TurnLeft") || lastPlayedCard.equals("PowerUp") || lastPlayedCard.equals("UTurn")){
+                        if(card.equals("Again")){
+                            if(!(cardCounter == 0)){
                                 bestRegister.add("Again");
                                 cardCounter++;
                             }
-                        }else{
+                        }else {
                             bestRegister.add(card);
                             lastPlayedCard = card;
                             cardCounter++;
@@ -312,8 +339,10 @@ public class SmartAi {
                 }else {
                     currentDistance = calculateManhattanDistance(xFuture, yFuture);
                 }
-
-                if(!reboot && currentDistance < bestDistance){
+                if(checkpointWall()){
+                    currentDistance = 1000;
+                }
+                if(!reboot && currentDistance < bestDistance && !currentRegister.contains("Spam")){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
                 }
@@ -975,5 +1004,51 @@ public class SmartAi {
                 setCheckpoint();
             }
         }
+    }
+
+    private boolean checkpointWall(){
+        if(gameBoard.getBordName().equals("Extra Crispy")){
+            switch (currentCheckpointToken){
+                case 0:
+                    if(xFuture == 10 && yFuture == 1){
+                        return true;
+                    }
+                    if(xFuture == 10 && yFuture == 3 && !futureOrientation.equals("top")){
+                        return true;
+                    }
+                    break;
+                case 1:
+                    if(xFuture == 5 && yFuture == 8){
+                        return true;
+                    }
+                    if(xFuture == 5 && yFuture == 6 && !futureOrientation.equals("bottom")){
+                        return true;
+                    }
+                    break;
+                case 3:
+                    if(xFuture == 10 && yFuture == 8){
+                        return true;
+                    }
+                    if(xFuture == 10 && yFuture == 6 && !futureOrientation.equals("bottom")){
+                        return true;
+                    }
+                    break;
+                case 4:
+                    if(xFuture == 5 && yFuture == 1){
+                        return true;
+                    }
+                    if(xFuture == 5 && yFuture == 3 && !futureOrientation.equals("top")){
+                        return true;
+                    }
+                    break;
+            }
+        }else if(gameBoard.getBordName().equals("Death Trap")){
+            if (currentCheckpointToken == 1) {
+                if ((xFuture == 4 && yFuture == 5) || (xFuture == 4 && yFuture == 3)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
