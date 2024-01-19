@@ -1,7 +1,8 @@
 package SEPee.client.model;
 
-import SEPee.serialisierung.messageType.PlayerTurning;
+import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
+import SEPee.server.model.Robot;
 import SEPee.server.model.Server;
 import SEPee.server.model.card.progCard.LeftTurn;
 import SEPee.server.model.card.progCard.RightTurn;
@@ -14,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.SelectedCard;
 import SEPee.server.model.field.*;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
@@ -448,15 +448,84 @@ public class SmartAi {
     }
 
     private void moveIII(){
-
+        switch(futureOrientation){
+            case "top":
+                if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                    yFuture--;
+                    if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                        yFuture--;
+                        if(!isOnGameboard(xFuture, yFuture-1) || checkRobotField(xFuture, yFuture-1).contains("Pit")){
+                            reboot = true;
+                        }else if(!checkRobotField(xFuture, yFuture).contains("Wall [top")){
+                            yFuture--;
+                        }
+                    }
+                }
+                break;
+            case "right":
+                if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                    xFuture++;
+                    if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                        xFuture++;
+                        if(!isOnGameboard(xFuture+1, yFuture) || checkRobotField(xFuture+1, yFuture).contains("Pit")){
+                            reboot = true;
+                        }else if(!checkRobotField(xFuture, yFuture).contains("Wall [right")){
+                            xFuture++;
+                        }
+                    }
+                }
+                break;
+            case "bottom":
+                if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                    yFuture++;
+                    if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                        yFuture++;
+                        if(!isOnGameboard(xFuture, yFuture+1) || checkRobotField(xFuture, yFuture+1).contains("Pit")){
+                            reboot = true;
+                        }else if(!checkRobotField(xFuture, yFuture).contains("Wall [bottom")){
+                            yFuture++;
+                        }
+                    }
+                }
+                break;
+            case "left":
+                if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                    reboot = true;
+                }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                    xFuture--;
+                    if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                        reboot = true;
+                    }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                        xFuture--;
+                        if(!isOnGameboard(xFuture-1, yFuture) || checkRobotField(xFuture-1, yFuture).contains("Pit")){
+                            reboot = true;
+                        }else if(!checkRobotField(xFuture, yFuture).contains("Wall [left")){
+                            xFuture--;
+                        }
+                    }
+                }
+                break;
+        }
     }
 
-    private void turnRight(){
-
+    private void turnRight() {
+        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
     }
 
     private void turnLeft(){
-
+        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
     }
 
     private void uTurn(){
@@ -539,4 +608,322 @@ public class SmartAi {
         }
     }
 
+    private static String getResultingOrientation(String turningDirection, String currentOrientation) {
+        if (turningDirection.equals("clockwise")) {
+            switch (currentOrientation) {
+                case "top":
+                    return "right";
+                case "bottom":
+                    return "left";
+                case "left":
+                    return "top";
+                case "right":
+                    return "bottom";
+            }
+        } else {
+            switch (currentOrientation) {
+                case "top":
+                    return "left";
+                case "bottom":
+                    return "right";
+                case "left":
+                    return "bottom";
+                case "right":
+                    return "top";
+            }
+        }
+        //da sollte man nie hinkommen
+        return "---";
+    }
+
+    public void fieldActivation() throws InterruptedException {
+        checkBlueConveyorBelts();
+
+        checkGreenConveyorBelts();
+
+        checkPushPanels();
+
+        checkGears();
+
+        //checkCheckpoint();
+    }
+
+    private void checkBlueConveyorBelts(){
+        String standingOnBlueConveyor = checkRobotField(xFuture, yFuture);
+        if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
+            if (standingOnBlueConveyor.contains("ConveyorBelt 2 [top")) {
+                yFuture--;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [top")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+                checkConveyorBeltAgain();
+
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [right")) {
+                xFuture++;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [right")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+                checkConveyorBeltAgain();
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [bottom")) {
+
+                yFuture++;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                }
+
+                checkConveyorBeltAgain();
+
+            } else if (standingOnBlueConveyor.contains("ConveyorBelt 2 [left")) {
+
+                xFuture--;
+
+                String secondBlue = checkRobotField(xFuture, yFuture);
+
+                if (!secondBlue.contains("ConveyorBelt 2 [left")) {
+                    if (secondBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (secondBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+                checkConveyorBeltAgain();
+
+            }
+        }
+    }
+
+    private void checkConveyorBeltAgain(){
+        String standingOnBlueConveyorBelt = checkRobotField(xFuture, yFuture);
+        if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
+            if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [top")) {
+                yFuture--;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [right")) {
+                xFuture++;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [bottom")) {
+                yFuture++;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+
+            } else if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2 [left")) {
+                xFuture--;
+
+                String stillOnBlue = checkRobotField(xFuture, yFuture);
+
+                if (!stillOnBlue.contains("ConveyorBelt 2 [left")) {
+
+                    if (stillOnBlue.contains("ConveyorBelt 2 [top")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (stillOnBlue.contains("ConveyorBelt 2 [bottom")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void checkGreenConveyorBelts() {
+        String standingOnGreenConveyor = checkRobotField(xFuture, yFuture);
+        if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
+            if (standingOnGreenConveyor.contains("ConveyorBelt 1 [top")) {
+
+                yFuture--;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [top")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [right")) {
+
+                xFuture++;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [right")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [bottom")) {
+
+                yFuture++;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [right")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [left")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                }
+
+            } else if (standingOnGreenConveyor.contains("ConveyorBelt 1 [left")) {
+
+                xFuture--;
+
+                String secondGreen = checkRobotField(xFuture, yFuture);
+
+                if (!secondGreen.contains("ConveyorBelt 1 [left")) {
+                    if (secondGreen.contains("ConveyorBelt 1 [top")) {
+                        futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+                    }
+                    if (secondGreen.contains("ConveyorBelt 1 [bottom")) {
+                        futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkPushPanels() {
+        String standingOnPushPanel = checkRobotField(xFuture, yFuture);
+        boolean shouldActivate = false;
+        int pushPanelRegister = 0;
+
+        if (standingOnPushPanel.contains("[1, 3, 5]")) {
+            pushPanelRegister = 1;
+
+        } else if (standingOnPushPanel.contains("[2, 4]")) {
+            pushPanelRegister = 2;
+        }
+
+        if (standingOnPushPanel.contains("PushPanel")) {
+
+            if ((currentRegisterNum == 1 || currentRegisterNum == 3 || currentRegisterNum == 5) && (pushPanelRegister == 1)) {
+                shouldActivate = true;
+            } else if ((currentRegisterNum == 2 || currentRegisterNum == 4) && (pushPanelRegister == 2)) {
+                shouldActivate = true;
+            }
+
+            if (shouldActivate) {
+                if (standingOnPushPanel.contains("PushPanel [top")) {
+                    yFuture--;
+                } else if (standingOnPushPanel.contains("PushPanel [left")) {
+                    xFuture--;
+                } else if (standingOnPushPanel.contains("PushPanel [right")) {
+                    xFuture++;
+                } else if (standingOnPushPanel.contains("PushPanel [bottom")) {
+                    yFuture++;
+                }
+            }
+        }
+    }
+
+    private void checkGears(){
+        if (checkRobotField(xFuture, yFuture).contains("Gear [clockwise")) {
+            futureOrientation = getResultingOrientation("clockwise", futureOrientation);
+        } else if (checkRobotField(xFuture, yFuture).contains("Gear [counterclockwise")) {
+            futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
+        }
+    }
+
+    private void checkCheckpoint(){
+        String standingOnCheckPoint = checkRobotField(xFuture, yFuture);
+
+        if (standingOnCheckPoint.contains("CheckPoint [1")) {
+            if (numCheckpointToken == 0) { //check whether no checkPoints were reached before
+                numCheckpointToken++;
+                setCheckpoint();
+            }
+        } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
+            if (numCheckpointToken == 1) { //check whether one checkPoint was reached before
+                numCheckpointToken++;
+                setCheckpoint();
+            }
+        } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
+            if (numCheckpointToken == 2) {
+                numCheckpointToken++;
+                setCheckpoint();
+            }
+        } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
+            if (numCheckpointToken == 3) {
+                numCheckpointToken++;
+                setCheckpoint();
+            }
+        } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
+            if (numCheckpointToken == 4) {
+                numCheckpointToken++;
+                setCheckpoint();
+            }
+        }
+    }
 }
