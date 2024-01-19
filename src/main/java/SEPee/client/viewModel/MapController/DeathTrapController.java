@@ -1,5 +1,6 @@
 package SEPee.client.viewModel.MapController;
 
+import SEPee.client.ClientLogger;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.ClientController;
@@ -104,7 +105,7 @@ public class DeathTrapController extends MapController {
     }
 
     public void avatarAppear(Player player, int x, int y) {
-        System.out.println("getFigure: " + player.getFigure());
+        ClientLogger.writeToClientLog("Figure: " + player.getFigure());
 
         switch (player.getFigure()) {
             case 1:
@@ -186,7 +187,7 @@ public class DeathTrapController extends MapController {
                 break;
 
             default:
-                System.out.println("Robot not found.");
+                ClientLogger.writeToClientLog("Robot not found.");
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package SEPee.client.viewModel;
 
+import SEPee.client.ClientLogger;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.MapController.*;
@@ -264,7 +265,7 @@ public class ClientController {
                     avatarNameLabel.setEffect(dropShadow);
                     avatarImageView.setEffect(dropShadow);
                     selectedRobotNumber[0] = newSelectedRobotNumber;
-                    System.out.println("Selected Robot Number: " + selectedRobotNumber[0]);
+                    ClientLogger.writeToClientLog("Selected Robot Number: " + selectedRobotNumber[0]);
                     updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
                 });
             }
@@ -297,7 +298,6 @@ public class ClientController {
                     if (newTakenFigures == null || newTakenFigures.contains(GridPane.getColumnIndex(currentSelectedImageView) + 1)) {
                         currentSelectedImageView = null;
                         updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
-                        System.out.println("komm ich hier rein?");
                     }
                 }
             }
@@ -388,7 +388,7 @@ public class ClientController {
                 isRobotAvailable = !client.getTakenFigures().contains(selectedRobotNumber[0]);
             }
 
-            System.out.println("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected + ", Robot Available = " + isRobotAvailable);
+            ClientLogger.writeToClientLog("Updating OK Button State: Username Valid = " + isUsernameValid + ", Robot Selected = " + isRobotSelected + ", Robot Available = " + isRobotAvailable);
 
             okButton.setDisable(!(isUsernameValid && isRobotSelected && isRobotAvailable && confirmedClients < 2));
         }
@@ -416,7 +416,7 @@ public class ClientController {
         String message = messageField.getText();
         if (!message.isEmpty()) {
             SendChat sendChatMessage = new SendChat(message, getSelectedRecipientId());
-            System.out.println("send message selected id " + getSelectedRecipientId());
+            ClientLogger.writeToClientLog("Send message to id: " + getSelectedRecipientId());
 
             String serializedSendChat = Serialisierer.serialize(sendChatMessage);
             Client.getWriter().println(serializedSendChat);
@@ -427,7 +427,7 @@ public class ClientController {
 
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
-            System.out.println("ID selected " + selectedRecipientId);
+            ClientLogger.writeToClientLog("Id selected: " + selectedRecipientId);
             return selectedRecipientId;
         } else {
             return -1;
@@ -443,7 +443,6 @@ public class ClientController {
             ready = false;
             readyButton.setText("BEREIT");
         }
-        System.out.println(ready);
         SetStatus setStatus = new SetStatus(ready);
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
@@ -558,7 +557,6 @@ public class ClientController {
 
     private void initializePlayerNames() {
         playerNames.clear();
-        System.out.println("initializePlayerNames (Client.getPlayerListClient()): " + Client.getPlayerListClient());
         for (Player player : Client.getPlayerListClient()) {
             String playerName = player.getName();
             playerNames.add(playerName);
@@ -969,7 +967,6 @@ public class ClientController {
         dialog.getDialogPane().setHeader(headerLabel);
         headerLabel.getStyleClass().add("header-label");
 
-        // Create buttons for each robot
         ButtonType button1 = new ButtonType("Start 1", ButtonBar.ButtonData.OK_DONE);
         ButtonType button2 = new ButtonType("Start 2", ButtonBar.ButtonData.OK_DONE);
         ButtonType button3 = new ButtonType("Start 3", ButtonBar.ButtonData.OK_DONE);
@@ -977,7 +974,7 @@ public class ClientController {
         ButtonType button5 = new ButtonType("Start 5", ButtonBar.ButtonData.OK_DONE);
         ButtonType button6 = new ButtonType("Start 6", ButtonBar.ButtonData.OK_DONE);
 
-        // Create a map to associate button types with integer values
+        // Map um button types mit integer zu verknüpfen
         HashMap<ButtonType, Integer> buttonMap = new HashMap<>();
         buttonMap.put(button1, 1);
         buttonMap.put(button2, 2);
@@ -986,13 +983,10 @@ public class ClientController {
         buttonMap.put(button5, 5);
         buttonMap.put(button6, 6);
 
-        // Add buttons to the dialog
+        // Hinzufügen der Buttons zu dialog
         dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
 
-        //show the dialog and wait for user input
-        //dialog.initOwner(stage);
-
-        //disable previously selected buttons
+        // disable zuvor gewählter Buttons
         for (Integer takenStartingPoint : takenStartPoints) {
             ButtonType buttonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == takenStartingPoint)
@@ -1005,12 +999,12 @@ public class ClientController {
                 buttonNode.setDisable(true);
             }
         }
-        //show dialog, wait for input
+        // zeige dialog, warte auf input
         Optional<Integer> result = dialog.showAndWait();
-        // Process user input and return the selected robot (index starting from 1)
+        // nimm input und gib zurück: selected robot
         if (result.isPresent()) {
             int selectedStartingpoint = buttonMap.get(result.get());
-            // Get the selected button
+            // bekomme selected button
             ButtonType selectedButtonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == selectedStartingpoint)
                     .map(Map.Entry::getKey)
@@ -1114,10 +1108,6 @@ public class ClientController {
 
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
-    }
-
-    public void initRegisterAI(){
-        //mapController.initializeRegisterAI(id, clientHand);
     }
 
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
@@ -1260,7 +1250,7 @@ public class ClientController {
                                     }
                                 }
                             } else {
-                                System.out.println("Register voll");
+                                ClientLogger.writeToClientLog("Register full");
 
                             }
                         });
@@ -1296,7 +1286,7 @@ public class ClientController {
                                         String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                         Client.getWriter().println(serializedCardSelected);
                                     } else {
-                                        System.out.println("Hand voll");
+                                        ClientLogger.writeToClientLog("Hand full");
                                     }
                                 }
                             }

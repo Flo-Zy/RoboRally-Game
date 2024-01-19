@@ -56,8 +56,6 @@ public class MapController {
 
     public void avatarAppear(Player player, int x, int y) {}
 
-    // public void initializeRegisterAI(int clientId, ArrayList<Card> clientHand){}
-
     public void movementPlayed(int clientId, int newX, int newY){}
 
     public void playerTurn(int clientIdtoTurn, String rotation){}

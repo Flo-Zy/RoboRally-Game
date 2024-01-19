@@ -1,5 +1,6 @@
 package SEPee.client.viewModel.MapController;
 
+import SEPee.client.ClientLogger;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.ClientController;
@@ -105,7 +106,7 @@ public class LostBearingsController extends MapController {
     }
 
     public void avatarAppear(Player player, int x, int y) {
-        System.out.println("getFigure: " + player.getFigure());
+        ClientLogger.writeToClientLog("Figure: " + player.getFigure());
 
         switch (player.getFigure()) {
             case 1:
@@ -187,7 +188,7 @@ public class LostBearingsController extends MapController {
                 break;
 
             default:
-                System.out.println("Robot not found.");
+                ClientLogger.writeToClientLog("Robot not found.");
                 break;
         }
     }
@@ -198,64 +199,6 @@ public class LostBearingsController extends MapController {
         GridPane.setRowIndex(imageView, robot.getY());
 
         // send messagetype move
-    }
-
-    //tester fur spätere kartenimplementierung:
-    public void moveRobotTester(Robot robot) {
-        if (robot != null) {
-            // Move 1 field
-            int currentX = robot.getX();
-            int currentY = robot.getY();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            // Move in the x-axis (for example)
-            robot.setX(currentX + 1);
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Move 2 fields
-            robot.setX(currentX + 2); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //rotateAvatar(2, "clockwise");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            robot.setX(currentX + 3); // Move 2 fields ahead from the previous position
-            updateAvatarPosition(robot); // Update the robot's position on the grid
-
-            // Wait for one second
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Repeat this process for the y-axis or any other required movements
-        }
     }
 
     public synchronized void playerTurn(int clientIdToTurn, String rotation) {
