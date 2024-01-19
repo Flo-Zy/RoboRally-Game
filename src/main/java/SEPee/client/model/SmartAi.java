@@ -73,6 +73,28 @@ public class SmartAi {
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
 
+        if(bestRegister.isEmpty()){
+            //aiBestMove.setRegister(robot, hand);
+            int cardCounter=0;
+            for(String card : clientHand){
+                if(cardCounter<5) {
+                    if (card.equals("TurnRight") || card.equals("TurnLeft") || card.equals("PowerUp") || card.equals("UTurn") || card.equals("Again")) {
+                        if(cardCounter > 0 && card.equals("Again")){
+                            if (lastPlayedCard.equals("TurnRight") || lastPlayedCard.equals("TurnLeft") || lastPlayedCard.equals("PowerUp") || lastPlayedCard.equals("UTurn")){
+                                bestRegister.add("Again");
+                                cardCounter++;
+                            }
+                        }else{
+                            bestRegister.add(card);
+                            lastPlayedCard = card;
+                            cardCounter++;
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println(clientHand);
         System.out.println("HIER AI KARTEN: "+bestRegister);
         int i = 1;
         for(String card: bestRegister){
@@ -80,9 +102,6 @@ public class SmartAi {
             String serializedSelectedCard = Serialisierer.serialize(selectedCard);
             ClientAI.getWriter().println(serializedSelectedCard);
             i++;
-        }
-        if(bestRegister.isEmpty()){
-            aiBestMove.setRegister(robot, hand);
         }
         bestRegister.clear();
         checkpointReached = false;
@@ -145,7 +164,7 @@ public class SmartAi {
                 yCheckpoint = 3;
                 break;
             case "Extra Crispy":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 10;
                         yCheckpoint = 2;
@@ -165,7 +184,7 @@ public class SmartAi {
                 }
                 break;
             case "Lost Bearings":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 11;
                         yCheckpoint = 4;
@@ -185,7 +204,7 @@ public class SmartAi {
                 }
                 break;
             case "Death Trap":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 1;
                         yCheckpoint = 7;
@@ -561,33 +580,33 @@ public class SmartAi {
         }
 
         //tester string
-        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        //System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
 
         StringBuilder result = new StringBuilder();
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                System.out.println("ConveyorBelt");
+                //System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
 
                 result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
 
             } else if (field instanceof Laser) {
-                System.out.println("Laser");
+                //System.out.println("Laser");
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
-                System.out.println("Wall");
+                //System.out.println("Wall");
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                System.out.println("Empty field");
+                //System.out.println("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
-                System.out.println("Start point");
+                //System.out.println("Start point");
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
-                System.out.println("Checkpoint");
+                //System.out.println("Checkpoint");
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
@@ -602,7 +621,7 @@ public class SmartAi {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
             } else {
-                System.out.println("Field nicht gefunden");
+                //System.out.println("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
@@ -610,7 +629,7 @@ public class SmartAi {
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-        System.out.println(result);
+        //System.out.println(result);
         return result.toString();
     }
 

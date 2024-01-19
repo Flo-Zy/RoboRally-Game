@@ -50,6 +50,7 @@ public class ClientHandler implements Runnable {
     private boolean gotAlive = true;
     private ScheduledExecutorService disconnectScheduler = Executors.newSingleThreadScheduledExecutor();
     private Timer alive = new Timer();
+    private boolean isAi;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId, boolean isAi) {
         this.clientSocket = clientSocket;
