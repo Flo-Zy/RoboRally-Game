@@ -62,6 +62,8 @@ public class ClientController {
     @FXML
     public ImageView checkPointImageView;
     @FXML
+    public ImageView countDownImageView;
+    @FXML
     private Slider uiSoundSlider;
 
     @FXML
@@ -1360,5 +1362,16 @@ public class ClientController {
             this.hand = hand;
             this.register = register;
         }
+    }
+
+    public void updateCountdownImage(int seconds) {
+        String imageName;
+        if (seconds <= 0) {
+            imageName = "/boardElementsPNGs/countDown/countdown_0.png";
+        } else {
+            imageName = "/boardElementsPNGs/countDown/countdown_" + seconds + ".png";
+        }
+        Image image = new Image(imageName);
+        countDownImageView.setImage(image);
     }
 }

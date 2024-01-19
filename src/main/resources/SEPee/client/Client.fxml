@@ -193,7 +193,7 @@
                                  <Insets />
                               </HBox.margin>
                            </ImageView>
-                           <ImageView fx:id="energyCubesImageView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <ImageView fx:id="countDownImageView" fitHeight="50.0" fitWidth="199.0" layoutX="10.0" layoutY="10.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
                               <HBox.margin>
                                  <Insets left="15.0" />
                               </HBox.margin>

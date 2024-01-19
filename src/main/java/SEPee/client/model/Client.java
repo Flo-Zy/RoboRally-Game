@@ -17,12 +17,16 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -151,6 +155,7 @@ public class Client extends Application {
                                     String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                     writer.println(serializedPlayerValues);
                                     controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+                                    controller.updateCountdownImage(30);
                                     primaryStage.show();
                                 }
                             });
@@ -491,10 +496,14 @@ public class Client extends Application {
                             ClientLogger.writeToClientLog("TimerStarted");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
+
+                            int countdownDurationSeconds = 30;
+                            startCountdown(controller, countdownDurationSeconds);
                             //thread sleep 30000
                             break;
                         case "TimerEnded":
                             ClientLogger.writeToClientLog("TimerEnded");
+                            controller.updateCountdownImage(0);
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
                             controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
                             controller.setCounter1(5);
@@ -771,5 +780,22 @@ public class Client extends Application {
             }
         }
         notifyTakenFiguresChangeListeners();
+    }
+
+    private void startCountdown(ClientController controller, int durationSeconds) {
+        AtomicInteger seconds = new AtomicInteger(durationSeconds);
+        Timeline timeline = new Timeline();
+
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+                    controller.updateCountdownImage(seconds.get());
+                    if (seconds.get() <= 0) {
+                        timeline.stop();
+                    }
+                    seconds.decrementAndGet();
+                })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 }
