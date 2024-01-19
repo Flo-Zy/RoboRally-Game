@@ -65,6 +65,8 @@ public class Client extends Application {
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
+    AtomicInteger seconds = new AtomicInteger(0);
+
     public interface TakenFiguresChangeListener {
         void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures);
     }
@@ -328,6 +330,7 @@ public class Client extends Application {
                             controller.appendToChatArea(">> Active Phase: " + controller.getCurrentPhase());
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
+                                controller.updateCountdownImage(30);
                                 controller.setRegisterVisibilityFalse();
                                 controller.initializeRegister();
                                 ClientLogger.writeToClientLog(" Programming Phase");
@@ -337,7 +340,6 @@ public class Client extends Application {
                                 ClientLogger.writeToClientLog(" Activation Phase");
                                 controller.playEventSound("ActivationPhase");
                             }
-
                             break;
                         case "CurrentPlayer":
                             CurrentPlayer currentPlayer = Deserialisierer.deserialize(serializedReceivedString, CurrentPlayer.class);
@@ -497,13 +499,14 @@ public class Client extends Application {
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
 
-                            int countdownDurationSeconds = 30;
+                            int countdownDurationSeconds = 29;
                             startCountdown(controller, countdownDurationSeconds);
                             //thread sleep 30000
                             break;
                         case "TimerEnded":
                             ClientLogger.writeToClientLog("TimerEnded");
                             controller.updateCountdownImage(0);
+                            seconds.set(0);
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
                             controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
                             controller.setCounter1(5);
@@ -783,9 +786,8 @@ public class Client extends Application {
     }
 
     private void startCountdown(ClientController controller, int durationSeconds) {
-        AtomicInteger seconds = new AtomicInteger(durationSeconds);
         Timeline timeline = new Timeline();
-
+        seconds.set(durationSeconds);
         timeline.getKeyFrames().add(
                 new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
                     controller.updateCountdownImage(seconds.get());
