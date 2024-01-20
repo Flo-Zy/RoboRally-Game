@@ -6,20 +6,20 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
 
     <!-- Oberer Teil (HBox) -->
     <HBox prefHeight="800.0" prefWidth="935.0" VBox.vgrow="NEVER">
-      <VBox prefHeight="800.0" prefWidth="680.0">
+      <VBox prefHeight="800.0" prefWidth="664.0">
          <children>
               <!-- Linke HBox -->
-              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="680.0" VBox.vgrow="ALWAYS">
+              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
                      <opaqueInsets>
@@ -46,7 +46,7 @@
             </HBox>
             <VBox prefHeight="300.0" prefWidth="664.0" VBox.vgrow="NEVER">
                <children>
-                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
+                  <HBox fx:id="totalHand" alignment="CENTER" prefHeight="100.0" prefWidth="664.0" VBox.vgrow="NEVER">
                      <children>
                         <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
@@ -66,45 +66,25 @@
                         <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" maxHeight="100.0" maxWidth="665.0" prefHeight="100.0" prefWidth="665.0" VBox.vgrow="NEVER" />
-                  <HBox prefHeight="100.0" prefWidth="650.0" VBox.vgrow="NEVER">
+                  <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="664.0" VBox.vgrow="NEVER">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="60.0">
+                        <StackPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="664.0">
                            <HBox.margin>
-                              <Insets left="20.0" right="60.0" />
+                              <Insets />
                            </HBox.margin>
                            <children>
-                              <ImageView fx:id="discardPile" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/boardElementsPNGs/defaultCard.png" />
-                                 </image>
-                              </ImageView>
+                              <ImageView fitHeight="65.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true" />
+                              <HBox fx:id="totalRegister" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="325.0">
+                                 <children>
+                                    <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <HBox fx:id="totalRegister" layoutX="75.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                           <children>
-                              <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                           </children>
-                           <HBox.margin>
-                              <Insets right="60.0" />
-                           </HBox.margin>
-                        </HBox>
-                        <HBox layoutX="70.0" layoutY="10.0" prefHeight="100.0" prefWidth="60.0">
-                           <children>
-                              <ImageView fx:id="programmingDeck" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/boardElementsPNGs/flippedCard.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </HBox>
+                        </StackPane>
                      </children>
                   </HBox>
                </children>
