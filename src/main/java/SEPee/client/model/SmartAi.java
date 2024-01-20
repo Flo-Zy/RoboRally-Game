@@ -100,7 +100,7 @@ public class SmartAi {
 
             TimerStarted timerStarted = new TimerStarted();
             String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-            Client.getWriter().println(serializedTimerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);
 
         }else {
             System.out.println(clientHand);
@@ -115,7 +115,7 @@ public class SmartAi {
 
             TimerStarted timerStarted = new TimerStarted();
             String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-            Client.getWriter().println(serializedTimerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);
         }
         bestRegister.clear();
         checkpointReached = false;
@@ -1051,6 +1051,8 @@ public class SmartAi {
         }else if(gameBoard.getBordName().equals("Death Trap")){
             if (currentCheckpointToken == 1) {
                 if ((xFuture == 4 && yFuture == 5) || (xFuture == 4 && yFuture == 3)) {
+                    return 2;
+                }else if(xFuture == 4 && yFuture == 6 || xFuture == 3 && yFuture == 6 || xFuture == 5 && yFuture == 6){
                     return 2;
                 }
             }
