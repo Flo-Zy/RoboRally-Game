@@ -45,96 +45,99 @@
                     </VBox>
                </children>
             </HBox>
-            <StackPane alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="671.0" VBox.vgrow="NEVER">
+            <StackPane prefHeight="300.0" prefWidth="671.0" VBox.vgrow="NEVER">
                <children>
-                  <ImageView fitHeight="300.0" fitWidth="671.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="300.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                           <Image url="@/boardElementsPNGs/PlayerMat/PlayermatFrame.png" />
                      </image>
                   </ImageView>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="664.0">
                      <children>
-                        <HBox fx:id="totalHand" alignment="TOP_CENTER" prefHeight="135.0" prefWidth="671.0">
+                        <HBox fx:id="totalHand" alignment="BOTTOM_CENTER" prefHeight="135.0" prefWidth="671.0">
                            <children>
                               <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                               <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets bottom="5.0" />
                                  </HBox.margin>
                               </ImageView>
                            </children>
                         </HBox>
-                        <StackPane alignment="TOP_CENTER" prefHeight="165.0" prefWidth="671.0">
+                        <StackPane alignment="TOP_CENTER" prefHeight="165.0" prefWidth="671.0" VBox.vgrow="NEVER">
                            <children>
                               <ImageView fitHeight="96.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
                                   <image>
                                       <Image url="@/boardElementsPNGs/PlayerMat/register1.png" />
                                   </image>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
                               </ImageView>
-                              <HBox fx:id="totalRegister" alignment="BOTTOM_CENTER" prefHeight="185.0" prefWidth="664.0">
+                              <HBox fx:id="totalRegister" alignment="TOP_CENTER" prefHeight="185.0" prefWidth="664.0">
                                  <children>
                                     <ImageView fx:id="register0" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets bottom="25.0" right="2.8" />
+                                          <Insets right="2.8" top="15.0" />
                                        </HBox.margin>
                                     </ImageView>
                                     <ImageView fx:id="register1" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets bottom="25.0" left="2.5" right="2.9" />
+                                          <Insets left="2.5" right="2.9" top="15.0" />
                                        </HBox.margin>
                                     </ImageView>
                                     <ImageView fx:id="register2" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets bottom="25.0" left="2.5" right="2.9" />
+                                          <Insets left="2.5" right="2.9" top="15.0" />
                                        </HBox.margin>
                                     </ImageView>
                                     <ImageView fx:id="register3" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets bottom="25.0" left="2.5" right="2.9" />
+                                          <Insets left="2.5" right="2.9" top="15.0" />
                                        </HBox.margin>
                                     </ImageView>
                                     <ImageView fx:id="register4" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets bottom="25.0" left="2.5" />
+                                          <Insets left="2.5" top="15.0" />
                                        </HBox.margin>
                                     </ImageView>
                                  </children>
