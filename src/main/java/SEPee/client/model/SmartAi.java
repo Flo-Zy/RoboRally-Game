@@ -80,7 +80,6 @@ public class SmartAi {
             }
             System.out.println("DAMAGE NUMBER" + numDamage);
             if(numDamage >= 5){
-                int i = 0;
                 for(String card : clientHand){
                     if(bestRegister.size() < 5) {
                         if (card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")) {
@@ -131,7 +130,6 @@ public class SmartAi {
             }
 
         }else {
-
             System.out.println(clientHand);
             System.out.println("HIER AI KARTEN: " + bestRegister);
             int i = 1;
@@ -348,9 +346,7 @@ public class SmartAi {
                 }else {
                     currentDistance = calculateManhattanDistance(xFuture, yFuture);
                 }
-                if(checkpointWall()){
-                    currentDistance = 1000;
-                }
+                currentDistance = currentDistance + checkpointWall();
                 if(!reboot && currentDistance < bestDistance && !currentRegister.contains("Spam")){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
@@ -1034,26 +1030,44 @@ public class SmartAi {
                     break;
                 case 1:
                     if(xFuture == 5 && yFuture == 8){
-                        return true;
+                        return 2;
                     }
                     if(xFuture == 5 && yFuture == 6 && !futureOrientation.equals("bottom")){
-                        return true;
+                        return 4;
+                    }
+                    if(xFuture == 7 && yFuture == 7){
+                        return 5;
+                    }
+                    if(xFuture == 10 && yFuture == 7){
+                        return 6;
                     }
                     break;
-                case 3:
+                case 2:
                     if(xFuture == 10 && yFuture == 8){
-                        return true;
+                        return 2;
                     }
                     if(xFuture == 10 && yFuture == 6 && !futureOrientation.equals("bottom")){
-                        return true;
+                        return 4;
+                    }
+                    if(xFuture == 8 && yFuture == 7){
+                        return 5;
+                    }
+                    if(xFuture == 5 && yFuture == 7){
+                        return 6;
                     }
                     break;
                 case 3:
                     if(xFuture == 5 && yFuture == 1){
-                        return true;
+                        return 2;
                     }
                     if(xFuture == 5 && yFuture == 3 && !futureOrientation.equals("top")){
-                        return true;
+                        return 4;
+                    }
+                    if(xFuture == 7 && yFuture == 2){
+                        return 5;
+                    }
+                    if(xFuture == 10 && yFuture == 2){
+                        return 6;
                     }
                     break;
             }
