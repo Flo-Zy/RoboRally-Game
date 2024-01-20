@@ -48,8 +48,6 @@ public class SmartAi {
     private boolean reboot = false;
     private int currentRegisterNum = 0;
     private AIBestMove aiBestMove = new AIBestMove();
-    private int xDistanceBest;
-    private int yDistanceBest;
     private boolean checkpointReached;
     private int currentCheckpointToken;
 
@@ -68,7 +66,7 @@ public class SmartAi {
 
         currentCheckpointToken = numCheckpointToken;
         setCheckpoint();
-        bestDistance = calculateManhattanDistance(xRobot, yRobot);
+        bestDistance = 9999;
 
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
@@ -80,15 +78,27 @@ public class SmartAi {
                     numDamage++;
                 }
             }
+            System.out.println("DAMAGE NUMBER" + numDamage);
             if(numDamage >= 5){
                 int i = 0;
                 for(String card : clientHand){
-                    if(card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")){
-                        bestRegister.add(card);
+                    if(bestRegister.size() < 5) {
+                        if (card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")) {
+                            bestRegister.add(card);
+                        }
                     }
                 }
             }
-            if(bestRegister.isEmpty()) {
+            System.out.println(clientHand);
+            System.out.println("HIER AI KARTEN: " + bestRegister);
+            int i = 1;
+            for (String card : bestRegister) {
+                SelectedCard selectedCard = new SelectedCard(card, i);
+                String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedSelectedCard);
+                i++;
+            }
+            /*if(bestRegister.isEmpty()) {
                 aiBestMove.setRegister(robot, hand);
             }else{
                 System.out.println(clientHand);
@@ -100,8 +110,8 @@ public class SmartAi {
                     ClientAI.getWriter().println(serializedSelectedCard);
                     i++;
                 }
-            }
-            /*
+            }*/
+
             int cardCounter=0;
             for(String card : clientHand){
                 if(cardCounter<5) {
@@ -120,7 +130,6 @@ public class SmartAi {
                 }
             }
 
-             */
         }else {
 
             System.out.println(clientHand);
@@ -1006,15 +1015,21 @@ public class SmartAi {
         }
     }
 
-    private boolean checkpointWall(){
+    private int checkpointWall(){
         if(gameBoard.getBordName().equals("Extra Crispy")){
             switch (currentCheckpointToken){
                 case 0:
                     if(xFuture == 10 && yFuture == 1){
-                        return true;
+                        return 2;
                     }
                     if(xFuture == 10 && yFuture == 3 && !futureOrientation.equals("top")){
-                        return true;
+                        return 4;
+                    }
+                    if(xFuture == 8 && yFuture == 2){
+                        return 5;
+                    }
+                    if(xFuture == 5 && yFuture == 2){
+                        return 6;
                     }
                     break;
                 case 1:
@@ -1033,7 +1048,7 @@ public class SmartAi {
                         return true;
                     }
                     break;
-                case 4:
+                case 3:
                     if(xFuture == 5 && yFuture == 1){
                         return true;
                     }
@@ -1045,10 +1060,10 @@ public class SmartAi {
         }else if(gameBoard.getBordName().equals("Death Trap")){
             if (currentCheckpointToken == 1) {
                 if ((xFuture == 4 && yFuture == 5) || (xFuture == 4 && yFuture == 3)) {
-                    return true;
+                    return 2;
                 }
             }
         }
-        return false;
+        return 0;
     }
 }
