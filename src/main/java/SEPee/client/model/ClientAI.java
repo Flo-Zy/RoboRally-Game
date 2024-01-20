@@ -645,19 +645,16 @@ public class ClientAI extends Application {
                             numDamageCards.set(pickDamage.getMessageBody().getCount());
 
                             ArrayList<String> selectedDamageList = new ArrayList<>();
-                            Platform.runLater(() -> {
-                                int i = 0;
-                                while(i < numDamageCards.get()) {
-                                    String damageCard;
-                                    damageCard = controller.showSelectDamageDialog(availableList);
-                                    selectedDamageList.add(damageCard);
-                                    i++;
-                                }
-
-                                SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
-                                String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
-                                writer.println(serializedSelectedDamage);
-                            });
+                            int i = 0;
+                            while(i < numDamageCards.get()) {
+                                String damageCard;
+                                damageCard = availableList.get(0);
+                                selectedDamageList.add(damageCard);
+                                i++;
+                            }
+                            SelectedDamage selectedDamage = new SelectedDamage(selectedDamageList);
+                            String serializedSelectedDamage = Serialisierer.serialize(selectedDamage);
+                            writer.println(serializedSelectedDamage);
                             break;
                         case "Animation":
                             System.out.println("Animation");
