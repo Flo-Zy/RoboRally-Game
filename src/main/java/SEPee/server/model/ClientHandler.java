@@ -67,7 +67,6 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        if(!isAi) {
             TimerTask taskAlive = new TimerTask() {
                 @Override
                 public void run() {
@@ -104,7 +103,7 @@ public class ClientHandler implements Runnable {
                 }
             };
             alive.scheduleAtFixedRate(taskAlive, 0, 5000);
-        }
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;
@@ -1022,7 +1021,7 @@ public class ClientHandler implements Runnable {
                                         timer.cancel();
                                         timer1.cancel();
                                     }
-                                }, 1000);
+                                }, 30000);
                             }
                             break;
                         case "SelectedDamage":
