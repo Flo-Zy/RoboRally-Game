@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -68,19 +69,38 @@
                   </HBox>
                   <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="664.0" VBox.vgrow="NEVER">
                      <children>
-                        <StackPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="664.0">
+                        <StackPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="664.0" HBox.hgrow="NEVER">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                            <children>
-                              <ImageView fitHeight="65.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fitHeight="65.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@/boardElementsPNGs/PlayerMat/register1.png" />
+                               </image>
+                              </ImageView>
                               <HBox fx:id="totalRegister" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="325.0">
                                  <children>
-                                    <ImageView fx:id="register0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="register1" fitHeight="100.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="register2" fitHeight="100.0" fitWidth="65.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="register3" fitHeight="100.0" fitWidth="65.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="register4" fitHeight="100.0" fitWidth="65.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="register0" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets right="2.6" top="15.0" />
+                                       </HBox.margin></ImageView>
+                                    <ImageView fx:id="register1" fitHeight="120.0" fitWidth="78.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets left="2.5" right="2.7" top="15.0" />
+                                       </HBox.margin></ImageView>
+                                    <ImageView fx:id="register2" fitHeight="120.0" fitWidth="78.0" layoutX="75.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets left="2.5" right="2.8" top="15.0" />
+                                       </HBox.margin></ImageView>
+                                    <ImageView fx:id="register3" fitHeight="120.0" fitWidth="78.0" layoutX="140.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets left="2.5" right="2.8" top="15.0" />
+                                       </HBox.margin></ImageView>
+                                    <ImageView fx:id="register4" fitHeight="120.0" fitWidth="78.0" layoutX="205.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets left="2.5" top="15.0" />
+                                       </HBox.margin></ImageView>
                                  </children>
                               </HBox>
                            </children>
