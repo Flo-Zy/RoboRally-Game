@@ -78,7 +78,7 @@ public class SmartAi {
                     numDamage++;
                 }
             }
-            System.out.println("DAMAGE NUMBER" + numDamage);
+
             if(numDamage >= 5){
                 for(String card : clientHand){
                     if(bestRegister.size() < 5) {
@@ -97,37 +97,10 @@ public class SmartAi {
                 ClientAI.getWriter().println(serializedSelectedCard);
                 i++;
             }
-            /*if(bestRegister.isEmpty()) {
-                aiBestMove.setRegister(robot, hand);
-            }else{
-                System.out.println(clientHand);
-                System.out.println("HIER AI KARTEN: " + bestRegister);
-                int i = 1;
-                for (String card : bestRegister) {
-                    SelectedCard selectedCard = new SelectedCard(card, i);
-                    String serializedSelectedCard = Serialisierer.serialize(selectedCard);
-                    ClientAI.getWriter().println(serializedSelectedCard);
-                    i++;
-                }
-            }*/
 
-            int cardCounter=0;
-            for(String card : clientHand){
-                if(cardCounter<5) {
-                    if (card.equals("TurnRight") || card.equals("TurnLeft") || card.equals("PowerUp") || card.equals("UTurn") || card.equals("Again")) {
-                        if(card.equals("Again")){
-                            if(!(cardCounter == 0)){
-                                bestRegister.add("Again");
-                                cardCounter++;
-                            }
-                        }else {
-                            bestRegister.add(card);
-                            lastPlayedCard = card;
-                            cardCounter++;
-                        }
-                    }
-                }
-            }
+            TimerStarted timerStarted = new TimerStarted();
+            String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+            Client.getWriter().println(serializedTimerStarted);
 
         }else {
             System.out.println(clientHand);
@@ -139,6 +112,10 @@ public class SmartAi {
                 ClientAI.getWriter().println(serializedSelectedCard);
                 i++;
             }
+
+            TimerStarted timerStarted = new TimerStarted();
+            String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+            Client.getWriter().println(serializedTimerStarted);
         }
         bestRegister.clear();
         checkpointReached = false;
