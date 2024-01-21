@@ -8,7 +8,6 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -22,7 +21,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -47,6 +45,9 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * controls all the parts of the GUI that are not in the map controlers
+ */
 public class ClientController {
     @FXML
     private Button sendButton;
@@ -66,13 +67,10 @@ public class ClientController {
     public ImageView countDownImageView;
     @FXML
     private Slider uiSoundSlider;
-
     @FXML
     private Slider eventSoundSlider;
-
     @FXML
     private Slider generalSoundSlider;
-
     @FXML
     private Slider masterVolumeSlider;
     @Getter
@@ -94,7 +92,7 @@ public class ClientController {
     @Setter
     @Getter
     private static ArrayList<Player> playerListClient;
-    public MapController mapController; // wird zB. in loadDizzyHighwayFXML() spezifiziert: mapController = dizzyHighwayController;
+    public MapController mapController;
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
     private List<Integer> takenFigures = new ArrayList<>();
@@ -140,7 +138,13 @@ public class ClientController {
     private ArrayList<Zahlen> zahlen = new ArrayList<>();
     private AtomicInteger counter1 = new AtomicInteger(0);
     private Map<Integer, Integer> indexToCounterMap;
+    private int selectedRecipientId = -1;
 
+    /**
+     * initializes the client controller
+     * @param client the client
+     * @param stage the stage
+     */
     public void init(Client client, Stage stage) {
         this.clientHandMap = new HashMap<>();
         this.indexToCounterMap = new HashMap<>();
@@ -169,21 +173,12 @@ public class ClientController {
 
         updateOkButtonState(client, dialog, usernameTextField, selectedRobotNumber, okButtonType);
 
-        //GridPane.setHalignment(connectButton, HPos.CENTER);
-        //GridPane.setValignment(connectButton, VPos.CENTER);
-
         stage.getScene().getRoot().getStyleClass().add("dialog-background");
 
         GridPane grid = new GridPane();
         grid.getStyleClass().add("grid-pane");
         grid.add(connectButton, 1, 3, 1, 1);
         GridPane.setHalignment(connectButton, HPos.CENTER);
-        //GridPane.setHalignment(connectButton, HPos.CENTER);
-        //GridPane.setValignment(connectButton, VPos.CENTER);
-        //GridPane roboRally = new GridPane();
-        //roboRally.setHgap(37);
-        //roboRally.setVgap(37);
-        //roboRally.getStyleClass().add("robo-rally-grid");
         Image RoboRallyName = new Image("boardElementsPNGs/Custom/Backgrounds/RoboRallyName.png");
         ImageView introImage = new ImageView(RoboRallyName);
         introImage.getStyleClass().add("intro-image");
@@ -197,16 +192,14 @@ public class ClientController {
         grid.setMinHeight(300);
         grid.setAlignment(Pos.CENTER);
         introImage.getStyleClass().add("intro-image");
-        introImage.setFitHeight(118);  // Setzt die maximale Höhe
-        introImage.setFitWidth(645);  // Setzt die maximale Breite
+        introImage.setFitHeight(118);
+        introImage.setFitWidth(645);
         introImage.setPreserveRatio(true);
         robotSelectionGrid = new GridPane();
         robotSelectionGrid.setHgap(10);
         robotSelectionGrid.setVgap(10);
         robotSelectionGrid.getStyleClass().add("robot-selection-grid");
         dialog.getDialogPane().setContent(grid);
-
-        // playEventSound("FigureSelected");
 
         for (int i = 1; i <= 6; i++) {
             Image image = new Image("boardElementsPNGs/Custom/Avatars/Figure" + i + ".png");
@@ -238,7 +231,7 @@ public class ClientController {
             } else {
                 final int robotNumber = i;
                 imageView.setOnMouseClicked(event -> {
-                    int newSelectedRobotNumber = 0; // Lokale Variable
+                    int newSelectedRobotNumber = 0;
                     if (currentSelectedImageView == imageView) {
                         // Deselect
                         currentSelectedImageView.setOpacity(1.0);
@@ -262,7 +255,6 @@ public class ClientController {
                     avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
                             "-fx-font-size: 40px; " +
                             "-fx-font-family: 'Impact'");
-                    //avatarNameLabel.setFont(customFont1);
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(10.0);
                     dropShadow.setOffsetX(3.0);
@@ -332,7 +324,6 @@ public class ClientController {
             muteButton.setOnAction(event -> SoundManager.toggleSoundMute(this));
 
             sendButton.setOnAction(event -> sendMessage());
-            // visibilityButton.setOnAction(event -> toggleVisibility());
 
             uiSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 double volume = newValue.doubleValue() / 100.0;
@@ -356,23 +347,11 @@ public class ClientController {
         });
     }
 
-    private Slider createSlider(String label, SoundManager.VolumeSetter volumeSetter) {
-        Slider slider = new Slider(0, 100, 50);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(50);
-        slider.setMinorTickCount(5);
-
-        Label sliderLabel = new Label(label);
-
-        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            volumeSetter.setVolume(newValue.doubleValue() / 100.0);
-        });
-
-        return slider;
-    }
-
-
+    /**
+     * initializes the AI
+     * @param clientAI the AI
+     * @param stage the stage
+     */
     public void initAI(ClientAI clientAI, Stage stage) {
         figure = robotSelectionAI(Client.getTakenFigures());
     }
@@ -396,6 +375,10 @@ public class ClientController {
     }
 
 
+    /**
+     * updates which robots are taken and disables the according images
+     * @param newTakenFigures the figure that is now taken
+     */
     private void updateRobotImageViews(ArrayList<Integer> newTakenFigures) {
         for (Node node : robotSelectionGrid.getChildren()) {
             if (node instanceof ImageView) {
@@ -412,6 +395,9 @@ public class ClientController {
         }
     }
 
+    /**
+     * sends a message that is entered in the GUI
+     */
     @FXML
     private void sendMessage() {
         String message = messageField.getText();
@@ -426,6 +412,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * gets the selected recipient to send the message to
+     * @return the selected recipient, -1 if it is a public message
+     */
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
             ClientLogger.writeToClientLog("Id selected: " + selectedRecipientId);
@@ -435,6 +425,9 @@ public class ClientController {
         }
     }
 
+    /**
+     * sends ready when you press the ready button
+     */
     @FXML
     private void sendReady() {
         if (!ready) {
@@ -451,12 +444,14 @@ public class ClientController {
         String serializedSetStatus = Serialisierer.serialize(setStatus);
         Client.getWriter().println(serializedSetStatus);
 
-        //Damit ClientHandler vergleicht, wie viele Spieler ready sind in der MapSelected case
         MapSelected mapSelected = new MapSelected("");
         String serializedMapSelected = Serialisierer.serialize(mapSelected);
         Client.getWriter().println(serializedMapSelected);
     }
 
+    /**
+     * always make the AI ready
+     */
     public void sendReadyAI() {
         ready = true;
         SetStatus setStatus = new SetStatus(ready);
@@ -468,8 +463,9 @@ public class ClientController {
         ClientAI.getWriter().println(serializedMapSelected1);
     }
 
-    private int selectedRecipientId = -1; // Initialize with a default value
-
+    /**
+     * if you press the "alle" button you can choose from a list of all players who you want to send the message to
+     */
     @FXML
     private void toggleVisibility() {
         if (visibilityButton.getText().equals("Alle")) {
@@ -479,25 +475,26 @@ public class ClientController {
         }
     }
 
+    /**
+     * shows the player list dialog
+     */
     private void showPlayerListDialog() {
         initializePlayerNames();
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, playerNames);
-        dialog.setTitle("Spieler auswählen");
+        dialog.setTitle("Choose a player");
 
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/showPlayerListDialog.css").toExternalForm());
         dialog.getDialogPane().setGraphic(null);
 
-        Label headerLabel = new Label("Bitte wählen Sie einen Spieler:");
+        Label headerLabel = new Label("Please choose a player:");
         headerLabel.setFont(new Font("Arial", 56));
         dialog.getDialogPane().setHeader(headerLabel);
         headerLabel.getStyleClass().add("header-label");
 
-        // "An Alle senden" button
         ButtonType sendToAllButton = new ButtonType("An Alle senden", ButtonBar.ButtonData.LEFT);
         dialog.getDialogPane().getButtonTypes().add(sendToAllButton);
 
-        //"Send to All" button vom dialog
         Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
         ((Button) sendToAllNode).setOnAction(event -> {
             visibilityButton.setText("Alle");
@@ -505,13 +502,12 @@ public class ClientController {
             dialog.close();
         });
 
-
-        // Benutzer auswählen oder "Abbrechen" wählen
+        //choose user or cancel
         Optional<String> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             String selectedPlayerName = result.get();
-            // Id über Namen finden
+            // find id by name
             int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt, weil clientIds mit 1 anfangen
             if (index != -1) {
                 selectedRecipientId = index;
@@ -520,6 +516,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * appends something to the chat
+     * @param message what to append to the chat
+     */
     public void appendToChatArea(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
     }
@@ -543,11 +543,16 @@ public class ClientController {
         System.exit(0);
     }
 
+    /**
+     * AI selects a robot
+     * @param takenFigures all the figures that are already taken
+     * @return the figure that the AI chooses
+     */
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
         while(true){
             int robotNumber = random.nextInt(1, 7);
-            // Überprüfen, ob der Roboter bereits genommen wurde
+            //check whether player is already chosen
             if (!takenFigures.contains(robotNumber)) {
                 return robotNumber;
             } else if(takenFigures.contains(1) && takenFigures.contains(2) && takenFigures.contains(3) && takenFigures.contains(4) &&
@@ -557,6 +562,9 @@ public class ClientController {
         }
     }
 
+    /**
+     * initializes the player names
+     */
     private void initializePlayerNames() {
         playerNames.clear();
         for (Player player : Client.getPlayerListClient()) {
@@ -565,6 +573,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * shows the select map dialog and waits for user input
+     * @return the selected map
+     */
     public String showSelectMapDialog() {
         String selectedMap = null;
 
@@ -588,6 +600,11 @@ public class ClientController {
         return selectedMap;
     }
 
+    /**
+     * shows the select reboot direction dialog
+     * @param stage the stage
+     * @return the direction chosen by the user id no direction was chosen "top" gets returned as default
+     */
     public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
         root.setHgap(10);
@@ -597,8 +614,7 @@ public class ClientController {
 
         String[] selectedDirection = {null};
 
-        // Berechnen der Mindestbreite für die Buttons
-        double minWidth = new Text("bottom").getBoundsInLocal().getWidth() + 20; // 20 für etwas zusätzlichen Platz
+        double minWidth = new Text("bottom").getBoundsInLocal().getWidth() + 20;
 
         // Top Button in der ersten Reihe mittig
         Button topButton = new Button("top");
@@ -666,6 +682,11 @@ public class ClientController {
         return selectedDirection[0];
     }
 
+    /**
+     * shows the select damage dialog and waits for user input
+     * @param availableList the options from which the user can choose the damage
+     * @return the chosen damage
+     */
     public String showSelectDamageDialog(ArrayList<String> availableList){
         String selectedDamage = null;
 
@@ -688,25 +709,28 @@ public class ClientController {
         return selectedDamage;
     }
 
+    /**
+     * loads the FXML of the map Dizzy Highway
+     * @param client the client
+     * @param primaryStage the client's primary stage
+     */
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                 Node dizzyHighway = loader.load();
 
-                // Get  controller
                 DizzyHighwayController dizzyHighwayController = loader.getController();
                 mapController = dizzyHighwayController;
 
                 mapController.init(client, primaryStage);
                 mapController.setRootVBox(DizzyHighwayMap);
 
-                // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -715,13 +739,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * loads the Dizzy Highway FXML for the AI
+     * @param clientAI the AI
+     * @param primaryStage the primary stage
+     */
     public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DizzyHighway.fxml"));
                 Node dizzyHighway = loader.load();
 
-                // Get  controller
                 DizzyHighwayController dizzyHighwayController = loader.getController();
 
                 mapController = dizzyHighwayController;
@@ -729,12 +757,11 @@ public class ClientController {
                 dizzyHighwayController.initAI(clientAI, primaryStage);
                 dizzyHighwayController.setRootVBox(DizzyHighwayMap);
 
-                // set loaded FXML to VBox
                 DizzyHighwayMap.getChildren().setAll(dizzyHighway);
                 DizzyHighwayMap.setVisible(true);
                 DizzyHighwayMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -743,13 +770,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * loads the Extra Crispy FXML
+     * @param client the client
+     * @param primaryStage the primary stage
+     */
     public void loadExtraCrispyFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                 Node extraCrispy = loader.load();
 
-                // Get  controller
                 ExtraCrispyController extraCrispyController = loader.getController();
 
                 mapController = extraCrispyController;
@@ -757,12 +788,11 @@ public class ClientController {
                 extraCrispyController.init(client, primaryStage);
                 extraCrispyController.setRootVBox(ExtraCrispyMap);
 
-                // set loaded FXML to VBox
                 ExtraCrispyMap.getChildren().setAll(extraCrispy);
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -771,13 +801,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * loads the Extra Crispy FXML for the AI
+     * @param clientAI the AI
+     * @param primaryStage the primary stage
+     */
     public void loadExtraCrispyFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/ExtraCrispy.fxml"));
                 Node extraCrispy = loader.load();
 
-                // Get  controller
                 ExtraCrispyController extraCrispyController = loader.getController();
 
                 mapController = extraCrispyController;
@@ -785,12 +819,11 @@ public class ClientController {
                 extraCrispyController.initAI(clientAI, primaryStage);
                 extraCrispyController.setRootVBox(ExtraCrispyMap);
 
-                // set loaded FXML to VBox
                 ExtraCrispyMap.getChildren().setAll(extraCrispy);
                 ExtraCrispyMap.setVisible(true);
                 ExtraCrispyMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -799,13 +832,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * load the Lost Bearings FXML
+     * @param client the client
+     * @param primaryStage the primary stage
+     */
     public void loadLostBearingsFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
                 Node lostBearings = loader.load();
 
-                // Get  controller
                 LostBearingsController lostBearingsController = loader.getController();
 
                 mapController = lostBearingsController;
@@ -813,12 +850,11 @@ public class ClientController {
                 lostBearingsController.init(client, primaryStage);
                 lostBearingsController.setRootVBox(LostBearingsMap);
 
-                // set loaded FXML to VBox
                 LostBearingsMap.getChildren().setAll(lostBearings);
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -827,13 +863,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * load the Lost Bearings FXML for the AI
+     * @param clientAI the AI
+     * @param primaryStage the primary stage
+     */
     public void loadLostBearingsFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/LostBearings.fxml"));
                 Node lostBearings = loader.load();
 
-                // Get  controller
                 LostBearingsController lostBearingsController = loader.getController();
 
                 mapController = lostBearingsController;
@@ -841,12 +881,11 @@ public class ClientController {
                 lostBearingsController.initAI(clientAI, primaryStage);
                 lostBearingsController.setRootVBox(LostBearingsMap);
 
-                // set loaded FXML to VBox
                 LostBearingsMap.getChildren().setAll(lostBearings);
                 LostBearingsMap.setVisible(true);
                 LostBearingsMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -855,13 +894,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * loads the Death Trap FXML
+     * @param client the client
+     * @param primaryStage the primary stage
+     */
     public void loadDeathTrapFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
                 Node deathTrap = loader.load();
 
-                // Get  controller
                 DeathTrapController deathTrapController = loader.getController();
 
                 mapController = deathTrapController;
@@ -869,12 +912,11 @@ public class ClientController {
                 deathTrapController.init(client, primaryStage);
                 deathTrapController.setRootVBox(DeathTrapMap);
 
-                // set loaded FXML to VBox
                 DeathTrapMap.getChildren().setAll(deathTrap);
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -883,13 +925,17 @@ public class ClientController {
         });
     }
 
+    /**
+     * loads the Death Trap FXML for the AI
+     * @param clientAI the AI
+     * @param primaryStage the primary stage
+     */
     public void loadDeathTrapFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/DeathTrap.fxml"));
                 Node deathTrap = loader.load();
 
-                // Get  controller
                 DeathTrapController deathTrapController = loader.getController();
 
                 mapController = deathTrapController;
@@ -897,12 +943,11 @@ public class ClientController {
                 deathTrapController.initAI(clientAI, primaryStage);
                 deathTrapController.setRootVBox(DeathTrapMap);
 
-                // set loaded FXML to VBox
                 DeathTrapMap.getChildren().setAll(deathTrap);
                 DeathTrapMap.setVisible(true);
                 DeathTrapMap.setManaged(true);
 
-                //Hide Bereit nicht bereit button
+                //Hide ready not ready button
                 readyButton.setVisible(false);
                 readyButton.setManaged(false);
             } catch (IOException e) {
@@ -911,6 +956,11 @@ public class ClientController {
         });
     }
 
+    /**
+     * adds the taken staring points to the field takenStartPoints
+     * @param x the x coordinate of the taken starting point
+     * @param y the y coordinate of the taken starting point
+     */
     public void addTakenStartingPoints(int x, int y){
         int combinedValue = x * 10 + y;
         switch(combinedValue){
@@ -935,6 +985,11 @@ public class ClientController {
         }
     }
 
+    /**
+     * adds the taken staring points to the field takenStartPoints for Death Trap
+     * @param x the x coordinate of the taken starting point
+     * @param y the y coordinate of the taken starting point
+     */
     public void addTakenStartingPointsDeathTrap(int x, int y){
         int combinedValue = x * 10 + y;
         switch(combinedValue){
@@ -959,6 +1014,9 @@ public class ClientController {
         }
     }
 
+    /**
+     * sets the selected starting points
+     */
     public void setStartingPoint() {
         Dialog<Integer> dialog = new Dialog<>();
         dialog.getDialogPane().getStylesheets().add(getClass().getResource("/CSSFiles/setStartingPoint.css").toExternalForm());
@@ -985,10 +1043,9 @@ public class ClientController {
         buttonMap.put(button5, 5);
         buttonMap.put(button6, 6);
 
-        // Hinzufügen der Buttons zu dialog
         dialog.getDialogPane().getButtonTypes().setAll(button1, button2, button3, button4, button5, button6);
 
-        // disable zuvor gewählter Buttons
+        // disable of already selected buttons
         for (Integer takenStartingPoint : takenStartPoints) {
             ButtonType buttonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == takenStartingPoint)
@@ -1001,12 +1058,10 @@ public class ClientController {
                 buttonNode.setDisable(true);
             }
         }
-        // zeige dialog, warte auf input
         Optional<Integer> result = dialog.showAndWait();
-        // nimm input und gib zurück: selected robot
+        // take input and return: selected robot
         if (result.isPresent()) {
             int selectedStartingpoint = buttonMap.get(result.get());
-            // bekomme selected button
             ButtonType selectedButtonType = buttonMap.entrySet().stream()
                     .filter(entry -> entry.getValue() == selectedStartingpoint)
                     .map(Map.Entry::getKey)
@@ -1019,13 +1074,16 @@ public class ClientController {
             }
 
             if(Client.getSelectedMap1().equals("Death Trap")) {
-                setStartingPointXYDeathTrap(selectedStartingpoint); // gespiegeltes Startboard
+                setStartingPointXYDeathTrap(selectedStartingpoint); //start board facing the other way
             } else {
                 setStartingPointXY(selectedStartingpoint);
             }
         }
     }
 
+    /**
+     * chooses a starting point for the AI that is still available
+     */
     public void setStartingPointAI() {
         ArrayList<Integer> availableStartingPoints = new ArrayList<>();
         for (int i = 1; i <= 6; i++) {
@@ -1035,21 +1093,24 @@ public class ClientController {
         }
 
         if (availableStartingPoints.isEmpty()) {
-            // Kein verfügbarer StartingPoint mehr
             return;
         }
 
-        // Zufällige Auswahl eines verfügbaren StartingPoints für die AI
+        //random selection of a starting point by the AI
         Random random = new Random();
         int selectedStartingPoint = availableStartingPoints.get(random.nextInt(availableStartingPoints.size()));
 
         if(ClientAI.getSelectedMap1().equals("Death Trap")) {
-            setStartingPointXYDeathTrap(selectedStartingPoint); // gespiegeltes Startboard
+            setStartingPointXYDeathTrap(selectedStartingPoint);
         } else {
             setStartingPointXY(selectedStartingPoint);
         }
     }
 
+    /**
+     * sets the starting points x and y coordinate depending on which one was chosen
+     * @param StartingPointNumber the number of the chosen starting point
+     */
     public void setStartingPointXY(int StartingPointNumber){
         switch(StartingPointNumber){
             case 1:
@@ -1079,6 +1140,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * sets the starting points x and y coordinate depending on which one was chosen for the map Death Trap
+     * @param StartingPointNumber the number of the chosen starting point
+     */
     public void setStartingPointXYDeathTrap(int StartingPointNumber){
         switch(StartingPointNumber){
             case 1:
@@ -1108,78 +1173,91 @@ public class ClientController {
         }
     }
 
+    /**
+     * puts the avatar onto the map
+     * @param player the player
+     * @param x x coordinate where to put the avatar
+     * @param y y coordinate where to put the avatar
+     */
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
     }
 
+    /**
+     * when a movement was played
+     * @param clientIdToMove the id of the client that is moving
+     * @param newX the x coordinate after the movement
+     * @param newY the y coordinate after the movement
+     */
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);
     }
 
+    /**
+     * when a player is turning
+     * @param clientIdToTurn the id of the client that is turning
+     * @param rotation which way the player is turning
+     */
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
     }
 
+    /**
+     * sets the image of the checkpoint
+     * @param imageUrl the image to set the checkpoint to
+     */
     public void setCheckPointImage(String imageUrl) {
         Image image = new Image(imageUrl);
         checkPointImageView.setImage(image);
     }
 
+    /**
+     * plays UI sounds
+     * @param eventName the name of the sound
+     */
     public void playUISound(String eventName){
         SoundManager.playUISound(eventName);
     }
 
+    /**
+     * plays event sound
+     * @param eventName the name of the sound
+     */
     public void playEventSound(String eventName){
         SoundManager.playEventSound(eventName);
     }
 
+    /**
+     * plays sounds
+     * @param soundName the name of the sound
+     */
     public void playSound(String soundName){
         SoundManager.playMusic(soundName);
     }
 
+    /**
+     * initializes the draw pile
+     */
     public void initializeDrawPile() {
-        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (clientHandMap.containsKey(id)) {
             clientHandMap.remove(id);
         }
 
-        // Erstelle eine Kopie der drawPile-Liste für diesen Client
         clientHandMap.put(id, new ArrayList<>(clientHand));
-
-        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = clientHandMap.get(id);
-
-        // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
-            // Hole die HBox mit fx:id="totalHand"
-            //HBox totalHand = (HBox) rootVBox.lookup("#totalHand");
-
-            // Prüfe, ob die HBox gefunden wurde
             if (totalHand != null) {
-
-                // Durchlaufe die ersten 9 ImageView-Elemente in der HBox
                 for (int i = 0; i < 9; i++) {
-                    // Hole das i-te ImageView-Element
                     ImageView imageView = (ImageView) totalHand.getChildren().get(i);
 
-                    // Prüfe, ob das ImageView-Element gefunden wurde
                     if (imageView != null) {
-                        // Prüfe, ob es noch Karten im Kartenstapel gibt
                         if (!drawPileClient.isEmpty()) {
-                            // Hole die oberste Karte vom Kartenstapel
                             Card topCard = drawPileClient.get(i);
-                            // Entferne die oberste Karte vom Kartenstapel
-                            // drawPileClient.remove(0);
-
-                            // Setze das Bild des ImageView-Elements mit dem Bild der Karte
                             javafx.scene.image.Image cardImage = new Image(topCard.getImageUrl());
                             imageView.setImage(cardImage);
-
-                            // Mache das ImageView-Element sichtbar
                             imageView.setVisible(true);
                             imageView.setManaged(true);
                         } else {
-                            // Wenn der Kartenstapel leer ist, setze das Bild auf null und mache das ImageView-Element unsichtbar
                             imageView.setImage(null);
                             imageView.setVisible(false);
                             imageView.setManaged(false);
@@ -1190,38 +1268,28 @@ public class ClientController {
         }
     }
 
+    /**
+     * initializes the register
+     */
     public void initializeRegister() {
         zahlen.clear();
         counter1.set(0);
-        // Überprüfe, ob der Spieler bereits in der playerDrawPile-Map vorhanden ist
         if (clientHandMap.containsKey(id)) {
             clientHandMap.remove(id);
         }
-        // Erstelle eine Kopie der drawPile-Liste für diesen Client
         clientHandMap.put(id, new ArrayList<>(clientHand));
-        // Hole den Spieler-zugeordneten Kartenstapel (playerDrawPileMap)
         List<Card> drawPileClient = clientHandMap.get(id);
 
-        // Prüfe, ob der Kartenstapel nicht leer ist
         if (!drawPileClient.isEmpty()) {
-            // Prüfe, ob die HBox totalHand gefunden wurde
-            // Prüfe, ob die HBox totalRegister gefunden wurde
-            //HBox totalRegister = (HBox) rootVBox.lookup("#totalRegister");
-
             if (totalHand != null && totalRegister != null) {
-
-                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
                 for (int i = 0; i < 9; i++) {
                     ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
 
                     if (handImageView != null) {
-                        final int index = i; // Erforderlich für den Event-Handler, um den richtigen Index zu verwenden
-                        // Füge den Event-Handler für das ImageView hinzu
-                        //if(counter1.get() <= 4 ) {
+                        final int index = i;
                         handImageView.setOnMouseClicked(mouseEvent -> {
 
                             if (counter1.get() < 5) {
-                                // Füge die ausgewählte Karte in das entsprechende Register-ImageView ein
                                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(counter1.get());
                                 if(!(drawPileClient.get(index).getName().equals("Again") && counter1.get() == 0)) {
                                     SoundManager.playUISound("CardChosen");
@@ -1232,10 +1300,8 @@ public class ClientController {
                                     registerImageView.setVisible(true);
                                     registerImageView.setManaged(true);
 
-                                    // gewählte Karte aus Hand unsichtbar machen
                                     handImageView.setVisible(false);
 
-                                    // sende serialisiertes SelectedCard
                                     SelectedCard selectedCard = new SelectedCard(clientHand.get(index).getName(), counter1.get() + 1);
                                     String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                     Client.getWriter().println(serializedCardSelected);
@@ -1259,7 +1325,6 @@ public class ClientController {
                         //}
                     }
                 }
-                // Füge für jedes ImageView-Element in totalHand einen Event-Handler hinzu
                 for (int i = 0; i < 5; i++) {
                     ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
 
@@ -1283,7 +1348,6 @@ public class ClientController {
                                         int smallestEmptyRegisterIndex = findSmallestEmptyRegisterIndex(totalRegister);
                                         counter1.set(smallestEmptyRegisterIndex);
 
-                                        // sende serialisiertes SelectedCard
                                         SelectedCard selectedCard = new SelectedCard(null, registerIndex+1);
                                         String serializedCardSelected = Serialisierer.serialize(selectedCard);
                                         Client.getWriter().println(serializedCardSelected);
@@ -1299,6 +1363,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * fill the empty register
+     * @param nextCards the next available cards
+     */
     public void fillEmptyRegister(ArrayList<Card> nextCards) {
         int index = 0;
         int emptyIndex;
@@ -1315,6 +1383,11 @@ public class ClientController {
         }
     }
 
+    /**
+     * find the smallest empty register index
+     * @param totalRegister the total register
+     * @return the register's index
+     */
     private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
         for (int i = 0; i < 5; i++) {
             ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
@@ -1325,21 +1398,27 @@ public class ClientController {
         return 5;
     }
 
+    /**
+     * maps the register index to the hand index
+     * @param registerIndex the register's index
+     * @return the hand index
+     */
     private int mapRegisterIndexToHandIndex(int registerIndex) {
         int storedInt;
         for (int i = 0; i < zahlen.size(); i++) {
             if (zahlen.get(i).register == registerIndex) {
                 storedInt = zahlen.get(i).hand;
-                zahlen.remove(i); // entferne handIndex mit entsprechendem registerIndex
+                zahlen.remove(i);
                 return storedInt;
             }
         }
         return -1;
     }
 
+    /**
+     * sets the register visibility false
+     */
     public void setRegisterVisibilityFalse() {
-        // Prüfe, ob die HBox totalRegister gefunden wurde
-
         if (totalRegister != null) {
             for (int i = 0; i < 5; i++) {
                 ImageView registerImageView = (ImageView) totalRegister.getChildren().get(i);
@@ -1350,10 +1429,17 @@ public class ClientController {
         }
     }
 
+    /**
+     * sets counter1
+     * @param counter the counter
+     */
     public void setCounter1(int counter) {
         counter1.set(counter);
     }
 
+    /**
+     * for the relationship between the hand and the register index
+     */
     class Zahlen {
         public int hand;
         public int register;
@@ -1364,6 +1450,10 @@ public class ClientController {
         }
     }
 
+    /**
+     * updates the countdown image
+     * @param seconds at what second you are
+     */
     public void updateCountdownImage(int seconds) {
         String imageName;
         if (seconds <= 0) {
