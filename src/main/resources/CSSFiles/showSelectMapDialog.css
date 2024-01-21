@@ -1,15 +1,14 @@
 .header-label {
-    -fx-font-size: 35px; /* font size for the labels */
+    -fx-font-size: 35px;
     -fx-text-fill: #dde400;
-    -fx-font-weight: bold; /* bold font weight */
+    -fx-font-weight: bold;
     -fx-alignment: center;
-    -fx-wrap-text: true; /* Enable text wrapping */
+    -fx-wrap-text: true;
     -fx-max-width: 100px;
-    -fx-padding: 30; /* Padding around labels */
+    -fx-padding: 30;
     -fx-font-family: "MyCustomFont";
 }
 
-/* Stil für den Hauptbereich des Dialogs */
 .dialog-pane {
     -fx-background-color: #2E2E2E;
     -fx-padding: 10px;
