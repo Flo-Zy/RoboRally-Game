@@ -129,28 +129,6 @@ public class Server extends Thread{
         }
     }
 
-    private static class AliveMessageSender implements Runnable {
-        @Override
-        public void run() {
-            try {
-                while (true) {
-                    sendAliveMessages();
-                    Thread.sleep(5000);  // Warte 5 Sekunden
-                }
-            } catch (InterruptedException e) {
-                ServerLogger.writeToServerLog("AliveMessageSender wurde unterbrochen");
-            }
-        }
-    }
-
-    private static void sendAliveMessages() {
-        synchronized (clients) {
-            for (ClientHandler clientHandler : clients) {
-                clientHandler.sendAliveMessage();
-            }
-        }
-    }
-
     public static synchronized int assigningClientID(){
         int assignedClientID = idCounter;
         idCounter++;

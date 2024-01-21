@@ -2,12 +2,6 @@ package SEPee.client.model;
 
 import SEPee.client.ClientAILogger;
 import SEPee.serialisierung.messageType.*;
-import SEPee.server.model.Player;
-import SEPee.server.model.Robot;
-import SEPee.server.model.Server;
-import SEPee.server.model.card.progCard.LeftTurn;
-import SEPee.server.model.card.progCard.RightTurn;
-import SEPee.server.model.card.progCard.UTurn;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +14,9 @@ import SEPee.server.model.field.*;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
 
+/**
+ * calculates the best possible combination of five cards to play
+ */
 public class SmartAi {
 
     @Getter
@@ -53,7 +50,12 @@ public class SmartAi {
     private int currentCheckpointToken;
 
 
-
+    /**
+     * sets the register for the AI
+     * @param robot the AI's robot
+     * @param hand the current nine cards that the AI can choose from
+     * @throws InterruptedException
+     */
     public void setRegister(RobotAI robot, ArrayList<String> hand) throws InterruptedException {
         ClientAILogger.writeToClientLog("ICH BIN HIER");
         this.clientHand = hand;
@@ -123,16 +125,28 @@ public class SmartAi {
 
     }
 
+    /**
+     * creates an ArrayList with all possible combinations in which you can choose 5 cards from 9 cards
+     * @param cards the nine cards to choose from
+     * @param size how many cards you want to choose out of the ArrayList cards
+     * @return ArrayList containing an ArrayList of Strings that are all the possible combinations of cards
+     */
     public ArrayList<ArrayList<String>> allCombinations(ArrayList<String> cards, int size){
         ArrayList<ArrayList<String>> result = new ArrayList<>();
         generateCombinationsHelper(cards, size, 0, new ArrayList<>(), result);
         return result;
     }
 
-    private static void generateCombinationsHelper(ArrayList<String> cards, int size, int start,
-                                                   ArrayList<String> current, ArrayList<ArrayList<String>> result) {
+    /**
+     * helps you create all possible combinations
+     * @param cards the nine cards you got
+     * @param size how many cards you want to choose out of the nine available cards
+     * @param start where it starts
+     * @param current the current combination of cards
+     * @param result the list in which all combinations are saved
+     */
+    private static void generateCombinationsHelper(ArrayList<String> cards, int size, int start, ArrayList<String> current, ArrayList<ArrayList<String>> result) {
         if (size == 0) {
-            // Generate permutations for the current combination
             generatePermutations(current, 0, result);
             return;
         }
@@ -144,27 +158,43 @@ public class SmartAi {
         }
     }
 
+    /**
+     * generates all possible combinations with different order of cards
+     * @param current the current cards
+     * @param start where you start
+     * @param result the list in which all lists of combinations are saved
+     */
     private static void generatePermutations(ArrayList<String> current, int start, ArrayList<ArrayList<String>> result) {
         if (start == current.size() - 1) {
-            // Add the current permutation to the result
             result.add(new ArrayList<>(current));
             return;
         }
 
         for (int i = start; i < current.size(); i++) {
-            // Swap elements to generate permutations
             swap(current, start, i);
             generatePermutations(current, start + 1, result);
-            swap(current, start, i);  // Backtrack to the original order
+            swap(current, start, i);
         }
     }
 
+    /**
+     * helps create all possible combinations with different order of cards
+     * @param list the current cards
+     * @param i first card to swap
+     * @param j second card to swap
+     */
     private static void swap(ArrayList<String> list, int i, int j) {
         String temp = list.get(i);
         list.set(i, list.get(j));
         list.set(j, temp);
     }
 
+    /**
+     * to calculate the Manhattan Distance between the current field and the checkpoint
+     * @param xCoordinate current x coordinate
+     * @param yCoordinate current y coordinate
+     * @return the Manhattan Distance
+     */
     private int calculateManhattanDistance(int xCoordinate, int yCoordinate){
 
         int manhattanDistance = Math.abs(xCoordinate - xCheckpoint) + Math.abs(yCoordinate - yCheckpoint);
@@ -172,6 +202,9 @@ public class SmartAi {
         return manhattanDistance;
     }
 
+    /**
+     * sets the correct checkpoint depending on the map and the checkpoint tokens collected
+     */
     private void setCheckpoint(){
         switch (gameBoard.getBordName()){
             case "Dizzy Highway":
@@ -245,6 +278,11 @@ public class SmartAi {
         }
     }
 
+    /**
+     * calculates the manhattan distance for the last position when playing five cards and saves the combination
+     * with the lowest distance if you do not reboot with those cards
+     * @throws InterruptedException
+     */
     public void calculateBestRegister() throws InterruptedException {
         for(int i = 0; i < combinations.size(); i++){
             ArrayList<String> currentRegister = combinations.get(i);
@@ -324,7 +362,7 @@ public class SmartAi {
                 }else {
                     currentDistance = calculateManhattanDistance(xFuture, yFuture);
                 }
-                currentDistance = currentDistance + checkpointWall();
+                currentDistance = currentDistance + increaseDistance();
                 if(!reboot && currentDistance < bestDistance && !currentRegister.contains("Spam")){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
@@ -333,6 +371,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * plays the last played card when playing an again card
+     */
     private void again(){
         switch (lastPlayedCard) {
             case "Again":
@@ -376,6 +417,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * adjusts x future any y future according to the backup card
+     */
     private void backUp(){
         switch(futureOrientation){
             case "top":
@@ -409,6 +453,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * adjusts x future any y future according to the move I card
+     */
     private void moveI(){
         switch(futureOrientation){
             case "top":
@@ -442,6 +489,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * adjusts x future any y future according to the move II card
+     */
     private void moveII(){
         switch(futureOrientation){
             case "top":
@@ -495,6 +545,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * adjusts x future any y future according to the move III card
+     */
     private void moveIII(){
         switch(futureOrientation){
             case "top":
@@ -568,19 +621,34 @@ public class SmartAi {
         }
     }
 
+    /**
+     * adjusts the robot's future orientation according to the turn right card
+     */
     private void turnRight() {
         futureOrientation = getResultingOrientation("clockwise", futureOrientation);
     }
 
+    /**
+     * adjusts the robot's future orientation according to the turn left card
+     */
     private void turnLeft(){
         futureOrientation = getResultingOrientation("counterclockwise", futureOrientation);
     }
 
+    /**
+     * adjusts the robot's future orientation according to the u turn card
+     */
     private void uTurn(){
         futureOrientation = getResultingOrientation("clockwise", futureOrientation);
         futureOrientation = getResultingOrientation("clockwise", futureOrientation);
     }
 
+    /**
+     * checks what board elements are on the current field
+     * @param robotX the field's x coordinate
+     * @param robotY the field's y coordinate
+     * @return the String that contains all the board elements that are on the current field
+     */
     private String checkRobotField(int robotX, int robotY) {
         List<Field> fields = new ArrayList<>();
 
@@ -637,6 +705,12 @@ public class SmartAi {
         return result.toString();
     }
 
+    /**
+     * whether the field is within the bounds of the game board
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return true if it is within bounds, false otherwise
+     */
     private boolean isOnGameboard(int x, int y){
         if((x <= 12 && x >= 0) && (y <= 9 && y >= 0)){
             return true;
@@ -645,6 +719,12 @@ public class SmartAi {
         }
     }
 
+    /**
+     * get the resulting orientation when turning the player
+     * @param turningDirection clockwise or counterclockwise
+     * @param currentOrientation the orientation that the robot is looking in before turning
+     * @return string of the new orientation after turning
+     */
     private static String getResultingOrientation(String turningDirection, String currentOrientation) {
         if (turningDirection.equals("clockwise")) {
             switch (currentOrientation) {
@@ -673,6 +753,10 @@ public class SmartAi {
         return "---";
     }
 
+    /**
+     * activates the fields in the according order to calculate where the robot would end up
+     * @throws InterruptedException
+     */
     public void fieldActivation() throws InterruptedException {
         checkBlueConveyorBelts();
 
@@ -685,6 +769,9 @@ public class SmartAi {
         checkCheckpoint();
     }
 
+    /**
+     * changes the future x coordinate, y coordinate and orientation of the robot according to the activation of the blue conveyor belts
+     */
     private void checkBlueConveyorBelts(){
         String standingOnBlueConveyor = checkRobotField(xFuture, yFuture);
         if (standingOnBlueConveyor.contains("ConveyorBelt 2")) {
@@ -762,6 +849,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * changes the future x coordinate, y coordinate and orientation of the robot according to the activation of the blue conveyor belts
+     */
     private void checkConveyorBeltAgain(){
         String standingOnBlueConveyorBelt = checkRobotField(xFuture, yFuture);
         if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
@@ -828,6 +918,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * changes the future x coordinate, y coordinate and orientation of the robot according to the activation of the green conveyor belts
+     */
     private void checkGreenConveyorBelts() {
         String standingOnGreenConveyor = checkRobotField(xFuture, yFuture);
         if (standingOnGreenConveyor.contains("ConveyorBelt 1")) {
@@ -897,6 +990,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * changes the future x coordinate, y coordinate and orientation of the robot according to the activation of the push panels
+     */
     private void checkPushPanels() {
         String standingOnPushPanel = checkRobotField(xFuture, yFuture);
         boolean shouldActivate = false;
@@ -934,6 +1030,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * changes the future orientation of the robot according to the activation of the gears
+     */
     private void checkGears(){
         if (checkRobotField(xFuture, yFuture).contains("Gear [clockwise")) {
             futureOrientation = getResultingOrientation("clockwise", futureOrientation);
@@ -942,6 +1041,9 @@ public class SmartAi {
         }
     }
 
+    /**
+     * checks whether you would reach the checkpoint with those five cards
+     */
     private void checkCheckpoint(){
         String standingOnCheckPoint = checkRobotField(xFuture, yFuture);
 
@@ -978,7 +1080,11 @@ public class SmartAi {
         }
     }
 
-    private int checkpointWall(){
+    /**
+     * punishes walking onto certain fields by increasing their distance to the checkpoint
+     * @return the amount by which the distance is being increased
+     */
+    private int increaseDistance(){
         if(gameBoard.getBordName().equals("Extra Crispy")){
             switch (currentCheckpointToken){
                 case 0:

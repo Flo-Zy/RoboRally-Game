@@ -2,22 +2,15 @@ package SEPee.client.model;
 
 import SEPee.client.ClientAILogger;
 import SEPee.client.viewModel.ClientController;
-import SEPee.client.viewModel.MapController.DeathTrapController;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
-import SEPee.client.viewModel.MapController.ExtraCrispyController;
-import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.serialisierung.messageType.Error;
-//auslagern
 import SEPee.server.model.Player;
-import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.*;
 import SEPee.server.model.card.progCard.*;
 import SEPee.server.model.gameBoard.*;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -36,12 +29,12 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import java.util.Iterator;
-
-
-import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * the version of the client that functions as an AI, chooses options automatically for the dialogs
+ */
 @Getter
 public class ClientAI extends Application {
 
@@ -52,7 +45,7 @@ public class ClientAI extends Application {
 
     @Getter
     @Setter
-    private static ArrayList<Player> playerListClientAI = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
+    private static ArrayList<Player> playerListClientAI = new ArrayList<>();
     @Getter
     @Setter
     private static ArrayList<String> mapList = new ArrayList<>();
@@ -64,7 +57,6 @@ public class ClientAI extends Application {
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
-    private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
     private int registerCounter = 1;
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
@@ -75,10 +67,18 @@ public class ClientAI extends Application {
     private RobotAI aiRobot = new RobotAI();
     private int numCheckpointToken = 0;
 
+    /**
+     * main method
+     * @param args arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * establishes a connection with the server
+     * @param primaryStage the stage that needs to be displayed
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -96,7 +96,7 @@ public class ClientAI extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            // Empfange HelloClient vom Server
+            // receive HelloClient from Server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
@@ -109,10 +109,7 @@ public class ClientAI extends Application {
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
 
             } else {
-
-                //socket.close();
                 controller.shutdown();
-                //System.exit(0);
             }
 
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
@@ -122,6 +119,14 @@ public class ClientAI extends Application {
         }
     }
 
+    /**
+     * starts processing the messages sent by the server
+     * @param socket the socket on which the client communicates with the server
+     * @param reader the reader to read from the socket
+     * @param controller the AI's client controller
+     * @param primaryStage the stage
+     * @param writer the writer to print to the socket
+     */
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
@@ -138,7 +143,6 @@ public class ClientAI extends Application {
 
                     switch (messageType) {
                         case "Alive":
-                            // ClientAILogger.writeToClientLog("Alive");
                             Alive alive = new Alive();
                             String serializedAlive = Serialisierer.serialize(alive);
                             writer.println(serializedAlive);
@@ -148,15 +152,13 @@ public class ClientAI extends Application {
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
-                            //Stage wird initialisiert
+
                             Platform.runLater(() -> {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.initAI(this, primaryStage);
-                                // PlayerValues schicken
                                 PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
                                 String serializedPlayerValues = Serialisierer.serialize(playerValues);
                                 writer.println(serializedPlayerValues);
-                                // primaryStage.show();
                             });
                             break;
                         case "PlayerAdded":
@@ -166,7 +168,6 @@ public class ClientAI extends Application {
                             int id = playerAdded.getMessageBody().getClientID();
                             int figure = playerAdded.getMessageBody().getFigure();
 
-                            // Create a new Player object
                             Player newPlayer = new Player(name, id, figure+1);
                             boolean exists = false;
                             synchronized (playerListClientAI) {
@@ -294,7 +295,6 @@ public class ClientAI extends Application {
                             }
                             break;
                         case "Error":
-                            //empfängt den Error vom Server und printet eine Fehlermeldung auf die Konsole.
                             Error deserializedError = Deserialisierer.deserialize(serializedReceivedString, Error.class);
                             ClientAILogger.writeToClientLog(deserializedError.getMessageBody().getError());
                             break;
@@ -328,8 +328,6 @@ public class ClientAI extends Application {
                             // wenn Phase 2: SelectedCard an Server (ClientHandler) senden
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
-                                //controller.initRegisterAI();
-                                //aiBestMove.setRegister(aiRobot, controller.getHandAi());
                                 ClientAILogger.writeToClientLog("ICH SETTE REGISTER");
                                 smartAi.setRegister(aiRobot, controller.getHandAi());
                                 ClientAILogger.writeToClientLog(" Programmierungsphase");
@@ -345,7 +343,7 @@ public class ClientAI extends Application {
 
                             switch (controller.getCurrentPhase()) {
                                 case 0:
-                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) { // wenn currentPlayerID dieser ClientID hier entspricht
+                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
                                         ClientAILogger.writeToClientLog("Aufbauphase");
                                         Platform.runLater(() -> {
                                             controller.setStartingPointAI();
@@ -413,7 +411,7 @@ public class ClientAI extends Application {
                                 aiRobot.setX(startingPointTaken.getMessageBody().getX());
                                 aiRobot.setY(startingPointTaken.getMessageBody().getY());
                             }
-                            // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
+                            //set avatarPlayer to the player that chose the starting point
                             Player avatarPlayer = new Player("", -999,-999);
                             synchronized (playerListClientAI) {
                                 for (Player player : playerListClientAI) {
@@ -422,7 +420,6 @@ public class ClientAI extends Application {
                                     }
                                 }
                             }
-                            //Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             ClientAILogger.writeToClientLog("Starting Point taken for ID: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
                             break;
@@ -431,16 +428,14 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
                             ClientAILogger.writeToClientLog(yourCards.getMessageBody().getCardsInHand());
-                            // Füge in ChatArea: transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
                             controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
-                            // update im ClientController die clientHand
                             ArrayList<Card> drawPile = new ArrayList<>();
                             for (String cardName : yourCards.getMessageBody().getCardsInHand()) {
                                 switch (cardName) {
                                     case "Again":
                                         drawPile.add(new Again());
-                                        break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                                        break;
                                     case "BackUp":
                                         drawPile.add(new BackUp());
                                         break;
@@ -506,12 +501,10 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Timer Started");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
-                            //thread sleep 30000
                             break;
                         case "TimerEnded":
                             ClientAILogger.writeToClientLog("Timer Ended");
                             TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
-                            controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
                             controller.setCounter1(5);
                             break;
                         case "CardsYouGotNow":
@@ -657,8 +650,7 @@ public class ClientAI extends Application {
                             Reboot reboot = Deserialisierer.deserialize(serializedReceivedString, Reboot.class);
                             int rebootingClientId = reboot.getMessageBody().getClientID();
 
-                            // bei AI immer default direction top
-
+                            // for AI default direction top
                             if (controller.getId() == rebootingClientId) {
                                 RebootDirection rebootDirection2 = new RebootDirection("top");
                                 String serializedRebootDirection2 = Serialisierer.serialize(rebootDirection2);
@@ -692,7 +684,6 @@ public class ClientAI extends Application {
                         case "GameFinished":
                             ClientAILogger.writeToClientLog("GameFinished");
                             GameFinished gameFinished = Deserialisierer.deserialize(serializedReceivedString, GameFinished.class);
-                            //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
                             int winnerId = gameFinished.getMessageBody().getClientID();
 
                             synchronized (playerListClientAI) {
@@ -719,14 +710,12 @@ public class ClientAI extends Application {
         }).start();
     }
 
-    public static String getServerIp() {
-        return SERVER_IP;
-    }
-
-    public static int getServerPort() {
-        return SERVER_PORT;
-    }
-
+    /**
+     * get the resulting orientation when turning the player
+     * @param turningDirection clockwise or counterclockwise
+     * @param robot the robot being turned
+     * @return the new direction the robot is facing in now
+     */
     private static String getResultingOrientation(String turningDirection, RobotAI robot) {
         if (turningDirection.equals("clockwise")) {
             switch (robot.getOrientation()) {

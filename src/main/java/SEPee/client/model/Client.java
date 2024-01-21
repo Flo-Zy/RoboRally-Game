@@ -35,6 +35,10 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * reads the messages sent by the server, first establishes an connection to the server
+ * and then deserializes the received messages and applies them to the GUI
+ */
 @Getter
 public class Client extends Application {
 
@@ -45,7 +49,7 @@ public class Client extends Application {
 
     @Getter
     @Setter
-    private static ArrayList<Player> playerListClient = new ArrayList<>(); // ACHTUNG wird direkt von Player importiert!
+    private static ArrayList<Player> playerListClient = new ArrayList<>();
     @Getter
     @Setter
     private static ArrayList<String> mapList = new ArrayList<>();
@@ -57,21 +61,29 @@ public class Client extends Application {
     private boolean receivedHelloClient = false;
     @Getter
     private static PrintWriter writer;
-    private static final Object lock = new Object(); // gemeinsames Sperr-Objekt
     private int registerCounter = 1;
     @Getter
     private static ArrayList<CurrentCards.ActiveCard> activeRegister = new ArrayList<>();
     private boolean wait = false;
     AtomicInteger seconds = new AtomicInteger(0);
+    private final List<TakenFiguresChangeListener> takenFiguresChangeListeners = new ArrayList<>();
 
     public interface TakenFiguresChangeListener {
         void onTakenFiguresChanged(ArrayList<Integer> newTakenFigures);
     }
 
+    /**
+     * main method
+     * @param args arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * establishes a connection with the server
+     * @param primaryStage the stage that needs to be displayed
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -88,7 +100,7 @@ public class Client extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            // Empfange HelloClient vom Server
+            // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
 
@@ -101,10 +113,7 @@ public class Client extends Application {
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
 
             } else {
-
-                //socket.close();
                 controller.shutdown();
-                //System.exit(0);
             }
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
 
@@ -113,15 +122,22 @@ public class Client extends Application {
         }
     }
 
+    /**
+     * starts processing the messages sent by the server
+     * @param socket the socket on which the client communicates with the server
+     * @param reader the reader to read from the socket
+     * @param controller the client's client controller
+     * @param primaryStage the stage
+     * @param writer the writer to print to the socket
+     */
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
             try {
                 while (!receivedHelloClient) {
                     // Wait until HelloClient and Welcome are received
-                    Thread.sleep(100); // Add a short delay to avoid busy waiting
+                    Thread.sleep(100);
                 }
-
-                // Start processing subsequent messages after receiving HelloClient and Welcome
+                // Start processing messages after receiving HelloClient and Welcome
                 while (true) {
                     String serializedReceivedString = reader.readLine();
                     Message deserializedReceivedString = Deserialisierer.deserialize(serializedReceivedString, Message.class);
@@ -129,7 +145,6 @@ public class Client extends Application {
 
                     switch (messageType) {
                         case "Alive":
-                            // ClientLogger.writeToClientLog("Alive");
                             Alive alive = new Alive();
                             String serializedAlive = Serialisierer.serialize(alive);
                             writer.println(serializedAlive);
@@ -139,13 +154,10 @@ public class Client extends Application {
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             controller.setId(receivedId);
-                            //Stage wird initialisiert
+
                             Platform.runLater(() -> {
                                 primaryStage.setOnCloseRequest(event -> controller.shutdown());
                                 controller.init(this, primaryStage);
-
-                                // controller.playCustomSound("get ready for this");
-
                                 if ( controller.getName() == null || controller.getFigure() == 0) {
                                     controller.shutdown();
                                 } else {
@@ -165,7 +177,6 @@ public class Client extends Application {
                             int id = playerAdded.getMessageBody().getClientID();
                             int figure = playerAdded.getMessageBody().getFigure();
 
-                            // Create a new Player object
                             Player newPlayer = new Player(name, id, figure+1);
                             boolean exists = false;
                             synchronized (playerListClient) {
@@ -188,7 +199,7 @@ public class Client extends Application {
                                 }
                             }
                             updateTakenFigures();
-                            notifyTakenFiguresChangeListeners(); //probably redundant bcs of update taken figs
+                            notifyTakenFiguresChangeListeners();
 
                             synchronized (playerListClient) {
                                 for (int i = 0; i < playerListClient.size(); i++) {
@@ -228,7 +239,6 @@ public class Client extends Application {
                             String serializedReceivedMap = serializedReceivedString;
                             MapSelected deserializedReceivedMap = Deserialisierer.deserialize(serializedReceivedMap, MapSelected.class);
 
-                            FXMLLoader loader;
                             ClientLogger.writeToClientLog(deserializedReceivedMap.getMessageBody().getMap());
                             switch (deserializedReceivedMap.getMessageBody().getMap()) {
                                 case "Dizzy Highway":
@@ -291,14 +301,13 @@ public class Client extends Application {
                             }
                             break;
                         case "Error":
-                            //empfängt den Error vom Server und printet eine Fehlermeldung auf die Konsole.
                             Error deserializedError = Deserialisierer.deserialize(serializedReceivedString, Error.class);
                             ClientLogger.writeToClientLog(deserializedError.getMessageBody().getError());
                             break;
                         case "ConnectionUpdate":
                             ClientLogger.writeToClientLog("ConnectionUpdate");
                             ConnectionUpdate connectionUpdate = Deserialisierer.deserialize(serializedReceivedString, ConnectionUpdate.class);
-                            //remove Player from playerList if he lost his connection
+                            //remove player from playerList if he lost his connection
                             int clientIdToRemove = connectionUpdate.getMessageBody().getClientID();
                             synchronized (playerListClient) {
                                 Iterator<Player> iterator = playerListClient.iterator();
@@ -342,7 +351,7 @@ public class Client extends Application {
                             ClientLogger.writeToClientLog("Current Player is " + currentPlayer.getMessageBody().getClientID());
                             switch (controller.getCurrentPhase()) {
                                 case 0:
-                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) { // wenn currentPlayerID dieser ClientID hier entspricht
+                                    if (controller.getId() == currentPlayer.getMessageBody().getClientID()) {
                                         ClientLogger.writeToClientLog("Starting Phase");
                                         Platform.runLater(() -> {
                                             controller.setStartingPoint();
@@ -403,7 +412,7 @@ public class Client extends Application {
                                 controller.addTakenStartingPoints(startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             }
 
-                            // Setze avatarPlayer auf Spieler der gerade einen StartingPoint gewählt hat
+                            //set avatarPlayer to the player that chose the starting point
                             Player avatarPlayer = new Player("", -999,-999);
                             synchronized (playerListClient) {
                                 for (Player player : playerListClient) {
@@ -412,7 +421,6 @@ public class Client extends Application {
                                     }
                                 }
                             }
-                            //Player avatarPlayer = playerListClient.get(takenClientID - 1); // Ids beginnen bei 1 und playerListClient bei 0
                             controller.putAvatarDown(avatarPlayer, startingPointTaken.getMessageBody().getX(), startingPointTaken.getMessageBody().getY());
                             ClientLogger.writeToClientLog("StartingPoint - id: " + avatarPlayer.getId() + ", figure: " + avatarPlayer.getFigure());
                             break;
@@ -420,16 +428,12 @@ public class Client extends Application {
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
                             ClientLogger.writeToClientLog("YourCards: " + yourCards.getMessageBody().getCardsInHand());
 
-                            // transformCardsInHandIntoString() macht aus ArrayList<String> einen formatierten String
-                            controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
-
-                            // update im ClientController die clientHand
                             ArrayList<Card> drawPile = new ArrayList<>();
                             for (String cardName : yourCards.getMessageBody().getCardsInHand()) {
                                 switch (cardName) {
                                     case "Again":
                                         drawPile.add(new Again());
-                                        break; // Füge diese Unterbrechungspunkte hinzu, um sicherzustellen, dass nur eine Karte hinzugefügt wird
+                                        break;
                                     case "BackUp":
                                         drawPile.add(new BackUp());
                                         break;
@@ -469,7 +473,7 @@ public class Client extends Application {
                                 }
                             }
                             controller.setClientHand(drawPile);
-                            // initialisiere die 9 Karten von YourCards in Hand des players
+                            //initialise the 9 cards from YourCards in the player's hand
                             controller.initializeDrawPile();
                             controller.initializeRegister();
                             break;
@@ -492,19 +496,13 @@ public class Client extends Application {
                             break;
                         case "TimerStarted":
                             ClientLogger.writeToClientLog("TimerStarted");
-                            TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
-                            controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
-
                             int countdownDurationSeconds = 29;
                             startCountdown(controller, countdownDurationSeconds);
-                            //thread sleep 30000
                             break;
                         case "TimerEnded":
                             ClientLogger.writeToClientLog("TimerEnded");
                             controller.updateCountdownImage(0);
                             seconds.set(0);
-                            TimerEnded timerEnded = Deserialisierer.deserialize(serializedReceivedString, TimerEnded.class);
-                            controller.appendToChatArea(">> Timer Ended \n>> (empty register fields will be filled)");
                             controller.setCounter1(5);
                             break;
                         case "CardsYouGotNow":
@@ -595,7 +593,7 @@ public class Client extends Application {
                         case "DrawDamage":
                             ClientLogger.writeToClientLog("DrawDamage");
                             DrawDamage drawDamage = Deserialisierer.deserialize(serializedReceivedString, DrawDamage.class);
-                            int damagedID = drawDamage.getMessageBody().getClientID(); // die ID die karten ziehen soll!
+                            int damagedID = drawDamage.getMessageBody().getClientID();
 
                             ArrayList<String> damageCardsDrawn = drawDamage.getMessageBody().getCards();
                             synchronized (playerListClient) {
@@ -739,7 +737,6 @@ public class Client extends Application {
                             controller.shutdown();
                             break;
                         default:
-                            //kann man entfernen?
                             ClientLogger.writeToClientLog("Unhandled message received: " + messageType);
                             break;
 
@@ -751,30 +748,26 @@ public class Client extends Application {
         }).start();
     }
 
-    public static String getServerIp() {
-        return SERVER_IP;
-    }
-
-    public static int getServerPort() {
-        return SERVER_PORT;
-    }
-
-    private final List<TakenFiguresChangeListener> takenFiguresChangeListeners = new ArrayList<>();
-
+    /**
+     * change listener for taken figures
+     * @param listener change listener
+     */
     public void addTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
         takenFiguresChangeListeners.add(listener);
     }
 
-    public void removeTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
-        takenFiguresChangeListeners.remove(listener);
-    }
-
+    /**
+     * to notify the taken figures change listener
+     */
     private void notifyTakenFiguresChangeListeners() {
         for (TakenFiguresChangeListener listener : takenFiguresChangeListeners) {
             listener.onTakenFiguresChanged(new ArrayList<>(takenFigures));
         }
     }
 
+    /**
+     * to update the taken figures
+     */
     private void updateTakenFigures() {
         synchronized (playerListClient) {
             for (Player player : playerListClient) {
@@ -784,6 +777,11 @@ public class Client extends Application {
         notifyTakenFiguresChangeListeners();
     }
 
+    /**
+     * to start the 30 seconds countdown in the GUI
+     * @param controller the client's controller
+     * @param durationSeconds how long the timer is
+     */
     private void startCountdown(ClientController controller, int durationSeconds) {
         Timeline timeline = new Timeline();
         seconds.set(durationSeconds);
