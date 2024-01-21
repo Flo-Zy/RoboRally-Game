@@ -2,7 +2,6 @@
     -fx-spacing: 10;
 }
 
-/* ChatArea VBox */
 #SEPee.client.viewModel.ClientController HBox > VBox {
     -fx-spacing: 10;
     -fx-pref-height: 645.0;
@@ -27,10 +26,6 @@
 
 #visibilityButton {
     -fx-background-color: #dde400;
-    -fx-min-width: 100px;
-    -fx-min-height: 26px;
-    -fx-pref-width: 100px;
-    -fx-pref-height: 26px;
     -fx-text-fill: #2E2E2E;
     -fx-font-weight: bold;
 }
@@ -47,28 +42,15 @@
 }
 
 #readyButton {
-    -fx-pref-width: 128px;
+    -fx-pref-width: 63px;
     -fx-background-color: #dde400;
     -fx-text-fill: #2e2e2e;
 }
 
-.button {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 36, 0.2, 0, 7);
-}
-
-.mute-button {
-    -fx-background-color: #CCCCCC; /* Example background color */
-    -fx-text-fill: white; /* Example text color */
-    /* Other button styles */
-}
-
-
-/* ChatArea VBox */
-#SEPee.client.viewModel.ClientController HBox > VBox {
-    -fx-spacing: 10;
-    -fx-pref-height: 645.0;
-    -fx-pref-width: 287.0;
-    -fx-background-color: #2e2e2e;
+#muteButton {
+    -fx-pref-width: 63px;
+    -fx-background-color: #dde400;
+    -fx-text-fill: #2e2e2e;
 }
 
 .slider {
@@ -96,24 +78,15 @@
 }
 
 .slider .thumb {
-    -fx-text-fill: #ffffff; /* White text color */
+    -fx-text-fill: #ffffff;
 }
 
 .slider .value {
-    -fx-text-fill: #ffffff; /* White text color for the value label */
+    -fx-text-fill: #ffffff;
 }
 
 .slider .axis .tick-mark .tick-label {
-    -fx-fill: #ffffff; /* White text color for tick labels */
-}
-
-
-/* ChatArea VBox */
-#SEPee.client.viewModel.ClientController HBox > VBox {
-    -fx-spacing: 10;
-    -fx-pref-height: 645.0;
-    -fx-pref-width: 287.0;
-    -fx-background-color: #2e2e2e;
+    -fx-fill: #ffffff;
 }
 
 .slider {
@@ -141,13 +114,13 @@
 }
 
 .slider .thumb {
-    -fx-text-fill: #ffffff; /* White text color */
+    -fx-text-fill: #ffffff;
 }
 
 .slider .value {
-    -fx-text-fill: #ffffff; /* White text color for the value label */
+    -fx-text-fill: #ffffff;
 }
 
 .slider .axis .tick-mark .tick-label {
-    -fx-fill: #ffffff; /* White text color for tick labels */
+    -fx-fill: #ffffff;
 }

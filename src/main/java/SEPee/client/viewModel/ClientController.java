@@ -8,6 +8,7 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -74,6 +75,9 @@ public class ClientController {
 
     @FXML
     private Slider masterVolumeSlider;
+    @Getter
+    @FXML
+    private ImageView endGIF;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -121,6 +125,7 @@ public class ClientController {
     private VBox LostBearingsMap;
     @FXML
     private VBox DeathTrapMap;
+    @Getter
     @FXML
     private Button muteButton;
     @Getter
@@ -315,25 +320,19 @@ public class ClientController {
 
             confirmedClients++;
 
-            // Check if both clients have confirmed before enabling the "Connect" button
             if (confirmedClients == 2 && connectButton != null) {
                 connectButton.setDisable(false);
             }
-            // Hier Ihre weitere Initialisierungslogik
 
             stage.getScene().getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
                     "-fx-background-repeat: repeat;" +
                     "-fx-background-size: cover;");
 
-            Scene scene = stage.getScene();
-            scene.getStylesheets().add(getClass().getResource("/CSSFiles/init.css").toExternalForm());
-            muteButton = new Button("Mute Sounds");
             muteButton.getStyleClass().add("mute-button");
-            muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
-            VBox root = (VBox) scene.getRoot();
-            root.getChildren().add(muteButton);
+            muteButton.setOnAction(event -> SoundManager.toggleSoundMute(this));
+
             sendButton.setOnAction(event -> sendMessage());
-            visibilityButton.setOnAction(event -> toggleVisibility());
+            // visibilityButton.setOnAction(event -> toggleVisibility());
 
             uiSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 double volume = newValue.doubleValue() / 100.0;
@@ -441,9 +440,12 @@ public class ClientController {
         if (!ready) {
             ready = true;
             readyButton.setText("NICHT BEREIT");
+            readyButton.setStyle("-fx-background-color: rgba(221, 228, 0, 0.5);");
+
         } else {
             ready = false;
             readyButton.setText("BEREIT");
+            readyButton.setStyle("-fx-background-color: #dde400;");
         }
         SetStatus setStatus = new SetStatus(ready);
         String serializedSetStatus = Serialisierer.serialize(setStatus);
@@ -498,7 +500,6 @@ public class ClientController {
         //"Send to All" button vom dialog
         Node sendToAllNode = dialog.getDialogPane().lookupButton(sendToAllButton);
         ((Button) sendToAllNode).setOnAction(event -> {
-            // Handle the action when "Send to All" is clicked
             visibilityButton.setText("Alle");
             selectedRecipientId = -1;
             dialog.close();
@@ -513,7 +514,6 @@ public class ClientController {
             // Id über Namen finden
             int index = playerNames.indexOf(selectedPlayerName) + 1; // Index ist um 1 versetzt, weil clientIds mit 1 anfangen
             if (index != -1) {
-                // Update selectedRecipientId based on the index
                 selectedRecipientId = index;
                 visibilityButton.setText("Privat");
             }

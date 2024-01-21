@@ -14,283 +14,283 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
-
-    <!-- Oberer Teil (HBox) -->
-    <HBox prefHeight="800.0" prefWidth="935.0" VBox.vgrow="NEVER">
-      <VBox prefHeight="800.0" prefWidth="802.0">
-         <children>
-              <!-- Linke HBox -->
-              <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
+   <StackPane VBox.vgrow="NEVER">
+      <children>
+                <!-- Oberer Teil (HBox) -->
+          <HBox prefHeight="800.0" prefWidth="935.0">
+            <VBox prefHeight="800.0" prefWidth="664.0">
                <children>
-                  <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Button>
-            
-                    <VBox fx:id="DizzyHighwayMap" alignment="TOP_CENTER" managed="false" visible="false">
-                        <fx:include source="DizzyHighway.fxml" />
-                    </VBox>
-                    <VBox fx:id="ExtraCrispyMap" alignment="TOP_CENTER" managed="false" visible="false">
-                        <fx:include source="ExtraCrispy.fxml" />
-                    </VBox>
-                    <VBox fx:id="LostBearingsMap" alignment="TOP_CENTER" managed="false" visible="false">
-                        <fx:include source="LostBearings.fxml" />
-                    </VBox>
-                    <VBox fx:id="DeathTrapMap" alignment="TOP_CENTER" managed="false" visible="false">
-                        <fx:include source="DeathTrap.fxml" />
-                    </VBox>
-               </children>
-            </HBox>
-            <StackPane prefHeight="300.0" prefWidth="671.0" VBox.vgrow="NEVER">
-               <children>
-                  <ImageView fitHeight="300.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                          <Image url="@/boardElementsPNGs/PlayerMat/PlayermatBackground.png" />
-                     </image>
-                  </ImageView>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="664.0">
+                    <!-- Linke HBox -->
+                    <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <HBox fx:id="totalHand" alignment="BOTTOM_CENTER" prefHeight="135.0" prefWidth="671.0">
+                        <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+      
+                                <VBox fx:id="DizzyHighwayMap" alignment="TOP_CENTER" managed="false" visible="false">
+                              <fx:include source="DizzyHighway.fxml" />
+                          </VBox>
+                          <VBox fx:id="ExtraCrispyMap" alignment="TOP_CENTER" managed="false" visible="false">
+                              <fx:include source="ExtraCrispy.fxml" />
+                          </VBox>
+                          <VBox fx:id="LostBearingsMap" alignment="TOP_CENTER" managed="false" visible="false">
+                              <fx:include source="LostBearings.fxml" />
+                          </VBox>
+                          <VBox fx:id="DeathTrapMap" alignment="TOP_CENTER" managed="false" visible="false">
+                              <fx:include source="DeathTrap.fxml" />
+                          </VBox>
+                     </children>
+                  </HBox>
+                  <StackPane prefHeight="300.0" prefWidth="671.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ImageView fitHeight="300.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                                <Image url="@/boardElementsPNGs/PlayerMat/PlayermatBackground.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="664.0">
                            <children>
-                              <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <StackPane alignment="TOP_CENTER" prefHeight="165.0" prefWidth="671.0" VBox.vgrow="NEVER">
-                           <children>
-                              <ImageView fitHeight="96.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
-                                  <image>
-                                      <Image url="@/boardElementsPNGs/PlayerMat/register1.png" />
-                                  </image>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </ImageView>
-                              <HBox fx:id="totalRegister" alignment="TOP_CENTER" prefHeight="185.0" prefWidth="664.0">
+                              <HBox fx:id="totalHand" alignment="BOTTOM_CENTER" prefHeight="135.0" prefWidth="671.0">
                                  <children>
-                                    <ImageView fx:id="register0" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand0" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets right="2.8" top="15.0" />
+                                          <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fx:id="register1" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand1" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets left="2.5" right="2.9" top="15.0" />
+                                          <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fx:id="register2" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand2" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets left="2.5" right="2.9" top="15.0" />
+                                          <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fx:id="register3" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand3" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets left="2.5" right="2.9" top="15.0" />
+                                          <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fx:id="register4" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="hand4" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
-                                          <Insets left="2.5" top="15.0" />
+                                          <Insets bottom="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="hand5" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="hand6" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="hand7" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                    <ImageView fx:id="hand8" fitHeight="100.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" />
                                        </HBox.margin>
                                     </ImageView>
                                  </children>
                               </HBox>
+                              <StackPane alignment="TOP_CENTER" prefHeight="165.0" prefWidth="671.0" VBox.vgrow="NEVER">
+                                 <children>
+                                    <ImageView fitHeight="96.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/boardElementsPNGs/PlayerMat/register1.png" />
+                                        </image>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </ImageView>
+                                    <HBox fx:id="totalRegister" alignment="TOP_CENTER" prefHeight="185.0" prefWidth="664.0">
+                                       <children>
+                                          <ImageView fx:id="register0" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets right="2.8" top="15.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ImageView fx:id="register1" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets left="2.5" right="2.9" top="15.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ImageView fx:id="register2" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets left="2.5" right="2.9" top="15.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ImageView fx:id="register3" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets left="2.5" right="2.9" top="15.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ImageView fx:id="register4" fitHeight="120.0" fitWidth="78.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets left="2.5" top="15.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </StackPane>
                            </children>
-                        </StackPane>
+                        </VBox>
                      </children>
-                  </VBox>
+                  </StackPane>
                </children>
-            </StackPane>
-         </children>
-      </VBox>
-      <AnchorPane prefHeight="800.0" prefWidth="256.0" HBox.hgrow="NEVER">
-         <children>
-              <!-- Rechte HBox (Chatarea VBox) -->
-              <VBox prefHeight="800.0" prefWidth="271.0">
-                  <!-- Verankerte rechte TextArea -->
-                  <VBox VBox.vgrow="NEVER">
-                      <HBox prefHeight="548.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
-                          <VBox alignment="TOP_CENTER" prefHeight="537.0" prefWidth="271.0" HBox.hgrow="NEVER" VBox.vgrow="NEVER">
+            </VBox>
+            <AnchorPane prefHeight="800.0" prefWidth="256.0" HBox.hgrow="NEVER">
+               <children>
+                    <!-- Rechte HBox (Chatarea VBox) -->
+                    <VBox prefHeight="800.0" prefWidth="271.0">
+                          <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="271.0" VBox.vgrow="NEVER">
                         <HBox VBox.vgrow="NEVER">
                            <children>
-
-                                    <ImageView fx:id="avatarImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      
+                                                               <ImageView fx:id="avatarImageView" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <HBox.margin>
                                     <Insets left="15.0" />
                                  </HBox.margin>
                                     </ImageView>
-
-                                    <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+      
+                                                               <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets left="10.0" right="15.0" />
                                  </HBox.margin>
                                     </Label>
                            </children>
                            <VBox.margin>
+                              <Insets bottom="15.0" top="15.0" />
+                           </VBox.margin>
+                        </HBox>
+      
+                                                         <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="415.0" prefWidth="264.0">
+                                  <VBox.margin>
+                                      <Insets right="7.0" />
+                                  </VBox.margin>
+                              </TextArea>
+      
+                                                     </VBox>
+                         <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
+                         <VBox prefHeight="300.0" prefWidth="271.0">
+                             <!-- HBox für Textfield und VisibilityButton -->
+                             <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="271.0" VBox.vgrow="NEVER">
+                                     <Button fx:id="visibilityButton" minHeight="26.0" minWidth="37.5" onAction="#toggleVisibility" prefHeight="26.0" prefWidth="37.5" text="Alle">
+                              <HBox.margin>
+                                 <Insets top="15.0" />
+                              </HBox.margin>
+                           </Button>
+                             </HBox>
+                             <!-- HBox für SendButton -->
+                             <HBox VBox.vgrow="NEVER">
+                           <children>
+                              <TextField fx:id="messageField" minHeight="26.0" minWidth="198.0" prefHeight="26.0" prefWidth="198.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
+                                 <HBox.margin>
+                                    <Insets left="7.0" right="7.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="7.0" />
+                           </VBox.margin>
+                             </HBox>
+                        <HBox prefHeight="50.0" prefWidth="271.0" VBox.vgrow="NEVER">
+                           <children>
+                              <ImageView fx:id="checkPointImageView" fitHeight="50.0" fitWidth="50.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </ImageView>
+                              <ImageView fx:id="countDownImageView" fitHeight="50.0" fitWidth="199.0" layoutX="10.0" layoutY="10.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="15.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                           <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
                         </HBox>
-
-                              <TextArea fx:id="chatArea" editable="false" layoutX="15.0" prefHeight="412.0" prefWidth="241.0" VBox.vgrow="ALWAYS">
-                                  <VBox.margin>
-                                      <Insets bottom="15.0" right="7.0" top="15.0" />
-                                  </VBox.margin>
-                              </TextArea>
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin>
-
-                          </VBox>
-                      </HBox>
-                      <!-- Innerste VBox für Textfield, VisibilityButton, SendButton und AvatarImage -->
-                      <VBox prefHeight="321.0" prefWidth="271.0" VBox.vgrow="NEVER">
-                          <!-- HBox für Textfield und VisibilityButton -->
-                          <HBox VBox.vgrow="NEVER">
-                              <AnchorPane prefHeight="26.0" prefWidth="276.0" HBox.hgrow="SOMETIMES">
-                                  <children>
-                                        <Button fx:id="visibilityButton" minHeight="26.0" minWidth="37.5" prefHeight="26.0" prefWidth="37.5" text="Alle" />
-                                  </children>
-                                  <HBox.margin>
-                                      <Insets bottom="7.0" />
-                                  </HBox.margin>
-                              </AnchorPane>
-                          </HBox>
-                          <!-- HBox für SendButton -->
-                          <HBox VBox.vgrow="NEVER">
-                        <children>
-                           <AnchorPane prefWidth="220.0" HBox.hgrow="NEVER">
-                              <children>
-                                 <HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="271.0">
-                                    <children>
-                                       <TextField fx:id="messageField" minHeight="26.0" minWidth="198.0" prefHeight="26.0" prefWidth="198.0" promptText="Tippe deine Nachricht..." HBox.hgrow="NEVER">
-                                          <HBox.margin>
-                                             <Insets />
-                                          </HBox.margin>
-                                       </TextField>
-                                       <Button fx:id="sendButton" alignment="CENTER" contentDisplay="CENTER" minHeight="26.0" minWidth="59.0" onAction="#sendMessage" text="Senden" HBox.hgrow="NEVER">
-                                          <HBox.margin>
-                                             <Insets left="7.0" right="7.0" />
-                                          </HBox.margin>
-                                       </Button>
-                                    </children>
-                                 </HBox>
-                              </children>
-                           </AnchorPane>
-                        </children>
-                          </HBox>
-                     <HBox prefHeight="65.0" prefWidth="271.0" VBox.vgrow="NEVER">
-                        <children>
-                           <ImageView fx:id="checkPointImageView" fitHeight="50.0" fitWidth="50.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
-                              <HBox.margin>
-                                 <Insets />
-                              </HBox.margin>
-                           </ImageView>
-                           <ImageView fx:id="countDownImageView" fitHeight="50.0" fitWidth="199.0" layoutX="10.0" layoutY="10.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
-                              <HBox.margin>
-                                 <Insets left="15.0" />
-                              </HBox.margin>
-                           </ImageView>
-                        </children>
-                     </HBox>
-                          <VBox VBox.vgrow="NEVER">
-                              <children>
-                                     <!-- Create sliders for sound categories and master volume -->
-                                     <VBox prefWidth="274.0" styleClass="vbox-label">
-                                         <children>
-                                             <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
-                                             <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
-                                         </children>
-                              <VBox.margin>
-                                 <Insets right="7.0" />
-                              </VBox.margin>
-                                     </VBox>
-                                     <VBox>
-                                         <children>
-                                             <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
-                                             <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                         </children>
-                              <VBox.margin>
-                                 <Insets right="7.0" />
-                              </VBox.margin>
-                                     </VBox>
-                                     <VBox>
-                                         <children>
-                                             <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
-                                             <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                         </children>
-                              <VBox.margin>
-                                 <Insets right="7.0" />
-                              </VBox.margin>
-                                     </VBox>
-                                     <VBox>
-                                         <children>
-                                             <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
-                                             <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
-                                         </children>
-                              <VBox.margin>
-                                 <Insets right="7.0" />
-                              </VBox.margin>
-                                     </VBox>
-                              </children>
+                        <Button fx:id="muteButton" mnemonicParsing="false" text="mute" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets bottom="7.0" top="7.0" />
+                           </VBox.margin>
+                        </Button>
+                             <VBox VBox.vgrow="NEVER">
+                                 <children>
+                                        <!-- Create sliders for sound categories and master volume -->
+                                        <VBox prefWidth="274.0" styleClass="vbox-label">
+                                            <children>
+                                                <Label style="-fx-text-fill: #ffffff;" text="Master vol" />
+                                                <Slider fx:id="masterVolumeSlider" max="100" min="0" styleClass="slider" value="50" />
+                                            </children>
+                                 <VBox.margin>
+                                    <Insets right="7.0" />
+                                 </VBox.margin>
+                                        </VBox>
+                                        <VBox>
+                                            <children>
+                                                <Label style="-fx-text-fill: #ffffff;" text="Voice Lines vol" />
+                                                <Slider fx:id="eventSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                            </children>
+                                 <VBox.margin>
+                                    <Insets right="7.0" />
+                                 </VBox.margin>
+                                        </VBox>
+                                        <VBox>
+                                            <children>
+                                                <Label style="-fx-text-fill: #ffffff;" text="GUI, Map vol" />
+                                                <Slider fx:id="uiSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                            </children>
+                                 <VBox.margin>
+                                    <Insets right="7.0" />
+                                 </VBox.margin>
+                                        </VBox>
+                                        <VBox>
+                                            <children>
+                                                <Label style="-fx-text-fill: #ffffff;" text="Music vol" />
+                                                <Slider fx:id="generalSoundSlider" max="100" min="0" styleClass="slider" value="50" />
+                                            </children>
+                                 <VBox.margin>
+                                    <Insets right="7.0" />
+                                 </VBox.margin>
+                                        </VBox>
+                                 </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                             </VBox>
                         <opaqueInsets>
                            <Insets />
                         </opaqueInsets>
-                          </VBox>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-
-                      </VBox>
-                  </VBox>
-              </VBox>
-         </children>
-      </AnchorPane>
-    </HBox>
+      
+                               </VBox>
+                    </VBox>
+               </children>
+            </AnchorPane>
+          </HBox>
+         <ImageView fx:id="endGIF" fitHeight="528.0" fitWidth="616.0" pickOnBounds="true" preserveRatio="true" visible="false">
+          <image>
+              <Image url="@/boardElementsPNGs/action/winner.gif" />
+          </image>
+         </ImageView>
+      </children>
+   </StackPane>
 </VBox>

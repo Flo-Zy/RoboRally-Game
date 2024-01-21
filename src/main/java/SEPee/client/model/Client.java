@@ -2,10 +2,6 @@ package SEPee.client.model;
 
 import SEPee.client.ClientLogger;
 import SEPee.client.viewModel.ClientController;
-import SEPee.client.viewModel.MapController.DeathTrapController;
-import SEPee.client.viewModel.MapController.DizzyHighwayController;
-import SEPee.client.viewModel.MapController.ExtraCrispyController;
-import SEPee.client.viewModel.MapController.LostBearingsController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.Error;
@@ -17,6 +13,7 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -25,11 +22,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -109,7 +106,6 @@ public class Client extends Application {
                 controller.shutdown();
                 //System.exit(0);
             }
-
             startServerMessageProcessing(socket, reader, controller, primaryStage, writer);
 
         } catch (IOException e) {
@@ -721,7 +717,6 @@ public class Client extends Application {
                         case "GameFinished":
                             ClientLogger.writeToClientLog("GameFinished");
                             GameFinished gameFinished = Deserialisierer.deserialize(serializedReceivedString, GameFinished.class);
-                            //hier noch berücksichtigen, dass sobald jemand gewonnen hat, nicht sofort alles schließen, sondern irgendwie anzeigen, wer gewonnen hat etc.
                             int winnerId = gameFinished.getMessageBody().getClientID();
 
                             synchronized (playerListClient) {
@@ -729,13 +724,17 @@ public class Client extends Application {
                                     if (player.getId() == winnerId) {
                                         ClientLogger.writeToClientLog("WinnerId " + winnerId);
                                         controller.appendToChatArea(player.getName() + " has won this game!");
-                                        controller.playEventSound("YouWon");
-
-                                    } else if (player.getId() != winnerId){
-                                        controller.playEventSound("YouLost");
                                     }
                                 }
                             }
+                            if(winnerId == controller.getId()) {
+                                controller.playEventSound("YouWon");
+                            } else {
+                                controller.playEventSound("YouLost");
+                                Image looserImage = new Image(getClass().getResourceAsStream("/boardElementsPNGs/action/looser.gif"));
+                                controller.getEndGIF().setImage(looserImage);
+                            }
+                            controller.getEndGIF().setVisible(true);
                             Thread.sleep(10000);
                             controller.shutdown();
                             break;

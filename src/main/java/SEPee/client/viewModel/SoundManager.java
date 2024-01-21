@@ -95,13 +95,15 @@ public class SoundManager {
         }
     }
 
-    public static void toggleSoundMute() {
+    public static void toggleSoundMute(ClientController controller) {
         isMuted = !isMuted;
 
         if (isMuted) {
             masterVolume = 0.0;
+            controller.getMuteButton().setStyle("-fx-background-color: rgba(221, 228, 0, 0.5);");
         } else {
             masterVolume = 1.0;
+            controller.getMuteButton().setStyle("-fx-background-color: #dde400;");
         }
 
         updateAllMediaPlayersVolume();
