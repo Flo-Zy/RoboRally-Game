@@ -1,18 +1,10 @@
 package SEPee.client.viewModel.MapController;
 
 import SEPee.client.model.Client;
-import SEPee.client.viewModel.SoundManager;
-import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.SelectedCard;
-import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
-import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -22,9 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MapController {
     @FXML
@@ -52,11 +42,33 @@ public class MapController {
     private final java.util.Queue<MoveInstruction> movementQueue = new LinkedList<>();
 
 
+    /**
+     * initializes the clients GUI
+     * @param client the client
+     * @param stage the stage
+     */
     public void init(Client client, Stage stage) {}
 
+    /**
+     * sets the avatar visible
+     * @param player the player whose avatar needs to be set visible
+     * @param x x coordinate where the avatar appears
+     * @param y y coordinate where the avatar appears
+     */
     public void avatarAppear(Player player, int x, int y) {}
 
+    /**
+     * for movement animation
+     * @param clientId id of the client whose avatar needs to be moved
+     * @param newX the x coordinate after the movement
+     * @param newY the y coordinate after the movement
+     */
     public void movementPlayed(int clientId, int newX, int newY){}
 
+    /**
+     * rotates the image of the player's avatar
+     * @param clientIdToTurn id of the player whose robot needs to be rotated
+     * @param rotation clockwise or counterclockwise
+     */
     public void playerTurn(int clientIdtoTurn, String rotation){}
 }

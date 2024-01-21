@@ -1,5 +1,8 @@
 package SEPee.client.viewModel.MapController;
 
+/**
+ * class needed as help for the movements in the map controller classes
+ */
 class MoveInstruction {
     int clientId;
     String rotation;

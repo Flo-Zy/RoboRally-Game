@@ -4,20 +4,14 @@ import SEPee.client.ClientLogger;
 import SEPee.client.model.Client;
 import SEPee.client.model.ClientAI;
 import SEPee.client.viewModel.ClientController;
-import SEPee.client.viewModel.SoundManager;
-import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.SelectedCard;
-import SEPee.serialisierung.messageType.TimerStarted;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,9 +19,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * controls all graphical changes on the map Death Trap
+ */
 public class DeathTrapController extends MapController {
 
     @Setter
@@ -38,25 +34,9 @@ public class DeathTrapController extends MapController {
     @FXML
     private ImageView field00;
     @FXML
-    private ImageView field01;
-    @FXML
     private ImageView field02;
     @FXML
-    private ImageView field03a;
-    @FXML
-    private ImageView field03b;
-    @FXML
-    private ImageView field03c;
-    @FXML
     private ImageView field04;
-    @FXML
-    private ImageView field05;
-    @FXML
-    private ImageView field06;
-    @FXML
-    private ImageView field07;
-    @FXML
-    private ImageView field08;
     @FXML
     private ImageView field09;
     private Stage stage;
@@ -72,56 +52,59 @@ public class DeathTrapController extends MapController {
     public ImageView Avatar5;
     @FXML
     public ImageView Avatar6;
-    @FXML
-    public HBox totalHand;
-    @FXML
-    public HBox totalRegister;
     @Getter
     static ArrayList<Card> register;
 
-    private Map<Player, Robot> playerRobotMap; //store player and robot
-    private Map<Robot, ImageView> robotImageViewMap; // link robots and ImageViews
-    private Map<Integer, List<Card>> clientHandMap;
-    private Map<Integer, Integer> indexToCounterMap;
+    private Map<Player, Robot> playerRobotMap;
+    private Map<Robot, ImageView> robotImageViewMap;
     private AtomicInteger counter1 = new AtomicInteger(0);
     @Getter
     private final Queue<MoveInstruction> movementQueue = new LinkedList<MoveInstruction>();
     private boolean isTransitioning = false;
 
-    public void setCounter1(int counter){
-        counter1.set(counter);
-    }
-
+    /**
+     * initializes the clients GUI
+     * @param client the client
+     * @param stage the stage
+     */
     public void init(Client client, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
     }
 
+    /**
+     * initializes the AI
+     * @param clientAI the AI
+     * @param stage the stage
+     */
     public void initAI(ClientAI clientAI, Stage stage) {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
     }
 
+    /**
+     * sets the avatar visible
+     * @param player the player whose avatar needs to be set visible
+     * @param x x coordinate where the avatar appears
+     * @param y y coordinate where the avatar appears
+     */
     public void avatarAppear(Player player, int x, int y) {
         ClientLogger.writeToClientLog("Figure: " + player.getFigure());
 
         switch (player.getFigure()) {
             case 1:
-                Robot robot1 = new Robot(x, y, "left"); // set coordinates for robot1
-                playerRobotMap.put(player, robot1); //link player and robot
+                Robot robot1 = new Robot(x, y, "left");
+                playerRobotMap.put(player, robot1);
 
-                ImageView avatar1ImageView = Avatar1; // store imageview
-                robotImageViewMap.put(robot1, avatar1ImageView); // link imageview w robot
+                ImageView avatar1ImageView = Avatar1;
+                robotImageViewMap.put(robot1, avatar1ImageView);
 
-                updateAvatarPosition(robot1); //put on selectedStartPoint
+                updateAvatarPosition(robot1);
 
-                avatar1ImageView.setVisible(true); //make visible
+                avatar1ImageView.setVisible(true);
                 avatar1ImageView.setManaged(true);
-
-                //rotateAvatar(player.getId(), "clockwise"); //wird rotiert hingestellt weil PlayerTurning erst mit karten geschieht
-
                 break;
             case 2:
                 Robot robot2 = new Robot(x, y, "left");
@@ -133,9 +116,6 @@ public class DeathTrapController extends MapController {
 
                 avatar2ImageView.setVisible(true);
                 avatar2ImageView.setManaged(true);
-
-                //moveRobotTester(robot2);
-
                 break;
 
             case 3:
@@ -192,14 +172,22 @@ public class DeathTrapController extends MapController {
         }
     }
 
+    /**
+     * updates the position of the player's robot
+     * @param robot the robot whose avatar needs to be moved
+     */
     private void updateAvatarPosition(Robot robot) {
         ImageView imageView = robotImageViewMap.get(robot);
         GridPane.setColumnIndex(imageView, robot.getX());
         GridPane.setRowIndex(imageView, robot.getY());
 
-        // send messagetype move
     }
 
+    /**
+     * rotates the image of the player's avatar
+     * @param clientIdToTurn id of the player whose robot needs to be rotated
+     * @param rotation clockwise or counterclockwise
+     */
     public synchronized void playerTurn(int clientIdToTurn, String rotation) {
         movementQueue.offer(new MoveInstruction(clientIdToTurn, rotation));
 
@@ -208,6 +196,12 @@ public class DeathTrapController extends MapController {
         }
     }
 
+    /**
+     * for movement animation
+     * @param clientId id of the client whose avatar needs to be moved
+     * @param newX the x coordinate after the movement
+     * @param newY the y coordinate after the movement
+     */
     public synchronized void movementPlayed(int clientId, int newX, int newY) {
         movementQueue.offer(new MoveInstruction(clientId, newX, newY));
 
@@ -216,6 +210,9 @@ public class DeathTrapController extends MapController {
         }
     }
 
+    /**
+     * queue for the animations
+     */
     private void processQueue() {
         if (movementQueue.isEmpty() || isTransitioning) {
             return;
@@ -232,6 +229,10 @@ public class DeathTrapController extends MapController {
         }
     }
 
+    /**
+     * processes the animation of a turning player
+     * @param instruction what kind of movement
+     */
     private void processPlayerTurn(MoveInstruction instruction) {
         Player player = getPlayerById(instruction.clientId);
 
@@ -254,6 +255,10 @@ public class DeathTrapController extends MapController {
         rotateTransition.play();
     }
 
+    /**
+     * processes the movements
+     * @param instruction what kind of movement
+     */
     private void processMovement(MoveInstruction instruction) {
         Player player = getPlayerById(instruction.clientId);
 
@@ -284,6 +289,11 @@ public class DeathTrapController extends MapController {
         transition.play();
     }
 
+    /**
+     * returns the player that matches the id
+     * @param clientId the id you want to match a player to
+     * @return the player object that matches the id
+     */
     private Player getPlayerById(int clientId) {
         for (Player player : ClientController.getPlayerListClient()) {
             if (player.getId() == clientId) {
