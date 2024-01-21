@@ -49,7 +49,7 @@
                <children>
                   <ImageView fitHeight="300.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                          <Image url="@/boardElementsPNGs/PlayerMat/PlayermatFrame.png" />
+                          <Image url="@/boardElementsPNGs/PlayerMat/PlayermatBackground.png" />
                      </image>
                   </ImageView>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="664.0">
