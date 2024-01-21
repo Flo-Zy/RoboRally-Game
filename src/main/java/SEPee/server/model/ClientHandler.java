@@ -72,9 +72,16 @@ public class ClientHandler implements Runnable {
                 public void run() {
                     if (gotAlive) {
                         gotAlive = false;
-                        Alive alive1 = new Alive();
-                        String serializedAlive1 = Serialisierer.serialize(alive1);
-                        sendToOneClient(clientId, serializedAlive1);
+                        if(Server.isGameStarted() && Server.getGame().getPlayerList().size() == 1){
+                            Player gameVictor = Server.getGame().getPlayerList().get(0);
+                            GameFinished gameFinished = new GameFinished(gameVictor.getId());
+                            String serializedGameFinished = Serialisierer.serialize(gameFinished);
+                            broadcast(serializedGameFinished);
+                        }else {
+                            Alive alive1 = new Alive();
+                            String serializedAlive1 = Serialisierer.serialize(alive1);
+                            sendToOneClient(clientId, serializedAlive1);
+                        }
                     } else {
                         System.out.println("Disconnect");
 
