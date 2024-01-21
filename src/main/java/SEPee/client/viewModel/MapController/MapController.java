@@ -67,7 +67,7 @@ public class MapController {
 
     /**
      * rotates the image of the player's avatar
-     * @param clientIdToTurn id of the player whose robot needs to be rotated
+     * @param clientIdtoTurn id of the player whose robot needs to be rotated
      * @param rotation clockwise or counterclockwise
      */
     public void playerTurn(int clientIdtoTurn, String rotation){}
