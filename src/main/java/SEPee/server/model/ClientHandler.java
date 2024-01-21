@@ -50,11 +50,13 @@ public class ClientHandler implements Runnable {
     private boolean gotAlive = true;
     private ScheduledExecutorService disconnectScheduler = Executors.newSingleThreadScheduledExecutor();
     private Timer alive = new Timer();
+    private boolean isAi;
 
-    public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId) {
+    public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId, boolean isAi) {
         this.clientSocket = clientSocket;
         this.clients = clients;
         this.clientId = clientId;
+        this.isAi = isAi;
 
         try {
             this.writer = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -65,42 +67,49 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        TimerTask taskAlive = new TimerTask() {
-            @Override
-            public void run() {
-                if(gotAlive) {
-                    gotAlive = false;
-                    Alive alive1 = new Alive();
-                    String serializedAlive1 = Serialisierer.serialize(alive1);
-                    sendToOneClient(clientId, serializedAlive1);
-                }else{
-                    ServerLogger.writeToServerLog("Disconnect");
-
-                    Player disconnectPLayer = new Player("", -9999, -9999);
-                    for(Player player : Server.getPlayerList()){
-                        if(player.getId() == clientId){
-                            disconnectPLayer = player;
+            TimerTask taskAlive = new TimerTask() {
+                @Override
+                public void run() {
+                    if (gotAlive) {
+                        gotAlive = false;
+                        if(Server.isGameStarted() && Server.getGame().getPlayerList().size() == 1){
+                            Player gameVictor = Server.getGame().getPlayerList().get(0);
+                            GameFinished gameFinished = new GameFinished(gameVictor.getId());
+                            String serializedGameFinished = Serialisierer.serialize(gameFinished);
+                            broadcast(serializedGameFinished);
+                        }else {
+                            Alive alive1 = new Alive();
+                            String serializedAlive1 = Serialisierer.serialize(alive1);
+                            sendToOneClient(clientId, serializedAlive1);
                         }
-                    }
-                    Server.getPlayerList().remove(disconnectPLayer);
+                    } else {
+                        ServerLogger.writeToServerLog("Disconnect");
 
-                    if(Server.isGameStarted()) {
+                        Player disconnectPLayer = new Player("", -9999, -9999);
                         for (Player player : Server.getPlayerList()) {
                             if (player.getId() == clientId) {
                                 disconnectPLayer = player;
                             }
                         }
-                        Server.getGame().getPlayerList().remove(disconnectPLayer);
-                    }
-                    ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
-                    String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
-                    broadcast(serializedConnectionUpdate);
-                    alive.cancel();
-                }
+                        Server.getPlayerList().remove(disconnectPLayer);
 
-            }
-        };
-        alive.scheduleAtFixedRate(taskAlive, 0, 5000);
+                        if (Server.isGameStarted()) {
+                            for (Player player : Server.getPlayerList()) {
+                                if (player.getId() == clientId) {
+                                    disconnectPLayer = player;
+                                }
+                            }
+                            Server.getGame().getPlayerList().remove(disconnectPLayer);
+                        }
+                        ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+                        String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                        broadcast(serializedConnectionUpdate);
+                        alive.cancel();
+                    }
+                }
+            };
+            alive.scheduleAtFixedRate(taskAlive, 0, 5000);
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String serializedReceivedString;
             String playerName = null;

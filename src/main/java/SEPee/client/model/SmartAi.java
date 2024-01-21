@@ -48,6 +48,8 @@ public class SmartAi {
     private boolean reboot = false;
     private int currentRegisterNum = 0;
     private AIBestMove aiBestMove = new AIBestMove();
+    private boolean checkpointReached;
+    private int currentCheckpointToken;
 
 
 
@@ -60,25 +62,63 @@ public class SmartAi {
         yFuture = yRobot;
         orientation = robot.getOrientation();
         futureOrientation = orientation;
+        checkpointReached = false;
 
+        currentCheckpointToken = numCheckpointToken;
         setCheckpoint();
-        bestDistance = calculateManhattanDistance(xRobot, yRobot);
+        bestDistance = 9999;
 
         combinations = allCombinations(clientHand, 5);
         calculateBestRegister();
 
-        System.out.println("HIER AI KARTEN: "+bestRegister);
-        int i = 1;
-        for(String card: bestRegister){
-            SelectedCard selectedCard = new SelectedCard(card, i);
-            String serializedSelectedCard = Serialisierer.serialize(selectedCard);
-            ClientAI.getWriter().println(serializedSelectedCard);
-            i++;
-        }
         if(bestRegister.isEmpty()){
-            aiBestMove.setRegister(robot, hand);
+            int numDamage = 0;
+            for(String card : clientHand){
+                if(card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")){
+                    numDamage++;
+                }
+            }
+
+            if(numDamage >= 5){
+                for(String card : clientHand){
+                    if(bestRegister.size() < 5) {
+                        if (card.equals("Spam") || card.equals("Worm") || card.equals("TrojanHorse") || card.equals("Virus")) {
+                            bestRegister.add(card);
+                        }
+                    }
+                }
+            }
+            System.out.println(clientHand);
+            System.out.println("HIER AI KARTEN: " + bestRegister);
+            int i = 1;
+            for (String card : bestRegister) {
+                SelectedCard selectedCard = new SelectedCard(card, i);
+                String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedSelectedCard);
+                i++;
+            }
+
+            TimerStarted timerStarted = new TimerStarted();
+            String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);
+
+        }else {
+            System.out.println(clientHand);
+            System.out.println("HIER AI KARTEN: " + bestRegister);
+            int i = 1;
+            for (String card : bestRegister) {
+                SelectedCard selectedCard = new SelectedCard(card, i);
+                String serializedSelectedCard = Serialisierer.serialize(selectedCard);
+                ClientAI.getWriter().println(serializedSelectedCard);
+                i++;
+            }
+
+            TimerStarted timerStarted = new TimerStarted();
+            String serializedTimerStarted = Serialisierer.serialize(timerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);
         }
         bestRegister.clear();
+        checkpointReached = false;
 
     }
 
@@ -138,7 +178,7 @@ public class SmartAi {
                 yCheckpoint = 3;
                 break;
             case "Extra Crispy":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 10;
                         yCheckpoint = 2;
@@ -158,7 +198,7 @@ public class SmartAi {
                 }
                 break;
             case "Lost Bearings":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 11;
                         yCheckpoint = 4;
@@ -178,7 +218,7 @@ public class SmartAi {
                 }
                 break;
             case "Death Trap":
-                switch(numCheckpointToken){
+                switch(currentCheckpointToken){
                     case 0:
                         xCheckpoint = 1;
                         yCheckpoint = 7;
@@ -214,10 +254,11 @@ public class SmartAi {
                 int currentDistance;
                 reboot = false;
                 currentRegisterNum = 0;
-                int xDistance = Math.abs(xCheckpoint-xFuture);
-                int yDistance = Math.abs(yCheckpoint-yFuture);
+                checkpointReached = false;
+                currentCheckpointToken = numCheckpointToken;
                 for (String card : currentRegister) {
                     currentRegisterNum++;
+                    setCheckpoint();
                     switch (card) {
                         case "Again":
                             again();
@@ -276,8 +317,14 @@ public class SmartAi {
                         fieldActivation();
                     }
                 }
-                currentDistance = calculateManhattanDistance(xFuture, yFuture);
-                if(!reboot && currentDistance < bestDistance){
+
+                if(checkpointReached){
+                    currentDistance = 0;
+                }else {
+                    currentDistance = calculateManhattanDistance(xFuture, yFuture);
+                }
+                currentDistance = currentDistance + checkpointWall();
+                if(!reboot && currentDistance < bestDistance && !currentRegister.contains("Spam")){
                     bestRegister = currentRegister;
                     bestDistance = currentDistance;
                 }
@@ -547,33 +594,33 @@ public class SmartAi {
         }
 
         //tester string
-        System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
+        //System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
 
         StringBuilder result = new StringBuilder();
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                System.out.println("ConveyorBelt");
+                //System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
 
                 result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
 
             } else if (field instanceof Laser) {
-                System.out.println("Laser");
+                //System.out.println("Laser");
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
-                System.out.println("Wall");
+                //System.out.println("Wall");
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                System.out.println("Empty field");
+                //System.out.println("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
-                System.out.println("Start point");
+                //System.out.println("Start point");
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
-                System.out.println("Checkpoint");
+                //System.out.println("Checkpoint");
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
@@ -588,7 +635,7 @@ public class SmartAi {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
             } else {
-                System.out.println("Field nicht gefunden");
+                //System.out.println("Field nicht gefunden");
                 result.append("UnknownField, ");
             }
         }
@@ -596,7 +643,7 @@ public class SmartAi {
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-        System.out.println(result);
+        //System.out.println(result);
         return result.toString();
     }
 
@@ -645,7 +692,7 @@ public class SmartAi {
 
         checkGears();
 
-        //checkCheckpoint();
+        checkCheckpoint();
     }
 
     private void checkBlueConveyorBelts(){
@@ -719,6 +766,9 @@ public class SmartAi {
                 checkConveyorBeltAgain();
 
             }
+        }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
         }
     }
 
@@ -852,6 +902,9 @@ public class SmartAi {
                 }
             }
         }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
+        }
     }
 
     private void checkPushPanels() {
@@ -886,6 +939,9 @@ public class SmartAi {
                 }
             }
         }
+        if(!isOnGameboard(xFuture, yFuture) || checkRobotField(xFuture, yFuture).contains("Pit")){
+            reboot = true;
+        }
     }
 
     private void checkGears(){
@@ -900,30 +956,107 @@ public class SmartAi {
         String standingOnCheckPoint = checkRobotField(xFuture, yFuture);
 
         if (standingOnCheckPoint.contains("CheckPoint [1")) {
-            if (numCheckpointToken == 0) { //check whether no checkPoints were reached before
-                numCheckpointToken++;
+            if (currentCheckpointToken == 0) { //check whether no checkPoints were reached before
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [2")) {
-            if (numCheckpointToken == 1) { //check whether one checkPoint was reached before
-                numCheckpointToken++;
+            if (currentCheckpointToken == 1) { //check whether one checkPoint was reached before
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [3")) {
-            if (numCheckpointToken == 2) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 2) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [4")) {
-            if (numCheckpointToken == 3) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 3) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         } else if (standingOnCheckPoint.contains("CheckPoint [5")) {
-            if (numCheckpointToken == 4) {
-                numCheckpointToken++;
+            if (currentCheckpointToken == 4) {
+                currentCheckpointToken++;
+                checkpointReached = true;
                 setCheckpoint();
             }
         }
+    }
+
+    private int checkpointWall(){
+        if(gameBoard.getBordName().equals("Extra Crispy")){
+            switch (currentCheckpointToken){
+                case 0:
+                    if(xFuture == 10 && yFuture == 1){
+                        return 2;
+                    }
+                    if(xFuture == 10 && yFuture == 3 && !futureOrientation.equals("top")){
+                        return 4;
+                    }
+                    if(xFuture == 8 && yFuture == 2){
+                        return 5;
+                    }
+                    if(xFuture == 5 && yFuture == 2){
+                        return 6;
+                    }
+                    break;
+                case 1:
+                    if(xFuture == 5 && yFuture == 8){
+                        return 2;
+                    }
+                    if(xFuture == 5 && yFuture == 6 && !futureOrientation.equals("bottom")){
+                        return 4;
+                    }
+                    if(xFuture == 7 && yFuture == 7){
+                        return 5;
+                    }
+                    if(xFuture == 10 && yFuture == 7){
+                        return 6;
+                    }
+                    break;
+                case 2:
+                    if(xFuture == 10 && yFuture == 8){
+                        return 2;
+                    }
+                    if(xFuture == 10 && yFuture == 6 && !futureOrientation.equals("bottom")){
+                        return 4;
+                    }
+                    if(xFuture == 8 && yFuture == 7){
+                        return 5;
+                    }
+                    if(xFuture == 5 && yFuture == 7){
+                        return 6;
+                    }
+                    break;
+                case 3:
+                    if(xFuture == 5 && yFuture == 1){
+                        return 2;
+                    }
+                    if(xFuture == 5 && yFuture == 3 && !futureOrientation.equals("top")){
+                        return 4;
+                    }
+                    if(xFuture == 7 && yFuture == 2){
+                        return 5;
+                    }
+                    if(xFuture == 10 && yFuture == 2){
+                        return 6;
+                    }
+                    break;
+            }
+        }else if(gameBoard.getBordName().equals("Death Trap")){
+            if (currentCheckpointToken == 1) {
+                if ((xFuture == 4 && yFuture == 5) || (xFuture == 4 && yFuture == 3)) {
+                    return 2;
+                }else if(xFuture == 4 && yFuture == 6 || xFuture == 3 && yFuture == 6 || xFuture == 5 && yFuture == 6){
+                    return 2;
+                }
+            }
+        }
+        return 0;
     }
 }

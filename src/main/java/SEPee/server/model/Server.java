@@ -90,7 +90,8 @@ public class Server extends Thread{
                 HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
                 if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
                     clientID = assigningClientID();
-                    ClientHandler clientHandler = new ClientHandler(clientSocket, clients, clientID);
+                    boolean isAi = deserializedHelloServer.getMessageBody().isAI();
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, clients, clientID, isAi);
                     clients.add(clientHandler);
                     //associate socket with ID in the Player object
                     Player.associateSocketWithId(clientSocket, clientID);
