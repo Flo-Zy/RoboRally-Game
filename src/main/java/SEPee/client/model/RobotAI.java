@@ -3,6 +3,9 @@ package SEPee.client.model;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * so smartAi can create a robot object
+ */
 public class RobotAI {
     @Setter
     @Getter
