@@ -1,5 +1,6 @@
 package SEPee.client.model;
 
+import SEPee.client.ClientAILogger;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
 import SEPee.server.model.Robot;
@@ -54,7 +55,7 @@ public class SmartAi {
 
 
     public void setRegister(RobotAI robot, ArrayList<String> hand) throws InterruptedException {
-        System.out.println("ICH BIN HIER");
+        ClientAILogger.writeToClientLog("ICH BIN HIER");
         this.clientHand = hand;
         xRobot = robot.getX();
         yRobot = robot.getY();
@@ -88,8 +89,8 @@ public class SmartAi {
                     }
                 }
             }
-            System.out.println(clientHand);
-            System.out.println("HIER AI KARTEN: " + bestRegister);
+            ClientAILogger.writeToClientLog(clientHand);
+            ClientAILogger.writeToClientLog("HIER AI KARTEN: " + bestRegister);
             int i = 1;
             for (String card : bestRegister) {
                 SelectedCard selectedCard = new SelectedCard(card, i);
@@ -103,8 +104,8 @@ public class SmartAi {
             ClientAI.getWriter().println(serializedTimerStarted);
 
         }else {
-            System.out.println(clientHand);
-            System.out.println("HIER AI KARTEN: " + bestRegister);
+            ClientAILogger.writeToClientLog(clientHand);
+            ClientAILogger.writeToClientLog("HIER AI KARTEN: " + bestRegister);
             int i = 1;
             for (String card : bestRegister) {
                 SelectedCard selectedCard = new SelectedCard(card, i);
@@ -307,7 +308,7 @@ public class SmartAi {
                             lastPlayedCard = "Worm";
                             break;
                         default:
-                            System.out.println("unknown card name");
+                            ClientAILogger.writeToClientLog("unknown card name");
                             break;
 
                     }
@@ -369,7 +370,7 @@ public class SmartAi {
             case "Worm":
                 break;
             default:
-                System.out.println("unknown card name");
+                ClientAILogger.writeToClientLog("unknown card name");
                 break;
 
         }
@@ -593,34 +594,25 @@ public class SmartAi {
             fields = gameBoard.getFieldsAt(robotX, robotY);
         }
 
-        //tester string
-        //System.out.println("Fields at position (" + robotX + ", " + robotY + "): " + fields);
-
         StringBuilder result = new StringBuilder();
 
         for (Field field : fields) {
             if (field instanceof ConveyorBelt) {
-                //System.out.println("ConveyorBelt");
                 String[] orientations = field.getOrientation();
                 int speed = field.getSpeed();
 
                 result.append("ConveyorBelt " + speed + " " + Arrays.toString(orientations) + ", ");
 
             } else if (field instanceof Laser) {
-                //System.out.println("Laser");
                 result.append("Laser, ");
             } else if (field instanceof Wall) {
-                //System.out.println("Wall");
                 String[] orientations = field.getOrientation();
                 result.append("Wall " + Arrays.toString(orientations) + ", ");
             } else if (field instanceof Empty) {
-                //System.out.println("Empty field");
                 result.append("Empty, ");
             } else if (field instanceof StartPoint) {
-                //System.out.println("Start point");
                 result.append("StartPoint, ");
             } else if (field instanceof CheckPoint) {
-                //System.out.println("Checkpoint");
                 int checkPointNumber = field.getCheckPointNumber();
                 result.append("CheckPoint [" + checkPointNumber + "], ");
             } else if (field instanceof EnergySpace) {
@@ -635,15 +627,13 @@ public class SmartAi {
                 String[] orientation = field.getOrientation();
                 result.append("Gear " + Arrays.toString(orientation) + ", ");
             } else {
-                //System.out.println("Field nicht gefunden");
-                result.append("UnknownField, ");
+                result.append("Unknown Field, ");
             }
         }
         // Remove the last comma and space
         if (result.length() > 0) {
             result.setLength(result.length() - 2);
         }
-        //System.out.println(result);
         return result.toString();
     }
 
