@@ -2,6 +2,9 @@ package SEPee.server.model.card.damageCard;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the Worm card
+ */
 @Getter
 @Setter
 public class Wurm extends DamageCard{

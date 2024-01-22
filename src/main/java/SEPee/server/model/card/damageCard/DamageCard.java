@@ -4,6 +4,9 @@ import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * parent class for all damage cards
+ */
 @Getter
 @Setter
 public abstract class DamageCard extends Card {

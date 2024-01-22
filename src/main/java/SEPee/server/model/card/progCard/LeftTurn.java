@@ -1,10 +1,12 @@
 package SEPee.server.model.card.progCard;
 import SEPee.server.model.Robot;
 import SEPee.server.model.ServerLogger;
-import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the LeftTurn card
+ */
 @Getter
 @Setter
 public class LeftTurn extends ProgCard {

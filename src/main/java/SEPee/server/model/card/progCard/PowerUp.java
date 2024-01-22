@@ -1,8 +1,10 @@
 package SEPee.server.model.card.progCard;
-import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the PowerUp card
+ */
 @Getter
 @Setter
 public class PowerUp extends ProgCard {

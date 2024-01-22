@@ -1,9 +1,11 @@
 package SEPee.server.model.card.progCard;
 import SEPee.server.model.Robot;
-import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the BackUp card
+ */
 @Getter
 @Setter
 public class BackUp extends ProgCard {

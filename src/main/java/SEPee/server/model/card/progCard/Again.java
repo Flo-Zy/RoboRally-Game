@@ -1,8 +1,10 @@
 package SEPee.server.model.card.progCard;
-import SEPee.server.model.card.Card;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the Again card
+ */
 @Getter
 @Setter
 public class Again extends ProgCard {

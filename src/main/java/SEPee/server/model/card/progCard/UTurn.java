@@ -4,6 +4,9 @@ import SEPee.server.model.ServerLogger;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the UTurn card
+ */
 @Getter
 @Setter
 public class UTurn extends ProgCard {

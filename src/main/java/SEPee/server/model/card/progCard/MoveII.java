@@ -3,6 +3,9 @@ import SEPee.server.model.Robot;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for implementing the MoveII card
+ */
 @Getter
 @Setter
 public class MoveII extends ProgCard {
