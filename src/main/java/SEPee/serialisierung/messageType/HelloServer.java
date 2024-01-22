@@ -1,25 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the HelloServer message type
+ */
 public class HelloServer extends Message{
-    //private String messageType;
     private HelloServerBody messageBody;
 
     public HelloServer(String group, boolean isAI, String protocol) {
         super("HelloServer");
-        //this.messageType = "HelloServer";
         this.messageBody = new HelloServerBody(group, isAI, protocol);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public HelloServerBody getMessageBody() {
         return messageBody;
@@ -29,6 +19,9 @@ public class HelloServer extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the HelloServer message type
+     */
     public static class HelloServerBody {
         private String group;
         private boolean isAI;

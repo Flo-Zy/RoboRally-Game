@@ -1,9 +1,10 @@
 package SEPee.serialisierung.messageType;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * class for the CurrentCards message type
+ */
 public class CurrentCards extends Message{
-    //private String messageType;
     private CurrentCardsBody messageBody;
 
     public CurrentCards(ArrayList<ActiveCard> activeCards) {
@@ -11,17 +12,6 @@ public class CurrentCards extends Message{
         //this.messageType = "CurrentCards";
         this.messageBody = new CurrentCardsBody(activeCards);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public CurrentCardsBody getMessageBody() {
         return messageBody;
@@ -31,6 +21,9 @@ public class CurrentCards extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the CurrentCards message type
+     */
     public static class CurrentCardsBody {
         ArrayList<ActiveCard> activeCards;
 

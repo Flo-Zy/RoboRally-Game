@@ -1,7 +1,9 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the ReceivedChat message type
+ */
 public class ReceivedChat extends Message {
-    // private String messageType;
     private ReceivedChatBody messageBody;
 
     public ReceivedChat(String message, int from, boolean isPrivate) {
@@ -9,16 +11,6 @@ public class ReceivedChat extends Message {
         // this.messageType = "ReceivedChat";
         this.messageBody = new ReceivedChatBody(message, from, isPrivate);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-     */
     public ReceivedChatBody getMessageBody() {
         return messageBody;
     }
@@ -27,6 +19,9 @@ public class ReceivedChat extends Message {
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the ReceivedChat message type
+     */
     public static class ReceivedChatBody {
         private String message;
         private int from;

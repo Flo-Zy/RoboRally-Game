@@ -2,6 +2,9 @@ package SEPee.serialisierung.messageType;
 
 import java.util.ArrayList;
 
+/**
+ * class for the PickDamage message type
+ */
 public class PickDamage extends Message{
     private PickDamage.PickDamageBody messageBody;
 
@@ -18,6 +21,9 @@ public class PickDamage extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the PickDamage message type
+     */
     public static class PickDamageBody {
 
         private int count;

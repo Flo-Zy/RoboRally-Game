@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the SendChat message type
+ */
 public class SendChat extends Message{
-    // private String messageType;
     private SendChatBody messageBody;
 
     public SendChat(String message, int to) {
         super("SendChat");
-        // this.messageType = "SendChat";
         this.messageBody = new SendChatBody(message, to);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-     */
 
     public SendChatBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class SendChat extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SendChat message type
+     */
     public static class SendChatBody {
         private int clientID;
         private String message;

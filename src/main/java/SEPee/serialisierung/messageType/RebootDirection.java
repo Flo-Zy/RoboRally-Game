@@ -1,25 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the RebootDirection message type
+ */
 public class RebootDirection extends Message {
-    // private String messageType;
     private RebootDirectionBody messageBody;
 
     public RebootDirection(String direction){
         super ("RebootDirection");
-        // this.messageType = "RebootDirection";
         this.messageBody = new RebootDirectionBody(direction);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public RebootDirectionBody getMessageBody() {
         return messageBody;
@@ -29,6 +19,9 @@ public class RebootDirection extends Message {
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the RebootDirection message type
+     */
     public static class RebootDirectionBody {
         private String direction;
 

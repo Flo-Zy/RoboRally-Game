@@ -1,7 +1,9 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the CurrentPlayer message type
+ */
 public class CurrentPlayer extends Message{
-    //private String messageType;
     private CurrentPlayerBody messageBody;
 
     public CurrentPlayer(int clientID){
@@ -9,17 +11,6 @@ public class CurrentPlayer extends Message{
         //this.messageType = "CurrentPlayer";
         this.messageBody = new CurrentPlayerBody(clientID);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public CurrentPlayerBody getMessageBody() {
         return messageBody;
@@ -29,6 +20,9 @@ public class CurrentPlayer extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the CurrentPlayer message type
+     */
     public static class CurrentPlayerBody{
         private int clientID;
 

@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the SelectionFinished message type
+ */
 public class SelectionFinished extends Message{
-    // private String messageType;
     private SelectionFinishedBody messageBody;
 
     public SelectionFinished(int clientID) {
         super("SelectionFinished");
-        //this.messageType = "SelectionFinished";
         this.messageBody = new SelectionFinishedBody(clientID);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-    */
 
     public SelectionFinishedBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class SelectionFinished extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SelectionFinished message type
+     */
     public static class SelectionFinishedBody {
         private int clientID;
 

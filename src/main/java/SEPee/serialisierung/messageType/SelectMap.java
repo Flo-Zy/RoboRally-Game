@@ -1,31 +1,18 @@
 package SEPee.serialisierung.messageType;
 
-import SEPee.server.model.gameBoard.DizzyHighway;
-
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * class for the SelectMap message type
+ */
 public class SelectMap extends Message{
-    // private String messageType;
     private SelectMapBody messageBody;
 
     public SelectMap() {
         super("SelectMap");
-        // this.messageType = "SelectMap";
         this.messageBody = new SelectMapBody();
     }
 
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-
-     */
     public SelectMapBody getMessageBody() {
         return messageBody;
     }
@@ -34,6 +21,9 @@ public class SelectMap extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SelectMap message type
+     */
     public static class SelectMapBody {
         private ArrayList<String> availableMaps = new ArrayList<>();
 

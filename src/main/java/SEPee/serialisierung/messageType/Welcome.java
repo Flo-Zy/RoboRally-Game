@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the Welcome message type
+ */
 public class Welcome extends Message{
-    // private String messageType;
     private WelcomeBody messageBody;
 
     public Welcome(int clientID) {
         super("Welcome");
-        // this.messageType = "Welcome";
         this.messageBody = new WelcomeBody(clientID);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-    */
 
     public WelcomeBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class Welcome extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the Welcome message type
+     */
     public static class WelcomeBody {
         private int clientID;
 

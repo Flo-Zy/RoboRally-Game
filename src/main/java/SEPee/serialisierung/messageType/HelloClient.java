@@ -1,12 +1,13 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for body of the HelloClient message type
+ */
 public class HelloClient extends Message{
-    //private String messageType;
     private HelloClientBody messageBody;
 
     public HelloClient(String protocol) {
         super ("HelloClient");
-        //this.messageType = "HelloClient";
         this.messageBody = new HelloClientBody(protocol);
     }
 
@@ -18,8 +19,9 @@ public class HelloClient extends Message{
         this.messageBody = messageBody;
     }
 
-
-
+    /**
+     * class for body of the HelloClient message type
+     */
     public static class HelloClientBody {
         private String protocol;
 

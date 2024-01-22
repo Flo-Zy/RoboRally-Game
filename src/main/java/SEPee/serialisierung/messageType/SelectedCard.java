@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the SelectedCard message type
+ */
 public class SelectedCard extends Message{
-    // private String messageType;
     private SelectedCardBody messageBody;
 
     public SelectedCard(String card, int register){
         super("SelectedCard");
-        // this.messageType = "SelectedCard";
         this.messageBody = new SelectedCardBody(card, register);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-    */
 
     public SelectedCardBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class SelectedCard extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SelectedCard message type
+     */
     public static class SelectedCardBody{
         private String card;
 

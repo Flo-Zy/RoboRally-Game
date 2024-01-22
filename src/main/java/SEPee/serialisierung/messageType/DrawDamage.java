@@ -2,6 +2,9 @@ package SEPee.serialisierung.messageType;
 
 import java.util.ArrayList;
 
+/**
+ * class for the DrawDamage message type
+ */
 public class DrawDamage extends Message{
     private DrawDamage.DrawDamageBody messageBody;
 
@@ -18,6 +21,9 @@ public class DrawDamage extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the DrawDamage message type
+     */
     public static class DrawDamageBody {
         private int clientID;
         private ArrayList<String> cards;

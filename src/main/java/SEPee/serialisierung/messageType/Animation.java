@@ -1,7 +1,9 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the Animation message type
+ */
 public class Animation extends Message{
-    //private String messageType;
     private AnimationBody messageBody;
 
     public Animation(String type){
@@ -9,17 +11,6 @@ public class Animation extends Message{
         //this.messageType = "Animation";
         this.messageBody = new AnimationBody(type);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public AnimationBody getMessageBody() {
         return messageBody;
@@ -29,6 +20,9 @@ public class Animation extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the Animation message type
+     */
     public static class AnimationBody {
         private String type;
 

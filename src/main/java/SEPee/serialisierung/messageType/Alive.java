@@ -1,7 +1,9 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the Alive message type
+ */
 public class Alive extends Message{
-    //private String messageType;
     private AliveBody messageBody;
 
     public Alive() {
@@ -9,17 +11,6 @@ public class Alive extends Message{
         //this.messageType = "Alive";
         this.messageBody = new AliveBody();
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public AliveBody getMessageBody() {
         return messageBody;
@@ -32,6 +23,9 @@ public class Alive extends Message{
     public static class AliveBody {
 
 
+        /**
+         * class for body of the Alive message type
+         */
         public AliveBody() {
 
         }

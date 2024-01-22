@@ -1,7 +1,9 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the ActivePhase message type
+ */
 public class ActivePhase extends Message{
-    //private String messageType;
     private ActivePhaseBody messageBody;
 
     public ActivePhase(int phase){
@@ -9,17 +11,6 @@ public class ActivePhase extends Message{
         //this.messageType = "ActivePhase";
         this.messageBody = new ActivePhaseBody(phase);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public ActivePhaseBody getMessageBody() {
         return messageBody;
@@ -29,6 +20,9 @@ public class ActivePhase extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the Active Phase message type
+     */
     public static class ActivePhaseBody{
         private int phase;
 

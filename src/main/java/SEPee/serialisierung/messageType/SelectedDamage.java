@@ -2,6 +2,9 @@ package SEPee.serialisierung.messageType;
 
 import java.util.ArrayList;
 
+/**
+ * class for the SelectedDamage message type
+ */
 public class SelectedDamage extends Message{
     private SelectedDamage.SelectedDamageBody messageBody;
 
@@ -18,6 +21,9 @@ public class SelectedDamage extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SelectedDamage message type
+     */
     public static class SelectedDamageBody {
         private ArrayList<String> cards;
 

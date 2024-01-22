@@ -1,7 +1,8 @@
 package SEPee.serialisierung.messageType;
 
-import java.sql.Connection;
-
+/**
+ * class for the ConnectionUpdate message type
+ */
 public class ConnectionUpdate extends Message{
     private ConnectionUpdate.ConnectionUpdateBody messageBody;
 
@@ -25,6 +26,9 @@ public class ConnectionUpdate extends Message{
         private boolean isConnected;
         private String action;
 
+        /**
+         * class for body of the ConnectionUpdate message type
+         */
         public ConnectionUpdateBody(int clientID, boolean isConnected, String action) {
             this.clientID = clientID;
             this.isConnected = isConnected;

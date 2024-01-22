@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the PlayerValues message type
+ */
 public class PlayerValues extends Message{
-    // private String messageType;
     private PlayerValuesBody messageBody;
 
     public PlayerValues(String name, int figure) {
         super ("PlayerValues");
-        // this.messageType = "PlayerValues";
         this.messageBody = new PlayerValuesBody(name, figure);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-     */
 
     public PlayerValuesBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class PlayerValues extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the PlayerValues message type
+     */
     public static class PlayerValuesBody {
         private String name;
         private int figure;

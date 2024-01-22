@@ -4,8 +4,10 @@ import SEPee.server.model.field.Field;
 
 import java.util.List;
 
+/**
+ * class for the GameStarted message type
+ */
 public class GameStarted extends Message{
-    //private String messageType;
     private GameStartedBody messageBody;
 
     public GameStarted(List<List<List<Field>>> gameMap) {
@@ -13,17 +15,6 @@ public class GameStarted extends Message{
         //this.messageType = "GameStarted";
         this.messageBody = new GameStartedBody(gameMap);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public GameStartedBody getMessageBody() {
         return messageBody;
@@ -33,6 +24,9 @@ public class GameStarted extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the GameStarted message type
+     */
     public static class GameStartedBody {
         private List<List<List<Field>>> gameMap;
 

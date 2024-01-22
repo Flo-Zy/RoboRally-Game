@@ -1,25 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the SetStartingPoint message type
+ */
 public class SetStartingPoint extends Message{
-   // private String messageType;
     private SetStartingPointBody messageBody;
 
     public SetStartingPoint(int x, int y){
         super("SetStartingPoint");
-        // this.messageType = "SetStartingPoint";
         this.messageBody = new SetStartingPointBody(x, y);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-     */
 
     public SetStartingPointBody getMessageBody() {
         return messageBody;
@@ -29,6 +19,9 @@ public class SetStartingPoint extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the SetStartingPoint message type
+     */
     public static class SetStartingPointBody{
         private int x;
 

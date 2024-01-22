@@ -2,25 +2,16 @@ package SEPee.serialisierung.messageType;
 
 import java.util.ArrayList;
 
+/**
+ * class for the YourCards message type
+ */
 public class YourCards extends Message{
-    // private String messageType;
     private YourCardsBody messageBody;
 
     public YourCards(ArrayList<String> cardsInHand){
         super("YourCards");
-        // this.messageType = "YourCards";
         this.messageBody = new YourCardsBody(cardsInHand);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-     */
 
     public YourCardsBody getMessageBody() {
         return messageBody;
@@ -30,6 +21,9 @@ public class YourCards extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the YourCards message type
+     */
     public static class YourCardsBody {
         private ArrayList<String> cardsInHand;
 
@@ -40,8 +34,6 @@ public class YourCards extends Message{
         public ArrayList<String> getCardsInHand(){
             return cardsInHand;
         }
-
-        // macht aus ArrayList<String> einen formatierten String
         public String transformCardsInHandIntoString(){
             ArrayList<String> cardsInHand = getCardsInHand();
             StringBuilder stringBuilder = new StringBuilder();

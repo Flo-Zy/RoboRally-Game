@@ -1,24 +1,15 @@
 package SEPee.serialisierung.messageType;
 
+/**
+ * class for the ShuffleCoding message type
+ */
 public class ShuffleCoding extends Message{
-    // private String messageType;
     private ShuffleCodingBody messageBody;
 
     public ShuffleCoding(int clientID){
         super("ShuffleCoding");
-        // this.messageType = "ShuffleCoding";
         this.messageBody = new ShuffleCodingBody(clientID);
     }
-
-    /*
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-    */
 
     public ShuffleCodingBody getMessageBody() {
         return messageBody;
@@ -28,6 +19,9 @@ public class ShuffleCoding extends Message{
         this.messageBody = messageBody;
     }
 
+    /**
+     * class for body of the ShuffleCoding message type
+     */
     public static class ShuffleCodingBody{
         private int clientID;
 
