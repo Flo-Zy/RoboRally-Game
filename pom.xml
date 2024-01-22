@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>maven</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <groupId>SEPee</groupId>
+    <artifactId>eifrige-eremiten</artifactId>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -17,9 +17,8 @@
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
+            <artifactId>javafx-controls</artifactId>
             <version>19</version>
-            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -28,24 +27,38 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
+            <artifactId>javafx-web</artifactId>
+            <version>19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
             <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-media</artifactId>
-            <version>19</version>
         </dependency>
     </dependencies>
 
@@ -56,36 +69,87 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.9.0</version>
                 <configuration>
-                    <source>
-                        19
-                    </source>
-                    <target>
-                        19
-                    </target>
+                    <source>19</source>
+                    <target>19</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <!-- Execution for Server -->
+                    <execution>
+                        <id>assembly-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>server</finalName>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>SEPee.server.model.Server</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+
                     <!-- Execution for Client -->
                     <execution>
                         <id>assembly-client</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
                             <finalName>client</finalName>
-                            <archive>
-                                <manifest>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>SEPee.client.model.Client</mainClass>
-                                </manifest>
-                            </archive>
+                                </transformer>
+                            </transformers>
+                            <!-- Include dependencies from target/libs -->
+                            <resourceTransformers>
+                                <resourceTransformer implementation=
+                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/javafx.application.Application</resource>
+                                </resourceTransformer>
+                                <resourceTransformer implementation=
+                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/com.sun.javafx.application.PlatformImpl</resource>
+                                </resourceTransformer>
+                                <resourceTransformer implementation=
+                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/com.sun.javafx.font.PrismFontFactory</resource>
+                                </resourceTransformer>
+                            </resourceTransformers>
                         </configuration>
                     </execution>
 
@@ -94,38 +158,17 @@
                         <id>assembly-clientai</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
                             <finalName>clientAI</finalName>
-                            <archive>
-                                <manifest>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>SEPee.client.model.ClientAI</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
-
-                    <!-- Execution for Server -->
-                    <execution>
-                        <id>assembly-server</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <finalName>server</finalName>
-                            <archive>
-                                <manifest>
-                                    <mainClass>SEPee.server.model.Server</mainClass>
-                                </manifest>
-                            </archive>
+                                </transformer>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
