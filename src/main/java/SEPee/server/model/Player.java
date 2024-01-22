@@ -33,6 +33,7 @@ public class Player {
     @Getter
     @Setter
     private int damageCounter = 0;
+    private int energyCubes = 5;
     public Player(String name, int id, int figure){
         this.name=name;
         this.id=id;

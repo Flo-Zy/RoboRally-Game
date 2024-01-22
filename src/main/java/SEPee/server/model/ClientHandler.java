@@ -1627,6 +1627,9 @@ public class ClientHandler implements Runnable {
             checkRobotLasers(i);
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            checkEnergySpace(i);
+        }
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkCheckpoint(i);
         }
     }
