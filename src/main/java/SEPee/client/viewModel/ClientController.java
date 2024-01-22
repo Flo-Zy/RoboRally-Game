@@ -321,7 +321,7 @@ public class ClientController {
                     "-fx-background-size: cover;");
 
             muteButton.getStyleClass().add("mute-button");
-            muteButton.setOnAction(event -> SoundManager.toggleSoundMute(this));
+            muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
 
             sendButton.setOnAction(event -> sendMessage());
 

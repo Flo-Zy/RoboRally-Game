@@ -13,6 +13,7 @@ public class SoundManager {
     private static double musicVolume = 0.5;
     private static double masterVolume = 0.5;
     private static boolean isMuted = false;
+    private static boolean isEventSoundPlaying = false;
     private static MediaPlayer backgroundMediaPlayer;
     private static final List<MediaPlayer> allMediaPlayers = new ArrayList<>();
 
@@ -36,7 +37,8 @@ public class SoundManager {
     public static void playEventSound(String eventName) {
         ClientLogger.writeToClientLog("event name: " + eventName + " ismuted: " + isMuted);
         try {
-            if (backgroundMediaPlayer != null && backgroundMediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            if (isEventSoundPlaying) {
+                System.out.println("Event sound is already playing");
                 return;
             }
 
@@ -56,7 +58,12 @@ public class SoundManager {
                     backgroundMediaPlayer = new MediaPlayer(sound);
                     allMediaPlayers.add(backgroundMediaPlayer);
 
+                    backgroundMediaPlayer.setOnEndOfMedia(() -> {
+                        isEventSoundPlaying = false;
+                    });
+
                     if (!isMuted) {
+                        isEventSoundPlaying = true;
                         backgroundMediaPlayer.play();
                     }
                 }
@@ -95,15 +102,13 @@ public class SoundManager {
         }
     }
 
-    public static void toggleSoundMute(ClientController controller) {
+    public static void toggleSoundMute() {
         isMuted = !isMuted;
 
         if (isMuted) {
             masterVolume = 0.0;
-            controller.getMuteButton().setStyle("-fx-background-color: rgba(221, 228, 0, 0.5);");
         } else {
             masterVolume = 1.0;
-            controller.getMuteButton().setStyle("-fx-background-color: #dde400;");
         }
 
         updateAllMediaPlayersVolume();
