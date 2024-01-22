@@ -15,6 +15,32 @@ public class GameBoard {
     private List<List<List<Field>>> gameBoard; // Spalte(Zeile(FelderTypen()))
     private int checkpointAmount;
 
+    //DizzyHighway
+    private int energySpace39 = 1;
+    private int energySpace52 = 1;
+    private int energySpace75 = 1;
+    private int energySpace84 = 1;
+    private int energySpace107 = 1;
+
+    //ExtraCrispy
+    private int energySpace34 = 1;
+    private int energySpace80 = 1;
+    private int energySpace114 = 1;
+
+    //LostBearings
+    private int energySpace57 = 1;
+    private int energySpace74 = 1;
+    private int energySpace85 = 1;
+    private int energySpace102 = 1;
+
+    //DeathTrap
+    private int energySpace23 = 1;
+    private int energySpace37 = 1;
+    private int energySpace42 = 1;
+    private int energySpace46 = 1;
+    private int energySpace62 = 1;
+    private int energySpace76 = 1;
+
     GameBoard(String boardId, String bordName, int sumColumns, int checkpointAmount){
         this.boardId = boardId;
         this.bordName = bordName;

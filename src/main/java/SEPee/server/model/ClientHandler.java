@@ -326,6 +326,20 @@ public class ClientHandler implements Runnable {
                                         }
                                     }
                                 }
+                                if(receivedSendChatMessage.contains("/energy")){
+                                    if(Server.isGameStarted()) {
+                                        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+                                            if (Server.getGame().getPlayerList().get(i).getId() == clientId) {
+                                                String energyCubes = ">> You have " + Server.getGame().getPlayerList().get(i).getEnergyCubes() + " energy cubes!";
+
+                                                ReceivedChat receivedChat = new ReceivedChat(energyCubes, -9999, true);
+                                                String serializedReceivedChat = Serialisierer.serialize(receivedChat);
+
+                                                sendToOneClient(clientId, serializedReceivedChat);
+                                            }
+                                        }
+                                    }
+                                }
                             }else {
 
                                 boolean receivedChatisPrivate;
@@ -333,7 +347,6 @@ public class ClientHandler implements Runnable {
                                     receivedChatisPrivate = false;
                                     ReceivedChat receivedChat = new ReceivedChat(receivedSendChatMessage, receivedSendChatFrom, receivedChatisPrivate);
                                     String serializedReceivedChat = Serialisierer.serialize(receivedChat);
-
 
                                     broadcast(serializedReceivedChat);
                                 } else {
@@ -381,6 +394,11 @@ public class ClientHandler implements Runnable {
                                         handleRobotMovement(3, true);
                                         break;
                                     case "PowerUp":
+                                        for(Player player : Server.getGame().getPlayerList()){
+                                            if(player.getId() == clientId){
+                                                player.setEnergyCubes(player.getEnergyCubes() + 1);
+                                            }
+                                        }
                                         break;
                                     case "TurnRight":
                                         RightTurn.makeEffect(this.robot);
@@ -1625,6 +1643,9 @@ public class ClientHandler implements Runnable {
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkRobotLasers(i);
+        }
+        for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
+            checkEnergySpace(i);
         }
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
             checkCheckpoint(i);
@@ -2954,6 +2975,7 @@ public class ClientHandler implements Runnable {
                         handleRobotMovement(3, true);
                         break;
                     case "PowerUp":
+                        player.setEnergyCubes(player.getEnergyCubes() + 1);
                         break;
                     case "TurnRight":
                         RightTurn.makeEffect(this.robot);
@@ -3077,6 +3099,214 @@ public class ClientHandler implements Runnable {
         }else{
             ServerLogger.writeToServerLog(false + "virus");
             return false;
+        }
+    }
+
+
+    /**
+     * increases the energy counter of a player when necessary
+     * @param i the index of the player in the player list
+     */
+    private void checkEnergySpace(int i){
+        Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
+        if(Server.getGame().getPlayerList().get(i).getId() == clientId) {
+            if (checkRobotField(robot).contains("EnergySpace")) {
+                int currentField = 10 * robot.getX() + robot.getY();
+                switch (Server.getGameMap().getBordName()) {
+                    case "Dizzy Highway":
+                        switch (currentField) {
+                            case 39:
+                                if (Server.getGameMap().getEnergySpace39() == 1) {
+                                    Server.getGameMap().setEnergySpace39(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 52:
+                                if (Server.getGameMap().getEnergySpace52() == 1) {
+                                    Server.getGameMap().setEnergySpace52(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 75:
+                                if (Server.getGameMap().getEnergySpace75() == 1) {
+                                    Server.getGameMap().setEnergySpace75(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 84:
+                                if (Server.getGameMap().getEnergySpace84() == 1) {
+                                    Server.getGameMap().setEnergySpace84(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 107:
+                                if (Server.getGameMap().getEnergySpace107() == 1) {
+                                    Server.getGameMap().setEnergySpace107(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                        }
+                        break;
+                    case "Extra Crispy":
+                        switch (currentField) {
+                            case 34:
+                                if (Server.getGameMap().getEnergySpace34() == 1) {
+                                    Server.getGameMap().setEnergySpace34(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 39:
+                                if (Server.getGameMap().getEnergySpace39() == 1) {
+                                    Server.getGameMap().setEnergySpace39(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 75:
+                                if (Server.getGameMap().getEnergySpace75() == 1) {
+                                    Server.getGameMap().setEnergySpace75(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 80:
+                                if (Server.getGameMap().getEnergySpace80() == 1) {
+                                    Server.getGameMap().setEnergySpace80(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 114:
+                                if (Server.getGameMap().getEnergySpace114() == 1) {
+                                    Server.getGameMap().setEnergySpace114(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                        }
+                        break;
+                    case "Lost Bearings":
+                        switch (currentField) {
+                            case 52:
+                                if (Server.getGameMap().getEnergySpace52() == 1) {
+                                    Server.getGameMap().setEnergySpace52(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 57:
+                                if (Server.getGameMap().getEnergySpace57() == 1) {
+                                    Server.getGameMap().setEnergySpace57(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 74:
+                                if (Server.getGameMap().getEnergySpace74() == 1) {
+                                    Server.getGameMap().setEnergySpace74(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 85:
+                                if (Server.getGameMap().getEnergySpace85() == 1) {
+                                    Server.getGameMap().setEnergySpace85(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 102:
+                                if (Server.getGameMap().getEnergySpace102() == 1) {
+                                    Server.getGameMap().setEnergySpace102(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 107:
+                                if (Server.getGameMap().getEnergySpace107() == 1) {
+                                    Server.getGameMap().setEnergySpace107(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                        }
+                        break;
+                    case "Death Trap":
+                        switch (currentField) {
+                            case 23:
+                                if (Server.getGameMap().getEnergySpace23() == 1) {
+                                    Server.getGameMap().setEnergySpace23(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 37:
+                                if (Server.getGameMap().getEnergySpace37() == 1) {
+                                    Server.getGameMap().setEnergySpace37(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 42:
+                                if (Server.getGameMap().getEnergySpace42() == 1) {
+                                    Server.getGameMap().setEnergySpace42(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 46:
+                                if (Server.getGameMap().getEnergySpace46() == 1) {
+                                    Server.getGameMap().setEnergySpace46(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 62:
+                                if (Server.getGameMap().getEnergySpace62() == 1) {
+                                    Server.getGameMap().setEnergySpace62(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                            case 76:
+                                if (Server.getGameMap().getEnergySpace76() == 1) {
+                                    Server.getGameMap().setEnergySpace76(0);
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                } else if (Server.getRegisterCounter() == 5) {
+                                    Server.getGame().getPlayerList().get(i).setEnergyCubes(Server.getGame().getPlayerList().get(i).getEnergyCubes() + 1);
+                                }
+                                break;
+                        }
+                        break;
+                }
+            }
         }
     }
 
