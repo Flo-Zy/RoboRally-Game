@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.LogRecord;
 
+/**
+ * creates a logger for the client
+ */
 public class ClientLogger {
     private static Logger logger = Logger.getLogger("ClientLogger");
 
@@ -39,10 +42,19 @@ public class ClientLogger {
         }
     }
 
+    /**
+     * writes to the logger
+     * @param object the object to add to the logger
+     */
     public static void writeToClientLog(Object object) {
         logger.info(String.valueOf(object));
     }
 
+    /**
+     * writes to the logger
+     * @param message the message to print to the logger
+     * @param e the exception to print to the logger
+     */
     public static void writeToClientLog(String message, Exception e) {
         logger.log(Level.WARNING, message, e);
     }
