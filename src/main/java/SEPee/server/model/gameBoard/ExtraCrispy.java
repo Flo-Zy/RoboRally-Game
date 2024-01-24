@@ -5,6 +5,9 @@ import SEPee.server.model.field.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class that contains all fields of the game board Extra Crispy and all their field elements
+ */
 public class ExtraCrispy extends GameBoard {
     public ExtraCrispy() {
 
@@ -742,8 +745,12 @@ public class ExtraCrispy extends GameBoard {
         this.addRow(column12);
     }
 
-
-
+    /**
+     * checks what field elements are on a field
+     * @param x x coordinate of the field
+     * @param y y coordinate of the field
+     * @return a list of all field elements on this field
+     */
     public List<Field> getFieldsAt(int x, int y) {
         if (x < 0 || x >= this.getGameBoard().size()) {
             throw new IllegalArgumentException("X-coordinate out of bounds");
@@ -758,16 +765,23 @@ public class ExtraCrispy extends GameBoard {
         return fieldsAtXY;
     }
 
-
+    /**
+     * @return the x variable of the reboot field
+     */
     public int getRebootX(){
         return 0;
     }
 
+    /**
+     * @return the y variable of the reboot field
+     */
     public int getRebootY(){
         return 0;
     }
 
-
+    /**
+     * @return the orientation of the reboot field
+     */
     public String getOrientationOfReboot(){
         return "right";
     }

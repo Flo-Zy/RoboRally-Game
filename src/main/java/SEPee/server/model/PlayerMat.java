@@ -1,12 +1,14 @@
 package SEPee.server.model;
 
 import SEPee.server.model.card.Card;
-import SEPee.server.model.card.upgradeCard.UpgradeCard;
 
 import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * the class representing a player's player mat
+ */
 public class PlayerMat{
     @Getter
     @Setter
@@ -14,8 +16,6 @@ public class PlayerMat{
     @Getter
     @Setter
     private ArrayList<Card> progDeck;
-    private UpgradeCard[] permanentSlot;
-    private UpgradeCard[] temporarySlot;
     @Getter
     @Setter
     private ArrayList<String> discardPile;
@@ -35,8 +35,6 @@ public class PlayerMat{
     public PlayerMat(ArrayList<Card> progDeck) {
         this.register = new String[5];
         this.progDeck = progDeck;
-        //this.permanentSlot = new UpgradeCard[3];
-        //this.temporarySlot = new UpgradeCard[3];
         this.discardPile = new ArrayList<>();
         this.clientHand = new ArrayList<>();
         this.tokenCount = 0;
@@ -51,6 +49,10 @@ public class PlayerMat{
         register[index] = card;
     }
 
+    /**
+     * fills an empty register with a random card
+     * @param card the card to fill the register with
+     */
     public void fillEmptyRegister(String card){
         for(int i = 0; i < 5; i++){
             if(register[i] == null){
@@ -60,12 +62,19 @@ public class PlayerMat{
         }
     }
 
+    /**
+     * clears the registers
+     */
     public void clearRegister(){
         for(int i = 0; i < 5; i++){
             register[i] = null;
         }
     }
 
+    /**
+     * gets the register size
+     * @return the register's size
+     */
     public int registerSize(){
         int size = 0;
         for(int i = 0; i < 5; i++){

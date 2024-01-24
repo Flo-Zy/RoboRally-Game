@@ -7,10 +7,6 @@ import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
-//import SEPee.serialisierung.messageType.HelloClient;
-//import SEPee.serialisierung.messageType.HelloServer;
-//import SEPee.serialisierung.messageType.Welcome;
-//import SEPee.serialisierung.messageType.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -102,9 +98,6 @@ public class Server extends Thread{
                     ServerLogger.writeToServerLog("Verbindung erfolgreich. Client verbunden: " + clientSocket);
                     //welcome erstellen und an den Client schicken
 
-                    // alive message sender erst raus weil stört unnormal.
-                    // new Thread(new AliveMessageSender()).start();
-
                     ServerLogger.writeToServerLog(clientID);
                     playerList.add(new Player("", clientID, -9999));
                     Welcome welcome = new Welcome(clientID);
@@ -129,6 +122,10 @@ public class Server extends Thread{
         }
     }
 
+    /**
+     * assigns a client id to a new client
+     * @return
+     */
     public static synchronized int assigningClientID(){
         int assignedClientID = idCounter;
         idCounter++;

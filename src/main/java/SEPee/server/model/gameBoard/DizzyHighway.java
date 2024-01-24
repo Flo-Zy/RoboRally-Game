@@ -705,29 +705,12 @@ public class DizzyHighway extends GameBoard {
         this.addRow(column12);
     }
 
-    /*
-    public Field getFieldAt(int x, int y) {
-        if (x < 0 || x >= this.getGameBoard().size()) {
-            throw new IllegalArgumentException("X-coordinate out of bounds");
-        }
-        List<List<Field>> column = this.getGameBoard().get(x);
-        if (y < 0 || y >= column.size()) {
-            throw new IllegalArgumentException("Y-coordinate out of bounds");
-        }
-
-
-        for (int i = 0, column.get(y).get(i), i++){
-            if(column.get(y).get(i)) == null{
-                break;
-            }
-            return column.get(y).get(i); // Assuming each cell has at least one Field object
-        }
-
-     }
-    */
-
-
-
+    /**
+     * checks what field elements are on a field
+     * @param x x coordinate of the field
+     * @param y y coordinate of the field
+     * @return a list of all field elements on this field
+     */
     public List<Field> getFieldsAt(int x, int y) {
         if (x < 0 || x >= this.getGameBoard().size()) {
             throw new IllegalArgumentException("X-coordinate out of bounds");
@@ -744,13 +727,23 @@ public class DizzyHighway extends GameBoard {
         return fieldsAtXY;
     }
 
+    /**
+     * @return the x variable of the reboot field
+     */
     public int getRebootX(){
         return 7;
     }
+
+    /**
+     * @return the y variable of the reboot field
+     */
     public int getRebootY(){
         return 3;
     }
 
+    /**
+     * @return the orientation of the reboot field
+     */
     public String getOrientationOfReboot(){
         return "bottom";
     }

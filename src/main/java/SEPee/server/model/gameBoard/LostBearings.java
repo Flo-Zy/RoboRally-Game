@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * class that contains all fields of the game board Lost Bearings and all their field elements
+ */
 public class LostBearings extends GameBoard {
     public LostBearings() {
 
@@ -677,8 +680,12 @@ public class LostBearings extends GameBoard {
         this.addRow(column12);
     }
 
-
-
+    /**
+     * checks what field elements are on a field
+     * @param x x coordinate of the field
+     * @param y y coordinate of the field
+     * @return a list of all field elements on this field
+     */
     public List<Field> getFieldsAt(int x, int y) {
         try {
             if (x < 0 || x >= this.getGameBoard().size()) {
@@ -699,15 +706,23 @@ public class LostBearings extends GameBoard {
         }
     }
 
-
+    /**
+     * @return the x variable of the reboot field
+     */
     public int getRebootX(){
         return 0;
     }
 
+    /**
+     * @return the y variable of the reboot field
+     */
     public int getRebootY(){
         return 0;
     }
 
+    /**
+     * @return the orientation of the reboot field
+     */
     public String getOrientationOfReboot(){
         return "right";
     }

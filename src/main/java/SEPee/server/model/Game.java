@@ -4,39 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import SEPee.serialisierung.Serialisierer;
-import SEPee.serialisierung.messageType.Movement;
-import SEPee.server.model.card.Card;
-import SEPee.server.model.card.Decks;
-import SEPee.server.model.card.upgradeCard.UpgradeCard;
 import SEPee.server.model.field.Field;
 import SEPee.server.model.gameBoard.GameBoard;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-
+/**
+ * class to represent a started game
+ */
 @Getter
 @Setter
 public class Game implements Robot.RobotPositionChangeListener {
     private List<List<List<Field>>> gameBoard;
     @Getter
     private ArrayList<Player> playerList;
-    // private ArrayList<Player> priorityPlayerList;
     private int playerIndex;
     private int currentPhase;
     private Player currentPlayer;
-    //private ArrayList<ProgCard> initialProgDeck;
     private int virus;
     private int spam;
     private int trojanHorse;
     private int wurm;
     private GameBoard boardClass;
-    //private DamageDecks damageDecks;
-    //private UpgradeShop upgradeShop;
-    //private ArrayList<SpecialCard> specialCardsDeck;
 
     public Game(ArrayList<Player> playerList, List<List<List<Field>>> gameBoard, GameBoard boardClass){
         this.gameBoard = gameBoard;
@@ -51,6 +40,9 @@ public class Game implements Robot.RobotPositionChangeListener {
         this.boardClass = boardClass;
     }
 
+    /**
+     * sets the next phase of the game
+     */
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
 
@@ -63,8 +55,6 @@ public class Game implements Robot.RobotPositionChangeListener {
                 throw new RuntimeException(e);
             }*/
 
-
-
             currentPhase = 2;
         } else if (currentPhase == 0) { // Überspringen der Upgrade Phase
             currentPhase = 2;
@@ -73,27 +63,28 @@ public class Game implements Robot.RobotPositionChangeListener {
             // jetzt in AktivierungsPhase
 
             ServerLogger.writeToServerLog("Wir sind in der Phase:" + currentPhase);
-
-            //set teleports or clients
-
         }
     }
 
+    /**
+     * set the next player's turn
+     */
     public void setNextPlayersTurn(){
-        if(currentPhase == 0) { // 0: Starting-Phase
+        if(currentPhase == 0) {
             playerIndex++;
             currentPlayer = playerList.get(playerIndex);
-            //return currentPlayer;
-        } else { // 1/2/3: Upgrade/Programming/Activation-Phase
+        } else {
             // select nextPlayer closest to antenna
             playerIndex = 0;
-            // update der priorityPlayerList
-            checkPriorities(); // update der playerList mit Prioritäten
+            checkPriorities();
             currentPlayer = playerList.get(playerIndex);
             playerIndex++;
         }
     }
 
+    /**
+     * check the priorities of the players
+     */
     public void checkPriorities() {
         int antennaX;
         int antennaY;
@@ -105,62 +96,59 @@ public class Game implements Robot.RobotPositionChangeListener {
             antennaY = 4;
         }
 
-        // TreeMap, die automatisch alles Player anhand Distanz und Winkel von der Antenne aus sortiert
         TreeMap<Double, Player> sortedPlayers = new TreeMap<>();
 
-        // Bestimme Position von jedem Player Roboter + Berechne Distanz und Winkel zu der Antenne
         for (Player player : playerList) {
             int distanceOfRobotFromAntenna = calculateDistance(player.getRobot().getX(), player.getRobot().getY(), antennaX, antennaY);
             double angleFromAntenna = calculateAngle(player.getRobot().getX(), player.getRobot().getY(), antennaX, antennaY);
 
-            // Schlüsselwert von Player für TreeMap erstellen aus Distanz und Winkel zu der Antenne
-            double playerKey = distanceOfRobotFromAntenna + angleFromAntenna / 1000.0; // /1000 damit beim Sortieren der Winkel nicht zu viel Einfluss hat
+            double playerKey = distanceOfRobotFromAntenna + angleFromAntenna / 1000.0;
 
             sortedPlayers.put(playerKey, player);
         }
 
-        // Hinzufügen der Player von der TreeMap zur priorityPlayerList (sortiert nach Distanz und Winkel)
         playerList.clear();
         playerList.addAll(sortedPlayers.values());
     }
 
+    /**
+     * calculate the distance to the antenna
+     * @param x1 robot x coordinate
+     * @param y1 robot y coordinate
+     * @param x2 antenna x coordinate
+     * @param y2 antenna y coordinate
+     * @return the distance
+     */
     private int calculateDistance(int x1, int y1, int x2, int y2) {
-        // Berechnung Distanz
         return (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
+
+    /**
+     * calculate the angle towards the antenna
+     * @param x
+     * @param y
+     * @param centerX
+     * @param centerY
+     * @return the angle
+     */
     private double calculateAngle(int x, int y, int centerX, int centerY) {
-        // Berechnung Winkel in Radian
         double angle = Math.atan2(y - centerY, x - centerX);
-        // Winkel -> Grad und normalisieren zu [0, 360]
         double degrees = Math.toDegrees(angle);
         degrees = (degrees + 360) % 360;
-        // Grad -> Radian
         return Math.toRadians(degrees);
     }
 
-    public void activateElements() {
-    }
-
-    public void setGameBoard(int boardId) {
-    }
-
-    public void shuffle() {
-    }
-
+    /**
+     * set the new position of the robot
+     * @param robot the robot that moved
+     */
     @Override
     public void onRobotPositionChange(Robot robot) {
         for (Player player : playerList) {
             if (player.getRobot() == robot) {
                 player.setRobot(robot);
-                break; // Stop looping once the corresponding player is found and updated
+                break;
             }
         }
     }
-    /** TIMER:
-     long start,end;
-     double tim;
-     start=System.currentTimeMillis();
-     end=System.currentTimeMillis();
-     tim=(end-start)/1000.0;
-     */
 }

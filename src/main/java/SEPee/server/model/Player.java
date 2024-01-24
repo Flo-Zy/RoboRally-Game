@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * the class representing a player
+ */
 @Getter
 @Setter
 public class Player {
@@ -43,18 +44,21 @@ public class Player {
         this.robot = new Robot(0,0, "left" );
     }
 
+    /**
+     * matches the socket to a player id
+     * @param socket the socket to match
+     * @param clientId the client id to match
+     */
     public static void associateSocketWithId(Socket socket, int clientId) {
         socketIdMap.put(socket, clientId);
     }
 
+    /**
+     * tells you which client id belongs to a socket
+     * @param socket the socket you want a client id for
+     * @return client id that matches the socket
+     */
     public static int getClientIdFromSocket(Socket socket) {
         return socketIdMap.getOrDefault(socket, 666); // Returns 666 if socket ID not found
     }
-
-
-    public void draw(){}
-    public void fillRegister(Card[] chosenCards){}
-    public void discard(){}
-    public void examineDamageCards(){}
-    public void rebootRobot(){}
 }

@@ -1,7 +1,5 @@
 package SEPee.server.model;
 
-import SEPee.client.ClientLogger;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
@@ -10,6 +8,9 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.LogRecord;
 
+/**
+ * creating a logger for the server
+ */
 public class ServerLogger {
     private static Logger logger = Logger.getLogger("ServerLogger");
 

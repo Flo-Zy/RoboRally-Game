@@ -5,6 +5,9 @@ import SEPee.server.model.field.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class that contains all fields of the game board Death Trap and all their field elements
+ */
 public class DeathTrap extends GameBoard {
     public DeathTrap() {
 
@@ -711,6 +714,12 @@ public class DeathTrap extends GameBoard {
         this.addRow(column12);
     }
 
+    /**
+     * checks what field elements are on a field
+     * @param x x coordinate of the field
+     * @param y y coordinate of the field
+     * @return a list of all field elements on this field
+     */
     public List<Field> getFieldsAt(int x, int y) {
         if (x < 0 || x >= this.getGameBoard().size()) {
             throw new IllegalArgumentException("X-coordinate out of bounds");
@@ -726,6 +735,13 @@ public class DeathTrap extends GameBoard {
     }
 
 
+    /**
+     * checks whether to reboot to your starting point or the reboot field or not at all
+     * @param xCoordinate x coordinate of the robot
+     * @param yCoordinate y coordinate of the robot
+     * @return "continue" if you do not have to reboot "startingPoint" if you have to reboot on your starting point
+     * "rebootField" if you have to reboot on the reboot field
+     */
     public String checkRebootConditions(int xCoordinate, int yCoordinate) {
         String rebootTo = "continue";
 
@@ -739,14 +755,23 @@ public class DeathTrap extends GameBoard {
         return rebootTo;
     }
 
+    /**
+     * @return the x variable of the reboot field
+     */
     public int getRebootX(){
         return 12;
     }
 
+    /**
+     * @return the y variable of the reboot field
+     */
     public int getRebootY(){
         return 9;
     }
 
+    /**
+     * @return the orientation of the reboot field
+     */
     public String getOrientationOfReboot(){
         return "left";
     }
