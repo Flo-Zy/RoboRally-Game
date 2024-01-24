@@ -5,8 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
+/**
+ * class for the conveyor belt fields
+ */
 @Getter
 @Setter
 public class ConveyorBelt extends Field{
@@ -15,8 +16,6 @@ public class ConveyorBelt extends Field{
     @Getter
     @SerializedName("orientations")
     private static String[] orientations;
-    //private int[] registers;
-    //private int count;
     public ConveyorBelt(String isOnBoard, int speed, String[] orientations) {
         super("ConveyorBelt", isOnBoard, speed, orientations);
         this.speed = speed;

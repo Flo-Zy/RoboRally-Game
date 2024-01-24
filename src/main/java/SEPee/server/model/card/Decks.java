@@ -6,15 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * class for the game's draw pile
+ */
 public class Decks {
     private ArrayList<Card> deck;
-    /*
-    private List<Card> deck2;
-    private List<Card> deck3;
-    private List<Card> deck4;
-    private List<Card> deck5;
-    private List<Card> deck6;
-     */
     public ArrayList<Card> getDeck() {
         return deck;
     }
@@ -26,20 +22,12 @@ public class Decks {
     public Decks() {
         deck = new ArrayList<>();
         initializeDeck(deck);
-        /*
-        deck2 = new ArrayList<>();
-        initializeDeck(deck2);
-        deck3 = new ArrayList<>();
-        initializeDeck(deck3);
-        deck4 = new ArrayList<>();
-        initializeDeck(deck4);
-        deck5 = new ArrayList<>();
-        initializeDeck(deck5);
-        deck6 = new ArrayList<>();
-        initializeDeck(deck6);
-         */
     }
 
+    /**
+     * initializes the deck
+     * @param deck the deck to be initialized
+     */
     private void initializeDeck(List<Card> deck) {
         for (int i = 0; i < 5; i++) {
             deck.add(new MoveI());
@@ -71,6 +59,10 @@ public class Decks {
         shuffle(deck);
     }
 
+    /**
+     * duffles the deck
+     * @param deck deck to be shuffled
+     */
     public void shuffle(List<Card> deck) {
         Collections.shuffle(deck);
     }

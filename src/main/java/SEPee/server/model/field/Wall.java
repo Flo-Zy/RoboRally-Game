@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
+/**
+ * class for fields containing a wall
+ */
 @Getter
 @Setter
 public class Wall extends Field{
-    //private int speed;
     @Getter
     @SerializedName("orientations")
     private static String[] orientations;

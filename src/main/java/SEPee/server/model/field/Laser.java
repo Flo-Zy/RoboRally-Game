@@ -3,13 +3,14 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for fields that contain a board laser
+ */
 @Getter
 @Setter
 public class Laser extends Field{
-    //private int speed;
     @SerializedName("orientations")
     private String[] orientations;
-    //private int[] registers;
     @SerializedName("count")
     private int count;
     public Laser(String isOnBoard, String[] orientations, int count){

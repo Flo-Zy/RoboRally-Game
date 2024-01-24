@@ -4,14 +4,15 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * fields containing push panels
+ */
 @Getter
 @Setter
 public class PushPanel extends Field {
-    //private int speed;
     @SerializedName("orientations")
     private String[] orientations;
 
-    //private int count;
     public PushPanel(String isOnBoard, String[] orientations, int[] registers){
         super("PushPanel", isOnBoard, orientations, registers);
         this.orientations = orientations;

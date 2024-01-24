@@ -5,8 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
+/**
+ * parent class for all fields
+ * with constructors for every single type of field
+ */
 @Getter
 @Setter
 public abstract class Field {

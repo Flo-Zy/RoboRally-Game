@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * class for fields that contain gears
+ */
 @Getter
 @Setter
 public class Gear extends Field{
-    //private int speed;
     @SerializedName("orientations")
     private String[] orientations;
-    //private int[] registers;
-    //private int count;
     public Gear(String isOnBoard, String[] orientations){
         super("Gear", isOnBoard, orientations);
         this.orientations = orientations;
