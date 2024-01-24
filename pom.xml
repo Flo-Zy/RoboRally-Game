@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>SEPee</groupId>
     <artifactId>eifrige-eremiten</artifactId>
     <version>1.0</version>
+    <name>RoboRally</name>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
@@ -64,6 +64,8 @@
 
     <build>
         <plugins>
+
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -74,6 +76,7 @@
                 </configuration>
             </plugin>
 
+            <!-- dependency Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -95,14 +98,15 @@
                 </executions>
             </plugin>
 
+            <!-- Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.2.0</version>
                 <executions>
                     <!-- Execution for Server -->
                     <execution>
-                        <id>assembly-server</id>
+                        <id>shade-server</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -111,17 +115,15 @@
                             <finalName>server</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
-                                <transformer implementation=
-                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>SEPee.server.model.Server</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
                     </execution>
-
                     <!-- Execution for Client -->
                     <execution>
-                        <id>assembly-client</id>
+                        <id>shade-client</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -130,32 +132,16 @@
                             <finalName>client</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
-                                <transformer implementation=
-                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>SEPee.client.model.Client</mainClass>
+                                <!-- Merge JavaFX dependencies into the Uber-JAR -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>SEPee.client.model.ClientLauncher</mainClass>
                                 </transformer>
                             </transformers>
-                            <!-- Include dependencies from target/libs -->
-                            <resourceTransformers>
-                                <resourceTransformer implementation=
-                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/javafx.application.Application</resource>
-                                </resourceTransformer>
-                                <resourceTransformer implementation=
-                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/com.sun.javafx.application.PlatformImpl</resource>
-                                </resourceTransformer>
-                                <resourceTransformer implementation=
-                                                             "org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/com.sun.javafx.font.PrismFontFactory</resource>
-                                </resourceTransformer>
-                            </resourceTransformers>
                         </configuration>
                     </execution>
-
                     <!-- Execution for ClientAI -->
                     <execution>
-                        <id>assembly-clientai</id>
+                        <id>shade-clientAI</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -164,9 +150,9 @@
                             <finalName>clientAI</finalName>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
-                                <transformer implementation=
-                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>SEPee.client.model.ClientAI</mainClass>
+                                <!-- Merge JavaFX dependencies into the Uber-JAR -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>SEPee.client.model.ClientAILauncher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

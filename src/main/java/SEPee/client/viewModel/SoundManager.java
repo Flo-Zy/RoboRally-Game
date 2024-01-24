@@ -38,7 +38,7 @@ public class SoundManager {
         ClientLogger.writeToClientLog("event name: " + eventName + " ismuted: " + isMuted);
         try {
             if (isEventSoundPlaying) {
-                System.out.println("Event sound is already playing");
+                ClientLogger.writeToClientLog("Event sound is already playing");
                 return;
             }
 
