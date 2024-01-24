@@ -57,6 +57,7 @@
     -fx-scale-y: 1.1;
     -fx-max-width: 469px;
     -fx-max-height: 91px;
+    -fx-cursor: "pointer"
 }
 
 .grid-label-robonames {

@@ -222,7 +222,7 @@ public class ClientController {
             if (client.getTakenFigures().contains(i)) {
                 if (imageView != currentSelectedImageView) {
                     imageView.setDisable(true);
-                    imageView.setOpacity(0.1);
+                    imageView.setOpacity(0.4);
                 } else {
                     currentSelectedImageView.setOpacity(1.0);
                     currentSelectedImageView = null;
@@ -252,9 +252,6 @@ public class ClientController {
                     avatarImageView.setImage(image);
                     avatarImageView.setVisible(true);
                     avatarNameLabel.setText(robotNames[robotNumber-1]);
-                    avatarNameLabel.setStyle("-fx-text-fill: #dde400; " +
-                            "-fx-font-size: 40px; " +
-                            "-fx-font-family: 'Impact'");
                     DropShadow dropShadow = new DropShadow();
                     dropShadow.setRadius(10.0);
                     dropShadow.setOffsetX(3.0);

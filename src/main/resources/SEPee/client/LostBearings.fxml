@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.LostBearingsController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.LostBearingsController">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
