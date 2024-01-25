@@ -42,10 +42,19 @@ public class ServerLogger {
         }
     }
 
+    /**
+     * writes to the logger
+     * @param object the object to write to the logger
+     */
     public static void writeToServerLog(Object object){
         logger.info(String.valueOf(object));
     }
 
+    /**
+     * write to the logger
+     * @param message message to write to the logger
+     * @param e exception to write to the logger
+     */
     public static void writeToServerLog(String message, Exception e){
         logger.log(Level.WARNING, message, e);
     }

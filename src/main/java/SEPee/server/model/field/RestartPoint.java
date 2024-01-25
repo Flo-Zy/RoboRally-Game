@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class RestartPoint extends Field {
     public RestartPoint(String isOnBoard){
-        super("PushPanel", isOnBoard);
+        super("RestartPoint", isOnBoard);
     }
 }

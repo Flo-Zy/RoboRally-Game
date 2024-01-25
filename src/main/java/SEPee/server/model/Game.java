@@ -125,10 +125,10 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     /**
      * calculate the angle towards the antenna
-     * @param x
-     * @param y
-     * @param centerX
-     * @param centerY
+     * @param x robot x coordinate
+     * @param y robot y coordinate
+     * @param centerX antenna x coordinate
+     * @param centerY antenna y coordinate
      * @return the angle
      */
     private double calculateAngle(int x, int y, int centerX, int centerY) {
