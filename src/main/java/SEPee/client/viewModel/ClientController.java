@@ -96,7 +96,6 @@ public class ClientController {
     @Getter
     private static ArrayList<Integer> takenStartPoints = new ArrayList<>();
     private List<Integer> takenFigures = new ArrayList<>();
-
     private ImageView currentSelectedImageView = null;
     private ArrayList<String> playerNames = new ArrayList<>();
     @Setter
@@ -350,6 +349,7 @@ public class ClientController {
      * @param stage the stage
      */
     public void initAI(ClientAI clientAI, Stage stage) {
+        System.out.println(Client.getTakenFigures());
         figure = robotSelectionAI(Client.getTakenFigures());
     }
 

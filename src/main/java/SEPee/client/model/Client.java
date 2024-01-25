@@ -189,17 +189,26 @@ public class Client extends Application {
                                 }
                             }
                             if(!exists){
+                                System.out.println("Before: " + playerListClient);
                                 synchronized (playerListClient) {
                                     playerListClient.add(newPlayer);
                                 }
+                                System.out.println("After: " + playerListClient);
                             }
+                            System.out.println("1. " + takenFigures);
                             synchronized (playerListClient) {
+                                System.out.println("After2: " + playerListClient);
                                 for (Player player : playerListClient) {
-                                    getTakenFigures().add(player.getFigure());
+                                    takenFigures.add(player.getFigure());
                                 }
+                                System.out.println("2. " + takenFigures);
                             }
+                            System.out.println("3. " + takenFigures);
+
                             updateTakenFigures();
+                            System.out.println("4. " + takenFigures);
                             notifyTakenFiguresChangeListeners();
+                            System.out.println("5. " + takenFigures);
 
                             synchronized (playerListClient) {
                                 for (int i = 0; i < playerListClient.size(); i++) {
@@ -771,7 +780,7 @@ public class Client extends Application {
     private void updateTakenFigures() {
         synchronized (playerListClient) {
             for (Player player : playerListClient) {
-                getTakenFigures().add(player.getFigure());
+                takenFigures.add(player.getFigure());
             }
         }
         notifyTakenFiguresChangeListeners();

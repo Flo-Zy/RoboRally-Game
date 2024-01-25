@@ -184,11 +184,15 @@ public class ClientAI extends Application {
                                     playerListClientAI.add(newPlayer);
                                 }
                             }
+
+                            System.out.println("1. " + takenFigures);
                             synchronized (playerListClientAI) {
+                                System.out.println(playerListClientAI);
                                 for (Player player : playerListClientAI) {
-                                    getTakenFigures().add(player.getFigure());
+                                    takenFigures.add(player.getFigure());
                                 }
                             }
+                            System.out.println("2. " + takenFigures);
 
                             ClientAILogger.writeToClientLog("Player added");
                             synchronized (playerListClientAI) {
