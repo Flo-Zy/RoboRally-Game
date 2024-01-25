@@ -733,7 +733,7 @@ public class Client extends Application {
                                 controller.getEndGIF().setImage(looserImage);
                             }
                             controller.getEndGIF().setVisible(true);
-                            Thread.sleep(10000);
+                            Thread.sleep(15000);
                             controller.shutdown();
                             break;
                         default:
