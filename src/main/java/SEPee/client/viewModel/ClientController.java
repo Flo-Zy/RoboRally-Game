@@ -349,8 +349,7 @@ public class ClientController {
      * @param stage the stage
      */
     public void initAI(ClientAI clientAI, Stage stage) {
-        System.out.println(Client.getTakenFigures());
-        figure = robotSelectionAI(Client.getTakenFigures());
+        figure = robotSelectionAI(ClientAI.getTakenFigures());
     }
 
     private void updateOkButtonState(Client client, Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {

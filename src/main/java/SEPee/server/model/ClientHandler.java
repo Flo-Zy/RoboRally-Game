@@ -141,7 +141,7 @@ public class ClientHandler implements Runnable {
                             PlayerValues deserializedPlayerValues = Deserialisierer.deserialize(serializedReceivedString, PlayerValues.class);
                             playerName = deserializedPlayerValues.getMessageBody().getName();
                             int playerFigure = deserializedPlayerValues.getMessageBody().getFigure();
-
+                            PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                             associateSocketWithId(clientSocket, clientId);
 
                             this.player = new Player(playerName, clientId, playerFigure + 1);
@@ -152,7 +152,6 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
-                            PlayerAdded playerAdded = new PlayerAdded(clientId, playerName, playerFigure);
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                             //playerAdded senden an alle alten Clients
                             broadcast(serializedPlayerAdded);

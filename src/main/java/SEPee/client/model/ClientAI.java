@@ -1,6 +1,7 @@
 package SEPee.client.model;
 
 import SEPee.client.ClientAILogger;
+import SEPee.client.ClientLogger;
 import SEPee.client.viewModel.ClientController;
 import SEPee.serialisierung.Deserialisierer;
 import SEPee.serialisierung.Serialisierer;
@@ -185,14 +186,16 @@ public class ClientAI extends Application {
                                 }
                             }
 
-                            System.out.println("1. " + takenFigures);
+                            ClientAILogger.writeToClientLog("1. " + takenFigures);
                             synchronized (playerListClientAI) {
-                                System.out.println(playerListClientAI);
+                                ClientAILogger.writeToClientLog(playerListClientAI);
                                 for (Player player : playerListClientAI) {
-                                    takenFigures.add(player.getFigure());
+                                    if(!takenFigures.contains(player.getFigure())) {
+                                        takenFigures.add(player.getFigure());
+                                    }
                                 }
                             }
-                            System.out.println("2. " + takenFigures);
+                            ClientAILogger.writeToClientLog("2. " + takenFigures);
 
                             ClientAILogger.writeToClientLog("Player added");
                             synchronized (playerListClientAI) {
