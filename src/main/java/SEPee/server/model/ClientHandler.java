@@ -104,12 +104,14 @@ public class ClientHandler implements Runnable {
                                 }
                             }
                             Server.getGame().getPlayerList().remove(disconnectPLayer);
+
+                            if(Server.getGame().getPlayerList().size() > 0) {
+                                ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
+                                String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
+                                broadcast(serializedConnectionUpdate);
+                            }
                         }
-                        if(Server.getGame().getPlayerList().size() > 0) {
-                            ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
-                            String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
-                            broadcast(serializedConnectionUpdate);
-                        }
+
                         alive.cancel();
                     }
                 }
