@@ -66,6 +66,12 @@ public class Server extends Thread{
     @Getter
     @Setter
     private static int numPickDamage = 0;
+    @Getter
+    @Setter
+    private static boolean disconnected = false;
+    @Getter
+    @Setter
+    private static ArrayList<Player> disconnectedPlayer = new ArrayList<>();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
