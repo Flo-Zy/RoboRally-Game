@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
    <StackPane VBox.vgrow="NEVER">
       <children>
                 <!-- Oberer Teil (HBox) -->
@@ -165,9 +165,9 @@
                                  </HBox.margin>
                                     </ImageView>
       
-                                                               <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="135.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                                               <Label fx:id="avatarNameLabel" prefHeight="55.0" prefWidth="191.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
-                                    <Insets left="10.0" right="15.0" />
+                                    <Insets left="10.0" />
                                  </HBox.margin>
                                     </Label>
                            </children>
@@ -187,7 +187,7 @@
                          <VBox prefHeight="300.0" prefWidth="271.0">
                              <!-- HBox für Textfield und VisibilityButton -->
                              <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="271.0" VBox.vgrow="NEVER">
-                                     <Button fx:id="visibilityButton" minHeight="26.0" minWidth="37.5" onAction="#toggleVisibility" prefHeight="26.0" prefWidth="37.5" text="Alle">
+                                     <Button fx:id="visibilityButton" minHeight="26.0" minWidth="37.5" onAction="#toggleVisibility" prefHeight="26.0" prefWidth="63.0" text="Alle">
                               <HBox.margin>
                                  <Insets top="15.0" />
                               </HBox.margin>
