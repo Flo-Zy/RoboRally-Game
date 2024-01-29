@@ -89,29 +89,45 @@ public class ClientHandler implements Runnable {
                     } else {
                         ServerLogger.writeToServerLog("Disconnect");
 
+                        Server.setDisconnected(true);
+
                         Player disconnectPLayer = new Player("", -9999, -9999);
                         for (Player player : Server.getPlayerList()) {
                             if (player.getId() == clientId) {
                                 disconnectPLayer = player;
+                                Server.getDisconnectedPlayer().add(disconnectPLayer);
                             }
                         }
-                        Server.getPlayerList().remove(disconnectPLayer);
+                        //Server.getPlayerList().remove(disconnectPLayer);
 
                         if (Server.isGameStarted()) {
-                            for (Player player : Server.getPlayerList()) {
-                                if (player.getId() == clientId) {
-                                    disconnectPLayer = player;
-                                }
-                            }
-                            Server.getGame().getPlayerList().remove(disconnectPLayer);
 
                             if(Server.getGame().getPlayerList().size() > 0) {
                                 ConnectionUpdate connectionUpdate = new ConnectionUpdate(clientId, false, "ignore");
                                 String serializedConnectionUpdate = Serialisierer.serialize(connectionUpdate);
                                 broadcast(serializedConnectionUpdate);
                             }
-                        }
 
+                            if(Server.getCountPlayerTurns() != Server.getGame().getPlayerList().size() && Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId() == clientId){
+                                if(Server.getCountPlayerTurns() < Server.getGame().getPlayerList().size()){
+                                    Server.setCountPlayerTurns(Server.getCountPlayerTurns()+1);
+                                    CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
+                                    String serializedCurrentPlayer = Serialisierer.serialize(currentPlayer);
+                                    broadcast(serializedCurrentPlayer);
+                                }
+                            }
+
+                        }
+                        if(Server.isGameStarted()) {
+                            if (Server.getGame().getCurrentPhase() == 2) {
+                                if(disconnectPLayer.getPlayerMat().registerSize() == 5){
+                                    Server.setTimerSend(Server.getTimerSend()-1);
+                                }
+                                Server.getPlayerList().remove(disconnectPLayer);
+                            }
+                        }else{
+                            Server.getPlayerList().remove(disconnectPLayer);
+                        }
                         alive.cancel();
                     }
                 }
@@ -480,6 +496,20 @@ public class ClientHandler implements Runnable {
 
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
+                                if(Server.isDisconnected()) {
+                                    System.out.println("player löschen");
+                                    for(Player player : Server.getDisconnectedPlayer()){
+                                        Server.getPlayerList().remove(player);
+                                    }
+                                    Server.getDisconnectedPlayer().clear();
+                                    for(Player player : Server.getPlayerList()){
+                                        System.out.println(player.getName());
+                                    }
+                                    for(Player player : Server.getGame().getPlayerList()){
+                                        System.out.println(player.getName());
+                                    }
+                                    Server.setDisconnected(false);
+                                }
 
                                 fieldActivation();
 
@@ -540,6 +570,7 @@ public class ClientHandler implements Runnable {
                                         player.setReboot(false);
                                     }
                                     Server.setRegisterCounter(0);
+                                    Server.setCountPlayerTurns(0);
                                     Server.setTimerSend(0);
                                     setPlayerFertig(true);
                                     for (Player player : Server.getGame().getPlayerList()) {
@@ -884,7 +915,7 @@ public class ClientHandler implements Runnable {
                                             String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                             broadcast(serializedCurrentCards);
 
-                                            Server.setCountPlayerTurns(0);
+                                            //Server.setCountPlayerTurns(0);
                                             CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
                                             String serializedCurrentPlayer1 = Serialisierer.serialize(currentPlayer);
                                             broadcast(serializedCurrentPlayer1);
@@ -1032,7 +1063,7 @@ public class ClientHandler implements Runnable {
                                         String serializedCurrentCards = Serialisierer.serialize(currentCards);
                                         broadcast(serializedCurrentCards);
 
-                                        Server.setCountPlayerTurns(0);
+                                        //Server.setCountPlayerTurns(0);
                                         CurrentPlayer currentPlayer = new CurrentPlayer(Server.getGame().getPlayerList().get(Server.getCountPlayerTurns()).getId());
                                         String serializedCurrentPlayer1 = Serialisierer.serialize(currentPlayer);
                                         broadcast(serializedCurrentPlayer1);
