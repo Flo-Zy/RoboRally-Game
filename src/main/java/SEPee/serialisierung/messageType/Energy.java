@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Energy message type
+ * @author Maximilian
  */
 public class Energy extends Message{
     private EnergyBody messageBody;

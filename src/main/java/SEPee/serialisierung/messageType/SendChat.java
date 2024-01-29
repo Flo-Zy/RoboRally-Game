@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the SendChat message type
+ * @author Franziska
  */
 public class SendChat extends Message{
     private SendChatBody messageBody;

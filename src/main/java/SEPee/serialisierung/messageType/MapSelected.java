@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the MapSelected message type
+ * @author Florian
  */
 public class MapSelected extends Message{
     private MapSelectedBody messageBody;

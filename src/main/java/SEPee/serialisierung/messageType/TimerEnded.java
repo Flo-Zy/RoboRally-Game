@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * class for the TimerEnded message type
+ * @author Maximilian
  */
 public class TimerEnded extends Message{
     private TimerEndedBody messageBody;

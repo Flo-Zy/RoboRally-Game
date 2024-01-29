@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * is needed to serialize abstract classes -> needed for serializing the game maps
+ * @author Maximilian
  */
 public class FieldTypeAdapterFactory implements TypeAdapterFactory {
     @Override

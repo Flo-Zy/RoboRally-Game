@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the SelectedCard message type
+ * @author Franziska
  */
 public class SelectedCard extends Message{
     private SelectedCardBody messageBody;

@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  * deserializes String objects
+ * @author Felix, Maximilian
  */
 public class Deserialisierer {
     private static final Gson gson = new GsonBuilder()

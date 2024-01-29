@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for body of the GameFinished message type
+ * @author Maximilian
  */
 public class GameFinished extends Message{
     private GameFinishedBody messageBody;

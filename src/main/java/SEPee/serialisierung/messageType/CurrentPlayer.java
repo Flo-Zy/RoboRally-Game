@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the CurrentPlayer message type
+ * @author Franziska
  */
 public class CurrentPlayer extends Message{
     private CurrentPlayerBody messageBody;

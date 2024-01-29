@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the SelectionFinished message type
+ * @author Maximilian
  */
 public class SelectionFinished extends Message{
     private SelectionFinishedBody messageBody;

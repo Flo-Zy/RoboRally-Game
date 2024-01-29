@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Alive message type
+ * @author Maximilian
  */
 public class Alive extends Message{
     private AliveBody messageBody;

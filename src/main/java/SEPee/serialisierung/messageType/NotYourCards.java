@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for body of the NotYourCards message type
+ * @author Franziska
  */
 public class NotYourCards extends Message{
     private NotYourCardsBody messageBody;

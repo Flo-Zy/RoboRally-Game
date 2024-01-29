@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the ActivePhase message type
+ * @author Franziska
  */
 public class ActivePhase extends Message{
     private ActivePhaseBody messageBody;

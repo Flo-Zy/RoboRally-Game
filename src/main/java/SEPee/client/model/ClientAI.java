@@ -35,6 +35,7 @@ import lombok.Setter;
 
 /**
  * the version of the client that functions as an AI, chooses options automatically for the dialogs
+ * @author Hasan, Franziska, Maximilian
  */
 @Getter
 public class ClientAI extends Application {

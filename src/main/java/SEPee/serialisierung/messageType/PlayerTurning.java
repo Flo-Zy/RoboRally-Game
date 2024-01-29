@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the PlayerTurning message type
+ * @author Maximilian
  */
 public class PlayerTurning extends Message{
     private PlayerTurningBody messageBody;

@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the HelloServer message type
+ * @author Felix, Florian
  */
 public class HelloServer extends Message{
     private HelloServerBody messageBody;

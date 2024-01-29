@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * class for the PickDamage message type
+ * @author Franziska
  */
 public class PickDamage extends Message{
     private PickDamage.PickDamageBody messageBody;

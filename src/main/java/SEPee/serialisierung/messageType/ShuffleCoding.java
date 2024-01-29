@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the ShuffleCoding message type
+ * @author Franziska
  */
 public class ShuffleCoding extends Message{
     private ShuffleCodingBody messageBody;

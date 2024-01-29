@@ -10,6 +10,7 @@ import java.util.logging.LogRecord;
 
 /**
  * creates a logger for the client AI
+ * @author Maximilian
  */
 public class ClientAILogger {
     private static Logger logger = Logger.getLogger("ClientAILogger");

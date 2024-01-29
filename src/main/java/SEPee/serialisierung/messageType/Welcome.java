@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Welcome message type
+ * @author Felix
  */
 public class Welcome extends Message{
     private WelcomeBody messageBody;

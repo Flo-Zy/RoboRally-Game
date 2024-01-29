@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 /**
  * class for the CurrentCards message type
+ * @author Maximilian
  */
 public class CurrentCards extends Message{
     private CurrentCardsBody messageBody;

@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Error message type
+ * @author Franziska
  */
 public class Error extends Message{
     private ErrorBody messageBody;

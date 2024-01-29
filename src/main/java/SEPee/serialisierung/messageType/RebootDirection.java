@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the RebootDirection message type
+ * @author Maximilian
  */
 public class RebootDirection extends Message {
     private RebootDirectionBody messageBody;

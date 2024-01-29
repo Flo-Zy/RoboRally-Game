@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Reboot message type
+ * @author Maximilian
  */
 public class Reboot extends Message {
     private RebootBody messageBody;

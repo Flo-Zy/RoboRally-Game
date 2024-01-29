@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the ReplaceCard message type
+ * @author Maximilian
  */
 public class ReplaceCard extends Message{
     private ReplaceCardBody messageBody;

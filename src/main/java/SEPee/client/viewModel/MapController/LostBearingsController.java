@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * controls all graphical changes on the map Lost Bearings
+ * @author Maximilian, Felix
  */
 public class LostBearingsController extends MapController {
 

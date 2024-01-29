@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the SetStartingPoint message type
+ * @author Franziska
  */
 public class SetStartingPoint extends Message{
     private SetStartingPointBody messageBody;

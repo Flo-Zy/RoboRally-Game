@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * class for the SelectMap message type
+ * @author Florian
  */
 public class SelectMap extends Message{
     private SelectMapBody messageBody;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * class for the CardsYouGotNow message type
+ * @author Maximilian
  */
 public class CardsYouGotNow extends Message{
     private CardsYouGotNowBody messageBody;

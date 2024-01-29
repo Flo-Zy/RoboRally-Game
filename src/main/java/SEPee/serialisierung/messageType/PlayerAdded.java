@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the PlayerAdded message type
+ * @author Florian
  */
 public class PlayerAdded extends Message{
     private PlayerAddedBody messageBody;

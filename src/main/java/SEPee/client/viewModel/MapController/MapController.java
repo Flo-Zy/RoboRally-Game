@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * parent class of all mapControllers for each game map
+ * @author Florian, Hasan
+ */
 public class MapController {
     @FXML
     private ImageView Avatar1;

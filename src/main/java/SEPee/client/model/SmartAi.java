@@ -16,6 +16,7 @@ import SEPee.server.model.gameBoard.GameBoard;
 
 /**
  * calculates the best possible combination of five cards to play
+ * @author Hasan, Franziska
  */
 public class SmartAi {
 

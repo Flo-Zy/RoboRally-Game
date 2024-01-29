@@ -46,7 +46,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * controls all the parts of the GUI that are not in the map controlers
+ * controls all the parts of the GUI that are not in the map controllers
+ * @author Maximilian, Florian, Hasan, Felix, Franzi
  */
 public class ClientController {
     @FXML
@@ -143,6 +144,7 @@ public class ClientController {
      * initializes the client controller
      * @param client the client
      * @param stage the stage
+     * @author Maximilian, Florian, Hasan, Felix, Franzi
      */
     public void init(Client client, Stage stage) {
         this.clientHandMap = new HashMap<>();
@@ -347,11 +349,21 @@ public class ClientController {
      * initializes the AI
      * @param clientAI the AI
      * @param stage the stage
+     * @author Hasan
      */
     public void initAI(ClientAI clientAI, Stage stage) {
         figure = robotSelectionAI(ClientAI.getTakenFigures());
     }
 
+    /**
+     * updates the connect button
+     * @param client the client
+     * @param dialog the dialog
+     * @param usernameTextField the text field for the username
+     * @param selectedRobotNumber the number of the selected robot
+     * @param okButtonType the connect button
+     * @author Florian, Felix
+     */
     private void updateOkButtonState(Client client, Dialog<Pair<String, Integer>> dialog, TextField usernameTextField, int[] selectedRobotNumber, ButtonType okButtonType) {
         Node okButton = dialog.getDialogPane().lookupButton(okButtonType);
 
@@ -374,6 +386,7 @@ public class ClientController {
     /**
      * updates which robots are taken and disables the according images
      * @param newTakenFigures the figure that is now taken
+     * @author Felix
      */
     private void updateRobotImageViews(ArrayList<Integer> newTakenFigures) {
         for (Node node : robotSelectionGrid.getChildren()) {
@@ -393,6 +406,7 @@ public class ClientController {
 
     /**
      * sends a message that is entered in the GUI
+     * @author Felix, Maximilian
      */
     @FXML
     private void sendMessage() {
@@ -411,6 +425,7 @@ public class ClientController {
     /**
      * gets the selected recipient to send the message to
      * @return the selected recipient, -1 if it is a public message
+     * @author Felix
      */
     private int getSelectedRecipientId() {
         if (visibilityButton.getText().equals("Privat")) {
@@ -423,6 +438,7 @@ public class ClientController {
 
     /**
      * sends ready when you press the ready button
+     * @author Hasan, Franziska
      */
     @FXML
     private void sendReady() {
@@ -447,6 +463,7 @@ public class ClientController {
 
     /**
      * always make the AI ready
+     * @author Maximilian
      */
     public void sendReadyAI() {
         ready = true;
@@ -461,6 +478,7 @@ public class ClientController {
 
     /**
      * if you press the "alle" button you can choose from a list of all players who you want to send the message to
+     * @author Maximilian
      */
     @FXML
     private void toggleVisibility() {
@@ -473,6 +491,7 @@ public class ClientController {
 
     /**
      * shows the player list dialog
+     * @author Maximilian, Felix
      */
     private void showPlayerListDialog() {
         initializePlayerNames();
@@ -515,6 +534,7 @@ public class ClientController {
     /**
      * appends something to the chat
      * @param message what to append to the chat
+     * @author Maximilian
      */
     public void appendToChatArea(String message) {
         Platform.runLater(() -> chatArea.appendText(message + "\n"));
@@ -543,6 +563,7 @@ public class ClientController {
      * AI selects a robot
      * @param takenFigures all the figures that are already taken
      * @return the figure that the AI chooses
+     * @author Maximilian, Florian
      */
     public int robotSelectionAI(ArrayList<Integer> takenFigures) {
         Random random = new Random();
@@ -560,6 +581,7 @@ public class ClientController {
 
     /**
      * initializes the player names
+     * @author Felix, Hasan
      */
     private void initializePlayerNames() {
         playerNames.clear();
@@ -572,6 +594,7 @@ public class ClientController {
     /**
      * shows the select map dialog and waits for user input
      * @return the selected map
+     * @author Hasan, Franziska, Felix
      */
     public String showSelectMapDialog() {
         String selectedMap = null;
@@ -600,6 +623,7 @@ public class ClientController {
      * shows the select reboot direction dialog
      * @param stage the stage
      * @return the direction chosen by the user id no direction was chosen "top" gets returned as default
+     * @author Felix, Florian, Franziska
      */
     public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
@@ -682,6 +706,7 @@ public class ClientController {
      * shows the select damage dialog and waits for user input
      * @param availableList the options from which the user can choose the damage
      * @return the chosen damage
+     * @author Hasan, Franziska
      */
     public String showSelectDamageDialog(ArrayList<String> availableList){
         String selectedDamage = null;
@@ -709,6 +734,7 @@ public class ClientController {
      * loads the FXML of the map Dizzy Highway
      * @param client the client
      * @param primaryStage the client's primary stage
+     * @author Felix, Florian
      */
     public void loadDizzyHighwayFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -739,6 +765,7 @@ public class ClientController {
      * loads the Dizzy Highway FXML for the AI
      * @param clientAI the AI
      * @param primaryStage the primary stage
+     * @author Felix, Florian
      */
     public void loadDizzyHighwayFXMLAI(ClientAI clientAI, Stage primaryStage){
         Platform.runLater(() -> {
@@ -770,6 +797,7 @@ public class ClientController {
      * loads the Extra Crispy FXML
      * @param client the client
      * @param primaryStage the primary stage
+     * @author Felix, Florian
      */
     public void loadExtraCrispyFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -801,6 +829,7 @@ public class ClientController {
      * loads the Extra Crispy FXML for the AI
      * @param clientAI the AI
      * @param primaryStage the primary stage
+     * @author Felix, Florian
      */
     public void loadExtraCrispyFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -832,6 +861,7 @@ public class ClientController {
      * load the Lost Bearings FXML
      * @param client the client
      * @param primaryStage the primary stage
+     * @author Florian, Felix
      */
     public void loadLostBearingsFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -863,6 +893,7 @@ public class ClientController {
      * load the Lost Bearings FXML for the AI
      * @param clientAI the AI
      * @param primaryStage the primary stage
+     * @author Florian, Felix
      */
     public void loadLostBearingsFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -894,6 +925,7 @@ public class ClientController {
      * loads the Death Trap FXML
      * @param client the client
      * @param primaryStage the primary stage
+     * @author Florian, Felix
      */
     public void loadDeathTrapFXML(Client client, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -925,6 +957,7 @@ public class ClientController {
      * loads the Death Trap FXML for the AI
      * @param clientAI the AI
      * @param primaryStage the primary stage
+     * @author Florian, Felix
      */
     public void loadDeathTrapFXMLAI(ClientAI clientAI, Stage primaryStage) {
         Platform.runLater(() -> {
@@ -956,6 +989,7 @@ public class ClientController {
      * adds the taken staring points to the field takenStartPoints
      * @param x the x coordinate of the taken starting point
      * @param y the y coordinate of the taken starting point
+     * @author Felix, Hasan
      */
     public void addTakenStartingPoints(int x, int y){
         int combinedValue = x * 10 + y;
@@ -985,6 +1019,7 @@ public class ClientController {
      * adds the taken staring points to the field takenStartPoints for Death Trap
      * @param x the x coordinate of the taken starting point
      * @param y the y coordinate of the taken starting point
+     * @author Maximilian, Hasan
      */
     public void addTakenStartingPointsDeathTrap(int x, int y){
         int combinedValue = x * 10 + y;
@@ -1012,6 +1047,7 @@ public class ClientController {
 
     /**
      * sets the selected starting points
+     * @author Felix, Maximilian, Hasan
      */
     public void setStartingPoint() {
         Dialog<Integer> dialog = new Dialog<>();
@@ -1079,6 +1115,7 @@ public class ClientController {
 
     /**
      * chooses a starting point for the AI that is still available
+     * @author Maximilian
      */
     public void setStartingPointAI() {
         ArrayList<Integer> availableStartingPoints = new ArrayList<>();
@@ -1106,6 +1143,7 @@ public class ClientController {
     /**
      * sets the starting points x and y coordinate depending on which one was chosen
      * @param StartingPointNumber the number of the chosen starting point
+     * @author Felix
      */
     public void setStartingPointXY(int StartingPointNumber){
         switch(StartingPointNumber){
@@ -1139,6 +1177,7 @@ public class ClientController {
     /**
      * sets the starting points x and y coordinate depending on which one was chosen for the map Death Trap
      * @param StartingPointNumber the number of the chosen starting point
+     * @author Maximilian
      */
     public void setStartingPointXYDeathTrap(int StartingPointNumber){
         switch(StartingPointNumber){
@@ -1174,6 +1213,7 @@ public class ClientController {
      * @param player the player
      * @param x x coordinate where to put the avatar
      * @param y y coordinate where to put the avatar
+     * @author Felix
      */
     public void putAvatarDown(Player player, int x, int y){
         mapController.avatarAppear(player, x, y);
@@ -1184,6 +1224,7 @@ public class ClientController {
      * @param clientIdToMove the id of the client that is moving
      * @param newX the x coordinate after the movement
      * @param newY the y coordinate after the movement
+     * @author Felix
      */
     public void movementPlayed(int clientIdToMove, int newX, int newY) {
         mapController.movementPlayed(clientIdToMove, newX, newY);
@@ -1193,6 +1234,7 @@ public class ClientController {
      * when a player is turning
      * @param clientIdToTurn the id of the client that is turning
      * @param rotation which way the player is turning
+     * @author Felix
      */
     public void playerTurn(int clientIdToTurn, String rotation){
         mapController.playerTurn(clientIdToTurn, rotation);
@@ -1201,6 +1243,7 @@ public class ClientController {
     /**
      * sets the image of the checkpoint
      * @param imageUrl the image to set the checkpoint to
+     * @author Maximilian
      */
     public void setCheckPointImage(String imageUrl) {
         Image image = new Image(imageUrl);
@@ -1210,6 +1253,7 @@ public class ClientController {
     /**
      * plays UI sounds
      * @param eventName the name of the sound
+     * @author Felix, Florian
      */
     public void playUISound(String eventName){
         SoundManager.playUISound(eventName);
@@ -1218,6 +1262,7 @@ public class ClientController {
     /**
      * plays event sound
      * @param eventName the name of the sound
+     * @author Felix, Florian
      */
     public void playEventSound(String eventName){
         SoundManager.playEventSound(eventName);
@@ -1226,6 +1271,7 @@ public class ClientController {
     /**
      * plays sounds
      * @param soundName the name of the sound
+     * @author Felix, Florian
      */
     public void playSound(String soundName){
         SoundManager.playMusic(soundName);
@@ -1233,6 +1279,7 @@ public class ClientController {
 
     /**
      * initializes the draw pile
+     * @author Maximilian
      */
     public void initializeDrawPile() {
         if (clientHandMap.containsKey(id)) {
@@ -1266,6 +1313,7 @@ public class ClientController {
 
     /**
      * initializes the register
+     * @author Maximilian, Hasan
      */
     public void initializeRegister() {
         zahlen.clear();
@@ -1362,6 +1410,7 @@ public class ClientController {
     /**
      * fill the empty register
      * @param nextCards the next available cards
+     * @author Maximilian, Hasan
      */
     public void fillEmptyRegister(ArrayList<Card> nextCards) {
         int index = 0;
@@ -1383,6 +1432,7 @@ public class ClientController {
      * find the smallest empty register index
      * @param totalRegister the total register
      * @return the register's index
+     * @author Maximilian, Hasan
      */
     private int findSmallestEmptyRegisterIndex(HBox totalRegister) {
         for (int i = 0; i < 5; i++) {
@@ -1398,6 +1448,7 @@ public class ClientController {
      * maps the register index to the hand index
      * @param registerIndex the register's index
      * @return the hand index
+     * @author Maximilian, Hasan
      */
     private int mapRegisterIndexToHandIndex(int registerIndex) {
         int storedInt;
@@ -1413,6 +1464,7 @@ public class ClientController {
 
     /**
      * sets the register visibility false
+     * @author Maximlian, Hasan
      */
     public void setRegisterVisibilityFalse() {
         if (totalRegister != null) {
@@ -1428,6 +1480,7 @@ public class ClientController {
     /**
      * sets counter1
      * @param counter the counter
+     * @author Hasan
      */
     public void setCounter1(int counter) {
         counter1.set(counter);
@@ -1435,6 +1488,7 @@ public class ClientController {
 
     /**
      * for the relationship between the hand and the register index
+     * @author Hasan
      */
     class Zahlen {
         public int hand;
@@ -1449,6 +1503,7 @@ public class ClientController {
     /**
      * updates the countdown image
      * @param seconds at what second you are
+     * @author Maximilian
      */
     public void updateCountdownImage(int seconds) {
         String imageName;

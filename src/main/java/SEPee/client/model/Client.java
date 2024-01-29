@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * reads the messages sent by the server, first establishes an connection to the server
  * and then deserializes the received messages and applies them to the GUI
+ * @author Maximilian, Florian, Hasan, Felix, Franziska
  */
 @Getter
 public class Client extends Application {
@@ -83,6 +84,7 @@ public class Client extends Application {
     /**
      * establishes a connection with the server
      * @param primaryStage the stage that needs to be displayed
+     * @author Maximilian, Florian, Hasan, Felix, Franziska
      */
     @Override
     public void start(Stage primaryStage) {
@@ -129,6 +131,7 @@ public class Client extends Application {
      * @param controller the client's client controller
      * @param primaryStage the stage
      * @param writer the writer to print to the socket
+     * @author Maximilian, Florian, Hasan, Felix, Franziska
      */
     private void startServerMessageProcessing(Socket socket, BufferedReader reader, ClientController controller, Stage primaryStage, PrintWriter writer) {
         new Thread(() -> {
@@ -751,6 +754,7 @@ public class Client extends Application {
     /**
      * change listener for taken figures
      * @param listener change listener
+     * @author Felix
      */
     public void addTakenFiguresChangeListener(TakenFiguresChangeListener listener) {
         takenFiguresChangeListeners.add(listener);
@@ -758,6 +762,7 @@ public class Client extends Application {
 
     /**
      * to notify the taken figures change listener
+     * @author Felix
      */
     private void notifyTakenFiguresChangeListeners() {
         for (TakenFiguresChangeListener listener : takenFiguresChangeListeners) {
@@ -767,6 +772,7 @@ public class Client extends Application {
 
     /**
      * to update the taken figures
+     * @author Felix, Maximilian
      */
     private void updateTakenFigures() {
         synchronized (playerListClient) {
@@ -783,6 +789,7 @@ public class Client extends Application {
      * to start the 30 seconds countdown in the GUI
      * @param controller the client's controller
      * @param durationSeconds how long the timer is
+     * @author Maximilian
      */
     private void startCountdown(ClientController controller, int durationSeconds) {
         Timeline timeline = new Timeline();

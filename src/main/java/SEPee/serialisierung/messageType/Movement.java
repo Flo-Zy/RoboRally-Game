@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Movement message type
+ * @author Maximilian
  */
 public class Movement extends Message{
     private MovementBody messageBody;

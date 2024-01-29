@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * parent class for all message types
+ * @author Franziska, Hasan
  */
 public class Message {
     private String messageType;

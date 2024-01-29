@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the ConnectionUpdate message type
+ * @author Franziska
  */
 public class ConnectionUpdate extends Message{
     private ConnectionUpdate.ConnectionUpdateBody messageBody;

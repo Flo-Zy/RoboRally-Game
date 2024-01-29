@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the CheckPointReached message type
+ * @author Maximilian
  */
 public class CheckPointReached extends Message{
     private CheckPointReachedBody messageBody;

@@ -10,6 +10,7 @@ import java.util.logging.LogRecord;
 
 /**
  * creates a logger for the client
+ * @author Maximilian
  */
 public class ClientLogger {
     private static Logger logger = Logger.getLogger("ClientLogger");

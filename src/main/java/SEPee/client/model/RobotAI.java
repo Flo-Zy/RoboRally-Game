@@ -5,6 +5,7 @@ import lombok.Setter;
 
 /**
  * so smartAi can create a robot object
+ * @author Maximilian
  */
 public class RobotAI {
     @Setter

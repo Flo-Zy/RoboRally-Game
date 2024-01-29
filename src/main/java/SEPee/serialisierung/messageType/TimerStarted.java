@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the TimerStarted message type
+ * @author Maximilian
  */
 public class TimerStarted extends Message{
     private TimerStartedBody messageBody;

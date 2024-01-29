@@ -28,6 +28,7 @@ import java.util.Queue;
 
 /**
  * controls all graphical changes on the map Dizzy Highway
+ * @author Maximilian, Felix
  */
 public class DizzyHighwayController extends MapController {
 

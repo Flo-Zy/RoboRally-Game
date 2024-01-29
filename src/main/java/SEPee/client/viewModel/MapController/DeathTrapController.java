@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * controls all graphical changes on the map Death Trap
+ * @author Maximilian, Felix
  */
 public class DeathTrapController extends MapController {
 

@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the Animation message type
+ * @author Maximilian
  */
 public class Animation extends Message{
     private AnimationBody messageBody;

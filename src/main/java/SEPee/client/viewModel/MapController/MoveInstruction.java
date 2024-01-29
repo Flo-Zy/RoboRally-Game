@@ -2,6 +2,7 @@ package SEPee.client.viewModel.MapController;
 
 /**
  * class needed as help for the movements in the map controller classes
+ * @author Felix
  */
 class MoveInstruction {
     int clientId;

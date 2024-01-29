@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the PlayCard message type
+ * @author Franziska
  */
 public class PlayCard extends Message{
     private CardBody messageBody;

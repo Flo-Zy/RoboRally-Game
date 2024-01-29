@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the ReceivedChat message type
+ * @author Franziska
  */
 public class ReceivedChat extends Message {
     private ReceivedChatBody messageBody;

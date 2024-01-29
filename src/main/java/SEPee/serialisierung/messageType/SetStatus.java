@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for the SetStatus message type
+ * @author Florian
  */
 public class SetStatus extends Message{
     private SetStatusBody messageBody;

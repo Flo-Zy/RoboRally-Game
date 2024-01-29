@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * controls all graphical changes on the map Extra Crispy
+ * @author Maximilian, Felix
  */
 public class ExtraCrispyController extends MapController {
 

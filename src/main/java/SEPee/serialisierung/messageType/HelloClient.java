@@ -2,6 +2,7 @@ package SEPee.serialisierung.messageType;
 
 /**
  * class for body of the HelloClient message type
+ * @author Franziska, Felix, Maximilian, Florian
  */
 public class HelloClient extends Message{
     private HelloClientBody messageBody;

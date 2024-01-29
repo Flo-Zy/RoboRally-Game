@@ -7,6 +7,9 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.util.*;
 
+/**
+ * @author Florian, Felix
+ */
 public class SoundManager {
     private static double uiSoundVolume = 0.5;
     private static double eventSoundVolume = 0.5;

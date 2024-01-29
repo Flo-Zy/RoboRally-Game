@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * class for the GameStarted message type
+ * @author Florian
  */
 public class GameStarted extends Message{
     private GameStartedBody messageBody;

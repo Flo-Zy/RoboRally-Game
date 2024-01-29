@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * class for the DrawDamage message type
+ * @author Franziska
  */
 public class DrawDamage extends Message{
     private DrawDamage.DrawDamageBody messageBody;
