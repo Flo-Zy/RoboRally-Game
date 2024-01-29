@@ -337,7 +337,7 @@ public class ClientAI extends Application {
                             if(controller.getCurrentPhase() == 2){
                                 controller.setRegisterVisibilityFalse();
                                 ClientAILogger.writeToClientLog("ICH SETTE REGISTER");
-                                smartAi.setRegister(aiRobot, controller.getHandAi());
+                                //smartAi.setRegister(aiRobot, controller.getHandAi());
                                 ClientAILogger.writeToClientLog(" Programmierungsphase");
                             }
                             if (controller.getCurrentPhase() == 3){
@@ -436,7 +436,6 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Your Cards");
                             YourCards yourCards = Deserialisierer.deserialize(serializedReceivedString, YourCards.class);
                             ClientAILogger.writeToClientLog(yourCards.getMessageBody().getCardsInHand());
-                            controller.appendToChatArea("Your Hand:\n" + yourCards.getMessageBody().transformCardsInHandIntoString());
 
                             ArrayList<Card> drawPile = new ArrayList<>();
                             for (String cardName : yourCards.getMessageBody().getCardsInHand()) {
@@ -484,6 +483,7 @@ public class ClientAI extends Application {
                             }
                             controller.setClientHand(drawPile);
                             controller.setHandAi(yourCards.getMessageBody().getCardsInHand());
+                            smartAi.setRegister(aiRobot, controller.getHandAi());
 
                             break;
 
