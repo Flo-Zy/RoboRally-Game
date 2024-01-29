@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * a player's robot
+ * @author Felix, Franziska, Maximilian
  */
 @Getter
 @Setter
@@ -44,6 +45,7 @@ public class Robot {
     /**
      * sets x and calls the method to check for a reboot
      * @param x the x coordinate
+     * @author Felix, Franziska
      */
     public void setX(int x) {
         this.x = x;
@@ -54,6 +56,7 @@ public class Robot {
     /**
      * sets y and calls the method to check for a reboot
      * @param y the y coordinate
+     * @author Felix, Framziska
      */
     public void setY(int y) {
         this.y = y;
@@ -63,6 +66,7 @@ public class Robot {
 
     /**
      * handles the rebooting of a robot
+     * @author Felix, Franziska
      */
     private void handleReboot() {
         GameBoard gameBoard = Server.getGame().getBoardClass();
@@ -79,6 +83,7 @@ public class Robot {
 
     /**
      * notifies in case of a position change
+     * @author Felix, Franziska
      */
     private void notifyPositionChange() {
         for (RobotPositionChangeListener listener : listeners) {
@@ -93,6 +98,7 @@ public class Robot {
     /**
      * sets a robot's orientation
      * @param orientation the orientation to set to
+     * @author Felix, Franziska
      */
     public void setOrientation(String orientation) {
         this.orientation = orientation;

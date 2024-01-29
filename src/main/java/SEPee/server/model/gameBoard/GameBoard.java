@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * parent class for the different game maps
+ * @author Franziska, Felix
  */
 @Getter
 @Setter

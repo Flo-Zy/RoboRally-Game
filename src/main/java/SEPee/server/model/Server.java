@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * server for the clients to connect to
+ * @author Maximilian, Florian, Hasan, Felix, Franziska
  */
 @Getter
 @Setter
@@ -132,7 +133,8 @@ public class Server extends Thread{
 
     /**
      * assigns a client id to a new client
-     * @return
+     * @return assignedClientID the assigned client id
+     * @author Hasan, Franziska
      */
     public static synchronized int assigningClientID(){
         int assignedClientID = idCounter;

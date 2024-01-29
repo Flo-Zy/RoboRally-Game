@@ -8,6 +8,7 @@ import lombok.Setter;
 
 /**
  * the class representing a player's player mat
+ * @author Hasan, Maximilian, Felix
  */
 public class PlayerMat{
     @Getter
@@ -52,6 +53,7 @@ public class PlayerMat{
     /**
      * fills an empty register with a random card
      * @param card the card to fill the register with
+     * @author Hasan
      */
     public void fillEmptyRegister(String card){
         for(int i = 0; i < 5; i++){
@@ -64,6 +66,7 @@ public class PlayerMat{
 
     /**
      * clears the registers
+     * @author Hasan
      */
     public void clearRegister(){
         for(int i = 0; i < 5; i++){
@@ -74,6 +77,7 @@ public class PlayerMat{
     /**
      * gets the register size
      * @return the register's size
+     * @author Hasan
      */
     public int registerSize(){
         int size = 0;

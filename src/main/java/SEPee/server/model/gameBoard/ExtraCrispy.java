@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * class that contains all fields of the game board Extra Crispy and all their field elements
+ * @author Franziska, Felix
  */
 public class ExtraCrispy extends GameBoard {
     public ExtraCrispy() {

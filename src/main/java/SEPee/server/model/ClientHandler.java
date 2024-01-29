@@ -1,7 +1,3 @@
-/**
- * for every connected client a ClientHandler is started
- * the ClientHandler reads the messageTypes sent by the Client and handles the according action on server-side
- */
 package SEPee.server.model;
 
 import SEPee.serialisierung.Deserialisierer;
@@ -32,6 +28,11 @@ import lombok.Setter;
 
 import static SEPee.server.model.Player.*;
 
+/**
+ * for every connected client a ClientHandler is started
+ * the ClientHandler reads the messageTypes sent by the Client and handles the according action on server-side
+ * @author Franziska, Florian, Maximilian, Felix, Hasan
+ */
 @Getter
 @Setter
 public class ClientHandler implements Runnable {
@@ -68,6 +69,7 @@ public class ClientHandler implements Runnable {
     /**
      * starts the Alive-Sender thread
      * handles every incoming messageType sent by the client and sends according messages back
+     * @author Franziska, Florian, Maximilian, Felix, Hasan
      */
     @Override
     public void run() {
@@ -1204,6 +1206,7 @@ public class ClientHandler implements Runnable {
     /**
      * sends a message to all clients
      * @param serializedObjectToSend the serialized message to send to all clients
+     * @author Franziska, Hasan
      */
     private static void broadcast(String serializedObjectToSend) {
         for (ClientHandler client : clients) {
@@ -1215,6 +1218,7 @@ public class ClientHandler implements Runnable {
      * sends a message to only on client
      * @param clientId the id of the client for whom the message is
      * @param serializedObject the serialized String that needs to be sent
+     * @author Franziska, Hasan
      */
     public void sendToOneClient(int clientId, String serializedObject) {
         for (ClientHandler client : clients) {
@@ -1231,6 +1235,7 @@ public class ClientHandler implements Runnable {
      * @param moves the amount of steps the robot is supposed to take
      * @param isForward true if it is a move card, false if it is a backup card
      * @throws InterruptedException
+     * @author Franziska, Felix
      */
     private void handleRobotMovement(int moves, boolean isForward) throws InterruptedException {
         Player checkPlayer = new Player("", 9999, 9999);
@@ -1285,6 +1290,7 @@ public class ClientHandler implements Runnable {
      * @param robot the robot that is moving
      * @param isForward true if it is a move card, false if it is a backup card
      * @throws InterruptedException
+     * @author Franziska, Felix
      */
     private void checkForRobotsAndMove(Robot robot, boolean isForward) throws InterruptedException {
         String orientation = robot.getOrientation();
@@ -1310,6 +1316,7 @@ public class ClientHandler implements Runnable {
      * @param xFleeing x coordinate of the robot being pushed
      * @param yFleeing y coordinate of the robot being pushed
      * @return returns boolean whether the robot needs to push another robot or not
+     * @author Franziska, Felix
      */
     private static boolean shouldPush(boolean isForward, String orientation, int xPushing, int yPushing, int xFleeing, int yFleeing) {
         switch (orientation) {
@@ -1346,6 +1353,7 @@ public class ClientHandler implements Runnable {
      * @param isForward true if it is a move card, false if it is a backup card
      * @param orientation orientation in which the robot is being pushed
      * @throws InterruptedException
+     * @author Franziska, Felix
      */
     private static void movePlayerRobot(Player player, boolean isForward, String orientation) throws InterruptedException {
         int x = player.getRobot().getX();
@@ -1443,6 +1451,7 @@ public class ClientHandler implements Runnable {
      * @param robot the robot that wants to move
      * @param isForward true if it is a move card, false if it is a backup card
      * @return returns whether the robot can move or is walking against a wall
+     * @author Franziska, Felix
      */
     public static boolean movePossibleWall(String fieldCheck, Robot robot, boolean isForward) {
         boolean canMove = true;
@@ -1462,6 +1471,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks how many players are ready
      * @return the number of players that are ready
+     * @author Hasan
      */
     public int checkNumReady() {
         int numReady = 0;
@@ -1476,6 +1486,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks the order in which the ready button was pressed in order to forward the map selection to the next player if necessary
      * @return returns the id of the according player
+     * @author Hasan
      */
     public int checkNextReady() {
         int x = 0;
@@ -1497,6 +1508,7 @@ public class ClientHandler implements Runnable {
      * checks of what type the game field is
      * @param robot the robot whose field is being checked
      * @return a String containing all the board elements on the field and there directions
+     * @author Franziska, Felix
      */
     private static String checkRobotField(Robot robot) {
         int robotX = robot.getX();
@@ -1579,6 +1591,7 @@ public class ClientHandler implements Runnable {
      * @param robotX x coordinate of the robot
      * @param robotY y coordinate of the robot
      * @return a String containing all the board elements on the field and there directions
+     * @author Franziska, Felix
      */
     private static String checkRobotFieldForXY(int robotX, int robotY) {
 
@@ -1656,6 +1669,7 @@ public class ClientHandler implements Runnable {
     /**
      * activates all the board elements in the right order
      * @throws InterruptedException
+     * @author Franziska, Felix
      */
     public void fieldActivation() throws InterruptedException {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
@@ -1688,6 +1702,7 @@ public class ClientHandler implements Runnable {
      * checks where the first field containing a blue conveyor belt moves the robot and in which direction they turn it
      * @param i the index of the player list where the robot is
      * @throws InterruptedException
+     * @author Franziska, Felix, Hasan
      */
     private void checkBlueConveyorBelts(int i) throws InterruptedException {
         String standingOnBlueConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
@@ -1853,6 +1868,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks where the green conveyor belts move the robot and in which direction they turn it
      * @param i the index of the player list where the robot is
+     * @author Franziska, Felix
      */
     private void checkGreenConveyorBelts(int i) {
         String standingOnGreenConveyor = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
@@ -2114,6 +2130,11 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * checks whether robots get pushed by a push panel during the field activation
+     * @param i the index of the player in the player list
+     * @author Franziska, Felix
+     */
     private void checkPushPanels(int i) {
         Robot robot = Server.getGame().getPlayerList().get(i).getRobot();
         int robotId = Server.getGame().getPlayerList().get(i).getId();
@@ -2236,6 +2257,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks in which direction the gears turn the robot
      * @param i the index of the player list where the robot is
+     * @author Franziska, Felix
      */
     private void checkGears(int i) {
         String standingOnGear = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
@@ -2277,6 +2299,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks which robots get hit by the board laser
      * @param i the index of the player list where the robot is
+     * @author Franziska, Felix
      */
     private void checkBoardLaser(int i) {
         String standingOnBoardLaser = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
@@ -2298,6 +2321,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks whether robots get hit by other robots' lasers
      * @param i the index of the player list where the robot is
+     * @author Franziska, Felix, Hasan
      */
     private void checkRobotLasers(int i) {
         String robotOrientation = Server.getGame().getPlayerList().get(i).getRobot().getOrientation();
@@ -2477,6 +2501,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks whether a robot is on a checkpoint at the end of a register
      * @param i the index of the player list where the robot is
+     * @author Franziska, Hasan
      */
     private void checkCheckpoint(int i) {
         String standingOnCheckPoint = checkRobotField(Server.getGame().getPlayerList().get(i).getRobot());
@@ -2535,6 +2560,7 @@ public class ClientHandler implements Runnable {
     /**
      * checks whether someone has won because he has enough checkpoint tokens
      * @param i the index of the player list where the robot is
+     * @author Franziska, Felix
      */
     private void checkGameFinished(int i) {
         Server.getGame().getPlayerList().get(i).getPlayerMat().setTokenCount(Server.getGame().getPlayerList().get(i).getPlayerMat().getTokenCount() + 1);
@@ -2552,6 +2578,7 @@ public class ClientHandler implements Runnable {
      * @param j the index of the player list where the robot is
      * @param standingOnBlueConveyorBelt the field string where you were standing after the first blue conveyor
      * @throws InterruptedException
+     * @author Franziska, Felix, Hasan
      */
     private void checkConveyorBeltAgain(int j, String standingOnBlueConveyorBelt) throws InterruptedException {
         if (standingOnBlueConveyorBelt.contains("ConveyorBelt 2")) {
@@ -2674,6 +2701,7 @@ public class ClientHandler implements Runnable {
      * @param turningDirection either clockwise or counterclockwise
      * @param robot the robot that is being turned
      * @return string to which the robots direction needs to be set
+     * @author Franziska, Felix
      */
     private static String getResultingOrientation(String turningDirection, Robot robot) {
         if (turningDirection.equals("clockwise")) {
@@ -2705,6 +2733,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * puts the current register's card into the discard pile or if it is a damage card back into the damage card piles
+     * @author Hasan, Maximilian
      */
     public void discardCurrentRegister() {
         for (Player player : Server.getGame().getPlayerList()) {
@@ -2725,6 +2754,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * puts all of the remaining cards that were not played into the discard pile
+     * @author Hasan
      */
     public void discardHand() {
         for (Player player : Server.getGame().getPlayerList()) {
@@ -2742,6 +2772,7 @@ public class ClientHandler implements Runnable {
      * turns a string into the according card object
      * @param stringCards takes in an ArrayList of Strings that represent cards
      * @return the pile of card objects saved as an array list
+     * @author Hasan, Franziska
      */
     public ArrayList<Card> stringToCard(ArrayList<String> stringCards) {
         ArrayList<Card> cardPile = new ArrayList<>();
@@ -2797,6 +2828,7 @@ public class ClientHandler implements Runnable {
      * @param xCoordinate the robot's x coordinate
      * @param yCoordinate the robot's y coordinate
      * @param rebootTo string that tells you where to reboot the robot to ("rebootField" or "startingPoint")
+     * @author Franziska, Felix, Hasan
      */
     public static void rebootThisRobot(int xCoordinate, int yCoordinate, String rebootTo) {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
@@ -2957,6 +2989,7 @@ public class ClientHandler implements Runnable {
      * @param xField x coordinate of the field
      * @param yField y coordinate of the field
      * @return true if there is a robot on the field, otherwise false
+     * @author Franziska, Felix
      */
     public static boolean robotOnThisField(int xField, int yField) {
         for (int i = 0; i < Server.getGame().getPlayerList().size(); i++) {
@@ -2967,6 +3000,11 @@ public class ClientHandler implements Runnable {
         return false;
     }
 
+    /**
+     * to play the card on top of the programming deck when a damage card is played
+     * @throws InterruptedException
+     * @author Hasan, Franziska
+     */
     public void playTopOfProgDeck() throws InterruptedException {
         String newCard = "";
         for(Player player: Server.getGame().getPlayerList()){
@@ -3084,6 +3122,7 @@ public class ClientHandler implements Runnable {
      * applies the virus card's effect: ypu have to play the top card of your draw pile this register
      * and robots within a 6 field receive a virus card
      * @throws InterruptedException
+     * @author Hasan, Franziska
      */
     public void playVirus() throws InterruptedException {
         Robot robot = new Robot(-9999, -9999, "");
@@ -3113,6 +3152,7 @@ public class ClientHandler implements Runnable {
      * @param robotPlayedVirus the robot that played the virus card
      * @param robotToBeChecked the robot that is being checked whether it is within a 6 field radius
      * @return true if the robot is within 6 fields, otherwise false
+     * @author Felix, Franziska, Hasan
      */
     public boolean isWithinSixFields(Robot robotPlayedVirus, Robot robotToBeChecked){
         int xRobotPlayedVirus = robotPlayedVirus.getX();
@@ -3138,6 +3178,7 @@ public class ClientHandler implements Runnable {
     /**
      * increases the energy counter of a player when necessary
      * @param i the index of the player in the player list
+     * @author Hasan, Franziska
      */
     private void checkEnergySpace(int i){
         Robot robot = Server.getGame().getPlayerList().get(i).getRobot();

@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * class that contains all fields of the game board Lost Bearings and all their field elements
+ * @author Franziska, Felix
  */
 public class LostBearings extends GameBoard {
     public LostBearings() {

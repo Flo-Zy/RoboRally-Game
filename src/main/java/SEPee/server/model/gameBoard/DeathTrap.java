@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * class that contains all fields of the game board Death Trap and all their field elements
+ * @author Franziska, Felix, Maximilian
  */
 public class DeathTrap extends GameBoard {
     public DeathTrap() {

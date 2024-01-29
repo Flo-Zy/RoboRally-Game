@@ -11,6 +11,7 @@ import lombok.Setter;
 
 /**
  * class to represent a started game
+ * @author Hasan, Maximilian, Florian, Felix, Franziska
  */
 @Getter
 @Setter
@@ -42,6 +43,7 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     /**
      * sets the next phase of the game
+     * @author Hasan, Felix
      */
     public void nextCurrentPhase(){
         if(currentPhase == 3) {
@@ -68,6 +70,7 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     /**
      * set the next player's turn
+     * @author Maximilian, Hasan
      */
     public void setNextPlayersTurn(){
         if(currentPhase == 0) {
@@ -84,6 +87,7 @@ public class Game implements Robot.RobotPositionChangeListener {
 
     /**
      * check the priorities of the players
+     * @author Maximilian
      */
     public void checkPriorities() {
         int antennaX;
@@ -118,6 +122,7 @@ public class Game implements Robot.RobotPositionChangeListener {
      * @param x2 antenna x coordinate
      * @param y2 antenna y coordinate
      * @return the distance
+     * @author Maximilian
      */
     private int calculateDistance(int x1, int y1, int x2, int y2) {
         return (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -130,6 +135,7 @@ public class Game implements Robot.RobotPositionChangeListener {
      * @param centerX antenna x coordinate
      * @param centerY antenna y coordinate
      * @return the angle
+     * @author Maximilian
      */
     private double calculateAngle(int x, int y, int centerX, int centerY) {
         double angle = Math.atan2(y - centerY, x - centerX);
@@ -141,6 +147,7 @@ public class Game implements Robot.RobotPositionChangeListener {
     /**
      * set the new position of the robot
      * @param robot the robot that moved
+     * @author Felix
      */
     @Override
     public void onRobotPositionChange(Robot robot) {

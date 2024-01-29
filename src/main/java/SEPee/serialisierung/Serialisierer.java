@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 /**
  * serializes String objects
+ * @author Felix
  */
 public class Serialisierer {
     public static final Gson gson = new Gson();

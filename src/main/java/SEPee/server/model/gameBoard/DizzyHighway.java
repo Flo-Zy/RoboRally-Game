@@ -4,7 +4,10 @@ import SEPee.server.model.field.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * class that contains all fields of the game board Dizzy Highway and all their field elements
+ * @author Franziska, Maximilian
+ */
 public class DizzyHighway extends GameBoard {
     public DizzyHighway() {
 

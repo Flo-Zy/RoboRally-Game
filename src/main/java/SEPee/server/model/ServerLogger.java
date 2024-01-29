@@ -10,6 +10,7 @@ import java.util.logging.LogRecord;
 
 /**
  * creating a logger for the server
+ * @author Maximilian
  */
 public class ServerLogger {
     private static Logger logger = Logger.getLogger("ServerLogger");
@@ -45,6 +46,7 @@ public class ServerLogger {
     /**
      * writes to the logger
      * @param object the object to write to the logger
+     * @author Maximilian
      */
     public static void writeToServerLog(Object object){
         logger.info(String.valueOf(object));
@@ -54,6 +56,7 @@ public class ServerLogger {
      * write to the logger
      * @param message message to write to the logger
      * @param e exception to write to the logger
+     * @author Maximilian
      */
     public static void writeToServerLog(String message, Exception e){
         logger.log(Level.WARNING, message, e);

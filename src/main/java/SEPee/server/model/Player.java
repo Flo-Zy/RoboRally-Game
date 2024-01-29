@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * the class representing a player
+ * @author Felix, Franziska, Maximilian, Hasan
  */
 @Getter
 @Setter
@@ -48,6 +49,7 @@ public class Player {
      * matches the socket to a player id
      * @param socket the socket to match
      * @param clientId the client id to match
+     * @author Felix
      */
     public static void associateSocketWithId(Socket socket, int clientId) {
         socketIdMap.put(socket, clientId);
@@ -57,6 +59,7 @@ public class Player {
      * tells you which client id belongs to a socket
      * @param socket the socket you want a client id for
      * @return client id that matches the socket
+     * @author Felix
      */
     public static int getClientIdFromSocket(Socket socket) {
         return socketIdMap.getOrDefault(socket, 666); // Returns 666 if socket ID not found
