@@ -43,8 +43,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 public class Client extends Application {
 
-    // private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
-    // private static final int SERVER_PORT = 52020;
+    //private static final String SERVER_IP = "sep21.dbs.ifi.lmu.de";
+    //private static final int SERVER_PORT = 52020;
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 8886;
 
@@ -325,9 +325,15 @@ public class Client extends Application {
                         case "CardPlayed":
                             ClientLogger.writeToClientLog("CardPlayed");
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
+                            Player player1 = new Player("", -9999, -9999);
+                            for(Player player: playerListClient){
+                                if(player.getId() == cardPlayed.getMessageBody().getClientID()){
+                                    player1 = player;
+                                }
+                            }
                             ClientLogger.writeToClientLog("Player " + cardPlayed.getMessageBody().getClientID() +
                                     " played card: " + cardPlayed.getMessageBody().getCard());
-                            controller.appendToChatArea("> Player " + playerListClient.get(cardPlayed.getMessageBody().getClientID() - 1).getName() +
+                            controller.appendToChatArea("> Player " + player1.getName() +
                                     " played card " + cardPlayed.getMessageBody().getCard());
 
                             break;
