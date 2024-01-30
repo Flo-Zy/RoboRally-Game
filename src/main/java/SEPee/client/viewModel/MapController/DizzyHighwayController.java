@@ -9,6 +9,7 @@ import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -37,6 +38,10 @@ public class DizzyHighwayController extends MapController {
     private GridPane gridPane;
     @FXML
     private ImageView field00;
+    @FXML
+    private ImageView field10;
+    @FXML
+    private ImageView field11a;
     @FXML
     private ImageView field01;
     @FXML
@@ -109,10 +114,29 @@ public class DizzyHighwayController extends MapController {
         });
 
         field00.setPreserveRatio(true);*/
-        field00.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
+        /*field00.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
         field00.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
         field01.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
         field01.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
+        field10.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
+        field10.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
+        field11a.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
+        field11a.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));*/
+        gridPane.getChildren().forEach(node -> {
+            if (node instanceof Region) {
+                Region region = (Region) node;
+                region.prefWidthProperty().bind(Bindings.min(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()), gridPane.heightProperty().divide(gridPane.getRowConstraints().size())));
+                region.prefHeightProperty().bind(region.prefWidthProperty());
+            }
+        });
+
+        // Stellen Sie sicher, dass jedes ImageView die Größe seiner Zelle ausfüllt
+        gridPane.getChildren().filtered(node -> node instanceof ImageView).forEach(node -> {
+            ImageView imageView = (ImageView) node;
+            imageView.fitWidthProperty().bind(Bindings.min(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()), gridPane.heightProperty().divide(gridPane.getRowConstraints().size())));
+            imageView.fitHeightProperty().bind(imageView.fitWidthProperty());
+            imageView.setPreserveRatio(false); // Das Bild wird gestreckt, um das ImageView zu füllen
+        });
     }
 
     /**
