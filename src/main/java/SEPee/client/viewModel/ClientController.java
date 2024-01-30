@@ -544,8 +544,28 @@ public class ClientController {
      * @author Maximilian
      */
     public void appendToChatArea(String message) {
-        Platform.runLater(() -> chatArea.appendText(message + "\n"));
+        Platform.runLater(() -> {
+            StringBuilder formattedMessage = new StringBuilder();
+            int charCount = 0;
+
+            for (char c : message.toCharArray()) {
+                formattedMessage.append(c);
+                charCount++;
+
+                if (charCount == 35) {
+                    formattedMessage.append("\n");
+                    charCount = 0;
+                } else if (charCount >= 35 && Character.isWhitespace(c)) {
+                    formattedMessage.append("\n");
+                    charCount = 0;
+                }
+            }
+
+            chatArea.appendText(formattedMessage.toString() + "\n");
+        });
     }
+
+
 
     public void shutdown() {
         try {
