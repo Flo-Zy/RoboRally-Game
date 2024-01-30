@@ -565,8 +565,10 @@ public class ClientController {
         });
     }
 
-
-
+    /**
+     * correctly shuts down the client and closes its sockets
+     * @author Florian, Felix
+     */
     public void shutdown() {
         try {
             if (name != null && !name.equals("null")) {
