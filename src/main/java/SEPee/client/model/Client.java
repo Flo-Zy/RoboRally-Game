@@ -109,6 +109,7 @@ public class Client extends Application {
                 @Override
                 public void run(){
                     if(!receivedHelloClient){
+                        System.out.println("cannot connect to server");
                         controller.shutdown();
                     }
                 }
