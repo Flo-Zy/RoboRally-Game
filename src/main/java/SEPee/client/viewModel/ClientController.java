@@ -555,7 +555,7 @@ public class ClientController {
                 if (charCount == 35) {
                     formattedMessage.append("\n");
                     charCount = 0;
-                } else if (charCount >= 35 && Character.isWhitespace(c)) {
+                } else if (charCount >= 35 && Character.isWhitespace(c)){
                     formattedMessage.append("\n");
                     charCount = 0;
                 }
