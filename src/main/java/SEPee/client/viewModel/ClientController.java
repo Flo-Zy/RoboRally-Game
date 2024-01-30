@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,9 +31,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import lombok.Getter;
@@ -322,6 +320,13 @@ public class ClientController {
             muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
 
             sendButton.setOnAction(event -> sendMessage());
+
+            messageField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    event.consume();
+                    sendMessage();
+                }
+            });
 
             uiSoundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
                 double volume = newValue.doubleValue() / 100.0;
