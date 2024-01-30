@@ -14,16 +14,16 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
-   <StackPane VBox.vgrow="NEVER">
+   <StackPane VBox.vgrow="ALWAYS">
       <children>
                 <!-- Oberer Teil (HBox) -->
-          <HBox prefHeight="800.0" prefWidth="935.0">
-            <VBox prefHeight="800.0" prefWidth="664.0">
+          <HBox prefHeight="800.0" prefWidth="935.0" HBox.hgrow="ALWAYS">
+              <VBox prefHeight="800.0" prefWidth="664.0" HBox.hgrow="ALWAYS">
                <children>
                     <!-- Linke HBox -->
                     <HBox alignment="CENTER" prefHeight="500.0" prefWidth="664.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="NEVER">
+                        <Button fx:id="readyButton" minWidth="100.0" onAction="#sendReady" text="BEREIT" HBox.hgrow="ALWAYS">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -31,7 +31,7 @@
                               <Insets />
                            </HBox.margin>
                         </Button>
-      
+
                                 <VBox fx:id="DizzyHighwayMap" alignment="TOP_CENTER" managed="false" visible="false">
                               <fx:include source="DizzyHighway.fxml" />
                           </VBox>
@@ -46,7 +46,7 @@
                           </VBox>
                      </children>
                   </HBox>
-                  <StackPane prefHeight="300.0" prefWidth="671.0" VBox.vgrow="NEVER">
+                  <StackPane alignment="BOTTOM_CENTER" prefHeight="300.0" prefWidth="671.0" VBox.vgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="300.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -151,7 +151,7 @@
                   </StackPane>
                </children>
             </VBox>
-            <AnchorPane prefHeight="800.0" prefWidth="256.0" HBox.hgrow="NEVER">
+              <AnchorPane prefHeight="800.0" prefWidth="256.0" HBox.hgrow="NEVER">
                <children>
                     <!-- Rechte HBox (Chatarea VBox) -->
                     <VBox prefHeight="800.0" prefWidth="271.0">
