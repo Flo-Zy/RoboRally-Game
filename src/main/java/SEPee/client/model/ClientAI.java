@@ -98,6 +98,16 @@ public class ClientAI extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            Timer connection = new Timer();
+            connection.schedule(new TimerTask() {
+                @Override
+                public void run(){
+                    if(!receivedHelloClient){
+                        System.out.println("cannot connect to server");
+                        controller.shutdown();
+                    }
+                }
+            }, 10000);
             // receive HelloClient from Server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);

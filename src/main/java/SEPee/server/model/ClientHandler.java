@@ -52,6 +52,7 @@ public class ClientHandler implements Runnable {
     private ScheduledExecutorService disconnectScheduler = Executors.newSingleThreadScheduledExecutor();
     private Timer alive = new Timer();
     private boolean isAi;
+    private boolean startingPointSet = false;
 
     public ClientHandler(Socket clientSocket, List<ClientHandler> clients, int clientId, boolean isAi) {
         this.clientSocket = clientSocket;
@@ -499,17 +500,10 @@ public class ClientHandler implements Runnable {
                             // wenn letzter Player aus PlayerList dran ist
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) {
                                 if(Server.isDisconnected()) {
-                                    System.out.println("player löschen");
                                     for(Player player : Server.getDisconnectedPlayer()){
                                         Server.getPlayerList().remove(player);
                                     }
                                     Server.getDisconnectedPlayer().clear();
-                                    for(Player player : Server.getPlayerList()){
-                                        System.out.println(player.getName());
-                                    }
-                                    for(Player player : Server.getGame().getPlayerList()){
-                                        System.out.println(player.getName());
-                                    }
                                     Server.setDisconnected(false);
                                 }
 
@@ -701,6 +695,7 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case "SetStartingPoint":
+                            startingPointSet = true;
                             Server.setCountPlayerTurns(Server.getCountPlayerTurns() + 1);
                             ServerLogger.writeToServerLog("SetStartingPoints");
                             SetStartingPoint setStartingPoint = Deserialisierer.deserialize(serializedReceivedString, SetStartingPoint.class);
@@ -739,6 +734,14 @@ public class ClientHandler implements Runnable {
                             if (Server.getCountPlayerTurns() == Server.getGame().getPlayerList().size()) { // wenn alle spieler in der aktuellen Phase dran waren -> gehe in nächste Phase
                                 Server.getGame().nextCurrentPhase(); // wenn Phase 2 (Programming Phase): jeder player bekommt progDeck in seine playerMat
                                 Server.setCountPlayerTurns(0);  // in neuer Phase: keiner dran bisher
+
+                                if(Server.isDisconnected()) {
+                                    for(Player player : Server.getDisconnectedPlayer()){
+                                        Server.getPlayerList().remove(player);
+                                    }
+                                    Server.getDisconnectedPlayer().clear();
+                                    Server.setDisconnected(false);
+                                }
 
                                 // wenn WIEDER currentPhase = 2: YourCards (schicke jedem Client zuerst sein progDeck)
                                 if (Server.getGame().getCurrentPhase() == 2) {
