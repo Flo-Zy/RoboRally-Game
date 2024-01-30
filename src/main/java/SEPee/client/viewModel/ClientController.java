@@ -424,6 +424,8 @@ public class ClientController {
             Client.getWriter().println(serializedSendChat);
 
             messageField.clear();
+
+            sendButton.requestFocus();
         }
     }
 
