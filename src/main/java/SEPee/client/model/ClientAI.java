@@ -509,6 +509,9 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Timer Started");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
+                            TimerStarted timerStartedAi = new TimerStarted();
+                            String serializedTimerStarted = Serialisierer.serialize(timerStartedAi);
+                            ClientAI.getWriter().println(serializedTimerStarted);
                             break;
                         case "TimerEnded":
                             ClientAILogger.writeToClientLog("Timer Ended");

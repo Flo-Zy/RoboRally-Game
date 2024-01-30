@@ -7,6 +7,8 @@ import SEPee.serialisierung.Serialisierer;
 import SEPee.serialisierung.messageType.Error;
 import SEPee.serialisierung.messageType.*;
 import SEPee.server.model.Player;
+import SEPee.server.model.Server;
+import SEPee.server.model.ServerLogger;
 import SEPee.server.model.card.Card;
 import SEPee.server.model.card.damageCard.Spam;
 import SEPee.server.model.card.damageCard.TrojanHorse;
@@ -102,6 +104,15 @@ public class Client extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            Timer connection = new Timer();
+            connection.schedule(new TimerTask() {
+                @Override
+                public void run(){
+                    if(!receivedHelloClient){
+                        controller.shutdown();
+                    }
+                }
+            }, 10000);
             // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);

@@ -587,6 +587,25 @@ public class ClientController {
     }
 
     /**
+     * correctly shuts down the client if a game has already been started
+     * @author Hasan
+     */
+    public void shutdown2() {
+        try {
+                    if (writer != null) {
+                        writer.println(name + " has left the chat.");
+                        writer.flush();
+                        writer.close();
+                    }
+                    Thread.sleep(100);
+                    socket.close();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+    /**
      * AI selects a robot
      * @param takenFigures all the figures that are already taken
      * @return the figure that the AI chooses
