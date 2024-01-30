@@ -11,9 +11,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -96,6 +94,25 @@ public class DizzyHighwayController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
+        /*gridPane.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            // Annahme: imageView befindet sich in Spalte 0 und Zeile 0
+            ColumnConstraints cc = gridPane.getColumnConstraints().get(0);
+            RowConstraints rc = gridPane.getRowConstraints().get(0);
+
+            // Berechnen der maximalen Größe basierend auf den Constraints
+            double maxWidth = newVal.getWidth() * (((ColumnConstraints) cc).getPercentWidth() / 100);
+            double maxHeight = newVal.getHeight() * (((RowConstraints) rc).getPercentHeight() / 100);
+
+            // Anpassen der ImageView-Größe
+            field00.setFitWidth(maxWidth);
+            field00.setFitHeight(maxHeight);
+        });
+
+        field00.setPreserveRatio(true);*/
+        field00.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
+        field00.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
+        field01.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
+        field01.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
     }
 
     /**

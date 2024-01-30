@@ -10,54 +10,45 @@
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0" alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
             <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" percentWidth="50" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
-                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS" percentHeight="50" />
                 </rowConstraints>
 
                 <children>
-                    <ImageView fx:id="field00" pickOnBounds="true" GridPane.rowIndex="0" GridPane.columnIndex="0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <ImageView fx:id="field00" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       fitWidth="1000" fitHeight="1000"
+                       preserveRatio="true" pickOnBounds="true">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
-                        <fitHeight>
-                            <Binding>
-                                ${rowConstraint00.prefHeight}
-                            </Binding>
-                        </fitHeight>
-                        <fitWidth>
-                            <Binding>
-                                ${columnConstraint00.prefWidth}
-                            </Binding>
-                        </fitWidth>
                     </ImageView>
 
-
-
-
-                    <ImageView fx:id="field01" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <ImageView fx:id="field01" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                        fitWidth="1000" fitHeight="1000"
+                        preserveRatio="true" pickOnBounds="true">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
