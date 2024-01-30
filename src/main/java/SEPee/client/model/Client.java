@@ -13,7 +13,6 @@ import SEPee.server.model.card.damageCard.TrojanHorse;
 import SEPee.server.model.card.damageCard.Virus;
 import SEPee.server.model.card.damageCard.Wurm;
 import SEPee.server.model.card.progCard.*;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -27,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -327,9 +327,9 @@ public class Client extends Application {
                             CardPlayed cardPlayed = Deserialisierer.deserialize(serializedReceivedString, CardPlayed.class);
                             ClientLogger.writeToClientLog("Player " + cardPlayed.getMessageBody().getClientID() +
                                     " played card: " + cardPlayed.getMessageBody().getCard());
-                            controller.appendToChatArea("> Player " + cardPlayed.getMessageBody().getClientID() +
+                            controller.appendToChatArea("> Player " + playerListClient.get(cardPlayed.getMessageBody().getClientID() - 1).getName() +
                                     " played card " + cardPlayed.getMessageBody().getCard());
-                            
+
                             break;
                         case "ActivePhase":
                             ClientLogger.writeToClientLog("ActivePhase");
