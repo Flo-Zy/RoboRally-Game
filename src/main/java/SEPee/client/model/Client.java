@@ -23,7 +23,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -107,13 +110,26 @@ public class Client extends Application {
             Timer connection = new Timer();
             connection.schedule(new TimerTask() {
                 @Override
-                public void run(){
-                    if(!receivedHelloClient){
-                        System.out.println("cannot connect to server");
-                        controller.shutdown();
+                public void run() {
+                    if (!receivedHelloClient) {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Sorry, game is already running...");
+                            alert.setContentText("Cannot connect to server");
+                            alert.showAndWait();
+                        });
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                controller.shutdown();
+                            }
+                        }, 10000);
+
                     }
                 }
-            }, 10000);
+            }, 1000);
+
             // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
