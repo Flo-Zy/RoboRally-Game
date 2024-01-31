@@ -127,6 +127,8 @@ public class ClientHandler implements Runnable {
                                     Server.setTimerSend(Server.getTimerSend()-1);
                                 }
                                 Server.getPlayerList().remove(disconnectPLayer);
+                            }else if(!startingPointSet){
+                                Server.setCountPlayerTurns(Server.getCountPlayerTurns() +1);
                             }
                         }else{
                             Server.getPlayerList().remove(disconnectPLayer);
