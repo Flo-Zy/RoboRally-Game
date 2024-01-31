@@ -112,23 +112,24 @@ public class Client extends Application {
                 @Override
                 public void run() {
                     if (!receivedHelloClient) {
-                        Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Sorry, game is already running...");
-                            alert.setContentText("Cannot connect to server");
-                            alert.showAndWait();
-                        });
-                        new Timer().schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                controller.shutdown();
-                            }
-                        }, 10000);
-
+                        Platform.runLater(controller::shutdown);
                     }
                 }
-            }, 1000);
+            }, 10000);
+
+            Platform.runLater(() -> {
+                try {
+                    FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
+                    Parent alertRoot = alertLoader.load();
+                    Scene newScene = new Scene(alertRoot);
+                    primaryStage.setTitle("Error");
+                    primaryStage.setScene(newScene);
+                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                    primaryStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
