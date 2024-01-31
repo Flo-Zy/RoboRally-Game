@@ -23,7 +23,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -107,29 +106,38 @@ public class Client extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            Timer connection1 = new Timer();
+            connection1.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!receivedHelloClient) {
+                        Platform.runLater(() -> {
+                            try {
+                                FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
+                                Parent alertRoot = alertLoader.load();
+                                Scene newScene = new Scene(alertRoot);
+                                Stage alertStage = new Stage();
+                                alertStage.setTitle("Error");
+                                alertStage.setScene(newScene);
+                                alertStage.setOnCloseRequest(event -> controller.shutdown());
+                                alertStage.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                }
+            }, 1000);
+
             Timer connection = new Timer();
             connection.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (!receivedHelloClient) {
-                        Platform.runLater(controller::shutdown);
+                        controller.shutdown();
                     }
                 }
             }, 10000);
-
-            Platform.runLater(() -> {
-                try {
-                    FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
-                    Parent alertRoot = alertLoader.load();
-                    Scene newScene = new Scene(alertRoot);
-                    primaryStage.setTitle("Error");
-                    primaryStage.setScene(newScene);
-                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                    primaryStage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
 
             // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
