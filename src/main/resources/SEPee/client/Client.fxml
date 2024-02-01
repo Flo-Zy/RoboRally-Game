@@ -28,14 +28,14 @@
                              <fx:include source="DizzyHighway.fxml" VBox.vgrow="ALWAYS" />
                          </VBox>
 
-                         <VBox fx:id="ExtraCrispyMap" alignment="TOP_CENTER" managed="false" visible="false">
-                              <fx:include source="ExtraCrispy.fxml" />
+                         <VBox fx:id="ExtraCrispyMap" alignment="TOP_CENTER" managed="false" visible="false" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                              <fx:include source="ExtraCrispy.fxml" VBox.vgrow="ALWAYS" />
                           </VBox>
-                          <VBox fx:id="LostBearingsMap" alignment="TOP_CENTER" managed="false" visible="false">
-                              <fx:include source="LostBearings.fxml" />
+                          <VBox fx:id="LostBearingsMap" alignment="TOP_CENTER" managed="false" visible="false" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                              <fx:include source="LostBearings.fxml" VBox.vgrow="ALWAYS" />
                           </VBox>
-                          <VBox fx:id="DeathTrapMap" alignment="TOP_CENTER" managed="false" visible="false">
-                              <fx:include source="DeathTrap.fxml" />
+                          <VBox fx:id="DeathTrapMap" alignment="TOP_CENTER" managed="false" visible="false" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                              <fx:include source="DeathTrap.fxml" VBox.vgrow="ALWAYS" />
                           </VBox>
                      </children>
                   </HBox>

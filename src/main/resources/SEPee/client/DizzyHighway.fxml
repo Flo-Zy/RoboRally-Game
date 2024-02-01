@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javax.naming.Binding?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController" prefHeight="500.0" prefWidth="650.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
     <children>
         <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0" alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
