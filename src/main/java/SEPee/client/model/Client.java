@@ -111,6 +111,7 @@ public class Client extends Application {
                 @Override
                 public void run() {
                     if (!receivedHelloClient) {
+                        System.out.println("false");
                         Platform.runLater(() -> {
                             try {
                                 FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
@@ -125,6 +126,8 @@ public class Client extends Application {
                                 e.printStackTrace();
                             }
                         });
+                    } else {
+                        System.out.println("true");
                     }
                 }
             }, 1000);
