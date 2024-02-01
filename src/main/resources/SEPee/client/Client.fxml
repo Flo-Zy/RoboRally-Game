@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox alignment="CENTER" spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController" minWidth="1440" minHeight="810" maxWidth="1980" maxHeight="1080">
    <StackPane VBox.vgrow="ALWAYS">
       <children>
                 <!-- Oberer Teil (HBox) -->

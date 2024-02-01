@@ -320,6 +320,8 @@ public class ClientController {
             muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
 
             sendButton.setOnAction(event -> sendMessage());
+            stage.setMinWidth(1440);
+            stage.setMinHeight(810);
 
             messageField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
