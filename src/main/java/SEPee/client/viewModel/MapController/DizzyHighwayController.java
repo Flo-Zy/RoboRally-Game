@@ -29,7 +29,7 @@ import java.util.Queue;
 
 /**
  * controls all graphical changes on the map Dizzy Highway
- * @author Maximilian, Felix
+ * @author Maximilian, Felix, Florian
  */
 public class DizzyHighwayController extends MapController {
 
@@ -92,7 +92,8 @@ public class DizzyHighwayController extends MapController {
     private AtomicInteger counter1 = new AtomicInteger(0);
 
     /**
-     * initializes the clients GUI
+     * initializes the GUI for a client by setting up a GridPane for display and an AspectRatioPane to control the aspect ratio
+     * ensures that ImageView elements dynamically adjust to the size of the cells
      * @param client the client
      * @param stage the stage
      */
