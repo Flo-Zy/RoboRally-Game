@@ -83,6 +83,9 @@ public class Game implements Robot.RobotPositionChangeListener {
             currentPlayer = playerList.get(playerIndex);
             playerIndex++;
         }
+        if(Server.getDisconnectedPlayer().contains(currentPlayer)){
+            setNextPlayersTurn();
+        }
     }
 
     /**

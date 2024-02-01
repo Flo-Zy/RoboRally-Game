@@ -142,7 +142,7 @@ public class ClientController {
      * initializes the client controller
      * @param client the client
      * @param stage the stage
-     * @author Maximilian, Florian, Hasan, Felix, Franzi
+     * @author Florian, Maximilian, Hasan, Felix, Franzi
      */
     public void init(Client client, Stage stage) {
         this.clientHandMap = new HashMap<>();
@@ -541,7 +541,7 @@ public class ClientController {
     /**
      * appends something to the chat
      * @param message what to append to the chat
-     * @author Maximilian
+     * @author Maximilian Felix
      */
     public void appendToChatArea(String message) {
         Platform.runLater(() -> {
@@ -565,8 +565,10 @@ public class ClientController {
         });
     }
 
-
-
+    /**
+     * correctly shuts down the client and closes its sockets
+     * @author Florian, Felix
+     */
     public void shutdown() {
         try {
             if (name != null && !name.equals("null")) {
@@ -580,6 +582,25 @@ public class ClientController {
                     socket.close();
                 }
             }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+    /**
+     * correctly shuts down the client if a game has already been started
+     * @author Hasan
+     */
+    public void shutdown2() {
+        try {
+                    if (writer != null) {
+                        writer.println(name + " has left the chat.");
+                        writer.flush();
+                        writer.close();
+                    }
+                    Thread.sleep(100);
+                    socket.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -650,7 +671,7 @@ public class ClientController {
      * shows the select reboot direction dialog
      * @param stage the stage
      * @return the direction chosen by the user id no direction was chosen "top" gets returned as default
-     * @author Felix, Florian, Franziska
+     * @author Felix, Maximilian, Florian, Franziska
      */
     public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
@@ -703,14 +724,16 @@ public class ClientController {
 
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
-
+        scene.getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
+                "-fx-background-repeat: repeat;" +
+                "-fx-background-size: cover;");
         stage.setScene(scene);
-        stage.setTitle("Reboot direction selection");
+        stage.setTitle("Your Reboot direction");
 
-        Text text = new Text("Reboot direction selection");
+        Text text = new Text("Your Reboot direction");
         text.getStyleClass().add("header-label");
         double titleWidth = text.getBoundsInLocal().getWidth();
-        stage.setWidth(titleWidth + 40);
+        stage.setWidth(titleWidth + 100);
 
         Duration duration = Duration.seconds(10);
         Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
@@ -721,9 +744,7 @@ public class ClientController {
         }));
         timeline.setCycleCount(1);
         timeline.play();
-
         stage.setOnHiding(event -> timeline.stop());
-
         stage.showAndWait();
 
         return selectedDirection[0];

@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
+<VBox alignment="CENTER" spacing="10" stylesheets="/CSSFiles/client.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.ClientController">
    <StackPane VBox.vgrow="ALWAYS">
       <children>
                 <!-- Oberer Teil (HBox) -->
@@ -45,9 +45,6 @@
                            <image>
                                 <Image url="@/boardElementsPNGs/PlayerMat/PlayermatBackground.png" />
                            </image>
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin>
                         </ImageView>
                         <VBox alignment="BOTTOM_CENTER" maxHeight="300.0" maxWidth="664.0" prefHeight="300.0" prefWidth="664.0" StackPane.alignment="TOP_CENTER">
                            <children>

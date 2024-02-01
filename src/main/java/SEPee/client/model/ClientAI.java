@@ -98,6 +98,16 @@ public class ClientAI extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            Timer connection = new Timer();
+            connection.schedule(new TimerTask() {
+                @Override
+                public void run(){
+                    if(!receivedHelloClient){
+                        System.out.println("cannot connect to server");
+                        controller.shutdown();
+                    }
+                }
+            }, 10000);
             // receive HelloClient from Server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
@@ -509,6 +519,9 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Timer Started");
                             TimerStarted timerStarted = Deserialisierer.deserialize(serializedReceivedString, TimerStarted.class);
                             controller.appendToChatArea(">> Timer Started \n>> (30 sec. left to fill your register)");
+                            TimerStarted timerStartedAi = new TimerStarted();
+                            String serializedTimerStarted = Serialisierer.serialize(timerStartedAi);
+                            ClientAI.getWriter().println(serializedTimerStarted);
                             break;
                         case "TimerEnded":
                             ClientAILogger.writeToClientLog("Timer Ended");

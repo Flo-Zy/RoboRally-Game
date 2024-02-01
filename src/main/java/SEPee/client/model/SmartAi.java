@@ -102,9 +102,9 @@ public class SmartAi {
                 i++;
             }
 
-            TimerStarted timerStarted = new TimerStarted();
+            /*TimerStarted timerStarted = new TimerStarted();
             String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-            ClientAI.getWriter().println(serializedTimerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);*/
 
         }else {
             ClientAILogger.writeToClientLog(clientHand);
@@ -117,9 +117,9 @@ public class SmartAi {
                 i++;
             }
 
-            TimerStarted timerStarted = new TimerStarted();
+            /*TimerStarted timerStarted = new TimerStarted();
             String serializedTimerStarted = Serialisierer.serialize(timerStarted);
-            ClientAI.getWriter().println(serializedTimerStarted);
+            ClientAI.getWriter().println(serializedTimerStarted);*/
         }
         bestRegister.clear();
         checkpointReached = false;
