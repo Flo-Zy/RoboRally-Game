@@ -10,7 +10,9 @@ import SEPee.server.model.card.Card;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -86,7 +88,6 @@ public class DizzyHighwayController extends MapController {
     private final Queue<MoveInstruction> movementQueue = new LinkedList<>();
     private boolean isTransitioning = false;
     private Map<Player, Robot> playerRobotMap;
-    private int gridSize = 0;
     private Map<Robot, ImageView> robotImageViewMap;
     private AtomicInteger counter1 = new AtomicInteger(0);
 
@@ -99,44 +100,27 @@ public class DizzyHighwayController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
-        /*gridPane.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-            // Annahme: imageView befindet sich in Spalte 0 und Zeile 0
-            ColumnConstraints cc = gridPane.getColumnConstraints().get(0);
-            RowConstraints rc = gridPane.getRowConstraints().get(0);
+        gridPane.prefWidthProperty().bind(rootVBox.widthProperty());
+        gridPane.prefHeightProperty().bind(rootVBox.heightProperty());
 
-            // Berechnen der maximalen Größe basierend auf den Constraints
-            double maxWidth = newVal.getWidth() * (((ColumnConstraints) cc).getPercentWidth() / 100);
-            double maxHeight = newVal.getHeight() * (((RowConstraints) rc).getPercentHeight() / 100);
-
-            // Anpassen der ImageView-Größe
-            field00.setFitWidth(maxWidth);
-            field00.setFitHeight(maxHeight);
-        });
-
-        field00.setPreserveRatio(true);*/
-        /*field00.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
-        field00.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
-        field01.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
-        field01.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
-        field10.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
-        field10.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));
-        field11a.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()));
-        field11a.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowConstraints().size()));*/
-        gridPane.getChildren().forEach(node -> {
-            if (node instanceof Region) {
-                Region region = (Region) node;
-                region.prefWidthProperty().bind(Bindings.min(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()), gridPane.heightProperty().divide(gridPane.getRowConstraints().size())));
-                region.prefHeightProperty().bind(region.prefWidthProperty());
+        // Gewährleistung, dass die ImageView-Elemente die Größe der Zellen ausfüllen
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                imageView.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnCount()));
+                imageView.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowCount()));
             }
-        });
+        }
 
-        // Stellen Sie sicher, dass jedes ImageView die Größe seiner Zelle ausfüllt
-        gridPane.getChildren().filtered(node -> node instanceof ImageView).forEach(node -> {
-            ImageView imageView = (ImageView) node;
-            imageView.fitWidthProperty().bind(Bindings.min(gridPane.widthProperty().divide(gridPane.getColumnConstraints().size()), gridPane.heightProperty().divide(gridPane.getRowConstraints().size())));
-            imageView.fitHeightProperty().bind(imageView.fitWidthProperty());
-            imageView.setPreserveRatio(false); // Das Bild wird gestreckt, um das ImageView zu füllen
-        });
+        // AspectRatioPane, um das Verhältnis zu kontrollieren
+        AspectRatioPane aspectRatioPane = new AspectRatioPane(gridPane, 13, 10);
+        rootVBox.getChildren().add(aspectRatioPane); // AspectRatioPane wird zur rootVBox hinzugefügt
+
+        // Setzen der Größen des AspectRatioPane
+        aspectRatioPane.setMaxWidth(1300);
+        aspectRatioPane.setMaxHeight(1000);
+        aspectRatioPane.setMinWidth(650);
+        aspectRatioPane.setMinHeight(500);
     }
 
     /**
@@ -372,6 +356,5 @@ public class DizzyHighwayController extends MapController {
         return null;
     }
 }
-
 
 

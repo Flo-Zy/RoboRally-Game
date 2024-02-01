@@ -10,6 +10,7 @@ import SEPee.server.model.card.Card;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -85,6 +86,27 @@ public class ExtraCrispyController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
+        gridPane.prefWidthProperty().bind(rootVBox.widthProperty());
+        gridPane.prefHeightProperty().bind(rootVBox.heightProperty());
+
+        // Gewährleistung, dass die ImageView-Elemente die Größe der Zellen ausfüllen
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                imageView.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnCount()));
+                imageView.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowCount()));
+            }
+        }
+
+        // AspectRatioPane, um das Verhältnis zu kontrollieren
+        AspectRatioPane aspectRatioPane = new AspectRatioPane(gridPane, 13, 10);
+        rootVBox.getChildren().add(aspectRatioPane); // AspectRatioPane wird zur rootVBox hinzugefügt
+
+        // Setzen der Größen des AspectRatioPane
+        aspectRatioPane.setMaxWidth(1300);
+        aspectRatioPane.setMaxHeight(1000);
+        aspectRatioPane.setMinWidth(650);
+        aspectRatioPane.setMinHeight(500);
     }
 
     /**
