@@ -106,6 +106,7 @@ public class Client extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            /*
             Timer connection1 = new Timer();
             connection1.schedule(new TimerTask() {
                 @Override
@@ -131,6 +132,32 @@ public class Client extends Application {
                     }
                 }
             }, 1000);
+
+             */
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
+                if (!receivedHelloClient) {
+                    System.out.println("false");
+                    //Platform.runLater(() -> {
+                        try {
+                            FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
+                            Parent alertRoot = alertLoader.load();
+                            Scene newScene = new Scene(alertRoot);
+                            Stage alertStage = new Stage();
+                            alertStage.setTitle("Error");
+                            alertStage.setScene(newScene);
+                            alertStage.setOnCloseRequest(e -> controller.shutdown());
+                            alertStage.show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    //});
+                } else {
+                    System.out.println("true");
+                }
+            }));
+
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
 
             Timer connection = new Timer();
             connection.schedule(new TimerTask() {
