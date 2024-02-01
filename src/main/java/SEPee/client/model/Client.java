@@ -814,6 +814,7 @@ public class Client extends Application {
         seconds.set(durationSeconds);
         timeline.getKeyFrames().add(
                 new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+                    controller.playUISound("Blips");
                     controller.updateCountdownImage(seconds.get());
                     if (seconds.get() <= 0) {
                         timeline.stop();
