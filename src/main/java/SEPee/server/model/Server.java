@@ -81,49 +81,53 @@ public class Server extends Thread{
                 Socket clientSocket = serverSocket.accept();
                 ServerLogger.writeToServerLog("Neue potentielle Verbindung: " + clientSocket);
                 // Sende HelloClient an den Client
-                if(!gameStarted){
-                    HelloClient helloClient = new HelloClient("Version 1.0");
-                    String serializedHelloClient = Serialisierer.serialize(helloClient);
+                HelloClient helloClient = new HelloClient("Version 1.0");
+                String serializedHelloClient = Serialisierer.serialize(helloClient);
 
-                    PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
-                    writer.println(serializedHelloClient);
+                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+                writer.println(serializedHelloClient);
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                    // Empfange Antwort vom Client
-                    String serializedHelloServer = reader.readLine();
-                    ServerLogger.writeToServerLog(serializedHelloServer);
-                    HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
-                    if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
-                        clientID = assigningClientID();
-                        boolean isAi = deserializedHelloServer.getMessageBody().isAI();
-                        ClientHandler clientHandler = new ClientHandler(clientSocket, clients, clientID, isAi);
-                        clients.add(clientHandler);
-                        //associate socket with ID in the Player object
-                        Player.associateSocketWithId(clientSocket, clientID);
+                // Empfange Antwort vom Client
+                String serializedHelloServer = reader.readLine();
+                ServerLogger.writeToServerLog(serializedHelloServer);
+                HelloServer deserializedHelloServer = Deserialisierer.deserialize(serializedHelloServer, HelloServer.class);
+                if (deserializedHelloServer != null && "Version 1.0".equals(deserializedHelloServer.getMessageBody().getProtocol())) {
+                    clientID = assigningClientID();
+                    boolean isAi = deserializedHelloServer.getMessageBody().isAI();
+                    ClientHandler clientHandler = new ClientHandler(clientSocket, clients, clientID, isAi);
+                    clients.add(clientHandler);
+                    //associate socket with ID in the Player object
+                    Player.associateSocketWithId(clientSocket, clientID);
 
-                        ServerLogger.writeToServerLog("101 server: " + Player.getClientIdFromSocket(clientSocket));
+                    ServerLogger.writeToServerLog("101 server: " + Player.getClientIdFromSocket(clientSocket));
 
-                        new Thread(clientHandler).start();
-                        ServerLogger.writeToServerLog("Verbindung erfolgreich. Client verbunden: " + clientSocket);
-                        //welcome erstellen und an den Client schicken
-
+                    new Thread(clientHandler).start();
+                    ServerLogger.writeToServerLog("Verbindung erfolgreich. Client verbunden: " + clientSocket);
+                    //welcome erstellen und an den Client schicken
+                    if(!gameStarted) {
                         ServerLogger.writeToServerLog(clientID);
                         playerList.add(new Player("", clientID, -9999));
                         Welcome welcome = new Welcome(clientID);
                         String serializedWelcome = Serialisierer.serialize(welcome);
                         writer.println(serializedWelcome);
 
-                        for(Player player : playerList){
-                            PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure()-1);
+                        for (Player player : playerList) {
+                            PlayerAdded playerAdded = new PlayerAdded(player.getId(), player.getName(), player.getFigure() - 1);
                             String serializedPlayerAdded = Serialisierer.serialize(playerAdded);
                             clientHandler.sendToOneClient(clientID, serializedPlayerAdded);
                         }
-                    } else {
-                        ServerLogger.writeToServerLog("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
-                        clientSocket.close();
+                    }else{
+                        Welcome welcome = new Welcome(-9999);
+                        String serializedWelcome = Serialisierer.serialize(welcome);
+                        writer.println(serializedWelcome);
                     }
+                } else {
+                    ServerLogger.writeToServerLog("Verbindung abgelehnt. Client verwendet falsches Protokoll.");
+                    clientSocket.close();
                 }
+
             }
 
         } catch (IOException e) {

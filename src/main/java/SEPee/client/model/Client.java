@@ -23,7 +23,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -106,69 +108,6 @@ public class Client extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            /*
-            Timer connection1 = new Timer();
-            connection1.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!receivedHelloClient) {
-                        System.out.println("false");
-                        Platform.runLater(() -> {
-                            try {
-                                FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
-                                Parent alertRoot = alertLoader.load();
-                                Scene newScene = new Scene(alertRoot);
-                                Stage alertStage = new Stage();
-                                alertStage.setTitle("Error");
-                                alertStage.setScene(newScene);
-                                alertStage.setOnCloseRequest(event -> controller.shutdown());
-                                alertStage.show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    } else {
-                        System.out.println("true");
-                    }
-                }
-            }, 1000);
-
-             */
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
-                if (!receivedHelloClient) {
-                    System.out.println("false");
-                    //Platform.runLater(() -> {
-                        try {
-                            FXMLLoader alertLoader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
-                            Parent alertRoot = alertLoader.load();
-                            Scene newScene = new Scene(alertRoot);
-                            Stage alertStage = new Stage();
-                            alertStage.setTitle("Error");
-                            alertStage.setScene(newScene);
-                            alertStage.setOnCloseRequest(e -> controller.shutdown());
-                            alertStage.show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    //});
-                } else {
-                    System.out.println("true");
-                }
-            }));
-
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-
-            Timer connection = new Timer();
-            connection.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!receivedHelloClient) {
-                        controller.shutdown();
-                    }
-                }
-            }, 10000);
-
             // receive HelloClient from server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
@@ -180,6 +119,7 @@ public class Client extends Application {
                 writer.println(serializedHelloServer);
 
                 receivedHelloClient = true; // Update flag after receiving HelloClient and Welcome
+
 
             } else {
                 controller.shutdown();
@@ -223,22 +163,37 @@ public class Client extends Application {
                             ClientLogger.writeToClientLog("Welcome");
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                            controller.setId(receivedId);
+                            if(receivedId == -9999){
+                                Platform.runLater(() -> {
+                                    StackPane root = new StackPane();
+                                    primaryStage.setScene(new Scene(root, 300, 250));
 
-                            Platform.runLater(() -> {
-                                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                                controller.init(this, primaryStage);
-                                if ( controller.getName() == null || controller.getFigure() == 0) {
-                                    controller.shutdown();
-                                } else {
-                                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
-                                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                                    writer.println(serializedPlayerValues);
-                                    controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
-                                    controller.updateCountdownImage(30);
-                                    primaryStage.show();
-                                }
-                            });
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Connection not possible");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("Sorry, the game is already in progress.");
+                                    alert.showAndWait();
+                                });
+                                Thread.sleep(5000);
+                                controller.shutdown();
+                            }else {
+                                controller.setId(receivedId);
+
+                                Platform.runLater(() -> {
+                                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                                    controller.init(this, primaryStage);
+                                    if (controller.getName() == null || controller.getFigure() == 0) {
+                                        controller.shutdown();
+                                    } else {
+                                        PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure() - 1);
+                                        String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                                        writer.println(serializedPlayerValues);
+                                        controller.setCheckPointImage("/boardElementsPNGs/CheckpointCounter0.png");
+                                        controller.updateCountdownImage(30);
+                                        primaryStage.show();
+                                    }
+                                });
+                            }
                             break;
                         case "PlayerAdded":
                             ClientLogger.writeToClientLog("PlayerAdded");
