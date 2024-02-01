@@ -1376,6 +1376,7 @@ public class ClientController {
             if (totalHand != null && totalRegister != null) {
                 for (int i = 0; i < 9; i++) {
                     ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+                    handImageView.setId("handImageView");
 
                     if (handImageView != null) {
                         final int index = i;
@@ -1391,6 +1392,7 @@ public class ClientController {
 
                                     registerImageView.setVisible(true);
                                     registerImageView.setManaged(true);
+                                    registerImageView.setId("registerImageView");
 
                                     handImageView.setVisible(false);
 
