@@ -124,3 +124,19 @@
 .slider .axis .tick-mark .tick-label {
     -fx-fill: #ffffff;
 }
+
+.image-view {
+    -fx-effect: none;
+}
+
+#registerImageView:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.3, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+#handImageView:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.3, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
