@@ -4,7 +4,9 @@ import SEPee.client.model.Client;
 import SEPee.server.model.Player;
 import SEPee.server.model.card.Card;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -21,6 +23,8 @@ import java.util.Map;
  * @author Florian, Hasan
  */
 public class MapController {
+    @FXML
+    private GridPane gridPane;
     @FXML
     private ImageView Avatar1;
     @FXML

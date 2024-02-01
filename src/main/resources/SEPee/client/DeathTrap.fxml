@@ -8,36 +8,36 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DeathTrapController" prefHeight="500.0" prefWidth="650.0"  VBox.vgrow="ALWAYS">
     <children>
-        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0">
-            <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
+        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0" alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"  VBox.vgrow="ALWAYS">
+            <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0" VBox.vgrow="ALWAYS" >
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
                 </rowConstraints>
                 <children>
                     <ImageView fx:id="field00" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">

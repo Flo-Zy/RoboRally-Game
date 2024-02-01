@@ -9,11 +9,12 @@ import SEPee.server.model.Robot;
 import SEPee.server.model.card.Card;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -28,7 +29,7 @@ import java.util.Queue;
 
 /**
  * controls all graphical changes on the map Dizzy Highway
- * @author Maximilian, Felix
+ * @author Maximilian, Felix, Florian
  */
 public class DizzyHighwayController extends MapController {
 
@@ -39,6 +40,10 @@ public class DizzyHighwayController extends MapController {
     private GridPane gridPane;
     @FXML
     private ImageView field00;
+    @FXML
+    private ImageView field10;
+    @FXML
+    private ImageView field11a;
     @FXML
     private ImageView field01;
     @FXML
@@ -83,12 +88,12 @@ public class DizzyHighwayController extends MapController {
     private final Queue<MoveInstruction> movementQueue = new LinkedList<>();
     private boolean isTransitioning = false;
     private Map<Player, Robot> playerRobotMap;
-    private int gridSize = 0;
     private Map<Robot, ImageView> robotImageViewMap;
     private AtomicInteger counter1 = new AtomicInteger(0);
 
     /**
-     * initializes the clients GUI
+     * initializes the GUI for a client by setting up a GridPane for display and an AspectRatioPane to control the aspect ratio
+     * ensures that ImageView elements dynamically adjust to the size of the cells
      * @param client the client
      * @param stage the stage
      */
@@ -96,6 +101,27 @@ public class DizzyHighwayController extends MapController {
         this.stage = stage;
         playerRobotMap = new HashMap<>();
         robotImageViewMap = new HashMap<>();
+        gridPane.prefWidthProperty().bind(rootVBox.widthProperty());
+        gridPane.prefHeightProperty().bind(rootVBox.heightProperty());
+
+        // Gewährleistung, dass die ImageView-Elemente die Größe der Zellen ausfüllen
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof ImageView) {
+                ImageView imageView = (ImageView) node;
+                imageView.fitWidthProperty().bind(gridPane.widthProperty().divide(gridPane.getColumnCount()));
+                imageView.fitHeightProperty().bind(gridPane.heightProperty().divide(gridPane.getRowCount()));
+            }
+        }
+
+        // AspectRatioPane, um das Verhältnis zu kontrollieren
+        AspectRatioPane aspectRatioPane = new AspectRatioPane(gridPane, 13, 10);
+        rootVBox.getChildren().add(aspectRatioPane); // AspectRatioPane wird zur rootVBox hinzugefügt
+
+        // Setzen der Größen des AspectRatioPane
+        aspectRatioPane.setMaxWidth(1300);
+        aspectRatioPane.setMaxHeight(1000);
+        aspectRatioPane.setMinWidth(650);
+        aspectRatioPane.setMinHeight(500);
     }
 
     /**
@@ -331,6 +357,5 @@ public class DizzyHighwayController extends MapController {
         return null;
     }
 }
-
 
 

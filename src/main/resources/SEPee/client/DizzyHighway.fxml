@@ -1,167 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController">
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javax.naming.Binding?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SEPee.client.viewModel.MapController.DizzyHighwayController" prefHeight="500.0" prefWidth="650.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
     <children>
-        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0">
-            <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0">
+        <VBox fx:id="rootVBox" layoutY="1.0" prefHeight="500.0" prefWidth="650.0" alignment="CENTER" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <GridPane fx:id="gridPane" prefHeight="500.0" prefWidth="650.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                    <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50" />
                 </rowConstraints>
+
                 <children>
-                    <ImageView fx:id="field00" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fx:id="field00" fitHeight="50" fitWidth="50" pickOnBounds="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field01" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                    <ImageView fx:id="field01" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field02" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                    <ImageView fx:id="field02" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field03a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                    <ImageView fx:id="field03a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field03b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                    <ImageView fx:id="field03b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field03c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                    <ImageView fx:id="field03c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf2.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field04a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
+                    <ImageView fx:id="field04a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field04b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4">
+                    <ImageView fx:id="field04b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/Antenne.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field05" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5">
+                    <ImageView fx:id="field05" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field06a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                    <ImageView fx:id="field06a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field06b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                    <ImageView fx:id="field06b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field06c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6">
+                    <ImageView fx:id="field06c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf5.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field07" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="7">
+                    <ImageView fx:id="field07" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field08" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="8">
+                    <ImageView fx:id="field08" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field09" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="9">
+                    <ImageView fx:id="field09" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field10" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                    <ImageView fx:id="field10" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field11a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <ImageView fx:id="field11a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field11b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <ImageView fx:id="field11b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field11c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <ImageView fx:id="field11c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf1.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field12a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <ImageView fx:id="field12a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field12b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <ImageView fx:id="field12b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -170,61 +170,61 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field13" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <ImageView fx:id="field13" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field14a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <ImageView fx:id="field14a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field14b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <ImageView fx:id="field14b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field14c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <ImageView fx:id="field14c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf3.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field15a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <ImageView fx:id="field15a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field15b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <ImageView fx:id="field15b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field15c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <ImageView fx:id="field15c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf4.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field16" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                    <ImageView fx:id="field16" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field17a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                    <ImageView fx:id="field17a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field17b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                    <ImageView fx:id="field17b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -233,37 +233,37 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field18a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                    <ImageView fx:id="field18a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field18b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                    <ImageView fx:id="field18b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2016TileSetA/StartingPoint.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field18c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                    <ImageView fx:id="field18c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/2005TileSetA/Knopf6.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field19" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                    <ImageView fx:id="field19" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field20a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                    <ImageView fx:id="field20a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field20b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                    <ImageView fx:id="field20b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
@@ -272,31 +272,31 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field21" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <ImageView fx:id="field21" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field22" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <ImageView fx:id="field22" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field23" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                    <ImageView fx:id="field23" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field24a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                    <ImageView fx:id="field24a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field24b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                    <ImageView fx:id="field24b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -305,13 +305,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field25a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                    <ImageView fx:id="field25a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field25b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                    <ImageView fx:id="field25b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -320,31 +320,31 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field26" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                    <ImageView fx:id="field26" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field27" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                    <ImageView fx:id="field27" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field28" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                    <ImageView fx:id="field28" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field29a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                    <ImageView fx:id="field29a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field29b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                    <ImageView fx:id="field29b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/GreenConveyor.png" />
                         </image>
@@ -353,55 +353,55 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field30" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                    <ImageView fx:id="field30" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field31" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                    <ImageView fx:id="field31" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field32" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                    <ImageView fx:id="field32" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field33" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                    <ImageView fx:id="field33" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field34" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                    <ImageView fx:id="field34" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field35" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                    <ImageView fx:id="field35" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field36" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                    <ImageView fx:id="field36" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field37a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                    <ImageView fx:id="field37a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field37b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                    <ImageView fx:id="field37b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -410,13 +410,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field38a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="8">
+                    <ImageView fx:id="field38a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field38b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="8">
+                    <ImageView fx:id="field38b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -425,25 +425,25 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field39a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                    <ImageView fx:id="field39a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field39b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                    <ImageView fx:id="field39b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field40a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
+                    <ImageView fx:id="field40a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field40b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
+                    <ImageView fx:id="field40b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -452,25 +452,25 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field41a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                    <ImageView fx:id="field41a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field41b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                    <ImageView fx:id="field41b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field42a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                    <ImageView fx:id="field42a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field42b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                    <ImageView fx:id="field42b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -479,13 +479,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field43a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                    <ImageView fx:id="field43a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field43b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                    <ImageView fx:id="field43b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -494,13 +494,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field44a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                    <ImageView fx:id="field44a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field44b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                    <ImageView fx:id="field44b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -509,13 +509,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field45a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5">
+                    <ImageView fx:id="field45a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field45b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5">
+                    <ImageView fx:id="field45b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -524,13 +524,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field46a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="6">
+                    <ImageView fx:id="field46a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field46b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="6">
+                    <ImageView fx:id="field46b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -539,13 +539,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field47a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
+                    <ImageView fx:id="field47a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field47b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="7">
+                    <ImageView fx:id="field47b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -554,13 +554,13 @@
                         </scaleX>
                     </ImageView>
 
-                    <ImageView fx:id="field48a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
+                    <ImageView fx:id="field48a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field48b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="8">
+                    <ImageView fx:id="field48b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -569,20 +569,20 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field49" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="9">
+                    <ImageView fx:id="field49" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="field50a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+                    <ImageView fx:id="field50a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field50b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+                    <ImageView fx:id="field50b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -591,13 +591,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field51a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <ImageView fx:id="field51a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field51b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <ImageView fx:id="field51b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -609,55 +609,55 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field52a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                    <ImageView fx:id="field52a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field52b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                    <ImageView fx:id="field52b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field53" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                    <ImageView fx:id="field53" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field54" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                    <ImageView fx:id="field54" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field55" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                    <ImageView fx:id="field55" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field56" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="6">
+                    <ImageView fx:id="field56" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field57" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="7">
+                    <ImageView fx:id="field57" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field58a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="8">
+                    <ImageView fx:id="field58a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field58b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="8">
+                    <ImageView fx:id="field58b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -666,7 +666,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field59" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="9">
+                    <ImageView fx:id="field59" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="5" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
@@ -674,19 +674,19 @@
 
 
 
-                    <ImageView fx:id="field60" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
+                    <ImageView fx:id="field60" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field61a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                    <ImageView fx:id="field61a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field61b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                    <ImageView fx:id="field61b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -695,19 +695,19 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field62" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="2">
+                    <ImageView fx:id="field62" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field63a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                    <ImageView fx:id="field63a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field63b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                    <ImageView fx:id="field63b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
@@ -716,7 +716,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field63c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                    <ImageView fx:id="field63c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -725,13 +725,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field64a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                    <ImageView fx:id="field64a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field64b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                    <ImageView fx:id="field64b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
@@ -740,7 +740,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field64c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                    <ImageView fx:id="field64c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -749,25 +749,25 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field65" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                    <ImageView fx:id="field65" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field66a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
+                    <ImageView fx:id="field66a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field66b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
+                    <ImageView fx:id="field66b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field66c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="6">
+                    <ImageView fx:id="field66c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -776,19 +776,19 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field67" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="7">
+                    <ImageView fx:id="field67" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field68a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="8">
+                    <ImageView fx:id="field68a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field68b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="8">
+                    <ImageView fx:id="field68b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -797,7 +797,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field69" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.rowIndex="9">
+                    <ImageView fx:id="field69" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="6" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
@@ -805,19 +805,19 @@
 
 
 
-                    <ImageView fx:id="field70" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7">
+                    <ImageView fx:id="field70" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field71a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="1">
+                    <ImageView fx:id="field71a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field71b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="1">
+                    <ImageView fx:id="field71b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -826,50 +826,50 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field72" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="2">
+                    <ImageView fx:id="field72" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field73a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                    <ImageView fx:id="field73a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field73b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="3">
+                    <ImageView fx:id="field73b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/Reboot.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="field74" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="4">
+                    <ImageView fx:id="field74" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field75a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5">
+                    <ImageView fx:id="field75a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field75b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="5">
+                    <ImageView fx:id="field75b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field76a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
+                    <ImageView fx:id="field76a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field76b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
+                    <ImageView fx:id="field76b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
@@ -878,7 +878,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field76c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="6">
+                    <ImageView fx:id="field76c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -887,19 +887,19 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field77" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="7">
+                    <ImageView fx:id="field77" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field78a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="8">
+                    <ImageView fx:id="field78a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field78b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="8">
+                    <ImageView fx:id="field78b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -908,7 +908,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field79" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.rowIndex="9">
+                    <ImageView fx:id="field79" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="7" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
@@ -916,19 +916,19 @@
 
 
 
-                    <ImageView fx:id="field80" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8">
+                    <ImageView fx:id="field80" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field81a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                    <ImageView fx:id="field81a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field81b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                    <ImageView fx:id="field81b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -937,67 +937,67 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field82" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="2">
+                    <ImageView fx:id="field82" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field83a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
+                    <ImageView fx:id="field83a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field83b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
+                    <ImageView fx:id="field83b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field83c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="3">
+                    <ImageView fx:id="field83c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field84a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
+                    <ImageView fx:id="field84a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field84b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="4">
+                    <ImageView fx:id="field84b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field85" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="5">
+                    <ImageView fx:id="field85" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field86" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="6">
+                    <ImageView fx:id="field86" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field87" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="7">
+                    <ImageView fx:id="field87" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field88a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="8">
+                    <ImageView fx:id="field88a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field88b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="8">
+                    <ImageView fx:id="field88b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1006,7 +1006,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field89" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="9">
+                    <ImageView fx:id="field89" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="8" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
@@ -1014,19 +1014,19 @@
 
 
 
-                    <ImageView fx:id="field90" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9">
+                    <ImageView fx:id="field90" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field91a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
+                    <ImageView fx:id="field91a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field91b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="1">
+                    <ImageView fx:id="field91b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1035,25 +1035,25 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field92" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="2">
+                    <ImageView fx:id="field92" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field93a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                    <ImageView fx:id="field93a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field93b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                    <ImageView fx:id="field93b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field93c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="3">
+                    <ImageView fx:id="field93c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -1062,19 +1062,19 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field94" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="4">
+                    <ImageView fx:id="field94" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field95a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
+                    <ImageView fx:id="field95a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field95b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
+                    <ImageView fx:id="field95b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserShooterOne.png" />
                         </image>
@@ -1083,7 +1083,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field95c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="5">
+                    <ImageView fx:id="field95c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -1092,13 +1092,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field96a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
+                    <ImageView fx:id="field96a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field96b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
+                    <ImageView fx:id="field96b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/LaserBeam.png" />
                         </image>
@@ -1107,7 +1107,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field96c" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="6">
+                    <ImageView fx:id="field96c" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/SimpleWall.png" />
                         </image>
@@ -1116,19 +1116,19 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field97" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="7">
+                    <ImageView fx:id="field97" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field98a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="8">
+                    <ImageView fx:id="field98a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field98b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="8">
+                    <ImageView fx:id="field98b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1137,26 +1137,26 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field99" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.rowIndex="9">
+                    <ImageView fx:id="field99" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="9" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="field100" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10">
+                    <ImageView fx:id="field100" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field101a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
+                    <ImageView fx:id="field101a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field101b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="1">
+                    <ImageView fx:id="field101b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1165,56 +1165,56 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field102" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="2">
+                    <ImageView fx:id="field102" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field103" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="3">
+                    <ImageView fx:id="field103" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field104" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="4">
+                    <ImageView fx:id="field104" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field105" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="5">
+                    <ImageView fx:id="field105" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field106" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="6">
+                    <ImageView fx:id="field106" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field107a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
+                    <ImageView fx:id="field107a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field107b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="7">
+                    <ImageView fx:id="field107b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="field108a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="8">
+                    <ImageView fx:id="field108a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field108b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="8">
+                    <ImageView fx:id="field108b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -1226,32 +1226,32 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field109a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
+                    <ImageView fx:id="field109a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field109b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.rowIndex="9">
+                    <ImageView fx:id="field109b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="10" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="field110" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11">
+                    <ImageView fx:id="field110" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field111a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="1">
+                    <ImageView fx:id="field111a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field111b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="1">
+                    <ImageView fx:id="field111b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -1260,13 +1260,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field112a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="2">
+                    <ImageView fx:id="field112a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field112b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="2">
+                    <ImageView fx:id="field112b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -1275,73 +1275,73 @@
                         </scaleY>
                     </ImageView>
 
-                    <ImageView fx:id="field113a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="3">
+                    <ImageView fx:id="field113a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field113b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="3">
+                    <ImageView fx:id="field113b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field114a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="4">
+                    <ImageView fx:id="field114a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field114b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="4">
+                    <ImageView fx:id="field114b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field115a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="5">
+                    <ImageView fx:id="field115a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field115b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="5">
+                    <ImageView fx:id="field115b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field116a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="6">
+                    <ImageView fx:id="field116a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field116b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="6">
+                    <ImageView fx:id="field116b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field117a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="7">
+                    <ImageView fx:id="field117a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field117b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="7">
+                    <ImageView fx:id="field117b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field118a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="8">
+                    <ImageView fx:id="field118a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field118b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="8">
+                    <ImageView fx:id="field118b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueMergeConveyorFromUp+RightToDown.png" />
                         </image>
@@ -1350,37 +1350,37 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field119a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="9">
+                    <ImageView fx:id="field119a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field119b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.rowIndex="9">
+                    <ImageView fx:id="field119b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="11" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field120a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
+                    <ImageView fx:id="field120a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field120b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12">
+                    <ImageView fx:id="field120b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/EnergyRed.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field121a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="1">
+                    <ImageView fx:id="field121a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field121b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="1">
+                    <ImageView fx:id="field121b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="1" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1389,13 +1389,13 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field122a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2">
+                    <ImageView fx:id="field122a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field122b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="2">
+                    <ImageView fx:id="field122b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="2" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/BlueConveyor.png" />
                         </image>
@@ -1404,56 +1404,56 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="field123a" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
+                    <ImageView fx:id="field123a" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field123b" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="3">
+                    <ImageView fx:id="field123b" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="3" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/Checkpoint1.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field124" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="4">
+                    <ImageView fx:id="field124" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="4" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field125" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="5">
+                    <ImageView fx:id="field125" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="5" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field126" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="6">
+                    <ImageView fx:id="field126" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="6" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field127" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="7">
+                    <ImageView fx:id="field127" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="7" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field128" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="8">
+                    <ImageView fx:id="field128" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="8" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
-                    <ImageView fx:id="field129" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="12" GridPane.rowIndex="9">
+                    <ImageView fx:id="field129" fitHeight="50" fitWidth="50" pickOnBounds="true" GridPane.columnIndex="12" GridPane.rowIndex="9" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                         <image>
                             <Image url="@/boardElementsPNGs/emptyField.png" />
                         </image>
                     </ImageView>
 
 
-                    <ImageView fx:id="Avatar1" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar1" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar1.png" />
                         </image>
@@ -1462,7 +1462,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar2" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar2" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar2.png" />
                         </image>
@@ -1471,7 +1471,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar3" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar3" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar3.png" />
                         </image>
@@ -1480,7 +1480,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar4" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar4" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar4.png" />
                         </image>
@@ -1489,7 +1489,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar5" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar5" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar5.png" />
                         </image>
@@ -1498,7 +1498,7 @@
                         </rotate>
                     </ImageView>
 
-                    <ImageView fx:id="Avatar6" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <ImageView fx:id="Avatar6" fitHeight="50" fitWidth="50" managed="false" pickOnBounds="true" visible="false">
                         <image>
                             <Image url="@/boardElementsPNGs/Custom/Avatars/Avatar6.png" />
                         </image>

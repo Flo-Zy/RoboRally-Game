@@ -142,7 +142,7 @@ public class ClientController {
      * initializes the client controller
      * @param client the client
      * @param stage the stage
-     * @author Maximilian, Florian, Hasan, Felix, Franzi
+     * @author Florian, Maximilian, Hasan, Felix, Franzi
      */
     public void init(Client client, Stage stage) {
         this.clientHandMap = new HashMap<>();
@@ -320,6 +320,8 @@ public class ClientController {
             muteButton.setOnAction(event -> SoundManager.toggleSoundMute());
 
             sendButton.setOnAction(event -> sendMessage());
+            stage.setMinWidth(1440);
+            stage.setMinHeight(810);
 
             messageField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
@@ -541,7 +543,7 @@ public class ClientController {
     /**
      * appends something to the chat
      * @param message what to append to the chat
-     * @author Maximilian
+     * @author Maximilian Felix
      */
     public void appendToChatArea(String message) {
         Platform.runLater(() -> {
@@ -671,7 +673,7 @@ public class ClientController {
      * shows the select reboot direction dialog
      * @param stage the stage
      * @return the direction chosen by the user id no direction was chosen "top" gets returned as default
-     * @author Felix, Florian, Franziska
+     * @author Felix, Maximilian, Florian, Franziska
      */
     public String showSelectRebootDirectionDialog(Stage stage) {
         GridPane root = new GridPane();
@@ -724,14 +726,16 @@ public class ClientController {
 
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/CSSFiles/showSelectRebootDirectionDialog.css");
-
+        scene.getRoot().setStyle("-fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');" +
+                "-fx-background-repeat: repeat;" +
+                "-fx-background-size: cover;");
         stage.setScene(scene);
-        stage.setTitle("Reboot direction selection");
+        stage.setTitle("Your Reboot direction");
 
-        Text text = new Text("Reboot direction selection");
+        Text text = new Text("Your Reboot direction");
         text.getStyleClass().add("header-label");
         double titleWidth = text.getBoundsInLocal().getWidth();
-        stage.setWidth(titleWidth + 40);
+        stage.setWidth(titleWidth + 100);
 
         Duration duration = Duration.seconds(10);
         Timeline timeline = new Timeline(new KeyFrame(duration, event -> {
@@ -742,9 +746,7 @@ public class ClientController {
         }));
         timeline.setCycleCount(1);
         timeline.play();
-
         stage.setOnHiding(event -> timeline.stop());
-
         stage.showAndWait();
 
         return selectedDirection[0];
@@ -1376,6 +1378,7 @@ public class ClientController {
             if (totalHand != null && totalRegister != null) {
                 for (int i = 0; i < 9; i++) {
                     ImageView handImageView = (ImageView) totalHand.getChildren().get(i);
+                    handImageView.setId("handImageView");
 
                     if (handImageView != null) {
                         final int index = i;
@@ -1391,6 +1394,7 @@ public class ClientController {
 
                                     registerImageView.setVisible(true);
                                     registerImageView.setManaged(true);
+                                    registerImageView.setId("registerImageView");
 
                                     handImageView.setVisible(false);
 
