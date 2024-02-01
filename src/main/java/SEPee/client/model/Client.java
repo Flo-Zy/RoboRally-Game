@@ -109,7 +109,7 @@ public class Client extends Application {
                 @Override
                 public void run(){
                     if(!receivedHelloClient){
-                        System.out.println("cannot connect to server");
+                        ClientLogger.writeToClientLog("Sorry, cannot connect to server. Game is already running...");
                         controller.shutdown();
                     }
                 }
