@@ -23,11 +23,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -164,16 +164,20 @@ public class Client extends Application {
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
                             if(receivedId == -9999){
                                 Platform.runLater(() -> {
-                                    StackPane root = new StackPane();
-                                    primaryStage.setScene(new Scene(root, 300, 250));
-
-                                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                                    alert.setTitle("Connection not possible");
-                                    alert.setHeaderText(null);
-                                    alert.setContentText("Sorry, the game is already in progress.");
-                                    alert.showAndWait();
+                                    try {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SEPee/client/CustomAlert.fxml"));
+                                        Parent root = loader.load();
+                                        Scene scene = new Scene(root, 500, 300);
+                                        scene.getStylesheets().add("/CSSFiles/customAlert.css");
+                                        Stage alertStage = new Stage();
+                                        alertStage.setScene(scene);
+                                        alertStage.initModality(Modality.APPLICATION_MODAL);
+                                        alertStage.showAndWait();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 });
-                                Thread.sleep(5000);
+                                Thread.sleep(8000);
                                 controller.shutdown();
                             }else {
                                 controller.setId(receivedId);

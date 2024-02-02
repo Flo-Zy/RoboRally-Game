@@ -1,0 +1,25 @@
+#alertRoot {
+    -fx-background-image: url('/boardElementsPNGs/Custom/Backgrounds/Background1Edited.png');
+    -fx-background-repeat: repeat;
+    -fx-background-size: cover;
+}
+
+#alertImageView {
+    -fx-image: url('/boardElementsPNGs/action/noconnection.gif');
+}
+
+#headerLabel {
+    -fx-alignment: center;
+    -fx-font-family: 'Digital-Bold';
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dde400;
+}
+
+#explanationLabel {
+    -fx-alignment: center;
+    -fx-font-family: 'Digital-Bold';
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dde400;
+}
