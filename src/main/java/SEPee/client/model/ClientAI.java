@@ -17,6 +17,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -98,16 +100,6 @@ public class ClientAI extends Application {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            Timer connection = new Timer();
-            connection.schedule(new TimerTask() {
-                @Override
-                public void run(){
-                    if(!receivedHelloClient){
-                        System.out.println("cannot connect to server");
-                        controller.shutdown();
-                    }
-                }
-            }, 10000);
             // receive HelloClient from Server
             String serializedHelloClient = reader.readLine();
             HelloClient deserializedHelloClient = Deserialisierer.deserialize(serializedHelloClient, HelloClient.class);
@@ -163,15 +155,31 @@ public class ClientAI extends Application {
                             ClientAILogger.writeToClientLog("Welcome");
                             Welcome deserializedWelcome = Deserialisierer.deserialize(serializedReceivedString, Welcome.class);
                             int receivedId = deserializedWelcome.getMessageBody().getClientID();
-                            controller.setId(receivedId);
 
-                            Platform.runLater(() -> {
-                                primaryStage.setOnCloseRequest(event -> controller.shutdown());
-                                controller.initAI(this, primaryStage);
-                                PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure()-1);
-                                String serializedPlayerValues = Serialisierer.serialize(playerValues);
-                                writer.println(serializedPlayerValues);
-                            });
+                            if(receivedId == -9999){
+                                Platform.runLater(() -> {
+                                    StackPane root = new StackPane();
+                                    primaryStage.setScene(new Scene(root, 300, 250));
+
+                                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                                    alert.setTitle("Connection not possible");
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("Sorry, the game is already in progress.");
+                                    alert.showAndWait();
+                                });
+                                Thread.sleep(5000);
+                                controller.shutdown();
+                            }else {
+                                controller.setId(receivedId);
+
+                                Platform.runLater(() -> {
+                                    primaryStage.setOnCloseRequest(event -> controller.shutdown());
+                                    controller.initAI(this, primaryStage);
+                                    PlayerValues playerValues = new PlayerValues(controller.getName(), controller.getFigure() - 1);
+                                    String serializedPlayerValues = Serialisierer.serialize(playerValues);
+                                    writer.println(serializedPlayerValues);
+                                });
+                            }
                             break;
                         case "PlayerAdded":
                             ClientAILogger.writeToClientLog("PlayerAdded");
